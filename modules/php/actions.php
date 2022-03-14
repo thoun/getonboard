@@ -1,0 +1,43 @@
+<?php
+
+trait ActionTrait {
+
+    //////////////////////////////////////////////////////////////////////////////
+    //////////// Player actions
+    //////////// 
+    
+    /*
+        Each time a player is doing some game action, one of the methods below is called.
+        (note: each method below must match an input method in nicodemus.action.php)
+    */
+
+    public function placeDeparturePawn(int $position) {
+        self::checkAction('placeDeparturePawn'); 
+        
+        $playerId = intval(self::getActivePlayerId());
+
+        /*$selectableMachines = $this->getSelectableMachinesForChooseAction($playerId);
+        if (!$this->array_some($selectableMachines, function ($m) use ($id) { return $m->id == $id; })) {
+            throw new BgaUserException("This machine cannot be played");
+        }
+
+        $freeTableSpot = $this->countMachinesOnTable() + 1;
+        $this->machines->moveCard($id, 'table', $freeTableSpot);
+        self::setGameStateValue(PLAYED_MACHINE, $id);
+
+        $machine = $this->getMachineFromDb($this->machines->getCard($id));
+
+        self::notifyAllPlayers('machinePlayed', clienttranslate('${player_name} plays machine ${machineImage}'), [
+            'playerId' => $playerId,
+            'player_name' => self::getActivePlayerName(),
+            'machine' => $machine,
+            'machineImage' => $this->getUniqueId($machine),
+            'handMachinesCount' => $this->getHandCount($playerId),
+        ]);
+
+        self::incStat(1, 'playedMachines');
+        self::incStat(1, 'playedMachines', $playerId);
+
+        $this->gamestate->nextState('choosePlayAction');*/
+    }
+}

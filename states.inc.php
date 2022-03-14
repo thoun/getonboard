@@ -49,63 +49,85 @@
 
 //    !! It is not a good idea to modify this file when a game is running !!
 
- 
-$machinestates = array(
+require_once("modules/php/constants.inc.php");
+
+$basicGameStates = [
 
     // The initial state. Please do not modify.
-    1 => array(
+    ST_BGA_GAME_SETUP => [
         "name" => "gameSetup",
-        "description" => "",
+        "description" => clienttranslate("Game setup"),
         "type" => "manager",
         "action" => "stGameSetup",
-        "transitions" => array( "" => 2 )
-    ),
-    
-    // Note: ID=2 => your first state
-
-    2 => array(
-    		"name" => "playerTurn",
-    		"description" => clienttranslate('${actplayer} must play a card or pass'),
-    		"descriptionmyturn" => clienttranslate('${you} must play a card or pass'),
-    		"type" => "activeplayer",
-    		"possibleactions" => array( "playCard", "pass" ),
-    		"transitions" => array( "playCard" => 2, "pass" => 2 )
-    ),
-    
-/*
-    Examples:
-    
-    2 => array(
-        "name" => "nextPlayer",
-        "description" => '',
-        "type" => "game",
-        "action" => "stNextPlayer",
-        "updateGameProgression" => true,   
-        "transitions" => array( "endGame" => 99, "nextPlayer" => 10 )
-    ),
-    
-    10 => array(
-        "name" => "playerTurn",
-        "description" => clienttranslate('${actplayer} must play a card or pass'),
-        "descriptionmyturn" => clienttranslate('${you} must play a card or pass'),
-        "type" => "activeplayer",
-        "possibleactions" => array( "playCard", "pass" ),
-        "transitions" => array( "playCard" => 2, "pass" => 2 )
-    ), 
-
-*/    
+        "transitions" => [ "" => ST_MULTIPLAYER_PLACE_DEPARTURE_PAWN ]
+    ],
    
     // Final state.
-    // Please do not modify (and do not overload action/args methods).
-    99 => array(
+    // Please do not modify.
+    ST_END_GAME => [
         "name" => "gameEnd",
         "description" => clienttranslate("End of game"),
         "type" => "manager",
         "action" => "stGameEnd",
-        "args" => "argGameEnd"
-    )
-
-);
-
+        "args" => "argGameEnd",
+    ],
+];
 
 
+$playerActionsGameStates = [
+
+    ST_MULTIPLAYER_PLACE_DEPARTURE_PAWN => [
+        "name" => "placeDeparturePawn",
+        "description" => clienttranslate('Players must place Departure pawn'),
+        "descriptionmyturn" => clienttranslate('${you} must place Departure pawn'),
+        "type" => "multipleactiveplayer",
+        "args" => "argPlaceDeparturePawn",
+        "action" => "stPlaceDeparturePawn",
+        "possibleactions" => [ "placeDeparturePawn" ],
+        "transitions" => [
+            "next" => ST_PLAYER_PLACE_ROUTE,
+        ],
+    ],
+
+    ST_PLAYER_PLACE_ROUTE => [
+        "name" => "placeRoute",
+        "description" => clienttranslate('${actplayer} must place a route'),
+        "descriptionmyturn" => clienttranslate('${you} must place a route'),
+        "type" => "activeplayer",
+        "args" => "argPlaceRoute",
+        "possibleactions" => [ 
+            "placeRoute",
+        ],
+        "transitions" => [
+            "placeNext" => ST_PLAYER_PLACE_ROUTE,
+            "nextPlayer" => ST_NEXT_PLAYER,
+            "zombiePass" => ST_NEXT_PLAYER,
+        ]
+    ],
+];
+
+
+$gameGameStates = [
+    ST_NEXT_PLAYER => [
+        "name" => "nextPlayer",
+        "description" => "",
+        "type" => "game",
+        "action" => "stNextPlayer",
+        "transitions" => [
+            "nextPlayer" => ST_PLAYER_PLACE_ROUTE, 
+            "endScore" => ST_END_SCORE,
+        ],
+    ],
+
+    ST_END_SCORE => [
+        "name" => "endScore",
+        "description" => "",
+        "type" => "game",
+        "action" => "stEndScore",
+        "transitions" => [
+            "endGame" => ST_END_GAME,
+        ],
+    ],
+];
+ 
+$machinestates = $basicGameStates + $playerActionsGameStates + $gameGameStates;
