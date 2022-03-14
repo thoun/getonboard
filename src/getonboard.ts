@@ -1,11 +1,22 @@
-var isDebug = window.location.host == 'studio.boardgamearena.com' || window.location.hash.indexOf('debug') > -1;
-;
-var log = isDebug ? console.log.bind(window.console) : function () { };
-var ANIMATION_MS = 500;
-var GetOnBoard = /** @class */ (function () {
+declare const define;
+declare const ebg;
+declare const $;
+declare const dojo: Dojo;
+declare const _;
+declare const g_gamethemeurl;
+
+const isDebug = window.location.host == 'studio.boardgamearena.com' || window.location.hash.indexOf('debug') > -1;;
+const log = isDebug ? console.log.bind(window.console) : function () { };
+
+const ANIMATION_MS = 500;
+
+class GetOnBoard implements GetOnBoardGame {
+    private gamedatas: GetOnBoardGamedatas;
     //private healthCounters: Counter[] = [];
-    function GetOnBoard() {
+
+    constructor() {
     }
+    
     /*
         setup:
 
@@ -18,42 +29,51 @@ var GetOnBoard = /** @class */ (function () {
 
         "gamedatas" argument contains all datas retrieved by your "getAllDatas" PHP method.
     */
-    GetOnBoard.prototype.setup = function (gamedatas) {
-        var players = Object.values(gamedatas.players);
+
+    public setup(gamedatas: GetOnBoardGamedatas) {
+        const players = Object.values(gamedatas.players);
         // ignore loading of some pictures
         if (players.length > 3) {
-            this.dontPreloadImage("map23.jpg");
+            (this as any).dontPreloadImage(`map23.jpg`);
+        } else {            
+            (this as any).dontPreloadImage(`map45.jpg`);
         }
-        else {
-            this.dontPreloadImage("map45.jpg");
-        }
-        log("Starting game setup");
+
+        log( "Starting game setup" );
+        
         this.gamedatas = gamedatas;
+
         log('gamedatas', gamedatas);
-        this.createPlayerPanels(gamedatas);
+        this.createPlayerPanels(gamedatas); 
         this.createPlayerTables(gamedatas);
         //this.tableManager = new TableManager(this, this.playerTables);
+
         this.setupNotifications();
         /*this.preferencesManager = new PreferencesManager(this);
 
         document.getElementById('zoom-out').addEventListener('click', () => this.tableManager?.zoomOut());
         document.getElementById('zoom-in').addEventListener('click', () => this.tableManager?.zoomIn());*/
-        log("Ending game setup");
-    };
+
+        log( "Ending game setup" );
+    }
+
     ///////////////////////////////////////////////////
     //// Game & client states
+
     // onEnteringState: this method is called each time we are entering into a new game state.
     //                  You can use this method to perform some user interface changes at this moment.
     //
-    GetOnBoard.prototype.onEnteringState = function (stateName, args) {
+    public onEnteringState(stateName: string, args: any) {
         log('Entering state: ' + stateName, args.args);
+
         switch (stateName) {
             /*case 'pickMonster':
                 dojo.addClass('kot-table', 'pickMonster');
                 this.onEnteringPickMonster(args.args);
                 break;*/
         }
-    };
+    }
+    
     /*private onEnteringPickMonster(args: EnteringPickMonsterArgs) {
         // TODO clean only needed
         document.getElementById('monster-pick').innerHTML = '';
@@ -70,10 +90,12 @@ var GetOnBoard = /** @class */ (function () {
         const isCurrentPlayerActive = (this as any).isCurrentPlayerActive();
         dojo.toggleClass('monster-pick', 'selectable', isCurrentPlayerActive);
     }*/
-    GetOnBoard.prototype.onLeavingState = function (stateName) {
-        log('Leaving state: ' + stateName);
+
+    public onLeavingState(stateName: string) {
+        log( 'Leaving state: '+stateName );
+
         switch (stateName) {
-            /*case 'chooseInitialCard':
+            /*case 'chooseInitialCard':                
                 this.tableCenter.setVisibleCardsSelectionMode(0);
                 this.tableCenter.setVisibleCardsSelectionClass(false);
                 this.playerTables.forEach(playerTable => {
@@ -82,22 +104,26 @@ var GetOnBoard = /** @class */ (function () {
                 });
                 break;*/
         }
-    };
+    }
+    
     /*private onLeavingStepEvolution() {
             const playerId = this.getPlayerId();
             this.getPlayerTable(playerId)?.unhighlightHiddenEvolutions();
     }*/
+
     // onUpdateActionButtons: in this method you can manage "action buttons" that are displayed in the
     //                        action status bar (ie: the HTML links in the status bar).
     //
-    GetOnBoard.prototype.onUpdateActionButtons = function (stateName, args) {
+    public onUpdateActionButtons(stateName: string, args: any) {
+
         switch (stateName) {
             /*case 'changeActivePlayerDie': case 'psychicProbeRollDie':
                 this.setDiceSelectorVisibility(true);
                 this.onEnteringPsychicProbeRollDie(args); // because it's multiplayer, enter action must be set here
                 break;*/
         }
-        if (this.isCurrentPlayerActive()) {
+
+        if((this as any).isCurrentPlayerActive()) {
             switch (stateName) {
                 /*case 'chooseInitialCard':
                     if (this.isInitialCardDoubleSelection()) {
@@ -109,26 +135,45 @@ var GetOnBoard = /** @class */ (function () {
                     }
                     break;*/
             }
+
         }
-    };
+    } 
+    
+
     ///////////////////////////////////////////////////
     //// Utility methods
+
+
     ///////////////////////////////////////////////////
-    GetOnBoard.prototype.getPlayerId = function () {
-        return Number(this.player_id);
-    };
-    GetOnBoard.prototype.getOrderedPlayers = function () {
-        return Object.values(this.gamedatas.players).sort(function (a, b) { return Number(a.player_no) - Number(b.player_no); });
-    };
-    GetOnBoard.prototype.createPlayerPanels = function (gamedatas) {
-        var _this = this;
-        Object.values(gamedatas.players).forEach(function (player) {
-            var playerId = Number(player.id);
-            var eliminated = Number(player.eliminated) > 0;
+
+    public getPlayerId(): number {
+        return Number((this as any).player_id);
+    }
+
+    private getOrderedPlayers(): GetOnBoardPlayer[] {
+        return Object.values(this.gamedatas.players).sort((a,b) => Number(a.player_no) - Number(b.player_no));
+    }
+
+    private createPlayerPanels(gamedatas: GetOnBoardGamedatas) {
+
+        Object.values(gamedatas.players).forEach(player => {
+            const playerId = Number(player.id);  
+
+            const eliminated = Number(player.eliminated) > 0;
+
             // health & energy counters
-            var html = "<div class=\"counters\">\n                <div id=\"health-counter-wrapper-".concat(player.id, "\" class=\"counter\">\n                    <div class=\"icon health\"></div> \n                    <span id=\"health-counter-").concat(player.id, "\"></span>\n                </div>\n                <div id=\"energy-counter-wrapper-").concat(player.id, "\" class=\"counter\">\n                    <div class=\"icon energy\"></div> \n                    <span id=\"energy-counter-").concat(player.id, "\"></span>\n                </div>");
-            html += "</div>";
-            dojo.place(html, "player_board_".concat(player.id));
+            let html = `<div class="counters">
+                <div id="health-counter-wrapper-${player.id}" class="counter">
+                    <div class="icon health"></div> 
+                    <span id="health-counter-${player.id}"></span>
+                </div>
+                <div id="energy-counter-wrapper-${player.id}" class="counter">
+                    <div class="icon energy"></div> 
+                    <span id="energy-counter-${player.id}"></span>
+                </div>`;
+            html += `</div>`;
+            dojo.place(html, `player_board_${player.id}`);
+
             /*const healthCounter = new ebg.counter();
             healthCounter.create(`health-counter-${player.id}`);
             healthCounter.setValue(player.health);
@@ -138,27 +183,33 @@ var GetOnBoard = /** @class */ (function () {
             energyCounter.create(`energy-counter-${player.id}`);
             energyCounter.setValue(player.energy);
             this.energyCounters[playerId] = energyCounter;*/
+
             if (eliminated) {
-                setTimeout(function () { return _this.eliminatePlayer(playerId); }, 200);
+                setTimeout(() => this.eliminatePlayer(playerId), 200);
             }
         });
+
         //(this as any).addTooltipHtmlToClass('shrink-ray-tokens', this.SHINK_RAY_TOKEN_TOOLTIP);
         //(this as any).addTooltipHtmlToClass('poison-tokens', this.POISON_TOKEN_TOOLTIP);
-    };
-    GetOnBoard.prototype.createPlayerTables = function (gamedatas) {
+    }
+    
+    private createPlayerTables(gamedatas: GetOnBoardGamedatas) {
         /*this.playerTables = this.getOrderedPlayers().map(player => {
             const playerId = Number(player.id);
             const playerWithGoldenScarab = gamedatas.anubisExpansion && playerId === gamedatas.playerWithGoldenScarab;
             return new PlayerTable(this, player, playerWithGoldenScarab);
         });*/
-    };
+    }
+
     /*private getPlayerTable(playerId: number): PlayerTable {
         return this.playerTables.find(playerTable => playerTable.playerId === Number(playerId));
     }*/
-    GetOnBoard.prototype.getZoom = function () {
+
+    public getZoom() {
         //return this.tableManager.zoom;
         return null; // TODO
-    };
+    }
+
     /*public pickMonster(monster: number) {
         if(!(this as any).checkAction('pickMonster')) {
             return;
@@ -168,38 +219,41 @@ var GetOnBoard = /** @class */ (function () {
             monster
         });
     }*/
-    GetOnBoard.prototype.takeAction = function (action, data) {
+
+    public takeAction(action: string, data?: any) {
         data = data || {};
         data.lock = true;
-        this.ajaxcall("/getonboard/getonboard/".concat(action, ".html"), data, this, function () { });
-    };
-    GetOnBoard.prototype.startActionTimer = function (buttonId, time) {
-        var _a;
-        if (((_a = this.prefs[202]) === null || _a === void 0 ? void 0 : _a.value) === 2) {
+        (this as any).ajaxcall(`/getonboard/getonboard/${action}.html`, data, this, () => {});
+    }
+
+    private startActionTimer(buttonId: string, time: number) {
+        if ((this as any).prefs[202]?.value === 2) {
             return;
         }
-        var button = document.getElementById(buttonId);
-        var actionTimerId = null;
-        var _actionTimerLabel = button.innerHTML;
-        var _actionTimerSeconds = time;
-        var actionTimerFunction = function () {
-            var button = document.getElementById(buttonId);
-            if (button == null) {
-                window.clearInterval(actionTimerId);
-            }
-            else if (_actionTimerSeconds-- > 1) {
-                button.innerHTML = _actionTimerLabel + ' (' + _actionTimerSeconds + ')';
-            }
-            else {
-                window.clearInterval(actionTimerId);
-                button.click();
-            }
+
+        const button = document.getElementById(buttonId);
+ 
+        let actionTimerId = null;
+        const _actionTimerLabel = button.innerHTML;
+        let _actionTimerSeconds = time;
+        const actionTimerFunction = () => {
+          const button = document.getElementById(buttonId);
+          if (button == null) {
+            window.clearInterval(actionTimerId);
+          } else if (_actionTimerSeconds-- > 1) {
+            button.innerHTML = _actionTimerLabel + ' (' + _actionTimerSeconds + ')';
+          } else {
+            window.clearInterval(actionTimerId);
+            button.click();
+          }
         };
         actionTimerFunction();
-        actionTimerId = window.setInterval(function () { return actionTimerFunction(); }, 1000);
-    };
+        actionTimerId = window.setInterval(() => actionTimerFunction(), 1000);
+    }
+
     ///////////////////////////////////////////////////
     //// Reaction to cometD notifications
+
     /*
         setupNotifications:
 
@@ -209,23 +263,26 @@ var GetOnBoard = /** @class */ (function () {
                 your pylos.game.php file.
 
     */
-    GetOnBoard.prototype.setupNotifications = function () {
+    setupNotifications() {
         //log( 'notifications subscriptions setup' );
-        var _this = this;
-        var notifs = [
+
+        const notifs = [
             ['pickMonster', ANIMATION_MS],
         ];
-        notifs.forEach(function (notif) {
-            dojo.subscribe(notif[0], _this, "notif_".concat(notif[0]));
-            _this.notifqueue.setSynchronous(notif[0], notif[1]);
+    
+        notifs.forEach((notif) => {
+            dojo.subscribe(notif[0], this, `notif_${notif[0]}`);
+            (this as any).notifqueue.setSynchronous(notif[0], notif[1]);
         });
-    };
-    GetOnBoard.prototype.notif_pickMonster = function (notif) {
-        // TODO
-    };
+    }
+
+    notif_pickMonster(notif: Notif<any/*NotifPickMonsterArgs*/>) {
+       // TODO
+    }
+
     /* This enable to inject translatable styled things to logs or action bar */
     /* @Override */
-    GetOnBoard.prototype.format_string_recursive = function (log, args) {
+    public format_string_recursive(log: string, args: any) {
         try {
             if (log && args && !args.processed) {
                 // Representation of the color of a card
@@ -249,6 +306,7 @@ var GetOnBoard = /** @class */ (function () {
                         }
                     }
                 });*/
+
                 /*for (const property in args) {
                     if (args[property]?.indexOf?.(']') > 0) {
                         args[property] = formatTextIcons(_(args[property]));
@@ -257,19 +315,9 @@ var GetOnBoard = /** @class */ (function () {
 
                 log = formatTextIcons(_(log));*/
             }
+        } catch (e) {
+            console.error(log,args,"Exception thrown", e.stack);
         }
-        catch (e) {
-            console.error(log, args, "Exception thrown", e.stack);
-        }
-        return this.inherited(arguments);
-    };
-    return GetOnBoard;
-}());
-define([
-    "dojo", "dojo/_base/declare",
-    "ebg/core/gamegui",
-    "ebg/counter",
-    "ebg/stock"
-], function (dojo, declare) {
-    return declare("bgagame.getonboard", ebg.core.gamegui, new GetOnBoard());
-});
+        return (this as any).inherited(arguments);
+    }
+}
