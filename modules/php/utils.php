@@ -70,4 +70,33 @@ trait UtilTrait {
     function getFirstPlayerId() {
         return intval(self::getGameStateValue(FIRST_PLAYER));
     }
+
+    function getPlayersIds() {
+        return array_keys($this->loadPlayersBasicInfos());
+    }
+
+    function isSmallMap() {
+        return count($this->getPlayersIds()) <= 3;
+    }
+
+    function setupTickets(int $playerNumber) {
+        // 12 bus ticket cards
+        $tickets = [];
+        for ($i = 1; $i <= 6; $i++) {
+            $tickets[] = [ 'type' => $i, 'type_arg' => null, 'nbr' => 1 ];
+        }
+        $this->tickets->createCards($tickets, 'deck');
+        $tickets = [];
+        for ($i = 7; $i <= 12; $i++) {
+            $tickets[] = [ 'type' => $i, 'type_arg' => null, 'nbr' => 1 ];
+        }
+        $this->tickets->createCards($tickets, $playerNumber > 3 ? 'deck' : 'discard');
+        $this->tickets->shuffle('deck');
+    }
+
+    function dealTickets(array $playersIds) {
+        foreach ($playersIds as $playerId) {
+            $this->tickets->pickCards(2, 'deck', $playerId);
+        }
+    }
 }

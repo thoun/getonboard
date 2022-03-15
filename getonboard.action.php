@@ -35,14 +35,38 @@ class action_getonboard extends APP_GameAction
   	}
   	
     public function placeDeparturePawn() {
-        self::setAjaxMode();     
+        self::setAjaxMode();
 
-        // Retrieve arguments
-        // Note: these arguments correspond to what has been sent through the javascript "ajaxcall" method
         $position = self::getArg("position", AT_posint, true);
 
-        // Then, call the appropriate method in your game logic, like "playCard" or "myAction"
         $this->game->placeDeparturePawn($position);
+
+        self::ajaxResponse();
+    }
+  	
+    public function placeRoute() {
+        self::setAjaxMode();
+
+        $from = self::getArg("from", AT_posint, true);
+        $to = self::getArg("to", AT_posint, true);
+
+        $this->game->placeRoute($from, $to);
+
+        self::ajaxResponse();
+    }
+  	
+    public function cancelLast() {
+        self::setAjaxMode();
+
+        $this->game->cancelLast();
+
+        self::ajaxResponse();
+    }
+  	
+    public function resetTurn() {
+        self::setAjaxMode();
+
+        $this->game->resetTurn();
 
         self::ajaxResponse();
     }

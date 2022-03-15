@@ -44,7 +44,10 @@ class GetOnBoard extends Table {
         
         self::initGameStateLabels([
             FIRST_PLAYER => 10,
-        ]);        
+        ]);   
+
+        $this->tickets = self::getNew("module.common.deck");
+        $this->tickets->init("tickets");     
 	}
 	
     protected function getGameName() {
@@ -65,14 +68,26 @@ class GetOnBoard extends Table {
         // The number of colors defined here must correspond to the maximum number of players allowed for the gams
         $gameinfos = self::getGameinfos();
         $default_colors = $gameinfos['player_colors'];
+
+        $sheetTypes = [1, 2, 3, 4, 5];
+        $personalObjectives = [1, 2, 3, 4, 5];
  
         // Create players
         // Note: if you added some extra field on "player" table in the database (dbmodel.sql), you can initialize it there.
-        $sql = "INSERT INTO player (player_id, player_color, player_canal, player_name, player_avatar) VALUES ";
+        $sql = "INSERT INTO player (player_id, player_color, player_canal, player_name, player_avatar, player_sheet_type, player_personal_objective) VALUES ";
         $values = [];
         foreach($players as $player_id => $player) {
             $color = array_shift( $default_colors );
-            $values[] = "('".$player_id."','$color','".$player['player_canal']."','".addslashes( $player['player_name'] )."','".addslashes( $player['player_avatar'] )."')";
+
+            $sheetTypeIndex = bga_rand(0, count($sheetTypes) - 1);
+            $sheetType = array_splice($sheetTypes, $sheetTypeIndex, 1)[0];
+            $sheetTypes = array_values($sheetTypes);
+
+            $personalObjectiveIndex = bga_rand(0, count($personalObjectives) - 1);
+            $personalObjective = array_splice($personalObjectives, $personalObjectiveIndex, 1)[0];
+            $personalObjectives = array_values($personalObjectives);
+
+            $values[] = "('".$player_id."','$color','".$player['player_canal']."','".addslashes( $player['player_name'] )."','".addslashes( $player['player_avatar'] )."', $sheetType, $personalObjective)";
         }
         $sql .= implode(',', $values);
         self::DbQuery($sql);
@@ -89,7 +104,8 @@ class GetOnBoard extends Table {
         //self::initStat( 'table', 'table_teststat1', 0 );    // Init a table statistics
         //self::initStat( 'player', 'player_teststat1', 0 );  // Init a player statistics (for all players)
 
-        // TODO: setup the initial game situation here
+        $this->setupTickets(count($players));
+        $this->dealTickets(array_keys($players));
 
         // Activate first player (which is in general a good idea :) )
         $this->activeNextPlayer();

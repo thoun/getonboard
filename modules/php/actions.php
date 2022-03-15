@@ -14,7 +14,7 @@ trait ActionTrait {
     public function placeDeparturePawn(int $position) {
         self::checkAction('placeDeparturePawn'); 
         
-        $playerId = intval(self::getActivePlayerId());
+        $playerId = self::getActivePlayerId();
 
         /*$selectableMachines = $this->getSelectableMachinesForChooseAction($playerId);
         if (!$this->array_some($selectableMachines, function ($m) use ($id) { return $m->id == $id; })) {
@@ -39,5 +39,26 @@ trait ActionTrait {
         self::incStat(1, 'playedMachines', $playerId);
 
         $this->gamestate->nextState('choosePlayAction');*/
+    }
+        
+  	
+    public function placeRoute(int $from, int $to) {
+        self::checkAction('placeRoute'); 
+        
+        $playerId = self::getActivePlayerId();
+
+        // TODO
+    }
+  	
+    public function cancelLast() {
+        self::checkAction('cancelLast'); 
+
+        // TODO
+    }
+  	
+    public function resetTurn() {
+        self::checkAction('resetTurn'); 
+
+        // TODO
     }
 }

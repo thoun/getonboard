@@ -85,7 +85,7 @@ $playerActionsGameStates = [
         "action" => "stPlaceDeparturePawn",
         "possibleactions" => [ "placeDeparturePawn" ],
         "transitions" => [
-            "next" => ST_PLAYER_PLACE_ROUTE,
+            "next" => ST_START_GAME,
         ],
     ],
 
@@ -97,6 +97,8 @@ $playerActionsGameStates = [
         "args" => "argPlaceRoute",
         "possibleactions" => [ 
             "placeRoute",
+            "cancelLast",
+            "resetTurn",
         ],
         "transitions" => [
             "placeNext" => ST_PLAYER_PLACE_ROUTE,
@@ -108,6 +110,17 @@ $playerActionsGameStates = [
 
 
 $gameGameStates = [
+
+    ST_START_GAME => [
+        "name" => "startGame",
+        "description" => "",
+        "type" => "game",
+        "action" => "stStartGame",
+        "transitions" => [
+            "start" => ST_PLAYER_PLACE_ROUTE,
+        ],
+    ],
+
     ST_NEXT_PLAYER => [
         "name" => "nextPlayer",
         "description" => "",
@@ -115,6 +128,16 @@ $gameGameStates = [
         "action" => "stNextPlayer",
         "transitions" => [
             "nextPlayer" => ST_PLAYER_PLACE_ROUTE, 
+            "endRound" => ST_END_ROUND,
+        ],
+    ],
+
+    ST_END_ROUND => [
+        "name" => "endRound",
+        "description" => "",
+        "type" => "game",
+        "action" => "stEndRound",
+        "transitions" => [
             "endScore" => ST_END_SCORE,
         ],
     ],
