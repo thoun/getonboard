@@ -37,9 +37,9 @@ class action_getonboard extends APP_GameAction
     public function placeDeparturePawn() {
         self::setAjaxMode();
 
-        $position = self::getArg("position", AT_posint, true);
+        $ticket = self::getArg("ticket", AT_posint, true);
 
-        $this->game->placeDeparturePawn($position);
+        $this->game->placeDeparturePawn($ticket);
 
         self::ajaxResponse();
     }

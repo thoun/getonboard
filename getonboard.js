@@ -91,6 +91,7 @@ var GetOnBoard = /** @class */ (function () {
     //                        action status bar (ie: the HTML links in the status bar).
     //
     GetOnBoard.prototype.onUpdateActionButtons = function (stateName, args) {
+        var _this = this;
         switch (stateName) {
             /*case 'changeActivePlayerDie': case 'psychicProbeRollDie':
                 this.setDiceSelectorVisibility(true);
@@ -99,15 +100,12 @@ var GetOnBoard = /** @class */ (function () {
         }
         if (this.isCurrentPlayerActive()) {
             switch (stateName) {
-                /*case 'chooseInitialCard':
-                    if (this.isInitialCardDoubleSelection()) {
-                        (this as any).addActionButton('confirmInitialCards_button', _("Confirm"), () => this.chooseInitialCard(
-                            Number(this.tableCenter.getVisibleCards().getSelectedItems()[0]?.id),
-                            Number(this.getPlayerTable(this.getPlayerId()).pickEvolutionCards.getSelectedItems()[0]?.id),
-                        ));
-                        document.getElementById(`confirmInitialCards_button`).classList.add('disabled');
-                    }
-                    break;*/
+                case 'placeDeparturePawn':
+                    var placeDeparturePawnArgs = args;
+                    placeDeparturePawnArgs._private.tickets.forEach(function (ticket) {
+                        return _this.addActionButton("placeDeparturePawn".concat(ticket, "_button"), dojo.string.substitute(_("Start at ${ticket}"), { ticket: ticket }), function () { return _this.placeDeparturePawn(ticket); });
+                    });
+                    break;
             }
         }
     };
@@ -159,15 +157,14 @@ var GetOnBoard = /** @class */ (function () {
         //return this.tableManager.zoom;
         return null; // TODO
     };
-    /*public pickMonster(monster: number) {
-        if(!(this as any).checkAction('pickMonster')) {
+    GetOnBoard.prototype.placeDeparturePawn = function (ticket) {
+        if (!this.checkAction('placeDeparturePawn')) {
             return;
         }
-
-        this.takeAction('pickMonster', {
-            monster
+        this.takeAction('placeDeparturePawn', {
+            ticket: ticket
         });
-    }*/
+    };
     GetOnBoard.prototype.takeAction = function (action, data) {
         data = data || {};
         data.lock = true;

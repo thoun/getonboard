@@ -12,7 +12,9 @@ interface Card {
 
 interface GetOnBoardPlayer extends Player {
     player_no: string;
-    objective: Card[];
+    sheetType: number;
+    departurePosition: number;
+    personalObjective?: number;
 }
 
 interface GetOnBoardGamedatas {
@@ -36,13 +38,16 @@ interface GetOnBoardGame extends Game {
     getZoom(): number;
 }
 
-/*
-interface EnteringChangeDieArgs {
-    playerId: number;
-    hasHerdCuller: boolean;
+interface EnteringPlaceDeparturePawnArgs {
+    _private?: {
+        tickets: number[];
+    };
 }
 
-interface NotifPickMonsterArgs {
+interface EnteringPlaceRouteArgs {
     playerId: number;
-    monster: number;
-} */
+}
+
+interface NotifNewFirstPlayerArgs {
+    playerId: number;
+}

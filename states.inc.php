@@ -126,6 +126,7 @@ $gameGameStates = [
         "description" => "",
         "type" => "game",
         "action" => "stNextPlayer",
+        "updateGameProgression" => true,
         "transitions" => [
             "nextPlayer" => ST_PLAYER_PLACE_ROUTE, 
             "endRound" => ST_END_ROUND,
@@ -138,6 +139,7 @@ $gameGameStates = [
         "type" => "game",
         "action" => "stEndRound",
         "transitions" => [
+            "newRound" => ST_PLAYER_PLACE_ROUTE,
             "endScore" => ST_END_SCORE,
         ],
     ],

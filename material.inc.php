@@ -19,19 +19,28 @@
  *
  */
 
+$this->MAP_DEPARTURE_POSITIONS = [
+  'small' => [
+    1 => 1, // TODO
+    2 => 1, // TODO
+    3 => 1, // TODO
+    4 => 1, // TODO
+    5 => 1, // TODO
+    6 => 1, // TODO
+  ],
 
-/*
-
-Example:
-
-$this->card_types = array(
-    1 => array( "card_name" => ...,
-                ...
-              )
-);
-
-*/
-
-
-
-
+  'big' => [
+    1 => 1, // TODO
+    2 => 1, // TODO
+    3 => 1, // TODO
+    4 => 1, // TODO
+    5 => 1, // TODO
+    6 => 1, // TODO
+    7 => 1, // TODO
+    8 => 1, // TODO
+    9 => 1, // TODO
+    10 => 1, // TODO
+    11 => 1, // TODO
+    12 => 1, // TODO
+  ],
+];

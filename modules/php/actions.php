@@ -11,22 +11,34 @@ trait ActionTrait {
         (note: each method below must match an input method in nicodemus.action.php)
     */
 
-    public function placeDeparturePawn(int $position) {
+    public function placeDeparturePawn(int $ticketNumber) {
         self::checkAction('placeDeparturePawn'); 
+        
+        $playerId = self::getCurrentPlayerId();
+
+        $tickets = $this->getCardsFromDb($this->tickets->getCardsInLocation('hand', $playerId));
+
+        if (!$this->array_some($tickets, fn($ticket) => $ticket->type == $ticketNumber)) {
+            throw new BgaUserException("Invalid departure");
+        }
+
+        $position = $this->MAP_DEPARTURE_POSITIONS[$this->getMap()][$ticketNumber]; 
+
+        $this->DbQuery("UPDATE player SET `player_departure_position` = $position WHERE `player_id` = $playerId");
+
+        $this->tickets->moveAllCardsInLocation('hand', 'discard', $playerId);
+
+        $this->gamestate->setPlayerNonMultiactive($playerId, 'next');
+    }
+        
+  	
+    public function placeRoute(int $from, int $to) {
+        self::checkAction('placeRoute'); 
         
         $playerId = self::getActivePlayerId();
 
-        /*$selectableMachines = $this->getSelectableMachinesForChooseAction($playerId);
-        if (!$this->array_some($selectableMachines, function ($m) use ($id) { return $m->id == $id; })) {
-            throw new BgaUserException("This machine cannot be played");
-        }
-
-        $freeTableSpot = $this->countMachinesOnTable() + 1;
-        $this->machines->moveCard($id, 'table', $freeTableSpot);
-        self::setGameStateValue(PLAYED_MACHINE, $id);
-
-        $machine = $this->getMachineFromDb($this->machines->getCard($id));
-
+        // TODO
+        /*
         self::notifyAllPlayers('machinePlayed', clienttranslate('${player_name} plays machine ${machineImage}'), [
             'playerId' => $playerId,
             'player_name' => self::getActivePlayerName(),
@@ -39,15 +51,6 @@ trait ActionTrait {
         self::incStat(1, 'playedMachines', $playerId);
 
         $this->gamestate->nextState('choosePlayAction');*/
-    }
-        
-  	
-    public function placeRoute(int $from, int $to) {
-        self::checkAction('placeRoute'); 
-        
-        $playerId = self::getActivePlayerId();
-
-        // TODO
     }
   	
     public function cancelLast() {

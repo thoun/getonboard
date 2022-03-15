@@ -1,5 +1,7 @@
 <?php
 
+require_once(__DIR__.'/objects/ticket.php');
+
 trait UtilTrait {
 
     //////////////////////////////////////////////////////////////////////////////
@@ -75,8 +77,22 @@ trait UtilTrait {
         return array_keys($this->loadPlayersBasicInfos());
     }
 
-    function isSmallMap() {
-        return count($this->getPlayersIds()) <= 3;
+    function getCardFromDb(array $dbCard) {
+        if (!$dbCard || !array_key_exists('id', $dbCard)) {
+            throw new \Error('card doesn\'t exists '.json_encode($dbCard));
+        }
+        if (!$dbCard || !array_key_exists('location', $dbCard)) {
+            throw new \Error('location doesn\'t exists '.json_encode($dbCard));
+        }
+        return new Card($dbCard);
+    }
+
+    function getCardsFromDb(array $dbCards) {
+        return array_map(fn($dbCard) => $this->getCardFromDb($dbCard), array_values($dbCards));
+    }
+
+    function getMap() {
+        return count($this->getPlayersIds()) > 3 ? 'big' : 'small';
     }
 
     function setupTickets(int $playerNumber) {

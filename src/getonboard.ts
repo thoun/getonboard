@@ -125,15 +125,12 @@ class GetOnBoard implements GetOnBoardGame {
 
         if((this as any).isCurrentPlayerActive()) {
             switch (stateName) {
-                /*case 'chooseInitialCard':
-                    if (this.isInitialCardDoubleSelection()) {
-                        (this as any).addActionButton('confirmInitialCards_button', _("Confirm"), () => this.chooseInitialCard(
-                            Number(this.tableCenter.getVisibleCards().getSelectedItems()[0]?.id),
-                            Number(this.getPlayerTable(this.getPlayerId()).pickEvolutionCards.getSelectedItems()[0]?.id),
-                        ));
-                        document.getElementById(`confirmInitialCards_button`).classList.add('disabled');
-                    }
-                    break;*/
+                case 'placeDeparturePawn':
+                    const placeDeparturePawnArgs = args as EnteringPlaceDeparturePawnArgs;
+                    placeDeparturePawnArgs._private.tickets.forEach(ticket => 
+                        (this as any).addActionButton(`placeDeparturePawn${ticket}_button`, dojo.string.substitute(_("Start at ${ticket}"), { ticket }), () => this.placeDeparturePawn(ticket))
+                    );
+                    break;
             }
 
         }
@@ -210,15 +207,15 @@ class GetOnBoard implements GetOnBoardGame {
         return null; // TODO
     }
 
-    /*public pickMonster(monster: number) {
-        if(!(this as any).checkAction('pickMonster')) {
+    public placeDeparturePawn(ticket: number) {
+        if(!(this as any).checkAction('placeDeparturePawn')) {
             return;
         }
 
-        this.takeAction('pickMonster', {
-            monster
+        this.takeAction('placeDeparturePawn', {
+            ticket
         });
-    }*/
+    }
 
     public takeAction(action: string, data?: any) {
         data = data || {};
