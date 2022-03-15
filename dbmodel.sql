@@ -31,10 +31,17 @@ ALTER TABLE `player` ADD `player_sheet_type` INT UNSIGNED NOT NULL DEFAULT '0';
 ALTER TABLE `player` ADD `player_personal_objective` INT UNSIGNED NOT NULL DEFAULT '0';
 ALTER TABLE `player` ADD `player_departure_position` INT UNSIGNED NOT NULL DEFAULT '0';
 
+CREATE TABLE IF NOT EXISTS `common_objectives` (
+   `id` int(11) UNSIGNED NOT NULL,
+   `completed` TINYINT(1)  UNSIGNED NOT NULL DEFAULT '0',
+   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
 CREATE TABLE IF NOT EXISTS `placed_routes` (
    `player_id` int(11) UNSIGNED NOT NULL,
    `from` int(4) UNSIGNED NOT NULL,
    `to` int(4) UNSIGNED NOT NULL,
+   `use_turn_zone` TINYINT(1) UNSIGNED NULL,
    `validated` TINYINT(1)  UNSIGNED NOT NULL DEFAULT '0',
    PRIMARY KEY (`player_id`, `from`, `to`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;

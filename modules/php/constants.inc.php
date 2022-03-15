@@ -13,7 +13,7 @@ define('ST_PLAYER_PLACE_ROUTE', 30);
 
 define('ST_NEXT_PLAYER', 70);
 
-define('ST_END_ROUND', 90);
+define('ST_END_ROUND', 80);
 
 define('ST_END_SCORE', 90);
 
@@ -28,4 +28,28 @@ define('FIRST_PLAYER', 'FIRST_PLAYER');
 /*
  * Global variables
  */
+
+/*
+ * Map elements
+ */
+define('GREEN_LIGHT', 0);
+// 1 to 6 : starting point
+
+define('OLD_LADY', 10);
+
+define('STUDENT', 20);
+define('SCHOOL', 21);
+define('SCHOOL_SPECIAL', 25);
+
+define('TOURIST', 30);
+define('MONUMENT_LIGHT', 31);
+define('MONUMENT_DARK', 32);
+define('MONUMENT_LIGHT_SPECIAL', 35);
+define('MONUMENT_DARK_SPECIAL', 36);
+
+define('BUSINESSMAN', 40);
+define('BUILDING', 21);
+define('BUILDING_SPECIAL', 25);
+
+// 97 to 122 : objectives (using ord('a'))
 ?>

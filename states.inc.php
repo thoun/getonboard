@@ -99,6 +99,7 @@ $playerActionsGameStates = [
             "placeRoute",
             "cancelLast",
             "resetTurn",
+            "confirmTurn",
         ],
         "transitions" => [
             "placeNext" => ST_PLAYER_PLACE_ROUTE,

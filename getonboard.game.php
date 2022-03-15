@@ -97,13 +97,14 @@ class GetOnBoard extends Table {
         /************ Start the game initialization *****/
 
         // Init global values with their initial values
-        //self::setGameStateInitialValue( 'my_first_global_variable', 0 );
+        self::setGameStateInitialValue(FIRST_PLAYER, intval(array_keys($players)[0]));
         
         // Init game statistics
         // (note: statistics used in this file must be defined in your stats.inc.php file)
         //self::initStat( 'table', 'table_teststat1', 0 );    // Init a table statistics
         //self::initStat( 'player', 'player_teststat1', 0 );  // Init a player statistics (for all players)
 
+        $this->setupCommonObjectives();
         $this->setupTickets(count($players));
         $this->dealTickets(array_keys($players));
 
@@ -135,10 +136,10 @@ class GetOnBoard extends Table {
         foreach ($result['players'] as $playerId => &$playerDb) {
             $playerDb['sheetType'] = intval($playerDb['sheetType']);
             $playerDb['departurePosition'] = intval($playerDb['departurePosition']);
-
+        }
         $result['players'][$currentPlayerId]['personalObjective'] = intval($this->getUniqueValueFromDB("SELECT player_personal_objective FROM `player` where `player_id` = $currentPlayerId"));
   
-        // TODO: Gather all information about current game situation (visible by player $current_player_id).
+        $result['firstPlayerTokenPlayerId'] = intval($this->getGameStateValue(FIRST_PLAYER));
   
         return $result;
     }

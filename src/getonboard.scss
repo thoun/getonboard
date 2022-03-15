@@ -3,3 +3,11 @@ html, .mode_3d #game_play_area_background {
   background-size: 100% auto;
   background-repeat: no-repeat;
 }
+
+#firstPlayerToken {
+    width: 32px;
+    height: 32px;
+    position: relative;
+    background: url('img/first-player.png');
+    background-size: contain;
+}

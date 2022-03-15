@@ -115,4 +115,16 @@ trait UtilTrait {
             $this->tickets->pickCards(2, 'deck', $playerId);
         }
     }
+
+    function setupCommonObjectives() {
+        $commonObjectives = [1, 2, 3, 4, 5, 6];
+
+        for ($i = 1; $i <= 2; $i++) {
+            $commonObjectiveIndex = bga_rand(0, count($commonObjectives) - 1);
+            $commonObjective = array_splice($commonObjectives, $commonObjectiveIndex, 1)[0];
+            $commonObjectives = array_values($commonObjectives);
+
+            $this->DbQuery("INSERT INTO common_objectives(`id`) VALUES ($commonObjective)");
+        }
+    }
 }

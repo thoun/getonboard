@@ -35,10 +35,13 @@ trait StateTrait {
         $playerId = intval($this->getActivePlayerId());
 
         $endOfRound = $playerId == intval($this->getGameStateValue(FIRST_PLAYER));
+
         $this->gamestate->nextState($endOfRound ? 'endRound' : 'nextPlayer');
     }
 
     function stEndRound() {
+        // TODO check common objectives
+
         $this->tickets->moveAllCardsInLocation('turn', 'discard');
 
         $startNewRound = intval($this->tickets->countCardInLocation('discard')) < 12;
@@ -47,14 +50,23 @@ trait StateTrait {
 
             $this->activeNextPlayer();
     
-            $playerId = $this->getActivePlayerId();
+            $playerId = intval($this->getActivePlayerId());
             $this->setGameStateValue(FIRST_PLAYER, $playerId);
     
-            // TODO notif
+            self::notifyAllPlayers('newFirstPlayer', clienttranslate('${player_name} is the new first player'), [
+                'playerId' => $playerId,
+                'player_name' => self::getActivePlayerName(),
+            ]);
 
             $this->tickets->pickCardForLocation('deck', 'turn');
         }
             
         $this->gamestate->nextState($startNewRound ? 'newRound' : 'endScore');
+    }
+
+    function stEndScore() {
+        // TODO
+        //$this->gamestate->nextState('endGame');
+        $this->gamestate->jumpToState(ST_PLAYER_PLACE_ROUTE);
     }
 }

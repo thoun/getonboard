@@ -30,7 +30,8 @@ interface GetOnBoardGamedatas {
     tablespeed: string;
 
     // Add here variables you set up in getAllDatas
-    commonObjectives: Card[],
+    commonObjectives: Card[];
+    firstPlayerTokenPlayerId: number;
 }
 
 interface GetOnBoardGame extends Game {

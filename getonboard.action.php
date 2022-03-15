@@ -70,5 +70,13 @@ class action_getonboard extends APP_GameAction
 
         self::ajaxResponse();
     }
+  	
+    public function confirmTurn() {
+        self::setAjaxMode();
+
+        $this->game->confirmTurn();
+
+        self::ajaxResponse();
+    }
 
 }

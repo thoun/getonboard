@@ -131,6 +131,10 @@ class GetOnBoard implements GetOnBoardGame {
                         (this as any).addActionButton(`placeDeparturePawn${ticket}_button`, dojo.string.substitute(_("Start at ${ticket}"), { ticket }), () => this.placeDeparturePawn(ticket))
                     );
                     break;
+                case 'placeRoute':
+                    (this as any).addActionButton(`TODOplaceRoute_button`, _("TODO place route"), () => this.placeRoute(1, 2));
+                    (this as any).addActionButton(`TODOconfirmTurn_button`, _("TODO confirmTurn"), () => this.confirmTurn());
+                    break;
             }
 
         }
@@ -181,8 +185,15 @@ class GetOnBoard implements GetOnBoardGame {
             energyCounter.setValue(player.energy);
             this.energyCounters[playerId] = energyCounter;*/
 
-            if (eliminated) {
+            /*if (eliminated) {
                 setTimeout(() => this.eliminatePlayer(playerId), 200);
+            }*/   
+
+            // first player token
+            dojo.place(`<div id="player_board_${player.id}_firstPlayerWrapper" class="firstPlayerWrapper disabled-shimmer"></div>`, `player_board_${player.id}`);
+
+            if (gamedatas.firstPlayerTokenPlayerId === playerId) {
+                this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
             }
         });
 
@@ -207,6 +218,17 @@ class GetOnBoard implements GetOnBoardGame {
         return null; // TODO
     }
 
+    placeFirstPlayerToken(playerId: number) {
+        const firstPlayerToken = document.getElementById('firstPlayerToken');
+        if (firstPlayerToken) {
+            slideToObjectAndAttach(this, firstPlayerToken, `player_board_${playerId}_firstPlayerWrapper`);
+        } else {
+            dojo.place('<div id="firstPlayerToken"></div>', `player_board_${playerId}_firstPlayerWrapper`);
+
+            (this as any).addTooltipHtml('firstPlayerToken', _("Inspector pawn. This player is the first player of the round."));
+        }
+    }
+
     public placeDeparturePawn(ticket: number) {
         if(!(this as any).checkAction('placeDeparturePawn')) {
             return;
@@ -215,6 +237,41 @@ class GetOnBoard implements GetOnBoardGame {
         this.takeAction('placeDeparturePawn', {
             ticket
         });
+    }
+
+    public placeRoute(from: number, to: number) {
+        if(!(this as any).checkAction('placeRoute')) {
+            return;
+        }
+
+        this.takeAction('placeRoute', {
+            from, 
+            to,
+        });
+    }
+
+    public cancelLast() {
+        if(!(this as any).checkAction('cancelLast')) {
+            return;
+        }
+
+        this.takeAction('cancelLast');
+    }
+
+    public resetTurn() {
+        if(!(this as any).checkAction('resetTurn')) {
+            return;
+        }
+
+        this.takeAction('resetTurn');
+    }
+
+    public confirmTurn() {
+        if(!(this as any).checkAction('confirmTurn')) {
+            return;
+        }
+
+        this.takeAction('confirmTurn');
     }
 
     public takeAction(action: string, data?: any) {
@@ -265,6 +322,7 @@ class GetOnBoard implements GetOnBoardGame {
 
         const notifs = [
             ['pickMonster', ANIMATION_MS],
+            ['newFirstPlayer', 1],
         ];
     
         notifs.forEach((notif) => {
@@ -275,6 +333,11 @@ class GetOnBoard implements GetOnBoardGame {
 
     notif_pickMonster(notif: Notif<any/*NotifPickMonsterArgs*/>) {
        // TODO
+    }
+
+    notif_newFirstPlayer(notif: Notif<NotifNewFirstPlayerArgs>) {
+        console.log(notif.args);
+        this.placeFirstPlayerToken(notif.args.playerId);
     }
 
     /* This enable to inject translatable styled things to logs or action bar */

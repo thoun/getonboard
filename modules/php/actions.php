@@ -37,7 +37,9 @@ trait ActionTrait {
         
         $playerId = self::getActivePlayerId();
 
-        // TODO
+        // TODO check valid
+
+        $this->DbQuery("INSERT INTO placed_routes(`player_id`, `from`, `to`) VALUES ($playerId, $from, $to)");
         /*
         self::notifyAllPlayers('machinePlayed', clienttranslate('${player_name} plays machine ${machineImage}'), [
             'playerId' => $playerId,
@@ -55,13 +57,33 @@ trait ActionTrait {
   	
     public function cancelLast() {
         self::checkAction('cancelLast'); 
+        
+        $playerId = self::getActivePlayerId();
 
         // TODO
+
+        $this->gamestate->nextState('placeRoute');
     }
   	
     public function resetTurn() {
         self::checkAction('resetTurn'); 
+        
+        $playerId = self::getActivePlayerId();
 
         // TODO
+
+        $this->gamestate->nextState('placeRoute');
+    }
+  	
+    public function confirmTurn() {
+        self::checkAction('confirmTurn'); 
+        
+        $playerId = self::getActivePlayerId();
+
+        $this->DbQuery("UPDATE placed_routes SET `validated` = 1 WHERE `player_id` = $playerId AND `validated` = 0");
+        
+        // TODO notif
+
+        $this->gamestate->nextState('nextPlayer');
     }
 }
