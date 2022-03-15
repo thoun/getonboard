@@ -315,3 +315,12 @@ $this->SCORE_SHEETS_SHAPES = [
   [0, 1, 1],
   [0, 0, 0],
 ];
+
+$this->OLD_LADIES_POINTS = [1, 1, 1, 2, 2, 2, 3, 3];
+$this->TOURISTS_POINTS = [2, 5, 9, 14];
+$this->BUSINESSMEN_POINTS = [2, 4, 6];
+$this->BUSINESSMEN_BONUS = [OLD_LADY, TOURIST, INTERNSHIP];
+$this->TURN_ZONES_POINTS = [-1, -2, -2, -2, -3];
+$this->TRAFFIC_JAM_POINTS = [0, -1, 0, -1, 0, -1,
+ -1, -1, -1, -1, -1, -1, -1, 
+ -1, -1, -1, -1, -1, -1];

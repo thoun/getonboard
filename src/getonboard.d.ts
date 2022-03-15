@@ -32,6 +32,9 @@ interface GetOnBoardGamedatas {
     // Add here variables you set up in getAllDatas
     commonObjectives: Card[];
     firstPlayerTokenPlayerId: number;
+    round: number;
+    map: 'small' | 'big';
+    MAP_ROUTES: { [position: number]: number[] };
 }
 
 interface GetOnBoardGame extends Game {
@@ -42,11 +45,16 @@ interface GetOnBoardGame extends Game {
 interface EnteringPlaceDeparturePawnArgs {
     _private?: {
         tickets: number[];
+        positions: number[];
     };
 }
 
 interface EnteringPlaceRouteArgs {
     playerId: number;
+    canConfirm: boolean;
+    canCancel: boolean;
+    currentPosition: number;
+    possibleDestinations: number[];
 }
 
 interface NotifNewFirstPlayerArgs {

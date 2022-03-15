@@ -33,15 +33,18 @@ ALTER TABLE `player` ADD `player_departure_position` INT UNSIGNED NOT NULL DEFAU
 
 CREATE TABLE IF NOT EXISTS `common_objectives` (
    `id` int(11) UNSIGNED NOT NULL,
-   `completed` TINYINT(1)  UNSIGNED NOT NULL DEFAULT '0',
+   `completed_at_round` TINYINT(2)  UNSIGNED NULL,
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `placed_routes` (
+   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
    `player_id` int(11) UNSIGNED NOT NULL,
    `from` int(4) UNSIGNED NOT NULL,
    `to` int(4) UNSIGNED NOT NULL,
    `use_turn_zone` TINYINT(1) UNSIGNED NULL,
    `validated` TINYINT(1)  UNSIGNED NOT NULL DEFAULT '0',
-   PRIMARY KEY (`player_id`, `from`, `to`)
+   `traffic_jam` TINYINT(1)  UNSIGNED NOT NULL DEFAULT '0',
+   `round` int(2) UNSIGNED NOT NULL,
+   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;

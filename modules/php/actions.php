@@ -11,14 +11,17 @@ trait ActionTrait {
         (note: each method below must match an input method in nicodemus.action.php)
     */
 
-    public function placeDeparturePawn(int $ticketNumber) {
+    public function placeDeparturePawn(int $position) {
         self::checkAction('placeDeparturePawn'); 
         
         $playerId = self::getCurrentPlayerId();
 
         $tickets = $this->getCardsFromDb($this->tickets->getCardsInLocation('hand', $playerId));
 
-        if (!$this->array_some($tickets, fn($ticket) => $ticket->type == $ticketNumber)) {
+        $mapElements = $this->MAP_POSITIONS[$this->getMap()][$position];
+        $ticketNumber = $this->array_find($mapElements, fn($element) => $element >= 1 && $element <= 12);
+
+        if ($ticketNumber === null || !$this->array_some($tickets, fn($ticket) => $ticket->type == $ticketNumber)) {
             throw new BgaUserException("Invalid departure");
         }
 
@@ -37,22 +40,43 @@ trait ActionTrait {
         
         $playerId = self::getActivePlayerId();
 
-        // TODO check valid
+        $placedRoutes = $this->getPlacedRoutes($playerId);
+        $currentPosition = $this->getCurrentPosition($playerId, $placedRoutes);
+        $possibleDestinations = $this->getPossibleDestinations($this->getMap(), $currentPosition, $placedRoutes);
 
-        $this->DbQuery("INSERT INTO placed_routes(`player_id`, `from`, `to`) VALUES ($playerId, $from, $to)");
-        /*
-        self::notifyAllPlayers('machinePlayed', clienttranslate('${player_name} plays machine ${machineImage}'), [
+        if (!$this->array_some($possibleDestinations, fn($possibleDestination) => ($possibleDestination === $to && $currentPosition === $from) || ($possibleDestination === $from && $currentPosition === $to))) {
+            throw new BgaUserException("Invalid route");
+        }
+
+        $round = $this->getRoundNumber();
+        $this->DbQuery("INSERT INTO placed_routes(`player_id`, `from`, `to`, `round`) VALUES ($playerId, $from, $to, $round)");
+        
+        self::notifyAllPlayers('placedRoute', clienttranslate('${player_name} places a route marker'), [
             'playerId' => $playerId,
             'player_name' => self::getActivePlayerName(),
-            'machine' => $machine,
-            'machineImage' => $this->getUniqueId($machine),
-            'handMachinesCount' => $this->getHandCount($playerId),
+            'from' => $from,
+            'to' => $to,
         ]);
 
-        self::incStat(1, 'playedMachines');
-        self::incStat(1, 'playedMachines', $playerId);
+        // TODO TEMP
+        self::notifyAllPlayers('updateScoreSheet', '', [
+            'playerId' => $playerId,
+            'player_name' => self::getActivePlayerName(),
+            'scoreSheets' => $this->getScoreSheets($this->getPlacedRoutes($playerId), $this->getPersonalObjective($playerId), $this->getCommonObjectives()),
+        ]);
 
-        $this->gamestate->nextState('choosePlayAction');*/
+        //self::incStat(1, 'placedRoutes');
+        //self::incStat(1, 'placedRoutes', $playerId);
+
+        $this->gamestate->nextState('placeNext');
+    }
+
+    private function applyCancel(array $routeIds) {
+        $this->DbQuery("DELETE FROM placed_routes WHERE `id` IN (".implode(',', $routeIds).")");
+
+        // TODO notif
+
+        $this->gamestate->nextState('placeNext');
     }
   	
     public function cancelLast() {
@@ -60,9 +84,15 @@ trait ActionTrait {
         
         $playerId = self::getActivePlayerId();
 
-        // TODO
+        $placedRoutes = $this->getPlacedRoutes($playerId);
+        $canCancel = count($placedRoutes) > 0 && !end($placedRoutes)->validated;
 
-        $this->gamestate->nextState('placeRoute');
+        if (!$canCancel) {
+            throw new BgaUserException("No move to cancel");
+        }
+
+        $routesToCancel = [end($placedRoutes)->id];
+        $this->applyCancel($routesToCancel);
     }
   	
     public function resetTurn() {
@@ -70,9 +100,14 @@ trait ActionTrait {
         
         $playerId = self::getActivePlayerId();
 
-        // TODO
+        $placedRoutes = $this->getPlacedRoutes($playerId);
+        $routesToCancel = array_map(fn($placedRoute) => $placedRoute->id, array_values(array_filter($placedRoutes, fn($placedRoute) => !$placedRoute->validated)));
 
-        $this->gamestate->nextState('placeRoute');
+        if ($routesToCancel == 0) {
+            throw new BgaUserException("No move to cancel");
+        }
+
+        $this->applyCancel($routesToCancel);
     }
   	
     public function confirmTurn() {

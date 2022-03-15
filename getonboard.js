@@ -72,6 +72,7 @@ var GetOnBoard = /** @class */ (function () {
         "gamedatas" argument contains all datas retrieved by your "getAllDatas" PHP method.
     */
     GetOnBoard.prototype.setup = function (gamedatas) {
+        var _this = this;
         var players = Object.values(gamedatas.players);
         // ignore loading of some pictures
         if (players.length > 3) {
@@ -86,6 +87,20 @@ var GetOnBoard = /** @class */ (function () {
         this.createPlayerPanels(gamedatas);
         this.createPlayerTables(gamedatas);
         //this.tableManager = new TableManager(this, this.playerTables);
+        // TODO TEMP
+        var center = document.getElementById('center');
+        Object.keys(gamedatas.MAP_ROUTES).forEach(function (key) {
+            var position = Number(key);
+            var destinations = gamedatas.MAP_ROUTES[position];
+            dojo.place("<div id=\"position".concat(position, "\"></div>"), center);
+            dojo.place("<button id=\"position".concat(position, "-placeDeparturePawn\" class=\"bgabutton bgabutton_blue disabled\">position ").concat(position, "</button>"), "position".concat(position));
+            document.getElementById("position".concat(position, "-placeDeparturePawn")).addEventListener('click', function () { return _this.placeDeparturePawn(position); });
+            destinations.forEach(function (destination) {
+                dojo.place("<button id=\"position".concat(position, "-placeRoute-to").concat(destination, "\" class=\"bgabutton bgabutton_blue placeRoute-button disabled\">route ").concat(position, " to ").concat(destination, "</button>"), "position".concat(position));
+                document.getElementById("position".concat(position, "-placeRoute-to").concat(destination)).addEventListener('click', function () { return _this.placeRoute(position, destination); });
+            });
+        });
+        // TODO TEMP
         this.setupNotifications();
         /*this.preferencesManager = new PreferencesManager(this);
 
@@ -101,39 +116,24 @@ var GetOnBoard = /** @class */ (function () {
     GetOnBoard.prototype.onEnteringState = function (stateName, args) {
         log('Entering state: ' + stateName, args.args);
         switch (stateName) {
-            /*case 'pickMonster':
-                dojo.addClass('kot-table', 'pickMonster');
-                this.onEnteringPickMonster(args.args);
-                break;*/
+            case 'placeRoute':
+                this.onEnteringPlaceRoute(args.args);
+                break;
         }
     };
-    /*private onEnteringPickMonster(args: EnteringPickMonsterArgs) {
-        // TODO clean only needed
-        document.getElementById('monster-pick').innerHTML = '';
-        args.availableMonsters.forEach(monster => {
-            dojo.place(`
-            <div id="pick-monster-figure-${monster}" class="monster-figure monster${monster}"></div>
-            `, `monster-pick`);
-
-            document.getElementById(`pick-monster-figure-${monster}`).addEventListener('click', () => {
-                this.pickMonster(monster);
-            })
+    GetOnBoard.prototype.onEnteringPlaceRoute = function (args) {
+        args.possibleDestinations.forEach(function (destination) {
+            var min = Math.min(args.currentPosition, destination);
+            var max = Math.max(args.currentPosition, destination);
+            document.getElementById("position".concat(min, "-placeRoute-to").concat(max)).classList.remove('disabled');
         });
-
-        const isCurrentPlayerActive = (this as any).isCurrentPlayerActive();
-        dojo.toggleClass('monster-pick', 'selectable', isCurrentPlayerActive);
-    }*/
+    };
     GetOnBoard.prototype.onLeavingState = function (stateName) {
         log('Leaving state: ' + stateName);
         switch (stateName) {
-            /*case 'chooseInitialCard':
-                this.tableCenter.setVisibleCardsSelectionMode(0);
-                this.tableCenter.setVisibleCardsSelectionClass(false);
-                this.playerTables.forEach(playerTable => {
-                    playerTable.hideEvolutionPickStock();
-                    playerTable.setVisibleCardsSelectionClass(false);
-                });
-                break;*/
+            case 'placeRoute':
+                Array.from(document.getElementsByClassName('placeRoute-button')).forEach(function (element) { return element.classList.add('disabled'); });
+                break;
         }
     };
     /*private onLeavingStepEvolution() {
@@ -155,13 +155,25 @@ var GetOnBoard = /** @class */ (function () {
             switch (stateName) {
                 case 'placeDeparturePawn':
                     var placeDeparturePawnArgs = args;
-                    placeDeparturePawnArgs._private.tickets.forEach(function (ticket) {
-                        return _this.addActionButton("placeDeparturePawn".concat(ticket, "_button"), dojo.string.substitute(_("Start at ${ticket}"), { ticket: ticket }), function () { return _this.placeDeparturePawn(ticket); });
+                    /*placeDeparturePawnArgs._private.tickets.forEach(ticket =>
+                        (this as any).addActionButton(`placeDeparturePawn${ticket}_button`, dojo.string.substitute(_("Start at ${ticket}"), { ticket }), () => this.placeDeparturePawn(ticket))
+                    );*/
+                    placeDeparturePawnArgs._private.positions.forEach(function (position) {
+                        return document.getElementById("position".concat(position, "-placeDeparturePawn")).classList.remove('disabled');
                     });
                     break;
                 case 'placeRoute':
-                    this.addActionButton("TODOplaceRoute_button", _("TODO place route"), function () { return _this.placeRoute(1, 2); });
-                    this.addActionButton("TODOconfirmTurn_button", _("TODO confirmTurn"), function () { return _this.confirmTurn(); });
+                    this.addActionButton("confirmTurn_button", _("TODO confirmTurn"), function () { return _this.confirmTurn(); });
+                    var placeRouteArgs = args;
+                    if (!placeRouteArgs.canConfirm) {
+                        dojo.addClass("confirmTurn_button", "disabled");
+                    }
+                    this.addActionButton("cancelLast_button", _("Cancel last marker"), function () { return _this.cancelLast(); }, null, null, 'grey');
+                    this.addActionButton("resetTurn_button", _("Reset the whole turn"), function () { return _this.resetTurn(); }, null, null, 'grey');
+                    if (!placeRouteArgs.canCancel) {
+                        dojo.addClass("cancelLast_button", "disabled");
+                        dojo.addClass("resetTurn_button", "disabled");
+                    }
                     break;
             }
         }
@@ -229,12 +241,12 @@ var GetOnBoard = /** @class */ (function () {
             this.addTooltipHtml('firstPlayerToken', _("Inspector pawn. This player is the first player of the round."));
         }
     };
-    GetOnBoard.prototype.placeDeparturePawn = function (ticket) {
+    GetOnBoard.prototype.placeDeparturePawn = function (position) {
         if (!this.checkAction('placeDeparturePawn')) {
             return;
         }
         this.takeAction('placeDeparturePawn', {
-            ticket: ticket
+            position: position
         });
     };
     GetOnBoard.prototype.placeRoute = function (from, to) {
@@ -311,6 +323,7 @@ var GetOnBoard = /** @class */ (function () {
         var notifs = [
             ['pickMonster', ANIMATION_MS],
             ['newFirstPlayer', 1],
+            ['updateScoreSheet', 1], // TODO TEMP
         ];
         notifs.forEach(function (notif) {
             dojo.subscribe(notif[0], _this, "notif_".concat(notif[0]));
@@ -323,6 +336,9 @@ var GetOnBoard = /** @class */ (function () {
     GetOnBoard.prototype.notif_newFirstPlayer = function (notif) {
         console.log(notif.args);
         this.placeFirstPlayerToken(notif.args.playerId);
+    };
+    GetOnBoard.prototype.notif_updateScoreSheet = function (notif) {
+        console.log(notif.args);
     };
     /* This enable to inject translatable styled things to logs or action bar */
     /* @Override */

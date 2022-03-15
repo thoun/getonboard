@@ -129,6 +129,9 @@ class GameState {
     
     function checkPossibleAction($action) {
     }
+
+    function state_id() {        
+    }
 }
 
 class BgaUserException extends Exception {

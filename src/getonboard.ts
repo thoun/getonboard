@@ -48,6 +48,23 @@ class GetOnBoard implements GetOnBoardGame {
         this.createPlayerTables(gamedatas);
         //this.tableManager = new TableManager(this, this.playerTables);
 
+        // TODO TEMP
+        const center = document.getElementById('center');
+        Object.keys(gamedatas.MAP_ROUTES).forEach(key => {
+            const position = Number(key);
+            const destinations = gamedatas.MAP_ROUTES[position];
+
+            dojo.place(`<div id="position${position}"></div>`, center);
+            dojo.place(`<button id="position${position}-placeDeparturePawn" class="bgabutton bgabutton_blue disabled">position ${position}</button>`, `position${position}`);
+            document.getElementById(`position${position}-placeDeparturePawn`).addEventListener('click', () => this.placeDeparturePawn(position));
+
+            destinations.forEach(destination => {
+                dojo.place(`<button id="position${position}-placeRoute-to${destination}" class="bgabutton bgabutton_blue placeRoute-button disabled">route ${position} to ${destination}</button>`, `position${position}`);
+                document.getElementById(`position${position}-placeRoute-to${destination}`).addEventListener('click', () => this.placeRoute(position, destination));
+            });
+        });
+        // TODO TEMP
+
         this.setupNotifications();
         /*this.preferencesManager = new PreferencesManager(this);
 
@@ -67,42 +84,27 @@ class GetOnBoard implements GetOnBoardGame {
         log('Entering state: ' + stateName, args.args);
 
         switch (stateName) {
-            /*case 'pickMonster':
-                dojo.addClass('kot-table', 'pickMonster');
-                this.onEnteringPickMonster(args.args);
-                break;*/
+            case 'placeRoute':
+                this.onEnteringPlaceRoute(args.args);
+                break;
         }
     }
     
-    /*private onEnteringPickMonster(args: EnteringPickMonsterArgs) {
-        // TODO clean only needed
-        document.getElementById('monster-pick').innerHTML = '';
-        args.availableMonsters.forEach(monster => {
-            dojo.place(`
-            <div id="pick-monster-figure-${monster}" class="monster-figure monster${monster}"></div>
-            `, `monster-pick`);
-
-            document.getElementById(`pick-monster-figure-${monster}`).addEventListener('click', () => {
-                this.pickMonster(monster);
-            })
+    private onEnteringPlaceRoute(args: EnteringPlaceRouteArgs) {
+        args.possibleDestinations.forEach(destination => {
+            const min = Math.min(args.currentPosition, destination);
+            const max = Math.max(args.currentPosition, destination);
+            document.getElementById(`position${min}-placeRoute-to${max}`).classList.remove('disabled');
         });
-
-        const isCurrentPlayerActive = (this as any).isCurrentPlayerActive();
-        dojo.toggleClass('monster-pick', 'selectable', isCurrentPlayerActive);
-    }*/
+    }
 
     public onLeavingState(stateName: string) {
         log( 'Leaving state: '+stateName );
 
         switch (stateName) {
-            /*case 'chooseInitialCard':                
-                this.tableCenter.setVisibleCardsSelectionMode(0);
-                this.tableCenter.setVisibleCardsSelectionClass(false);
-                this.playerTables.forEach(playerTable => {
-                    playerTable.hideEvolutionPickStock();
-                    playerTable.setVisibleCardsSelectionClass(false);
-                });
-                break;*/
+            case 'placeRoute':                
+                Array.from(document.getElementsByClassName('placeRoute-button')).forEach(element => element.classList.add('disabled'));
+                break;
         }
     }
     
@@ -127,13 +129,25 @@ class GetOnBoard implements GetOnBoardGame {
             switch (stateName) {
                 case 'placeDeparturePawn':
                     const placeDeparturePawnArgs = args as EnteringPlaceDeparturePawnArgs;
-                    placeDeparturePawnArgs._private.tickets.forEach(ticket => 
+                    /*placeDeparturePawnArgs._private.tickets.forEach(ticket => 
                         (this as any).addActionButton(`placeDeparturePawn${ticket}_button`, dojo.string.substitute(_("Start at ${ticket}"), { ticket }), () => this.placeDeparturePawn(ticket))
+                    );*/
+                    placeDeparturePawnArgs._private.positions.forEach(position => 
+                        document.getElementById(`position${position}-placeDeparturePawn`).classList.remove('disabled')
                     );
                     break;
                 case 'placeRoute':
-                    (this as any).addActionButton(`TODOplaceRoute_button`, _("TODO place route"), () => this.placeRoute(1, 2));
-                    (this as any).addActionButton(`TODOconfirmTurn_button`, _("TODO confirmTurn"), () => this.confirmTurn());
+                    (this as any).addActionButton(`confirmTurn_button`, _("TODO confirmTurn"), () => this.confirmTurn());
+                    const placeRouteArgs = args as EnteringPlaceRouteArgs;
+                    if (!placeRouteArgs.canConfirm) {
+                        dojo.addClass(`confirmTurn_button`, `disabled`);
+                    }
+                    (this as any).addActionButton(`cancelLast_button`, _("Cancel last marker"), () => this.cancelLast(), null, null, 'grey');
+                    (this as any).addActionButton(`resetTurn_button`, _("Reset the whole turn"), () => this.resetTurn(), null, null, 'grey');
+                    if (!placeRouteArgs.canCancel) {
+                        dojo.addClass(`cancelLast_button`, `disabled`);
+                        dojo.addClass(`resetTurn_button`, `disabled`);
+                    }
                     break;
             }
 
@@ -229,13 +243,13 @@ class GetOnBoard implements GetOnBoardGame {
         }
     }
 
-    public placeDeparturePawn(ticket: number) {
+    public placeDeparturePawn(position: number) {
         if(!(this as any).checkAction('placeDeparturePawn')) {
             return;
         }
 
         this.takeAction('placeDeparturePawn', {
-            ticket
+            position
         });
     }
 
@@ -323,6 +337,7 @@ class GetOnBoard implements GetOnBoardGame {
         const notifs = [
             ['pickMonster', ANIMATION_MS],
             ['newFirstPlayer', 1],
+            ['updateScoreSheet', 1], // TODO TEMP
         ];
     
         notifs.forEach((notif) => {
@@ -338,6 +353,10 @@ class GetOnBoard implements GetOnBoardGame {
     notif_newFirstPlayer(notif: Notif<NotifNewFirstPlayerArgs>) {
         console.log(notif.args);
         this.placeFirstPlayerToken(notif.args.playerId);
+    }
+
+    notif_updateScoreSheet(notif: Notif<any/*NotifPickMonsterArgs*/>) {
+       console.log(notif.args);
     }
 
     /* This enable to inject translatable styled things to logs or action bar */

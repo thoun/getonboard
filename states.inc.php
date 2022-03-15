@@ -150,6 +150,7 @@ $gameGameStates = [
         "description" => "",
         "type" => "game",
         "action" => "stEndScore",
+        "updateGameProgression" => true,
         "transitions" => [
             "endGame" => ST_END_GAME,
         ],

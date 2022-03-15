@@ -1,6 +1,7 @@
 <?php
 
 require_once(__DIR__.'/objects/ticket.php');
+require_once(__DIR__.'/objects/placed-route.php');
 
 trait UtilTrait {
 
@@ -12,6 +13,15 @@ trait UtilTrait {
         foreach ($array as $value) {
             if($fn($value)) {
                 return $value;
+            }
+        }
+        return null;
+    }
+
+    function array_find_key(array $array, callable $fn) {
+        foreach ($array as $key => $value) {
+            if($fn($value)) {
+                return $key;
             }
         }
         return null;
@@ -126,5 +136,60 @@ trait UtilTrait {
 
             $this->DbQuery("INSERT INTO common_objectives(`id`) VALUES ($commonObjective)");
         }
+    }
+
+    function getPlacedRoutes(/*int | null*/ $playerId = null) {
+        $sql = "SELECT * FROM `placed_routes` ";
+        if ($playerId != null) {
+            $sql .= "WHERE `player_id` = $playerId ";
+        }
+        $sql .= "ORDER by `id` ASC";
+        $dbResult = self::getCollectionFromDb($sql);
+
+        return array_map(fn($dbCard) => new PlacedRoute($dbCard), array_values($dbResult));
+    }
+
+    function getCurrentPosition(int $playerId, array $placedRoutes) {
+        if (count($placedRoutes) > 0) {
+            return end($placedRoutes)->to;
+        } else {
+            return intval($this->getUniqueValueFromDB("SELECT player_departure_position FROM `player` where `player_id` = $playerId"));
+        }
+    }
+    
+    function getDestinations(string $mapSize, int $position) {
+        $routes = [];
+
+        foreach($this->MAP_ROUTES[$mapSize] as $from => $tos) {
+            if ($from === $position) {
+                $routes = array_merge($routes, $tos);
+            } else {
+                $routeToSpot = $this->array_find($tos, fn($to) => $to == $position);
+                if ($routeToSpot !== null) {
+                    $routes[] = $from;
+                }
+            }
+        } 
+
+        return $routes;
+    }
+
+    function getPossibleDestinations(string $mapSize, int $position, array $placedRoutes) {
+        return array_values(array_filter(
+            $this->getDestinations($mapSize, $position), 
+            fn($destination) => !$this->array_some($placedRoutes, fn($placedRoute) => ($placedRoute->from === $position && $placedRoute->to === $destination) || ($placedRoute->to === $position && $placedRoute->from === $destination))
+        ));
+    }
+
+    function getRoundNumber() {
+        return intval($this->tickets->countCardInLocation('discard')) + 1;
+    }
+
+    function getPersonalObjective(int $playerId) {
+        return []; // TODO
+    }
+
+    function getCommonObjectives() {
+        return []; // TODO
     }
 }

@@ -33,23 +33,24 @@ define('FIRST_PLAYER', 'FIRST_PLAYER');
  * Map elements
  */
 define('GREEN_LIGHT', 0);
-// 1 to 6 : starting point
+// 1 to 12 : starting point
 
-define('OLD_LADY', 10);
+define('OLD_LADY', 20);
 
-define('STUDENT', 20);
-define('SCHOOL', 21);
-define('SCHOOL_SPECIAL', 25);
+define('STUDENT', 30);
+define('INTERNSHIP', 31);
+define('SCHOOL', 32);
+define('SCHOOL_SPECIAL', 35);
 
-define('TOURIST', 30);
-define('MONUMENT_LIGHT', 31);
-define('MONUMENT_DARK', 32);
-define('MONUMENT_LIGHT_SPECIAL', 35);
-define('MONUMENT_DARK_SPECIAL', 36);
+define('TOURIST', 40);
+define('MONUMENT_LIGHT', 41);
+define('MONUMENT_DARK', 42);
+define('MONUMENT_LIGHT_SPECIAL', 45);
+define('MONUMENT_DARK_SPECIAL', 46);
 
-define('BUSINESSMAN', 40);
-define('BUILDING', 21);
-define('BUILDING_SPECIAL', 25);
+define('BUSINESSMAN', 50);
+define('BUILDING', 51);
+define('BUILDING_SPECIAL', 55);
 
 // 97 to 122 : objectives (using ord('a'))
 ?>

@@ -24,6 +24,7 @@ require_once('modules/php/utils.php');
 require_once('modules/php/actions.php');
 require_once('modules/php/states.php');
 require_once('modules/php/args.php');
+require_once('modules/php/score-sheet.php');
 require_once('modules/php/debug-util.php');
 
 class GetOnBoard extends Table {
@@ -31,6 +32,7 @@ class GetOnBoard extends Table {
     use ActionTrait;
     use StateTrait;
     use ArgsTrait;
+    use ScoreSheetTrait;
     use DebugUtilTrait;
 
 	function __construct() {
@@ -136,10 +138,14 @@ class GetOnBoard extends Table {
         foreach ($result['players'] as $playerId => &$playerDb) {
             $playerDb['sheetType'] = intval($playerDb['sheetType']);
             $playerDb['departurePosition'] = intval($playerDb['departurePosition']);
+            $playerDb['placedRoutes'] = $this->getPlacedRoutes($playerId);
         }
         $result['players'][$currentPlayerId]['personalObjective'] = intval($this->getUniqueValueFromDB("SELECT player_personal_objective FROM `player` where `player_id` = $currentPlayerId"));
   
+        $result['map'] = $this->getMap();
+        $result['MAP_ROUTES'] = $this->MAP_ROUTES[$result['map']];
         $result['firstPlayerTokenPlayerId'] = intval($this->getGameStateValue(FIRST_PLAYER));
+        $result['round'] = $this->getRoundNumber();
   
         return $result;
     }
@@ -155,9 +161,14 @@ class GetOnBoard extends Table {
         (see states.inc.php)
     */
     function getGameProgression() {
-        // TODO: compute and return the game progression
-
-        return 0;
+        $stateId = intval($this->gamestate->state_id());
+        if ($stateId >= ST_END_SCORE) {
+            return 100;
+        } else if ($stateId <= ST_START_GAME) {
+            return 0;
+        } else {
+            return 4 + 8 * ($this->getRoundNumber() - 1);
+        }
     }
 
 //////////////////////////////////////////////////////////////////////////////
