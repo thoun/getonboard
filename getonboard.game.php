@@ -135,11 +135,14 @@ class GetOnBoard extends Table {
         $sql = "SELECT player_id id, player_score score, player_no playerNo, player_sheet_type sheetType, player_departure_position departurePosition FROM player ";
         $result['players'] = self::getCollectionFromDb($sql);
 
+        $commonObjectives = $this->getCommonObjectives();
         foreach ($result['players'] as $playerId => &$playerDb) {
             $playerDb['playerNo'] = intval($playerDb['playerNo']);
             $playerDb['sheetType'] = intval($playerDb['sheetType']);
             $playerDb['departurePosition'] = intval($playerDb['departurePosition']);
-            $playerDb['placedRoutes'] = $this->getPlacedRoutes($playerId);
+            $placedRoutes = $this->getPlacedRoutes($playerId);
+            $playerDb['placedRoutes'] = $placedRoutes;
+            $playerDb['scoreSheets'] = $this->getScoreSheets($playerId, $placedRoutes, $commonObjectives);
         }
         $result['players'][$currentPlayerId]['personalObjective'] = intval($this->getUniqueValueFromDB("SELECT player_personal_objective FROM `player` where `player_id` = $currentPlayerId"));
   
@@ -147,6 +150,8 @@ class GetOnBoard extends Table {
         $result['MAP_ROUTES'] = $this->MAP_ROUTES[$result['map']];
         $result['firstPlayerTokenPlayerId'] = intval($this->getGameStateValue(FIRST_PLAYER));
         $result['round'] = $this->getRoundNumber();
+
+        $result['TODO_TEMP_MAP_POSITIONS'] = $this->MAP_POSITIONS['small'];
   
         return $result;
     }

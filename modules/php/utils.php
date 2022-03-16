@@ -87,6 +87,10 @@ trait UtilTrait {
         return array_keys($this->loadPlayersBasicInfos());
     }
 
+    function getPlayerName(int $playerId) {
+        return self::getUniqueValueFromDB("SELECT player_name FROM player WHERE player_id = $playerId");
+    }
+
     function getCardFromDb(array $dbCard) {
         if (!$dbCard || !array_key_exists('id', $dbCard)) {
             throw new \Error('card doesn\'t exists '.json_encode($dbCard));
@@ -185,11 +189,27 @@ trait UtilTrait {
         return intval($this->tickets->countCardInLocation('discard')) + 1;
     }
 
-    function getPersonalObjective(int $playerId) {
-        return []; // TODO
+    function getPersonalObjectiveType(int $playerId) {
+        return intval($this->getUniqueValueFromDB("SELECT player_personal_objective FROM `player` where `player_id` = $playerId"));
+    }
+
+    function getPersonalObjectiveLetters(int $playerId) {
+        return $this->PERSONAL_OBJECTIVES[$this->getMap()][$this->getPersonalObjectiveType($playerId)];
     }
 
     function getCommonObjectives() {
         return []; // TODO
+    }
+
+    function notifUpdateScoreSheet(int $playerId) {
+        $scoreSheets = $this->getScoreSheets($playerId, $this->getPlacedRoutes($playerId), $this->getCommonObjectives());
+        
+        $this->notifyAllPlayers('updateScoreSheet', '', [
+            'playerId' => $playerId,
+            'player_name' => $this->getPlayerName($playerId),
+            'scoreSheets' => $scoreSheets,
+        ]);
+
+        return $scoreSheets;
     }
 }

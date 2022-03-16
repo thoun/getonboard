@@ -1,8 +1,16 @@
+#player-tables {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 .player-table {
   margin: 20px;
   width: 700px;
   height: 700px;
   position: relative;
+  font-family: 'Caveat';
+  font-size: 16pt;
 
   .top {
     position: absolute;
@@ -25,6 +33,52 @@
     width: 100%;
     height: 623px;
     background: url('img/score-pad.png');
+
+    .block {
+      position: absolute;
+
+      @import 'score-sheet-main';
+
+      .checkmark {
+        position: absolute;
+        background: #00FF0080;
+        text-align: center;
+        font-size: 22pt;
+        width: 28px;
+        height: 27px;
+        margin-top: -8px;
+      }
+
+      .subtotal, .special {
+        position: absolute;
+        text-align: center;
+        width: 28px;
+        height: 27px;
+        right: 7px;
+      }
+
+      .total {
+        position: absolute;
+        text-align: center;
+        bottom: 0;
+        right: 0;
+        width: 43px;
+        height: 41px;
+        font-size: 22pt;
+      }
+    }
+
+    .score.total {
+      position: absolute;
+      text-align: center;
+      bottom: 16px;
+      right: 29px;
+      width: 103px;
+      height: 41px;
+      font-size: 40pt;
+      margin-bottom: 15px;
+      margin-right: 7px;
+    }
   }
 
   .name {
@@ -36,5 +90,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  [data-unvalidated="true"] {
+    color: red;
   }
 }

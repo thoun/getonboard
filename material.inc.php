@@ -19,7 +19,7 @@
  *
  */
 
- $this->MAP_POSITIONS = [
+$this->MAP_POSITIONS = [
   'small' => [
     11 => [SCHOOL, SCHOOL_SPECIAL],
     12 => [GREEN_LIGHT, ord('a')],

@@ -10,11 +10,71 @@ interface Card {
     location_arg: number;
 }
 
+interface SimpleZoneScoreSheet {
+    checked: number;
+
+    total: number;
+}
+
+interface StudentsScoreSheet {
+    checkedStudents: number;
+    checkedInternships: number;
+    checkedSchools: number;
+    specialSchool: number;
+
+    subTotal: number;
+    total: number;
+}
+
+interface TouristsScoreSheet {
+    checkedTourists: number[];
+    checkedMonumentsLight: number;
+    checkedMonumentsDark: number; 
+    specialMonumentLight: number;
+    specialMonumentDark: number;
+    specialMonumentMax: number;
+
+    subTotals: number[];
+    total: number;
+}
+
+interface BusinessmenScoreSheet {
+    checkedBusinessmen: number[];
+    specialBuilding: number;
+
+    subTotals: number[];
+    total: number;
+}
+
+interface ObjectivesScoreSheet {
+    subTotals: number[];
+    total: number;
+}
+
+interface ScoreSheet {
+    oldLadies: SimpleZoneScoreSheet;
+    students: StudentsScoreSheet;
+    tourists: TouristsScoreSheet;
+    businessmen: BusinessmenScoreSheet;
+    commonObjectives: ObjectivesScoreSheet;
+    personalObjective: ObjectivesScoreSheet;
+    turnZones: SimpleZoneScoreSheet;
+    trafficJam: SimpleZoneScoreSheet;
+
+    total: number;
+}
+
+interface ScoreSheets {
+    validated: ScoreSheet;
+    current: ScoreSheet;
+}
+
 interface GetOnBoardPlayer extends Player {
     playerNo: number;
     sheetType: number;
     departurePosition: number;
     personalObjective?: number;
+    scoreSheets: ScoreSheets;
 }
 
 interface GetOnBoardGamedatas {
@@ -35,6 +95,8 @@ interface GetOnBoardGamedatas {
     round: number;
     map: 'small' | 'big';
     MAP_ROUTES: { [position: number]: number[] };
+
+    TODO_TEMP_MAP_POSITIONS: { [position: number]: [] };
 }
 
 interface GetOnBoardGame extends Game {
@@ -62,4 +124,9 @@ interface EnteringPlaceRouteArgs {
 
 interface NotifNewFirstPlayerArgs {
     playerId: number;
+}
+
+interface NotifUpdateScoreSheetArgs {
+    playerId: number;
+    scoreSheets: ScoreSheets;
 }

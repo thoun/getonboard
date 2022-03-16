@@ -49,6 +49,9 @@ class ScoreSheet {
     public ObjectivesScoreSheet $commonObjectives;
     public ObjectivesScoreSheet $personalObjective;
     public SimpleZoneScoreSheet $turnZones;
+    public SimpleZoneScoreSheet $trafficJam;
+
+    public int $total = 0;
 
     public function __construct() {
         $this->oldLadies = new SimpleZoneScoreSheet();
@@ -59,7 +62,6 @@ class ScoreSheet {
         $this->personalObjective = new ObjectivesScoreSheet();
         $this->turnZones = new SimpleZoneScoreSheet();
         $this->trafficJam = new SimpleZoneScoreSheet();
-        
     } 
 }
 

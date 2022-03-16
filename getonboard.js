@@ -60,9 +60,29 @@ var PlayerTable = /** @class */ (function () {
         this.player = player;
         this.playerId = Number(player.id);
         var eliminated = Number(player.eliminated) > 0;
-        var html = "\n        <div id=\"player-table-".concat(player.id, "\" class=\"player-table ").concat(eliminated ? 'eliminated' : '', "\">\n            <div id=\"player-table-").concat(player.id, "-top\" class=\"top\" data-type=\"").concat(player.sheetType, "\"></div>\n            <div id=\"player-table-").concat(player.id, "-main\" class=\"main\"></div>\n            <div class=\"name\" style=\"color: #").concat(player.color, ";\">").concat(player.name, "</div>\n        </div>\n        ");
+        var html = "\n        <div id=\"player-table-".concat(player.id, "\" class=\"player-table ").concat(eliminated ? 'eliminated' : '', "\" style=\"box-shadow: 0 0 3px 3px #").concat(player.color, ";\">\n            <div id=\"player-table-").concat(player.id, "-top\" class=\"top\" data-type=\"").concat(player.sheetType, "\"></div>\n            <div id=\"player-table-").concat(player.id, "-main\" class=\"main\">\n                <div class=\"old-ladies block\">");
+        for (var i = 1; i <= 8; i++) {
+            html += "\n                    <div id=\"player-table-".concat(player.id, "-old-ladies-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>");
+        }
+        html += "        \n                    <div id=\"player-table-".concat(player.id, "-old-ladies-total\" class=\"total\"></div>\n                </div>\n                <div class=\"students block\">\n                    <div id=\"player-table-").concat(player.id, "-students-special\" class=\"special\"></div>\n                    <div id=\"player-table-").concat(player.id, "-students-subtotal\" class=\"subtotal\"></div>\n                    <div id=\"player-table-").concat(player.id, "-students-total\" class=\"total\"></div>\n                </div>\n                <div class=\"tourists block\">\n                    <div id=\"player-table-").concat(player.id, "-tourists-specialLight\" class=\"special\" data-style=\"Light\"></div>\n                    <div id=\"player-table-").concat(player.id, "-tourists-specialDark\" class=\"special\" data-style=\"Dark\"></div>\n                    <div id=\"player-table-").concat(player.id, "-tourists-specialMax\" class=\"special\"></div>\n                    <div id=\"player-table-").concat(player.id, "-tourists-subtotal1\" class=\"subtotal\" data-number=\"1\"></div>\n                    <div id=\"player-table-").concat(player.id, "-tourists-subtotal2\" class=\"subtotal\" data-number=\"2\"></div>\n                    <div id=\"player-table-").concat(player.id, "-tourists-subtotal3\" class=\"subtotal\" data-number=\"3\"></div>\n                    <div id=\"player-table-").concat(player.id, "-tourists-total\" class=\"total\"></div>\n                </div>\n                <div class=\"businessmen block\">\n                    <div id=\"player-table-").concat(player.id, "-businessmen-specialMax\" class=\"special\"></div>\n                    <div id=\"player-table-").concat(player.id, "-businessmen-subtotal1\" class=\"subtotal\" data-number=\"1\"></div>\n                    <div id=\"player-table-").concat(player.id, "-businessmen-subtotal2\" class=\"subtotal\" data-number=\"2\"></div>\n                    <div id=\"player-table-").concat(player.id, "-businessmen-subtotal3\" class=\"subtotal\" data-number=\"3\"></div>\n                    <div id=\"player-table-").concat(player.id, "-businessmen-total\" class=\"total\"></div>\n                </div>\n                <div class=\"common-objectives block\">\n                    <div id=\"player-table-").concat(player.id, "-common-objectives-objective1\" class=\"subtotal\" data-number=\"1\"></div>\n                    <div id=\"player-table-").concat(player.id, "-common-objectives-objective2\" class=\"subtotal\" data-number=\"2\"></div>\n                    <div id=\"player-table-").concat(player.id, "-common-objectives-total\" class=\"total\"></div>\n                </div>\n                <div class=\"personal-objective block\">\n                    <div id=\"player-table-").concat(player.id, "-personal-objective-total\" class=\"total\"></div>\n                </div>\n                <div class=\"turn-zones block\">\n                    <div id=\"player-table-").concat(player.id, "-turn-zones-total\" class=\"total\"></div>\n                </div>\n                <div class=\"traffic-jam block\">\n                    <div id=\"player-table-").concat(player.id, "-turn-zones-total\" class=\"total\"></div>\n                </div>\n                <div id=\"player-table-").concat(player.id, "-total-score\" class=\"total score\"></div>\n            </div>\n            <div class=\"name\" style=\"color: #").concat(player.color, ";\">").concat(player.name, "</div>\n        </div>\n        ");
         dojo.place(html, 'player-tables');
+        this.updateScoreSheet(player.scoreSheets);
     }
+    PlayerTable.prototype.updateScoreSheet = function (scoreSheets) {
+        this.updateOldLadiesScoreSheet(scoreSheets.current.oldLadies, scoreSheets.validated.oldLadies);
+        this.setContentAndValidation("total-score", "".concat(scoreSheets.current.total), scoreSheets.current.total != scoreSheets.validated.total);
+    };
+    PlayerTable.prototype.setContentAndValidation = function (id, content, unvalidated) {
+        var div = document.getElementById("player-table-".concat(this.playerId, "-").concat(id));
+        div.innerHTML = content;
+        div.dataset.unvalidated = unvalidated.toString();
+    };
+    PlayerTable.prototype.updateOldLadiesScoreSheet = function (current, validated) {
+        for (var i = 1; i <= 8; i++) {
+            this.setContentAndValidation("old-ladies-checkmark".concat(i), current.checked >= i ? '✔' : '', current.checked >= i && validated.checked < i);
+        }
+        this.setContentAndValidation("old-ladies-total", "".concat(current.total), current.total != validated.total);
+    };
     return PlayerTable;
 }());
 var TableCenter = /** @class */ (function () {
@@ -71,14 +91,52 @@ var TableCenter = /** @class */ (function () {
         this.game = game;
         // TODO TEMP
         var center = document.getElementById('center');
+        dojo.place("<div id=\"departures\"></div>", center);
+        Object.keys(game.gamedatas.TODO_TEMP_MAP_POSITIONS).forEach(function (key) {
+            var position = Number(key);
+            var elements = game.gamedatas.TODO_TEMP_MAP_POSITIONS[position];
+            var departure = elements.some(function (element) { return element >= 1 && element <= 12; });
+            if (departure) {
+                dojo.place("<button id=\"position".concat(position, "-placeDeparturePawn\" class=\"bgabutton bgabutton_blue disabled\">Start at ").concat(position, "</button>"), "departures");
+                document.getElementById("position".concat(position, "-placeDeparturePawn")).addEventListener('click', function () { return _this.game.placeDeparturePawn(position); });
+            }
+        });
         Object.keys(game.gamedatas.MAP_ROUTES).forEach(function (key) {
             var position = Number(key);
             var destinations = game.gamedatas.MAP_ROUTES[position];
             dojo.place("<div id=\"position".concat(position, "\"></div>"), center);
-            dojo.place("<button id=\"position".concat(position, "-placeDeparturePawn\" class=\"bgabutton bgabutton_blue disabled\">&gt; ").concat(position, "</button>"), "position".concat(position));
-            document.getElementById("position".concat(position, "-placeDeparturePawn")).addEventListener('click', function () { return _this.game.placeDeparturePawn(position); });
             destinations.forEach(function (destination) {
-                dojo.place("<button id=\"position".concat(position, "-placeRoute-to").concat(destination, "\" class=\"bgabutton bgabutton_blue placeRoute-button disabled\">").concat(position, " - ").concat(destination, "</button>"), "position".concat(position));
+                var label = '';
+                var elements = game.gamedatas.TODO_TEMP_MAP_POSITIONS[position];
+                if (elements.some(function (element) { return element == 0; })) {
+                    label += '🟢';
+                }
+                if (elements.some(function (element) { return element == 20; })) {
+                    label += '👵';
+                }
+                if (elements.some(function (element) { return element == 30; })) {
+                    label += '🎓';
+                }
+                if (elements.some(function (element) { return element == 32; })) {
+                    label += '🏫';
+                }
+                if (elements.some(function (element) { return element == 40; })) {
+                    label += '🕶';
+                }
+                if (elements.some(function (element) { return element == 41 || element == 42; })) {
+                    label += '🗼';
+                }
+                if (elements.some(function (element) { return element == 50; })) {
+                    label += '🕴';
+                }
+                if (elements.some(function (element) { return element == 51; })) {
+                    label += '🏢';
+                }
+                if (elements.some(function (element) { return [35, 45, 46, 55].includes(element); })) {
+                    label += '★';
+                }
+                dojo.place("<button id=\"position".concat(position, "-placeRoute-to").concat(destination, "\" class=\"bgabutton bgabutton_blue placeRoute-button disabled\">").concat(label, "</button>"), "position".concat(position));
+                //dojo.place(`<button id="position${position}-placeRoute-to${destination}" class="bgabutton bgabutton_blue placeRoute-button disabled">${position} - ${destination}</button>`, `position${position}`);
                 document.getElementById("position".concat(position, "-placeRoute-to").concat(destination)).addEventListener('click', function () { return _this.game.placeRoute(position, destination); });
             });
         });
@@ -189,7 +247,7 @@ var GetOnBoard = /** @class */ (function () {
                     });
                     break;
                 case 'placeRoute':
-                    this.addActionButton("confirmTurn_button", _("TODO confirmTurn"), function () { return _this.confirmTurn(); });
+                    this.addActionButton("confirmTurn_button", _("Confirm turn"), function () { return _this.confirmTurn(); });
                     var placeRouteArgs = args;
                     if (!placeRouteArgs.canConfirm) {
                         dojo.addClass("confirmTurn_button", "disabled");
@@ -268,6 +326,9 @@ var GetOnBoard = /** @class */ (function () {
             dojo.place('<div id="firstPlayerToken"></div>', "player_board_".concat(playerId, "_firstPlayerWrapper"));
             this.addTooltipHtml('firstPlayerToken', _("Inspector pawn. This player is the first player of the round."));
         }
+    };
+    GetOnBoard.prototype.getPlayerTable = function (playerId) {
+        return this.playersTables.find(function (playerTable) { return playerTable.playerId === playerId; });
     };
     GetOnBoard.prototype.placeDeparturePawn = function (position) {
         if (!this.checkAction('placeDeparturePawn')) {
@@ -366,7 +427,10 @@ var GetOnBoard = /** @class */ (function () {
         this.placeFirstPlayerToken(notif.args.playerId);
     };
     GetOnBoard.prototype.notif_updateScoreSheet = function (notif) {
-        console.log(notif.args);
+        var _a;
+        var playerId = notif.args.playerId;
+        this.getPlayerTable(playerId).updateScoreSheet(notif.args.scoreSheets);
+        (_a = this.scoreCtrl[playerId]) === null || _a === void 0 ? void 0 : _a.toValue(notif.args.scoreSheets.current.total);
     };
     /* This enable to inject translatable styled things to logs or action bar */
     /* @Override */

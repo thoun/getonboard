@@ -4,6 +4,13 @@ html, .mode_3d #game_play_area_background {
   background-repeat: no-repeat;
 }
 
+@font-face {
+  font-family: "Caveat";
+  src: url("img/font/Caveat-Regular.woff2") format("woff2"), url("img/font/Caveat-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 #firstPlayerToken {
   width: 32px;
   height: 32px;
@@ -13,12 +20,18 @@ html, .mode_3d #game_play_area_background {
 }
 
 #center {
-  columns: 10rem auto;
+  columns: 7rem auto;
 }
 #center button {
   width: auto;
   margin: 2px;
-  font-size: 60%;
+  color: black;
+}
+
+#player-tables {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .player-table {
@@ -26,6 +39,8 @@ html, .mode_3d #game_play_area_background {
   width: 700px;
   height: 700px;
   position: relative;
+  font-family: "Caveat";
+  font-size: 16pt;
 }
 .player-table .top {
   position: absolute;
@@ -57,6 +72,177 @@ html, .mode_3d #game_play_area_background {
   height: 623px;
   background: url("img/score-pad.png");
 }
+.player-table .main .block {
+  position: absolute;
+}
+.player-table .main .block.old-ladies {
+  top: 60px;
+  left: 20px;
+  width: 115px;
+  height: 442px;
+}
+.player-table .main .block.old-ladies .checkmark {
+  left: 34px;
+}
+.player-table .main .block.old-ladies .checkmark[data-number="1"] {
+  top: 71px;
+}
+.player-table .main .block.old-ladies .checkmark[data-number="2"] {
+  top: 112px;
+}
+.player-table .main .block.old-ladies .checkmark[data-number="3"] {
+  top: 153px;
+}
+.player-table .main .block.old-ladies .checkmark[data-number="4"] {
+  top: 194px;
+}
+.player-table .main .block.old-ladies .checkmark[data-number="5"] {
+  top: 235px;
+}
+.player-table .main .block.old-ladies .checkmark[data-number="6"] {
+  top: 276px;
+}
+.player-table .main .block.old-ladies .checkmark[data-number="7"] {
+  top: 317px;
+}
+.player-table .main .block.old-ladies .checkmark[data-number="8"] {
+  top: 358px;
+}
+.player-table .main .block.old-ladies .total {
+  top: 401px;
+  left: 72px;
+  font-size: 22pt;
+}
+.player-table .main .block.students {
+  top: 60px;
+  left: 157px;
+  width: 244px;
+  height: 188px;
+}
+.player-table .main .block.students .special {
+  top: 29px;
+}
+.player-table .main .block.students .subtotal {
+  top: 93px;
+}
+.player-table .main .block.tourists {
+  top: 244px;
+  left: 157px;
+  width: 244px;
+  height: 252px;
+}
+.player-table .main .block.tourists .special {
+  top: 31px;
+  right: 7px;
+}
+.player-table .main .block.tourists .special[data-style] {
+  right: 35px;
+  width: 18px;
+  height: 16px;
+}
+.player-table .main .block.tourists .special[data-style=Light] {
+  top: 28px;
+}
+.player-table .main .block.tourists .special[data-style=Dark] {
+  top: 45px;
+}
+.player-table .main .block.tourists .subtotal[data-number="1"] {
+  top: 75px;
+}
+.player-table .main .block.tourists .subtotal[data-number="2"] {
+  top: 119px;
+}
+.player-table .main .block.tourists .subtotal[data-number="3"] {
+  top: 163px;
+}
+.player-table .main .block.businessmen {
+  top: 61px;
+  left: 423px;
+  width: 244px;
+  height: 252px;
+}
+.player-table .main .block.businessmen .special {
+  top: 31px;
+  right: 7px;
+}
+.player-table .main .block.businessmen .subtotal[data-number="1"] {
+  top: 75px;
+}
+.player-table .main .block.businessmen .subtotal[data-number="2"] {
+  top: 119px;
+}
+.player-table .main .block.businessmen .subtotal[data-number="3"] {
+  top: 163px;
+}
+.player-table .main .block.common-objectives {
+  top: 315px;
+  left: 423px;
+  width: 111px;
+  height: 181px;
+}
+.player-table .main .block.common-objectives .subtotal {
+  right: 37px;
+}
+.player-table .main .block.common-objectives .subtotal[data-number="1"] {
+  top: 64px;
+}
+.player-table .main .block.common-objectives .subtotal[data-number="2"] {
+  top: 109px;
+}
+.player-table .main .block.personal-objective {
+  top: 315px;
+  left: 556px;
+  width: 111px;
+  height: 181px;
+}
+.player-table .main .block.turn-zones {
+  top: 4px;
+  left: 312px;
+  width: 355px;
+  height: 64px;
+}
+.player-table .main .block.traffic-jam {
+  top: 502px;
+  left: 11px;
+  width: 523px;
+  height: 104px;
+}
+.player-table .main .block .checkmark {
+  position: absolute;
+  background: #00FF0080;
+  text-align: center;
+  font-size: 22pt;
+  width: 28px;
+  height: 27px;
+  margin-top: -8px;
+}
+.player-table .main .block .subtotal, .player-table .main .block .special {
+  position: absolute;
+  text-align: center;
+  width: 28px;
+  height: 27px;
+  right: 7px;
+}
+.player-table .main .block .total {
+  position: absolute;
+  text-align: center;
+  bottom: 0;
+  right: 0;
+  width: 43px;
+  height: 41px;
+  font-size: 22pt;
+}
+.player-table .main .score.total {
+  position: absolute;
+  text-align: center;
+  bottom: 16px;
+  right: 29px;
+  width: 103px;
+  height: 41px;
+  font-size: 40pt;
+  margin-bottom: 15px;
+  margin-right: 7px;
+}
 .player-table .name {
   position: absolute;
   top: 99px;
@@ -66,4 +252,7 @@ html, .mode_3d #game_play_area_background {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.player-table [data-unvalidated=true] {
+  color: red;
 }

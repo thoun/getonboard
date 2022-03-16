@@ -4,6 +4,15 @@ html, .mode_3d #game_play_area_background {
   background-repeat: no-repeat;
 }
 
+@font-face {
+  font-family: 'Caveat';
+  src: url('img/font/Caveat-Regular.woff2') format('woff2'),
+    url('img/font/Caveat-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 #firstPlayerToken {
     width: 32px;
     height: 32px;

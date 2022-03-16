@@ -119,7 +119,7 @@ class GetOnBoard implements GetOnBoardGame {
                     );
                     break;
                 case 'placeRoute':
-                    (this as any).addActionButton(`confirmTurn_button`, _("TODO confirmTurn"), () => this.confirmTurn());
+                    (this as any).addActionButton(`confirmTurn_button`, _("Confirm turn"), () => this.confirmTurn());
                     const placeRouteArgs = args as EnteringPlaceRouteArgs;
                     if (!placeRouteArgs.canConfirm) {
                         dojo.addClass(`confirmTurn_button`, `disabled`);
@@ -225,6 +225,10 @@ class GetOnBoard implements GetOnBoardGame {
 
             (this as any).addTooltipHtml('firstPlayerToken', _("Inspector pawn. This player is the first player of the round."));
         }
+    }
+
+    private getPlayerTable(playerId: number): PlayerTable {
+        return this.playersTables.find(playerTable => playerTable.playerId === playerId);
     }
 
     public placeDeparturePawn(position: number) {
@@ -339,8 +343,10 @@ class GetOnBoard implements GetOnBoardGame {
         this.placeFirstPlayerToken(notif.args.playerId);
     }
 
-    notif_updateScoreSheet(notif: Notif<any/*NotifPickMonsterArgs*/>) {
-       console.log(notif.args);
+    notif_updateScoreSheet(notif: Notif<NotifUpdateScoreSheetArgs>) {
+        const playerId = notif.args.playerId;
+        this.getPlayerTable(playerId).updateScoreSheet(notif.args.scoreSheets);
+        (this as any).scoreCtrl[playerId]?.toValue(notif.args.scoreSheets.current.total);
     }
 
     /* This enable to inject translatable styled things to logs or action bar */

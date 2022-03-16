@@ -35,13 +35,15 @@ trait ActionTrait {
     }
         
   	
-    public function placeRoute(int $from, int $to) {
+    public function placeRoute(int $routeFrom, int $routeTo) {
         self::checkAction('placeRoute'); 
         
-        $playerId = self::getActivePlayerId();
+        $playerId = intval(self::getActivePlayerId());
 
         $placedRoutes = $this->getPlacedRoutes($playerId);
         $currentPosition = $this->getCurrentPosition($playerId, $placedRoutes);
+        $from = $currentPosition == $routeFrom ? $routeFrom : $routeTo;
+        $to = $currentPosition == $routeFrom ? $routeTo : $routeFrom;
         $possibleDestinations = $this->getPossibleDestinations($this->getMap(), $currentPosition, $placedRoutes);
 
         if (!$this->array_some($possibleDestinations, fn($possibleDestination) => ($possibleDestination === $to && $currentPosition === $from) || ($possibleDestination === $from && $currentPosition === $to))) {
@@ -58,12 +60,7 @@ trait ActionTrait {
             'to' => $to,
         ]);
 
-        // TODO TEMP
-        self::notifyAllPlayers('updateScoreSheet', '', [
-            'playerId' => $playerId,
-            'player_name' => self::getActivePlayerName(),
-            'scoreSheets' => $this->getScoreSheets($this->getPlacedRoutes($playerId), $this->getPersonalObjective($playerId), $this->getCommonObjectives()),
-        ]);
+        $this->notifUpdateScoreSheet($playerId);
 
         //self::incStat(1, 'placedRoutes');
         //self::incStat(1, 'placedRoutes', $playerId);
@@ -72,9 +69,11 @@ trait ActionTrait {
     }
 
     private function applyCancel(array $routeIds) {
+        $playerId = intval(self::getActivePlayerId());
+
         $this->DbQuery("DELETE FROM placed_routes WHERE `id` IN (".implode(',', $routeIds).")");
 
-        // TODO notif
+        $this->notifUpdateScoreSheet($playerId);
 
         $this->gamestate->nextState('placeNext');
     }
@@ -117,7 +116,9 @@ trait ActionTrait {
 
         $this->DbQuery("UPDATE placed_routes SET `validated` = 1 WHERE `player_id` = $playerId AND `validated` = 0");
         
-        // TODO notif
+        $scoreSheets = $this->notifUpdateScoreSheet($playerId);
+        $score = $scoreSheets->validated->total;
+        $this->DbQuery("UPDATE player SET `player_score` = $score WHERE `player_id` = $playerId");
 
         $this->gamestate->nextState('nextPlayer');
     }

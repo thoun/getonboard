@@ -14,7 +14,7 @@ trait ScoreSheetTrait {
 
     function addOldLadyToScoreSheetAndUpdateTotal(ScoreSheet &$scoreSheet) {
         $scoreSheet->oldLadies->checked++;
-        $scoreSheet->oldLadies->total += $this->getTotalForSimpleZone($scoreSheet->oldLadies->checked, $this->OLD_LADIES_POINTS);
+        $scoreSheet->oldLadies->total = $this->getTotalForSimpleZone($scoreSheet->oldLadies->checked, $this->OLD_LADIES_POINTS);
         // TODO check common objective
     }
 
@@ -185,24 +185,37 @@ trait ScoreSheetTrait {
                             $this->addSpecialBuildingToScoreSheet($scoreSheet);
                             break;
 
-                        // TODO objectives
+                        // TODO common objectives
 
-                        // TODO maluses
+                        // TODO turn zones
+
+                        // TODO traffic jam
                     }
                 }
             }
         }
 
+        $scoreSheet->total = $scoreSheet->oldLadies->total + $scoreSheet->students->total + $scoreSheet->tourists->total + $scoreSheet->businessmen->total /* + TODO*/;
+
         return $scoreSheet;
     }
 
-    function getScoreSheets(array $placedRoutes, array $personalObjectives, array $commonObjectives) {
+    function getScoreSheets(int $playerId, array $placedRoutes, array $commonObjectives) {
 
         $mapPositions = $this->MAP_POSITIONS[$this->getMap()];
 
+        $personalObjective = $this->getPersonalObjectiveLetters($playerId);
+
+        $validatedPlacedRoutes = array_values(array_filter($placedRoutes, fn($placedRoute) => $placedRoute->validated));
+
+        $validatedScoreSheet = $this->getScoreSheet($validatedPlacedRoutes, $mapPositions, $personalObjective, $commonObjectives);
+        $currentScoreSheet = count($validatedPlacedRoutes) === count($placedRoutes) ? 
+            $validatedScoreSheet : 
+            $this->getScoreSheet($placedRoutes, $mapPositions, $personalObjective, $commonObjectives);
+
         return new ScoreSheets(
-            $this->getScoreSheet(array_filter($placedRoutes, fn($placedRoute) => $placedRoute->validated), $mapPositions, $personalObjectives, $commonObjectives),
-            $this->getScoreSheet($placedRoutes, $mapPositions, $personalObjectives, $commonObjectives),
+            $validatedScoreSheet,
+            $currentScoreSheet,
         );
     }
 }
