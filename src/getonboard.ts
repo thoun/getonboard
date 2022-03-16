@@ -5,14 +5,13 @@ declare const dojo: Dojo;
 declare const _;
 declare const g_gamethemeurl;
 
-const isDebug = window.location.host == 'studio.boardgamearena.com' || window.location.hash.indexOf('debug') > -1;;
-const log = isDebug ? console.log.bind(window.console) : function () { };
-
 const ANIMATION_MS = 500;
 
 class GetOnBoard implements GetOnBoardGame {
     private gamedatas: GetOnBoardGamedatas;
     //private healthCounters: Counter[] = [];
+    private tableCenter: TableCenter;
+    private playersTables: PlayerTable[] = [];
 
     constructor() {
     }
@@ -45,25 +44,8 @@ class GetOnBoard implements GetOnBoardGame {
 
         log('gamedatas', gamedatas);
         this.createPlayerPanels(gamedatas); 
+        this.tableCenter = new TableCenter(this);
         this.createPlayerTables(gamedatas);
-        //this.tableManager = new TableManager(this, this.playerTables);
-
-        // TODO TEMP
-        const center = document.getElementById('center');
-        Object.keys(gamedatas.MAP_ROUTES).forEach(key => {
-            const position = Number(key);
-            const destinations = gamedatas.MAP_ROUTES[position];
-
-            dojo.place(`<div id="position${position}"></div>`, center);
-            dojo.place(`<button id="position${position}-placeDeparturePawn" class="bgabutton bgabutton_blue disabled">position ${position}</button>`, `position${position}`);
-            document.getElementById(`position${position}-placeDeparturePawn`).addEventListener('click', () => this.placeDeparturePawn(position));
-
-            destinations.forEach(destination => {
-                dojo.place(`<button id="position${position}-placeRoute-to${destination}" class="bgabutton bgabutton_blue placeRoute-button disabled">route ${position} to ${destination}</button>`, `position${position}`);
-                document.getElementById(`position${position}-placeRoute-to${destination}`).addEventListener('click', () => this.placeRoute(position, destination));
-            });
-        });
-        // TODO TEMP
 
         this.setupNotifications();
         /*this.preferencesManager = new PreferencesManager(this);
@@ -165,10 +147,6 @@ class GetOnBoard implements GetOnBoardGame {
         return Number((this as any).player_id);
     }
 
-    private getOrderedPlayers(): GetOnBoardPlayer[] {
-        return Object.values(this.gamedatas.players).sort((a,b) => Number(a.player_no) - Number(b.player_no));
-    }
-
     private createPlayerPanels(gamedatas: GetOnBoardGamedatas) {
 
         Object.values(gamedatas.players).forEach(player => {
@@ -214,13 +192,19 @@ class GetOnBoard implements GetOnBoardGame {
         //(this as any).addTooltipHtmlToClass('shrink-ray-tokens', this.SHINK_RAY_TOKEN_TOOLTIP);
         //(this as any).addTooltipHtmlToClass('poison-tokens', this.POISON_TOKEN_TOOLTIP);
     }
-    
+
     private createPlayerTables(gamedatas: GetOnBoardGamedatas) {
-        /*this.playerTables = this.getOrderedPlayers().map(player => {
-            const playerId = Number(player.id);
-            const playerWithGoldenScarab = gamedatas.anubisExpansion && playerId === gamedatas.playerWithGoldenScarab;
-            return new PlayerTable(this, player, playerWithGoldenScarab);
-        });*/
+        const players = Object.values(gamedatas.players).sort((a, b) => a.playerNo - b.playerNo);
+        const playerIndex = players.findIndex(player => Number(player.id) === Number((this as any).player_id));
+        const orderedPlayers = playerIndex > 0 ? [...players.slice(playerIndex), ...players.slice(0, playerIndex)] : players;
+
+        orderedPlayers.forEach(player => 
+            this.createPlayerTable(gamedatas, Number(player.id))
+        );
+    }
+
+    private createPlayerTable(gamedatas: GetOnBoardGamedatas, playerId: number) {
+        this.playersTables.push(new PlayerTable(this, gamedatas.players[playerId]));
     }
 
     /*private getPlayerTable(playerId: number): PlayerTable {

@@ -11,7 +11,7 @@ interface Card {
 }
 
 interface GetOnBoardPlayer extends Player {
-    player_no: string;
+    playerNo: number;
     sheetType: number;
     departurePosition: number;
     personalObjective?: number;
@@ -38,8 +38,11 @@ interface GetOnBoardGamedatas {
 }
 
 interface GetOnBoardGame extends Game {
-    getPlayerId: () => number;
-    getZoom(): number;
+    getPlayerId(): number;
+    getZoom(): number;    
+
+    placeDeparturePawn(position: number): void;
+    placeRoute(from: number, to: number): void;
 }
 
 interface EnteringPlaceDeparturePawnArgs {

@@ -12,6 +12,58 @@ html, .mode_3d #game_play_area_background {
   background-size: contain;
 }
 
+#center {
+  columns: 10rem auto;
+}
 #center button {
   width: auto;
+  margin: 2px;
+  font-size: 60%;
+}
+
+.player-table {
+  margin: 20px;
+  width: 700px;
+  height: 700px;
+  position: relative;
+}
+.player-table .top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 77px;
+}
+.player-table .top[data-type="1"] {
+  background: url("img/score-pad-top-1.png");
+}
+.player-table .top[data-type="2"] {
+  background: url("img/score-pad-top-2.png");
+}
+.player-table .top[data-type="3"] {
+  background: url("img/score-pad-top-3.png");
+}
+.player-table .top[data-type="4"] {
+  background: url("img/score-pad-top-4.png");
+}
+.player-table .top[data-type="5"] {
+  background: url("img/score-pad-top-5.png");
+}
+.player-table .main {
+  position: absolute;
+  top: 77px;
+  left: 0;
+  width: 100%;
+  height: 623px;
+  background: url("img/score-pad.png");
+}
+.player-table .name {
+  position: absolute;
+  top: 99px;
+  left: 62px;
+  width: 133px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

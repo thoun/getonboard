@@ -12,8 +12,5 @@ html, .mode_3d #game_play_area_background {
     background-size: contain;
 }
 
-// TODO TEMP
-#center button {
-  width: auto;
-}
-// TODO TEMP
+@import 'table-center';
+@import 'player-table';

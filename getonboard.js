@@ -54,10 +54,51 @@ function slideToObjectAndAttach(game, object, destinationId, posX, posY, rotatio
 var isDebug = window.location.host == 'studio.boardgamearena.com' || window.location.hash.indexOf('debug') > -1;
 ;
 var log = isDebug ? console.log.bind(window.console) : function () { };
+var PlayerTable = /** @class */ (function () {
+    function PlayerTable(game, player) {
+        this.game = game;
+        this.player = player;
+        this.playerId = Number(player.id);
+        var eliminated = Number(player.eliminated) > 0;
+        var html = "\n        <div id=\"player-table-".concat(player.id, "\" class=\"player-table ").concat(eliminated ? 'eliminated' : '', "\">\n            <div id=\"player-table-").concat(player.id, "-top\" class=\"top\" data-type=\"").concat(player.sheetType, "\"></div>\n            <div id=\"player-table-").concat(player.id, "-main\" class=\"main\"></div>\n            <div class=\"name\" style=\"color: #").concat(player.color, ";\">").concat(player.name, "</div>\n        </div>\n        ");
+        dojo.place(html, 'player-tables');
+    }
+    return PlayerTable;
+}());
+var TableCenter = /** @class */ (function () {
+    function TableCenter(game) {
+        var _this = this;
+        this.game = game;
+        // TODO TEMP
+        var center = document.getElementById('center');
+        Object.keys(game.gamedatas.MAP_ROUTES).forEach(function (key) {
+            var position = Number(key);
+            var destinations = game.gamedatas.MAP_ROUTES[position];
+            dojo.place("<div id=\"position".concat(position, "\"></div>"), center);
+            dojo.place("<button id=\"position".concat(position, "-placeDeparturePawn\" class=\"bgabutton bgabutton_blue disabled\">&gt; ").concat(position, "</button>"), "position".concat(position));
+            document.getElementById("position".concat(position, "-placeDeparturePawn")).addEventListener('click', function () { return _this.game.placeDeparturePawn(position); });
+            destinations.forEach(function (destination) {
+                dojo.place("<button id=\"position".concat(position, "-placeRoute-to").concat(destination, "\" class=\"bgabutton bgabutton_blue placeRoute-button disabled\">").concat(position, " - ").concat(destination, "</button>"), "position".concat(position));
+                document.getElementById("position".concat(position, "-placeRoute-to").concat(destination)).addEventListener('click', function () { return _this.game.placeRoute(position, destination); });
+            });
+        });
+        // TODO TEMP
+    }
+    return TableCenter;
+}());
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 var ANIMATION_MS = 500;
 var GetOnBoard = /** @class */ (function () {
-    //private healthCounters: Counter[] = [];
     function GetOnBoard() {
+        this.playersTables = [];
     }
     /*
         setup:
@@ -72,7 +113,6 @@ var GetOnBoard = /** @class */ (function () {
         "gamedatas" argument contains all datas retrieved by your "getAllDatas" PHP method.
     */
     GetOnBoard.prototype.setup = function (gamedatas) {
-        var _this = this;
         var players = Object.values(gamedatas.players);
         // ignore loading of some pictures
         if (players.length > 3) {
@@ -85,22 +125,8 @@ var GetOnBoard = /** @class */ (function () {
         this.gamedatas = gamedatas;
         log('gamedatas', gamedatas);
         this.createPlayerPanels(gamedatas);
+        this.tableCenter = new TableCenter(this);
         this.createPlayerTables(gamedatas);
-        //this.tableManager = new TableManager(this, this.playerTables);
-        // TODO TEMP
-        var center = document.getElementById('center');
-        Object.keys(gamedatas.MAP_ROUTES).forEach(function (key) {
-            var position = Number(key);
-            var destinations = gamedatas.MAP_ROUTES[position];
-            dojo.place("<div id=\"position".concat(position, "\"></div>"), center);
-            dojo.place("<button id=\"position".concat(position, "-placeDeparturePawn\" class=\"bgabutton bgabutton_blue disabled\">position ").concat(position, "</button>"), "position".concat(position));
-            document.getElementById("position".concat(position, "-placeDeparturePawn")).addEventListener('click', function () { return _this.placeDeparturePawn(position); });
-            destinations.forEach(function (destination) {
-                dojo.place("<button id=\"position".concat(position, "-placeRoute-to").concat(destination, "\" class=\"bgabutton bgabutton_blue placeRoute-button disabled\">route ").concat(position, " to ").concat(destination, "</button>"), "position".concat(position));
-                document.getElementById("position".concat(position, "-placeRoute-to").concat(destination)).addEventListener('click', function () { return _this.placeRoute(position, destination); });
-            });
-        });
-        // TODO TEMP
         this.setupNotifications();
         /*this.preferencesManager = new PreferencesManager(this);
 
@@ -184,9 +210,6 @@ var GetOnBoard = /** @class */ (function () {
     GetOnBoard.prototype.getPlayerId = function () {
         return Number(this.player_id);
     };
-    GetOnBoard.prototype.getOrderedPlayers = function () {
-        return Object.values(this.gamedatas.players).sort(function (a, b) { return Number(a.player_no) - Number(b.player_no); });
-    };
     GetOnBoard.prototype.createPlayerPanels = function (gamedatas) {
         var _this = this;
         Object.values(gamedatas.players).forEach(function (player) {
@@ -218,11 +241,16 @@ var GetOnBoard = /** @class */ (function () {
         //(this as any).addTooltipHtmlToClass('poison-tokens', this.POISON_TOKEN_TOOLTIP);
     };
     GetOnBoard.prototype.createPlayerTables = function (gamedatas) {
-        /*this.playerTables = this.getOrderedPlayers().map(player => {
-            const playerId = Number(player.id);
-            const playerWithGoldenScarab = gamedatas.anubisExpansion && playerId === gamedatas.playerWithGoldenScarab;
-            return new PlayerTable(this, player, playerWithGoldenScarab);
-        });*/
+        var _this = this;
+        var players = Object.values(gamedatas.players).sort(function (a, b) { return a.playerNo - b.playerNo; });
+        var playerIndex = players.findIndex(function (player) { return Number(player.id) === Number(_this.player_id); });
+        var orderedPlayers = playerIndex > 0 ? __spreadArray(__spreadArray([], players.slice(playerIndex), true), players.slice(0, playerIndex), true) : players;
+        orderedPlayers.forEach(function (player) {
+            return _this.createPlayerTable(gamedatas, Number(player.id));
+        });
+    };
+    GetOnBoard.prototype.createPlayerTable = function (gamedatas, playerId) {
+        this.playersTables.push(new PlayerTable(this, gamedatas.players[playerId]));
     };
     /*private getPlayerTable(playerId: number): PlayerTable {
         return this.playerTables.find(playerTable => playerTable.playerId === Number(playerId));
