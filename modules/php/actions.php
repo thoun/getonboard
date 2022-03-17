@@ -40,18 +40,22 @@ trait ActionTrait {
         
         $playerId = intval(self::getActivePlayerId());
 
-        $placedRoutes = $this->getPlacedRoutes($playerId);
-        $currentPosition = $this->getCurrentPosition($playerId, $placedRoutes);
+        $allPlacedRoutes = $this->getPlacedRoutes();
+        $playerPlacedRoutes = array_filter($allPlacedRoutes, fn($placedRoute) => $placedRoute->playerId === $playerId);
+        $currentPosition = $this->getCurrentPosition($playerId, $playerPlacedRoutes);
         $from = $currentPosition == $routeFrom ? $routeFrom : $routeTo;
         $to = $currentPosition == $routeFrom ? $routeTo : $routeFrom;
-        $possibleDestinations = $this->getPossibleDestinations($this->getMap(), $currentPosition, $placedRoutes);
+        $turnShape = $this->getPlayerTurnShape($playerId);
+        $possibleRoutes = $this->getPossibleRoutes($playerId, $this->getMap(), $turnShape, $currentPosition, $allPlacedRoutes);
+        $possibleRoute = $this->array_find($possibleRoutes, fn($route) => $this->isSameRoute($route, $from, $to));
 
-        if (!$this->array_some($possibleDestinations, fn($possibleDestination) => ($possibleDestination === $to && $currentPosition === $from) || ($possibleDestination === $from && $currentPosition === $to))) {
+        if ($possibleRoute == null) {
             throw new BgaUserException("Invalid route");
         }
 
         $round = $this->getRoundNumber();
-        $this->DbQuery("INSERT INTO placed_routes(`player_id`, `from`, `to`, `round`) VALUES ($playerId, $from, $to, $round)");
+        $useTurnZone = $possibleRoute->useTurnZone ? 1 : 0;
+        $this->DbQuery("INSERT INTO placed_routes(`player_id`, `from`, `to`, `round`, `use_turn_zone`, `traffic_jam`) VALUES ($playerId, $from, $to, $round, $useTurnZone, $possibleRoute->trafficJam)");
         
         self::notifyAllPlayers('placedRoute', clienttranslate('${player_name} places a route marker'), [
             'playerId' => $playerId,

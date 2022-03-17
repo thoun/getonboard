@@ -34,18 +34,22 @@ trait ArgsTrait {
     }
    
     function argPlaceRoute() {
-        $playerId = self::getActivePlayerId();
+        $playerId = intval(self::getActivePlayerId());
 
-        $placedRoutes = $this->getPlacedRoutes($playerId);
-        $currentPosition = $this->getCurrentPosition($playerId, $placedRoutes);
-        $canConfirm = true; // TODO
-        $canCancel = count($placedRoutes) > 0 && !end($placedRoutes)->validated;
+        $allPlacedRoutes = $this->getPlacedRoutes();
+        $playerPlacedRoutes = array_filter($allPlacedRoutes, fn($placedRoute) => $placedRoute->playerId === $playerId);
+        $currentPosition = $this->getCurrentPosition($playerId, $playerPlacedRoutes);
+        $turnShape = $this->getPlayerTurnShape($playerId);
+        $possibleRoutes = $this->getPossibleRoutes($playerId, $this->getMap(), $turnShape, $currentPosition, $allPlacedRoutes);
+        $canConfirm = count($possibleRoutes) === 0;
+        $canCancel = count($playerPlacedRoutes) > 0 && !end($playerPlacedRoutes)->validated;
     
         return [
             'currentPosition' => $currentPosition,
-            'possibleDestinations' => $this->getPossibleDestinations($this->getMap(), $currentPosition, $placedRoutes),
+            'possibleRoutes' => $possibleRoutes,
             'canConfirm' => $canConfirm,
             'canCancel' => $canCancel,
+            'shape' => $turnShape,
         ];
     }
     

@@ -27,6 +27,17 @@ html, .mode_3d #game_play_area_background {
   height: 64px;
 }
 
+.personal-objective-wrapper {
+  display: flex;
+  justify-content: center;
+}
+.personal-objective-wrapper .personal-objective {
+  width: 150px;
+  height: 90px;
+  background: aquamarine;
+  margin: 10px;
+}
+
 #center {
   columns: 7rem auto;
 }

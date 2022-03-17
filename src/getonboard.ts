@@ -75,9 +75,9 @@ class GetOnBoard implements GetOnBoardGame {
     }
     
     private onEnteringPlaceRoute(args: EnteringPlaceRouteArgs) {
-        args.possibleDestinations.forEach(destination => {
-            const min = Math.min(args.currentPosition, destination);
-            const max = Math.max(args.currentPosition, destination);
+        args.possibleRoutes.forEach(route => {
+            const min = Math.min(route.from, route.to);
+            const max = Math.max(route.from, route.to);
             document.getElementById(`position${min}-placeRoute-to${max}`).classList.remove('disabled');
         });
     }
@@ -152,32 +152,13 @@ class GetOnBoard implements GetOnBoardGame {
     private createPlayerPanels(gamedatas: GetOnBoardGamedatas) {
 
         Object.values(gamedatas.players).forEach(player => {
-            const playerId = Number(player.id);  
-
+            const playerId = Number(player.id);
             const eliminated = Number(player.eliminated) > 0;
 
-            // health & energy counters
-            let html = `<div class="counters">
-                <div id="health-counter-wrapper-${player.id}" class="counter">
-                    <div class="icon health"></div> 
-                    <span id="health-counter-${player.id}"></span>
-                </div>
-                <div id="energy-counter-wrapper-${player.id}" class="counter">
-                    <div class="icon energy"></div> 
-                    <span id="energy-counter-${player.id}"></span>
-                </div>`;
-            html += `</div>`;
-            dojo.place(html, `player_board_${player.id}`);
-
-            /*const healthCounter = new ebg.counter();
-            healthCounter.create(`health-counter-${player.id}`);
-            healthCounter.setValue(player.health);
-            this.healthCounters[playerId] = healthCounter;
-
-            const energyCounter = new ebg.counter();
-            energyCounter.create(`energy-counter-${player.id}`);
-            energyCounter.setValue(player.energy);
-            this.energyCounters[playerId] = energyCounter;*/
+            if (playerId === this.getPlayerId()) {
+                dojo.place(`<div class="personal-objective-wrapper"><div id="panel-board-personal-objective" class="personal-objective" data-type="${player.personalObjective}"></div></div>`, `player_board_${player.id}`);
+                (this as any).addTooltipHtml('panel-board-personal-objective', _("Your personal objective"));
+            }
 
             /*if (eliminated) {
                 setTimeout(() => this.eliminatePlayer(playerId), 200);
@@ -187,8 +168,6 @@ class GetOnBoard implements GetOnBoardGame {
             dojo.place(`<div id="player_board_${player.id}_firstPlayerWrapper" class="firstPlayerWrapper"></div>`, `player_board_${player.id}`);
         });
 
-        //(this as any).addTooltipHtmlToClass('shrink-ray-tokens', this.SHINK_RAY_TOKEN_TOOLTIP);
-        //(this as any).addTooltipHtmlToClass('poison-tokens', this.POISON_TOKEN_TOOLTIP);
     }
 
     private createPlayerTables(gamedatas: GetOnBoardGamedatas) {
@@ -202,7 +181,7 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     private createPlayerTable(gamedatas: GetOnBoardGamedatas, playerId: number) {
-        const table = new PlayerTable(this, gamedatas.players[playerId]);
+        const table = new PlayerTable(gamedatas.players[playerId]);
         table.setRound(gamedatas.validatedTickets, gamedatas.currentTicket);
         this.playersTables.push(table);
     }

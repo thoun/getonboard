@@ -11,10 +11,10 @@ trait DebugUtilTrait {
             return;
         } 
 
-        $this->insertSomeRoutes(2343492);
+        //$this->insertSomeRoutes(2343492);
     }
 
-    function insertSomeRoutes(int $playerId) {
+    function insertSomeRoutes(int $playerId, int $validated = 1) {
         $routesIds = [            
             11, // [SCHOOL, SCHOOL_SPECIAL],
             12, // [GREEN_LIGHT, ord('a')],
@@ -41,7 +41,7 @@ trait DebugUtilTrait {
 
         foreach($routesIds as $routeId) {
             $useTurnZone = in_array($routeId, [24, 32, 33]) ? 1 : 0;
-            $this->DbQuery("INSERT INTO placed_routes(`player_id`, `from`, `to`, `round`, `use_turn_zone`, `traffic_jam`) VALUES ($playerId, $routeId, $routeId, 0, $useTurnZone, 1)");
+            $this->DbQuery("INSERT INTO placed_routes(`player_id`, `from`, `to`, `round`, `use_turn_zone`, `traffic_jam`, `validated`) VALUES ($playerId, $routeId, $routeId, 0, $useTurnZone, 1, $validated)");
         }
     }
 

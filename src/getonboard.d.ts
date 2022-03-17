@@ -10,6 +10,14 @@ interface Card {
     location_arg: number;
 }
 
+interface PossibleRoute {
+    from: number;
+    to: number;
+    trafficJam: number;
+    useTurnZone: boolean;
+    isElimination: boolean;
+}
+
 interface SimpleZoneScoreSheet {
     checked: number;
 
@@ -121,7 +129,7 @@ interface EnteringPlaceRouteArgs {
     canConfirm: boolean;
     canCancel: boolean;
     currentPosition: number;
-    possibleDestinations: number[];
+    possibleRoutes: PossibleRoute[];
 }
 
 interface NotifNewRoundArgs {

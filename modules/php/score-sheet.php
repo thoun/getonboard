@@ -96,7 +96,7 @@ trait ScoreSheetTrait {
             } else if ($checked == 2) {
                 $this->addTouristToScoreSheet($scoreSheet, false);
             } else if ($checked == 3) {
-                $scoreSheet->students->checkedStudents++;
+                $scoreSheet->students->checkedInternships++;
                 $this->updateStudentTotal($scoreSheet);
             }
         }

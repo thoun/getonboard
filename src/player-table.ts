@@ -4,7 +4,7 @@ const log = isDebug ? console.log.bind(window.console) : function () { };
 class PlayerTable {
     public playerId: number;
 
-    constructor(private game: GetOnBoardGame, private player: GetOnBoardPlayer) {
+    constructor(player: GetOnBoardPlayer) {
         this.playerId = Number(player.id);
 
         const eliminated = Number(player.eliminated) > 0;
@@ -235,7 +235,7 @@ class PlayerTable {
             this.setContentAndValidation(`turn-zones-checkmark${i}`, current.checked >= i ? '✔' : '', current.checked >= i && validated.checked < i);
         }
 
-        this.setContentAndValidation(`turn-zones-total`, current.total, current.total !== validated.total);
+        this.setContentAndValidation(`turn-zones-total`, -current.total, current.total !== validated.total);
     }
 
     private updateTrafficJamScoreSheet(current: SimpleZoneScoreSheet, validated: SimpleZoneScoreSheet) {
@@ -243,7 +243,7 @@ class PlayerTable {
             this.setContentAndValidation(`traffic-jam-checkmark${i}`, current.checked >= i ? '✔' : '', current.checked >= i && validated.checked < i);
         }
 
-        this.setContentAndValidation(`traffic-jam-total`, current.total, current.total !== validated.total);
+        this.setContentAndValidation(`traffic-jam-total`, -current.total, current.total !== validated.total);
     }
 
 }

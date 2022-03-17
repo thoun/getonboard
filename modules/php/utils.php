@@ -2,6 +2,7 @@
 
 require_once(__DIR__.'/objects/ticket.php');
 require_once(__DIR__.'/objects/placed-route.php');
+require_once(__DIR__.'/objects/possible-route.php');
 
 trait UtilTrait {
 
@@ -178,11 +179,66 @@ trait UtilTrait {
         return $routes;
     }
 
-    function getPossibleDestinations(string $mapSize, int $position, array $placedRoutes) {
-        return array_values(array_filter(
-            $this->getDestinations($mapSize, $position), 
-            fn($destination) => !$this->array_some($placedRoutes, fn($placedRoute) => ($placedRoute->from === $position && $placedRoute->to === $destination) || ($placedRoute->to === $position && $placedRoute->from === $destination))
+    function isSameRoute(object $route, int $from, int $to) {
+        return ($route->from === $from && $route->to === $to) || ($route->to === $from && $route->from === $to);
+    }
+
+    function createPossibleRoute(int $position, int $destination, array $allPlacedRoutes, array $playerPlacedRoutes, array $unvalidatedRoutes, array $turnShape) {
+        $trafficJam = count(array_filter(
+            $allPlacedRoutes, 
+            fn($route) => $this->isSameRoute($route, $position, $destination)
         ));
+        $useTurnZone = false;
+        $angle = $turnShape[count($unvalidatedRoutes)]; // 0 means any shape, 1 straight, 2 turn.
+        if ($angle > 0) {
+            $lastRoute = end($playerPlacedRoutes);
+            $lastDirection = abs($lastRoute->from - $lastRoute->to) <= 1;
+            $nextDirection = abs($position - $destination) <= 1;
+
+            if ($angle === 1) {
+                $useTurnZone = $lastDirection !== $nextDirection;
+            } else if ($angle === 2) {
+                $useTurnZone = $lastDirection === $nextDirection;
+            }
+        }
+
+        $isElimination = $this->array_some($playerPlacedRoutes, fn($route) => $route->from === $destination || $route->to === $destination);
+
+        return new PossibleRoute($position, $destination, $trafficJam, $useTurnZone, $isElimination);
+    }
+
+    function getPlayerTurnShape(int $playerId) {
+        $sheetTypeIndex = intval(self::getUniqueValueFromDB("SELECT player_sheet_type FROM player WHERE player_id = $playerId")) - 1;
+        $currentTicket = $this->getCurrentTicketForRound();
+        $currentTicketIndex = ($currentTicket - 1) % 6;
+        $playerShapes = array_merge(
+            array_slice($this->SCORE_SHEETS_SHAPES, 6 - $sheetTypeIndex),
+            array_slice($this->SCORE_SHEETS_SHAPES, 0, 6 - $sheetTypeIndex),
+        );
+
+        return $playerShapes[$currentTicketIndex];
+    }
+
+    function getPossibleRoutes(int $playerId, string $mapSize, array $turnShape, int $position, array $allPlacedRoutes) {
+        $playerPlacedRoutes = array_filter($allPlacedRoutes, fn($placedRoute) => $placedRoute->playerId === $playerId);
+        $unvalidatedRoutes = array_filter($playerPlacedRoutes, fn($placedRoute) => !$placedRoute->validated);
+
+        $possibleDestinations = array_values(array_filter(
+            $this->getDestinations($mapSize, $position), 
+            fn($destination) => !$this->array_some($playerPlacedRoutes, fn($placedRoute) => $this->isSameRoute($placedRoute, $position, $destination))
+        ));
+
+        if (count($unvalidatedRoutes) >= count($turnShape)) {
+            $isGreenLight = in_array(GREEN_LIGHT, $this->MAP_POSITIONS[$mapSize][$position]);
+
+            if ($isGreenLight) {
+                $turnShape = [...$turnShape, 0, 0, 0, 0, 0];
+            } else {
+                return [];
+            }
+        }
+
+        return array_map(fn($destination) => $this->createPossibleRoute($position, $destination, $allPlacedRoutes, $playerPlacedRoutes, $unvalidatedRoutes, $turnShape), $possibleDestinations);
     }
 
     function getRoundNumber() {

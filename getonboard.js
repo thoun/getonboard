@@ -55,9 +55,7 @@ var isDebug = window.location.host == 'studio.boardgamearena.com' || window.loca
 ;
 var log = isDebug ? console.log.bind(window.console) : function () { };
 var PlayerTable = /** @class */ (function () {
-    function PlayerTable(game, player) {
-        this.game = game;
-        this.player = player;
+    function PlayerTable(player) {
         this.playerId = Number(player.id);
         var eliminated = Number(player.eliminated) > 0;
         var html = "\n        <div id=\"player-table-".concat(player.id, "\" class=\"player-table ").concat(eliminated ? 'eliminated' : '', "\" style=\"box-shadow: 0 0 3px 3px #").concat(player.color, ";\">\n            <div id=\"player-table-").concat(player.id, "-top\" class=\"top\" data-type=\"").concat(player.sheetType, "\">\n            ");
@@ -205,13 +203,13 @@ var PlayerTable = /** @class */ (function () {
         for (var i = 1; i <= 5; i++) {
             this.setContentAndValidation("turn-zones-checkmark".concat(i), current.checked >= i ? '✔' : '', current.checked >= i && validated.checked < i);
         }
-        this.setContentAndValidation("turn-zones-total", current.total, current.total !== validated.total);
+        this.setContentAndValidation("turn-zones-total", -current.total, current.total !== validated.total);
     };
     PlayerTable.prototype.updateTrafficJamScoreSheet = function (current, validated) {
         for (var i = 1; i <= 19; i++) {
             this.setContentAndValidation("traffic-jam-checkmark".concat(i), current.checked >= i ? '✔' : '', current.checked >= i && validated.checked < i);
         }
-        this.setContentAndValidation("traffic-jam-total", current.total, current.total !== validated.total);
+        this.setContentAndValidation("traffic-jam-total", -current.total, current.total !== validated.total);
     };
     return PlayerTable;
 }());
@@ -337,9 +335,9 @@ var GetOnBoard = /** @class */ (function () {
         }
     };
     GetOnBoard.prototype.onEnteringPlaceRoute = function (args) {
-        args.possibleDestinations.forEach(function (destination) {
-            var min = Math.min(args.currentPosition, destination);
-            var max = Math.max(args.currentPosition, destination);
+        args.possibleRoutes.forEach(function (route) {
+            var min = Math.min(route.from, route.to);
+            var max = Math.max(route.from, route.to);
             document.getElementById("position".concat(min, "-placeRoute-to").concat(max)).classList.remove('disabled');
         });
     };
@@ -400,30 +398,20 @@ var GetOnBoard = /** @class */ (function () {
         return Number(this.player_id);
     };
     GetOnBoard.prototype.createPlayerPanels = function (gamedatas) {
+        var _this = this;
         Object.values(gamedatas.players).forEach(function (player) {
             var playerId = Number(player.id);
             var eliminated = Number(player.eliminated) > 0;
-            // health & energy counters
-            var html = "<div class=\"counters\">\n                <div id=\"health-counter-wrapper-".concat(player.id, "\" class=\"counter\">\n                    <div class=\"icon health\"></div> \n                    <span id=\"health-counter-").concat(player.id, "\"></span>\n                </div>\n                <div id=\"energy-counter-wrapper-").concat(player.id, "\" class=\"counter\">\n                    <div class=\"icon energy\"></div> \n                    <span id=\"energy-counter-").concat(player.id, "\"></span>\n                </div>");
-            html += "</div>";
-            dojo.place(html, "player_board_".concat(player.id));
-            /*const healthCounter = new ebg.counter();
-            healthCounter.create(`health-counter-${player.id}`);
-            healthCounter.setValue(player.health);
-            this.healthCounters[playerId] = healthCounter;
-
-            const energyCounter = new ebg.counter();
-            energyCounter.create(`energy-counter-${player.id}`);
-            energyCounter.setValue(player.energy);
-            this.energyCounters[playerId] = energyCounter;*/
+            if (playerId === _this.getPlayerId()) {
+                dojo.place("<div class=\"personal-objective-wrapper\"><div id=\"panel-board-personal-objective\" class=\"personal-objective\" data-type=\"".concat(player.personalObjective, "\"></div></div>"), "player_board_".concat(player.id));
+                _this.addTooltipHtml('panel-board-personal-objective', _("Your personal objective"));
+            }
             /*if (eliminated) {
                 setTimeout(() => this.eliminatePlayer(playerId), 200);
             }*/
             // first player token
             dojo.place("<div id=\"player_board_".concat(player.id, "_firstPlayerWrapper\" class=\"firstPlayerWrapper\"></div>"), "player_board_".concat(player.id));
         });
-        //(this as any).addTooltipHtmlToClass('shrink-ray-tokens', this.SHINK_RAY_TOKEN_TOOLTIP);
-        //(this as any).addTooltipHtmlToClass('poison-tokens', this.POISON_TOKEN_TOOLTIP);
     };
     GetOnBoard.prototype.createPlayerTables = function (gamedatas) {
         var _this = this;
@@ -435,7 +423,7 @@ var GetOnBoard = /** @class */ (function () {
         });
     };
     GetOnBoard.prototype.createPlayerTable = function (gamedatas, playerId) {
-        var table = new PlayerTable(this, gamedatas.players[playerId]);
+        var table = new PlayerTable(gamedatas.players[playerId]);
         table.setRound(gamedatas.validatedTickets, gamedatas.currentTicket);
         this.playersTables.push(table);
     };
