@@ -210,6 +210,19 @@ trait UtilTrait {
     function getCommonObjectives() {
         return []; // TODO
     }
+    
+    function notifCurrentRound() {
+        $validatedTickets = $this->getValidatedTicketsForRound();
+        $currentTicket = $this->getCurrentTicketForRound();
+        
+        $message = $currentTicket == null ? '' : clienttranslate('Round ${round}/12 starts!');
+
+        $this->notifyAllPlayers('newRound', $message, [
+            'round' => count($validatedTickets) + 1,
+            'validatedTickets' => $validatedTickets,
+            'currentTicket' => $currentTicket,
+        ]);
+    }
 
     function notifUpdateScoreSheet(int $playerId) {
         $scoreSheets = $this->getScoreSheets($playerId, $this->getPlacedRoutes($playerId), $this->getCommonObjectives());

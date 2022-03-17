@@ -91,7 +91,7 @@ var PlayerTable = /** @class */ (function () {
                 html += "\n                        <div id=\"player-table-".concat(player.id, "-tourists-checkmark").concat(row, "-").concat(i, "\" class=\"tourists checkmark\" data-row=\"").concat(row, "\" data-number=\"").concat(i, "\"></div>");
             }
         }
-        html += " \n                    <div id=\"player-table-".concat(player.id, "-tourists-subtotal1\" class=\"subtotal\" data-number=\"1\"></div>\n                    <div id=\"player-table-").concat(player.id, "-tourists-subtotal2\" class=\"subtotal\" data-number=\"2\"></div>\n                    <div id=\"player-table-").concat(player.id, "-tourists-subtotal3\" class=\"subtotal\" data-number=\"3\"></div>\n                    <div id=\"player-table-").concat(player.id, "-tourists-total\" class=\"total\"></div>\n                </div>\n                <div class=\"businessmen block\">\n                    <div id=\"player-table-").concat(player.id, "-businessmen-specialMax\" class=\"special\"></div>");
+        html += " \n                    <div id=\"player-table-".concat(player.id, "-tourists-subtotal1\" class=\"subtotal\" data-number=\"1\"></div>\n                    <div id=\"player-table-").concat(player.id, "-tourists-subtotal2\" class=\"subtotal\" data-number=\"2\"></div>\n                    <div id=\"player-table-").concat(player.id, "-tourists-subtotal3\" class=\"subtotal\" data-number=\"3\"></div>\n                    <div id=\"player-table-").concat(player.id, "-tourists-total\" class=\"total\"></div>\n                </div>\n                <div class=\"businessmen block\">\n                    <div id=\"player-table-").concat(player.id, "-businessmen-special\" class=\"special\"></div>");
         for (var row = 1; row <= 3; row++) {
             for (var i = 1; i <= 3; i++) {
                 html += "\n                        <div id=\"player-table-".concat(player.id, "-businessmen-checkmark").concat(row, "-").concat(i, "\" class=\"checkmark\" data-row=\"").concat(row, "\" data-number=\"").concat(i, "\"></div>");
@@ -105,25 +105,10 @@ var PlayerTable = /** @class */ (function () {
         for (var i = 1; i <= 19; i++) {
             html += "\n                    <div id=\"player-table-".concat(player.id, "-traffic-jam-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>");
         }
-        html += "\n                    <div id=\"player-table-".concat(player.id, "-traffic-jam-total\" class=\"total\"></div>\n                </div>\n                <div id=\"player-table-").concat(player.id, "-total-score\" class=\"total score\"></div>\n            </div>\n            <div class=\"name\" style=\"color: #").concat(player.color, ";\">").concat(player.name, "</div>\n        </div>\n        ");
+        html += "\n                    <div id=\"player-table-".concat(player.id, "-traffic-jam-total\" class=\"total\"></div>\n                </div>\n                <div id=\"player-table-").concat(player.id, "-total-score\" class=\"total score\"></div>\n            </div>\n            <div class=\"name\" style=\"color: #").concat(player.color, ";\">").concat(player.name, "</div>\n            <div id=\"player-table-").concat(player.id, "-first-player-wrapper\" class=\"first-player-wrapper\"></div>\n        </div>\n        ");
         dojo.place(html, 'player-tables');
         this.updateScoreSheet(player.scoreSheets);
     }
-    PlayerTable.prototype.updateScoreSheet = function (scoreSheets) {
-        this.updateOldLadiesScoreSheet(scoreSheets.current.oldLadies, scoreSheets.validated.oldLadies);
-        this.setContentAndValidation("total-score", "".concat(scoreSheets.current.total), scoreSheets.current.total != scoreSheets.validated.total);
-    };
-    PlayerTable.prototype.setContentAndValidation = function (id, content, unvalidated) {
-        var div = document.getElementById("player-table-".concat(this.playerId, "-").concat(id));
-        div.innerHTML = content;
-        div.dataset.unvalidated = unvalidated.toString();
-    };
-    PlayerTable.prototype.updateOldLadiesScoreSheet = function (current, validated) {
-        for (var i = 1; i <= 8; i++) {
-            this.setContentAndValidation("old-ladies-checkmark".concat(i), current.checked >= i ? '✔' : '', current.checked >= i && validated.checked < i);
-        }
-        this.setContentAndValidation("old-ladies-total", "".concat(current.total), current.total != validated.total);
-    };
     PlayerTable.prototype.setRound = function (validatedTickets, currentTicket) {
         if (!currentTicket) {
             return;
@@ -131,6 +116,102 @@ var PlayerTable = /** @class */ (function () {
         for (var i = 1; i <= 12; i++) {
             this.setContentAndValidation("top-checkmark".concat(i), currentTicket === i || validatedTickets.includes(i) ? '✔' : '', currentTicket === i);
         }
+    };
+    PlayerTable.prototype.updateScoreSheet = function (scoreSheets) {
+        this.updateOldLadiesScoreSheet(scoreSheets.current.oldLadies, scoreSheets.validated.oldLadies);
+        this.updateStudentsScoreSheet(scoreSheets.current.students, scoreSheets.validated.students);
+        this.updateTouristsScoreSheet(scoreSheets.current.tourists, scoreSheets.validated.tourists);
+        this.updateBusinessmenScoreSheet(scoreSheets.current.businessmen, scoreSheets.validated.businessmen);
+        this.updateCommonObjectivesScoreSheet(scoreSheets.current.commonObjectives, scoreSheets.validated.commonObjectives);
+        this.updatePersonalObjectiveScoreSheet(scoreSheets.current.personalObjective, scoreSheets.validated.personalObjective);
+        this.updateTurnZonesScoreSheet(scoreSheets.current.turnZones, scoreSheets.validated.turnZones);
+        this.updateTrafficJamScoreSheet(scoreSheets.current.trafficJam, scoreSheets.validated.trafficJam);
+        this.setContentAndValidation("total-score", scoreSheets.current.total, scoreSheets.current.total != scoreSheets.validated.total);
+    };
+    PlayerTable.prototype.setContentAndValidation = function (id, content, unvalidated) {
+        var div = document.getElementById("player-table-".concat(this.playerId, "-").concat(id));
+        var contentStr = '';
+        if (typeof content === 'string') {
+            contentStr = content;
+        }
+        else if (typeof content === 'number') {
+            contentStr = '' + content;
+        }
+        div.innerHTML = contentStr;
+        div.dataset.unvalidated = unvalidated.toString();
+    };
+    PlayerTable.prototype.updateOldLadiesScoreSheet = function (current, validated) {
+        for (var i = 1; i <= 8; i++) {
+            this.setContentAndValidation("old-ladies-checkmark".concat(i), current.checked >= i ? '✔' : '', current.checked >= i && validated.checked < i);
+        }
+        this.setContentAndValidation("old-ladies-total", current.total, current.total !== validated.total);
+    };
+    PlayerTable.prototype.updateStudentsScoreSheet = function (current, validated) {
+        for (var i = 1; i <= 6; i++) {
+            this.setContentAndValidation("students-checkmark".concat(i), current.checkedStudents >= i ? '✔' : '', current.checkedStudents >= i && validated.checkedStudents < i);
+        }
+        for (var i = 1; i <= 3; i++) {
+            this.setContentAndValidation("internships-checkmark".concat(i), current.checkedInternships >= i ? '✔' : '', current.checkedInternships >= i && validated.checkedInternships < i);
+        }
+        for (var i = 1; i <= 3; i++) {
+            this.setContentAndValidation("schools-checkmark".concat(i), current.checkedSchools >= i ? '✔' : '', current.checkedSchools >= i && validated.checkedSchools < i);
+        }
+        this.setContentAndValidation("students-special", current.specialSchool, current.specialSchool !== validated.specialSchool);
+        this.setContentAndValidation("students-subtotal", current.subTotal, current.subTotal !== validated.subTotal);
+        this.setContentAndValidation("students-total", current.total, current.total !== validated.total);
+    };
+    PlayerTable.prototype.updateTouristsScoreSheet = function (current, validated) {
+        for (var i = 1; i <= 3; i++) {
+            this.setContentAndValidation("tourists-light-checkmark".concat(i), current.checkedMonumentsLight >= i ? '✔' : '', current.checkedMonumentsLight >= i && validated.checkedMonumentsLight < i);
+        }
+        for (var i = 1; i <= 3; i++) {
+            this.setContentAndValidation("tourists-dark-checkmark".concat(i), current.checkedMonumentsDark >= i ? '✔' : '', current.checkedMonumentsDark >= i && validated.checkedMonumentsDark < i);
+        }
+        this.setContentAndValidation("tourists-specialLight", current.specialMonumentLight, current.specialMonumentLight !== validated.specialMonumentLight);
+        this.setContentAndValidation("tourists-specialDark", current.specialMonumentDark, current.specialMonumentDark !== validated.specialMonumentDark);
+        this.setContentAndValidation("tourists-specialMax", current.specialMonumentMax, current.specialMonumentMax !== validated.specialMonumentMax);
+        for (var row = 1; row <= 3; row++) {
+            for (var i = 1; i <= 4; i++) {
+                this.setContentAndValidation("tourists-checkmark".concat(row, "-").concat(i), current.checkedTourists[row - 1] >= i ? '✔' : (current.subTotals[row - 1] ? '⎯⎯' : ''), current.checkedTourists[row - 1] >= i && validated.checkedTourists[row - 1] < i);
+            }
+        }
+        for (var i = 1; i <= 3; i++) {
+            this.setContentAndValidation("tourists-subtotal".concat(i), current.subTotals[i - 1], current.subTotals[i - 1] != validated.subTotals[i - 1]);
+        }
+        this.setContentAndValidation("tourists-total", current.total, current.total != validated.total);
+    };
+    PlayerTable.prototype.updateBusinessmenScoreSheet = function (current, validated) {
+        this.setContentAndValidation("businessmen-special", current.specialBuilding, current.specialBuilding !== validated.specialBuilding);
+        for (var row = 1; row <= 3; row++) {
+            for (var i = 1; i <= 3; i++) {
+                this.setContentAndValidation("businessmen-checkmark".concat(row, "-").concat(i), current.checkedBusinessmen[row - 1] >= i ? '✔' : (current.subTotals[row - 1] ? '⎯⎯' : ''), current.checkedBusinessmen[row - 1] >= i && validated.checkedBusinessmen[row - 1] < i);
+            }
+        }
+        for (var i = 1; i <= 3; i++) {
+            this.setContentAndValidation("businessmen-subtotal".concat(i), current.subTotals[i - 1], current.subTotals[i - 1] != validated.subTotals[i - 1]);
+        }
+        this.setContentAndValidation("businessmen-total", current.total, current.total != validated.total);
+    };
+    PlayerTable.prototype.updateCommonObjectivesScoreSheet = function (current, validated) {
+        for (var i = 1; i <= 2; i++) {
+            this.setContentAndValidation("common-objectives-objective".concat(i), current.subTotals[i - 1], current.subTotals[i - 1] != validated.subTotals[i - 1]);
+        }
+        this.setContentAndValidation("common-objectives-total", current.total, current.total != validated.total);
+    };
+    PlayerTable.prototype.updatePersonalObjectiveScoreSheet = function (current, validated) {
+        this.setContentAndValidation("personal-objective-total", current.total, current.total != validated.total);
+    };
+    PlayerTable.prototype.updateTurnZonesScoreSheet = function (current, validated) {
+        for (var i = 1; i <= 5; i++) {
+            this.setContentAndValidation("turn-zones-checkmark".concat(i), current.checked >= i ? '✔' : '', current.checked >= i && validated.checked < i);
+        }
+        this.setContentAndValidation("turn-zones-total", current.total, current.total !== validated.total);
+    };
+    PlayerTable.prototype.updateTrafficJamScoreSheet = function (current, validated) {
+        for (var i = 1; i <= 19; i++) {
+            this.setContentAndValidation("traffic-jam-checkmark".concat(i), current.checked >= i ? '✔' : '', current.checked >= i && validated.checked < i);
+        }
+        this.setContentAndValidation("traffic-jam-total", current.total, current.total !== validated.total);
     };
     return PlayerTable;
 }());
@@ -234,6 +315,7 @@ var GetOnBoard = /** @class */ (function () {
         this.createPlayerPanels(gamedatas);
         this.tableCenter = new TableCenter(this);
         this.createPlayerTables(gamedatas);
+        this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
         this.setupNotifications();
         /*this.preferencesManager = new PreferencesManager(this);
 
@@ -318,7 +400,6 @@ var GetOnBoard = /** @class */ (function () {
         return Number(this.player_id);
     };
     GetOnBoard.prototype.createPlayerPanels = function (gamedatas) {
-        var _this = this;
         Object.values(gamedatas.players).forEach(function (player) {
             var playerId = Number(player.id);
             var eliminated = Number(player.eliminated) > 0;
@@ -340,9 +421,6 @@ var GetOnBoard = /** @class */ (function () {
             }*/
             // first player token
             dojo.place("<div id=\"player_board_".concat(player.id, "_firstPlayerWrapper\" class=\"firstPlayerWrapper\"></div>"), "player_board_".concat(player.id));
-            if (gamedatas.firstPlayerTokenPlayerId === playerId) {
-                _this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
-            }
         });
         //(this as any).addTooltipHtmlToClass('shrink-ray-tokens', this.SHINK_RAY_TOKEN_TOOLTIP);
         //(this as any).addTooltipHtmlToClass('poison-tokens', this.POISON_TOKEN_TOOLTIP);
@@ -366,16 +444,24 @@ var GetOnBoard = /** @class */ (function () {
     }*/
     GetOnBoard.prototype.getZoom = function () {
         //return this.tableManager.zoom;
-        return null; // TODO
+        return 1; // TODO
     };
     GetOnBoard.prototype.placeFirstPlayerToken = function (playerId) {
-        var firstPlayerToken = document.getElementById('firstPlayerToken');
-        if (firstPlayerToken) {
-            slideToObjectAndAttach(this, firstPlayerToken, "player_board_".concat(playerId, "_firstPlayerWrapper"));
+        var firstPlayerBoardToken = document.getElementById('firstPlayerBoardToken');
+        if (firstPlayerBoardToken) {
+            slideToObjectAndAttach(this, firstPlayerBoardToken, "player_board_".concat(playerId, "_firstPlayerWrapper"));
         }
         else {
-            dojo.place('<div id="firstPlayerToken"></div>', "player_board_".concat(playerId, "_firstPlayerWrapper"));
-            this.addTooltipHtml('firstPlayerToken', _("Inspector pawn. This player is the first player of the round."));
+            dojo.place('<div id="firstPlayerBoardToken" class="first-player-token"></div>', "player_board_".concat(playerId, "_firstPlayerWrapper"));
+            this.addTooltipHtml('firstPlayerBoardToken', _("Inspector pawn. This player is the first player of the round."));
+        }
+        var firstPlayerTableToken = document.getElementById('firstPlayerTableToken');
+        if (firstPlayerTableToken) {
+            slideToObjectAndAttach(this, firstPlayerTableToken, "player-table-".concat(playerId, "-first-player-wrapper"));
+        }
+        else {
+            dojo.place('<div id="firstPlayerTableToken" class="first-player-token"></div>', "player-table-".concat(playerId, "-first-player-wrapper"));
+            this.addTooltipHtml('firstPlayerTableToken', _("Inspector pawn. This player is the first player of the round."));
         }
     };
     GetOnBoard.prototype.getPlayerTable = function (playerId) {
@@ -461,8 +547,8 @@ var GetOnBoard = /** @class */ (function () {
         //log( 'notifications subscriptions setup' );
         var _this = this;
         var notifs = [
-            ['pickMonster', ANIMATION_MS],
-            ['newFirstPlayer', 1],
+            ['newRound', 1],
+            ['newFirstPlayer', ANIMATION_MS],
             ['updateScoreSheet', 1], // TODO TEMP
         ];
         notifs.forEach(function (notif) {
@@ -470,11 +556,11 @@ var GetOnBoard = /** @class */ (function () {
             _this.notifqueue.setSynchronous(notif[0], notif[1]);
         });
     };
-    GetOnBoard.prototype.notif_pickMonster = function (notif) {
-        // TODO
+    GetOnBoard.prototype.notif_newRound = function (notif) {
+        console.log(notif.args);
+        this.playersTables.forEach(function (playerTable) { return playerTable.setRound(notif.args.validatedTickets, notif.args.currentTicket); });
     };
     GetOnBoard.prototype.notif_newFirstPlayer = function (notif) {
-        console.log(notif.args);
         this.placeFirstPlayerToken(notif.args.playerId);
     };
     GetOnBoard.prototype.notif_updateScoreSheet = function (notif) {

@@ -10,7 +10,7 @@ class StudentsScoreSheet {
     public int $checkedStudents = 0;
     public int $checkedInternships = 0;
     public int $checkedSchools = 0;
-    public int $specialSchool = 0;
+    public /*int|null*/ $specialSchool = null;
 
     public int $subTotal = 0;
     public int $total = 0;
@@ -20,9 +20,9 @@ class TouristsScoreSheet {
     public array/*int[]*/ $checkedTourists = [0, 0, 0];
     public int $checkedMonumentsLight = 0;
     public int $checkedMonumentsDark = 0; 
-    public int $specialMonumentLight = 0;
-    public int $specialMonumentDark = 0;
-    public int $specialMonumentMax = 0;
+    public /*int|null*/ $specialMonumentLight = null;
+    public /*int|null*/ $specialMonumentDark = null;
+    public /*int|null*/ $specialMonumentMax = null;
 
     public array/*int[]*/ $subTotals = [];
     public int $total = 0;
@@ -30,7 +30,7 @@ class TouristsScoreSheet {
 
 class BusinessmenScoreSheet {
     public array/*int[]*/ $checkedBusinessmen = [0, 0, 0];
-    public int $specialBuilding = 0;
+    public /*int|null*/ $specialBuilding = null;
 
     public array/*int[]*/ $subTotals = [];
     public int $total = 0;

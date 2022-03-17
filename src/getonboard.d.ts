@@ -124,6 +124,11 @@ interface EnteringPlaceRouteArgs {
     possibleDestinations: number[];
 }
 
+interface NotifNewRoundArgs {
+    validatedTickets: number[];
+    currentTicket: number | null;
+}
+
 interface NotifNewFirstPlayerArgs {
     playerId: number;
 }

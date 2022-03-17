@@ -23,6 +23,8 @@ trait StateTrait {
 
         $this->tickets->pickCardForLocation('deck', 'turn');
 
+        $this->notifCurrentRound();
+
         $this->gamestate->nextState('start');
     }
 
@@ -52,13 +54,16 @@ trait StateTrait {
     
             $playerId = intval($this->getActivePlayerId());
             $this->setGameStateValue(FIRST_PLAYER, $playerId);
+
+            $this->tickets->pickCardForLocation('deck', 'turn');
+            $this->notifCurrentRound();
     
             self::notifyAllPlayers('newFirstPlayer', clienttranslate('${player_name} is the new first player'), [
                 'playerId' => $playerId,
                 'player_name' => self::getActivePlayerName(),
             ]);
-
-            $this->tickets->pickCardForLocation('deck', 'turn');
+        } else {
+            $this->notifCurrentRound();
         }
             
         $this->gamestate->nextState($startNewRound ? 'newRound' : 'endScore');

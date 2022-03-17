@@ -21,7 +21,7 @@ trait ScoreSheetTrait {
     function updateStudentTotal(ScoreSheet &$scoreSheet) {
         $checked = $scoreSheet->students->checkedInternships + $scoreSheet->students->checkedStudents;
         $scoreSheet->students->subTotal = $checked * $scoreSheet->students->checkedSchools;
-        $scoreSheet->students->total = $scoreSheet->students->specialSchool + $scoreSheet->students->subTotal;
+        $scoreSheet->students->total = ($scoreSheet->students->specialSchool || 0) + $scoreSheet->students->subTotal;
         // TODO check common objective
     }
     
@@ -50,18 +50,20 @@ trait ScoreSheetTrait {
 
     function addSpecialMonumentToScoreSheet(ScoreSheet &$scoreSheet, string $type) {
         $totalCheckedTourists = 0;
-        foreach ($$scoreSheet->tourists->checkedTourists as $checkedTourists) {
+        foreach ($scoreSheet->tourists->checkedTourists as $checkedTourists) {
             $totalCheckedTourists += $checkedTourists;
         }
         $scoreSheet->tourists->{'specialMonument'.$type} = $totalCheckedTourists;
 
-        $scoreSheet->tourists->$specialMonumentMax = max($scoreSheet->tourists->$specialMonumentLight, $scoreSheet->tourists->$specialMonumentMax);
+        if ($scoreSheet->tourists->specialMonumentLight !== null || $scoreSheet->tourists->specialMonumentMax !== null) {
+            $scoreSheet->tourists->specialMonumentMax = max($scoreSheet->tourists->specialMonumentLight || 0, $scoreSheet->tourists->specialMonumentDark || 0);
+        }
 
         $this->updateTouristTotal($scoreSheet);
     }
     
     function updateTouristTotal(ScoreSheet &$scoreSheet) {
-        $scoreSheet->tourists->total = $scoreSheet->tourists->specialMonumentMax;
+        $scoreSheet->tourists->total = $scoreSheet->tourists->specialMonumentMax || 0;
         foreach($scoreSheet->tourists->subTotals as $subTotal) {
             $scoreSheet->tourists->total += $subTotal;
         }   
@@ -85,7 +87,7 @@ trait ScoreSheetTrait {
             return;
         }
         if ($scoreSheet->businessmen->checkedBusinessmen[$rowIndex] > 0) {
-            $checked = $scoreSheet->tourists->checkedBusinessmen[$rowIndex];
+            $checked = $scoreSheet->businessmen->checkedBusinessmen[$rowIndex];
             $scoreSheet->businessmen->subTotals[$rowIndex] = $this->BUSINESSMEN_POINTS[$checked - 1];
             $this->updateBusinessmenTotal($scoreSheet);
 
@@ -111,11 +113,21 @@ trait ScoreSheetTrait {
     }
     
     function updateBusinessmenTotal(ScoreSheet &$scoreSheet) {
-        $scoreSheet->businessmen->total = $scoreSheet->businessmen->specialBuilding;
+        $scoreSheet->businessmen->total = ($scoreSheet->businessmen->specialBuilding || 0);
         foreach($scoreSheet->businessmen->subTotals as $subTotal) {
             $scoreSheet->businessmen->total += $subTotal;
         }   
         // TODO check common objective
+    }
+
+    function addTurnZoneToScoreSheetAndUpdateTotal(ScoreSheet &$scoreSheet) {
+        $scoreSheet->turnZones->checked = min($scoreSheet->turnZones->checked + 1, 5);
+        $scoreSheet->turnZones->total = $this->getTotalForSimpleZone($scoreSheet->turnZones->checked, $this->TURN_ZONES_POINTS);
+    }
+
+    function addTrafficJamToScoreSheetAndUpdateTotal(ScoreSheet &$scoreSheet, int $trafficJam) {
+        $scoreSheet->trafficJam->checked = min($scoreSheet->trafficJam->checked + $trafficJam, 19);
+        $scoreSheet->trafficJam->total = $this->getTotalForSimpleZone($scoreSheet->trafficJam->checked, $this->TRAFFIC_JAM_POINTS);
     }
 
     function getScoreSheet(array $placedRoutes, array $mapPositions, array $personalObjectives, array $commonObjectives, bool $endScoring = false) {
@@ -186,12 +198,15 @@ trait ScoreSheetTrait {
                             break;
 
                         // TODO common objectives
-
-                        // TODO turn zones
-
-                        // TODO traffic jam
                     }
                 }
+            }
+
+            if ($placedRoute->useTurnZone) {
+                $this->addTurnZoneToScoreSheetAndUpdateTotal($scoreSheet);
+            }
+            if ($placedRoute->trafficJam > 0) {
+                $this->addTrafficJamToScoreSheetAndUpdateTotal($scoreSheet, $placedRoute->trafficJam);
             }
         }
 

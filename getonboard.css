@@ -11,12 +11,20 @@ html, .mode_3d #game_play_area_background {
   font-style: normal;
   font-display: swap;
 }
-#firstPlayerToken {
-  width: 32px;
-  height: 32px;
+.first-player-token {
   position: relative;
   background: url("img/first-player.png");
   background-size: contain;
+}
+
+#firstPlayerBoardToken {
+  width: 32px;
+  height: 32px;
+}
+
+#firstPlayerTableToken {
+  width: 64px;
+  height: 64px;
 }
 
 #center {
@@ -41,6 +49,11 @@ html, .mode_3d #game_play_area_background {
   position: relative;
   font-family: "Caveat";
   font-size: 16pt;
+}
+.player-table .first-player-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .player-table .top {
   position: absolute;
@@ -309,6 +322,8 @@ html, .mode_3d #game_play_area_background {
   right: 35px;
   width: 18px;
   height: 16px;
+  margin-right: 3px;
+  margin-top: -6px;
 }
 .player-table .main .block.tourists .special[data-style=Light] {
   top: 28px;

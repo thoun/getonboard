@@ -13,12 +13,20 @@ html, .mode_3d #game_play_area_background {
   font-display: swap;
 }
 
-#firstPlayerToken {
-    width: 32px;
-    height: 32px;
+.first-player-token {
     position: relative;
     background: url('img/first-player.png');
     background-size: contain;
+}
+
+#firstPlayerBoardToken {
+  width: 32px;
+  height: 32px;
+}
+
+#firstPlayerTableToken {
+  width: 64px;
+  height: 64px;
 }
 
 @import 'table-center';

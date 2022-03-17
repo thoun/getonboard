@@ -47,6 +47,8 @@ class GetOnBoard implements GetOnBoardGame {
         this.tableCenter = new TableCenter(this);
         this.createPlayerTables(gamedatas);
 
+        this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
+
         this.setupNotifications();
         /*this.preferencesManager = new PreferencesManager(this);
 
@@ -183,10 +185,6 @@ class GetOnBoard implements GetOnBoardGame {
 
             // first player token
             dojo.place(`<div id="player_board_${player.id}_firstPlayerWrapper" class="firstPlayerWrapper"></div>`, `player_board_${player.id}`);
-
-            if (gamedatas.firstPlayerTokenPlayerId === playerId) {
-                this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
-            }
         });
 
         //(this as any).addTooltipHtmlToClass('shrink-ray-tokens', this.SHINK_RAY_TOKEN_TOOLTIP);
@@ -215,17 +213,26 @@ class GetOnBoard implements GetOnBoardGame {
 
     public getZoom() {
         //return this.tableManager.zoom;
-        return null; // TODO
+        return 1; // TODO
     }
 
-    placeFirstPlayerToken(playerId: number) {
-        const firstPlayerToken = document.getElementById('firstPlayerToken');
-        if (firstPlayerToken) {
-            slideToObjectAndAttach(this, firstPlayerToken, `player_board_${playerId}_firstPlayerWrapper`);
+    private placeFirstPlayerToken(playerId: number) {
+        const firstPlayerBoardToken = document.getElementById('firstPlayerBoardToken');
+        if (firstPlayerBoardToken) {
+            slideToObjectAndAttach(this, firstPlayerBoardToken, `player_board_${playerId}_firstPlayerWrapper`);
         } else {
-            dojo.place('<div id="firstPlayerToken"></div>', `player_board_${playerId}_firstPlayerWrapper`);
+            dojo.place('<div id="firstPlayerBoardToken" class="first-player-token"></div>', `player_board_${playerId}_firstPlayerWrapper`);
 
-            (this as any).addTooltipHtml('firstPlayerToken', _("Inspector pawn. This player is the first player of the round."));
+            (this as any).addTooltipHtml('firstPlayerBoardToken', _("Inspector pawn. This player is the first player of the round."));
+        }
+
+        const firstPlayerTableToken = document.getElementById('firstPlayerTableToken');
+        if (firstPlayerTableToken) {
+            slideToObjectAndAttach(this, firstPlayerTableToken, `player-table-${playerId}-first-player-wrapper`);
+        } else {
+            dojo.place('<div id="firstPlayerTableToken" class="first-player-token"></div>', `player-table-${playerId}-first-player-wrapper`);
+
+            (this as any).addTooltipHtml('firstPlayerTableToken', _("Inspector pawn. This player is the first player of the round."));
         }
     }
 
@@ -325,8 +332,8 @@ class GetOnBoard implements GetOnBoardGame {
         //log( 'notifications subscriptions setup' );
 
         const notifs = [
-            ['pickMonster', ANIMATION_MS],
-            ['newFirstPlayer', 1],
+            ['newRound', 1],
+            ['newFirstPlayer', ANIMATION_MS],
             ['updateScoreSheet', 1], // TODO TEMP
         ];
     
@@ -336,12 +343,12 @@ class GetOnBoard implements GetOnBoardGame {
         });
     }
 
-    notif_pickMonster(notif: Notif<any/*NotifPickMonsterArgs*/>) {
-       // TODO
+    notif_newRound(notif: Notif<NotifNewRoundArgs>) {
+        console.log(notif.args);
+        this.playersTables.forEach(playerTable => playerTable.setRound(notif.args.validatedTickets, notif.args.currentTicket));
     }
 
     notif_newFirstPlayer(notif: Notif<NotifNewFirstPlayerArgs>) {
-        console.log(notif.args);
         this.placeFirstPlayerToken(notif.args.playerId);
     }
 
