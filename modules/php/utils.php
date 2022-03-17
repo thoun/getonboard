@@ -189,6 +189,16 @@ trait UtilTrait {
         return intval($this->tickets->countCardInLocation('discard')) + 1;
     }
 
+    function getValidatedTicketsForRound() {
+        $tickets = $this->getCardsFromDb($this->tickets->getCardsInLocation('discard'));
+        return array_map(fn($ticket) => $ticket->type, $tickets);
+    }
+
+    function getCurrentTicketForRound() {
+        $tickets = $this->getCardsFromDb($this->tickets->getCardsInLocation('turn'));
+        return count($tickets) > 0 ? $tickets[0]->type : null;
+    }
+
     function getPersonalObjectiveType(int $playerId) {
         return intval($this->getUniqueValueFromDB("SELECT player_personal_objective FROM `player` where `player_id` = $playerId"));
     }

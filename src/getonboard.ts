@@ -182,7 +182,7 @@ class GetOnBoard implements GetOnBoardGame {
             }*/   
 
             // first player token
-            dojo.place(`<div id="player_board_${player.id}_firstPlayerWrapper" class="firstPlayerWrapper disabled-shimmer"></div>`, `player_board_${player.id}`);
+            dojo.place(`<div id="player_board_${player.id}_firstPlayerWrapper" class="firstPlayerWrapper"></div>`, `player_board_${player.id}`);
 
             if (gamedatas.firstPlayerTokenPlayerId === playerId) {
                 this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
@@ -204,7 +204,9 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     private createPlayerTable(gamedatas: GetOnBoardGamedatas, playerId: number) {
-        this.playersTables.push(new PlayerTable(this, gamedatas.players[playerId]));
+        const table = new PlayerTable(this, gamedatas.players[playerId]);
+        table.setRound(gamedatas.validatedTickets, gamedatas.currentTicket);
+        this.playersTables.push(table);
     }
 
     /*private getPlayerTable(playerId: number): PlayerTable {

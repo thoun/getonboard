@@ -24,6 +24,22 @@
         background: url('img/score-pad-top-#{$i}.png');
       }
     }
+
+    .checkmark {
+      position: absolute;
+      text-align: center;
+      top: 31px;
+      width: 15px;
+      height: 14px;
+      font-size: 13pt;
+      margin-top: -6px;
+
+      @for $i from 0 through 11 {
+        &[data-number="#{$i + 1}"] {
+          left: #{75 + ($i % 6) * 100 + floor($i / 6) * 46}px;
+        }
+      }
+    }
   }
 
   .main {
@@ -41,11 +57,10 @@
 
       .checkmark {
         position: absolute;
-        background: #00FF0080;
         text-align: center;
-        font-size: 22pt;
         width: 28px;
         height: 27px;
+        font-size: 22pt;
         margin-top: -8px;
       }
 
@@ -88,7 +103,6 @@
     width: 133px;
     height: 32px;
     display: flex;
-    justify-content: center;
     align-items: center;
   }
 

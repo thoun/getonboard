@@ -92,6 +92,8 @@ interface GetOnBoardGamedatas {
     // Add here variables you set up in getAllDatas
     commonObjectives: Card[];
     firstPlayerTokenPlayerId: number;
+    validatedTickets: number[];
+    currentTicket: number | null;
     round: number;
     map: 'small' | 'big';
     MAP_ROUTES: { [position: number]: number[] };

@@ -149,7 +149,8 @@ class GetOnBoard extends Table {
         $result['map'] = $this->getMap();
         $result['MAP_ROUTES'] = $this->MAP_ROUTES[$result['map']];
         $result['firstPlayerTokenPlayerId'] = intval($this->getGameStateValue(FIRST_PLAYER));
-        $result['round'] = $this->getRoundNumber();
+        $result['validatedTickets'] = $this->getValidatedTicketsForRound();
+        $result['currentTicket'] = $this->getCurrentTicketForRound();
 
         $result['TODO_TEMP_MAP_POSITIONS'] = $this->MAP_POSITIONS['small'];
   
