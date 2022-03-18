@@ -9,8 +9,8 @@ function slideToObjectAndAttach(game, object, destinationId, posX, posY, rotatio
         object.style.zIndex = '10';
         var objectCR = object.getBoundingClientRect();
         var destinationCR = destination.getBoundingClientRect();
-        var deltaX = destinationCR.left - objectCR.left + (posX !== null && posX !== void 0 ? posX : 0) * game.getZoom();
-        var deltaY = destinationCR.top - objectCR.top + (posY !== null && posY !== void 0 ? posY : 0) * game.getZoom();
+        var deltaX = destinationCR.left - objectCR.left + (posX !== null && posX !== void 0 ? posX : 0);
+        var deltaY = destinationCR.top - objectCR.top + (posY !== null && posY !== void 0 ? posY : 0);
         var attachToNewParent = function () {
             object.style.top = posY !== undefined ? "".concat(posY, "px") : 'unset';
             object.style.left = posX !== undefined ? "".concat(posX, "px") : 'unset';
@@ -26,7 +26,7 @@ function slideToObjectAndAttach(game, object, destinationId, posX, posY, rotatio
         }
         else {
             object.style.transition = "transform 0.5s ease-in";
-            object.style.transform = "translate(".concat(deltaX / game.getZoom(), "px, ").concat(deltaY / game.getZoom(), "px) rotate(").concat(rotation, "deg)");
+            object.style.transform = "translate(".concat(deltaX, "px, ").concat(deltaY, "px) rotate(").concat(rotation, "deg)");
             var securityTimeoutId_1 = null;
             var transitionend_1 = function () {
                 attachToNewParent();
@@ -352,10 +352,6 @@ var GetOnBoard = /** @class */ (function () {
         this.createPlayerTables(gamedatas);
         this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
         this.setupNotifications();
-        /*this.preferencesManager = new PreferencesManager(this);
-
-        document.getElementById('zoom-out').addEventListener('click', () => this.tableManager?.zoomOut());
-        document.getElementById('zoom-in').addEventListener('click', () => this.tableManager?.zoomIn());*/
         log("Ending game setup");
     };
     ///////////////////////////////////////////////////
@@ -419,28 +415,21 @@ var GetOnBoard = /** @class */ (function () {
     //
     GetOnBoard.prototype.onUpdateActionButtons = function (stateName, args) {
         var _this = this;
-        switch (stateName) {
-            /*case 'changeActivePlayerDie': case 'psychicProbeRollDie':
-                this.setDiceSelectorVisibility(true);
-                this.onEnteringPsychicProbeRollDie(args); // because it's multiplayer, enter action must be set here
-                break;*/
-        }
         if (this.isCurrentPlayerActive()) {
             switch (stateName) {
                 case 'placeDeparturePawn':
                     var placeDeparturePawnArgs = args;
-                    /*placeDeparturePawnArgs._private.tickets.forEach(ticket =>
-                        (this as any).addActionButton(`placeDeparturePawn${ticket}_button`, dojo.string.substitute(_("Start at ${ticket}"), { ticket }), () => this.placeDeparturePawn(ticket))
-                    );*/
                     placeDeparturePawnArgs._private.positions.forEach(function (position) {
-                        //document.getElementById(`position${position}-placeDeparturePawn`).classList.remove('disabled')
                         return document.getElementById("intersection".concat(position)).classList.add('selectable');
                     });
                     break;
                 case 'placeRoute':
                     this.addActionButton("confirmTurn_button", _("Confirm turn"), function () { return _this.confirmTurn(); });
                     var placeRouteArgs = args;
-                    if (!placeRouteArgs.canConfirm) {
+                    if (placeRouteArgs.canConfirm) {
+                        this.startActionTimer("confirmTurn_button", 5);
+                    }
+                    else {
                         dojo.addClass("confirmTurn_button", "disabled");
                     }
                     this.addActionButton("cancelLast_button", _("Cancel last marker"), function () { return _this.cancelLast(); }, null, null, 'grey');
@@ -494,13 +483,6 @@ var GetOnBoard = /** @class */ (function () {
         var table = new PlayerTable(gamedatas.players[playerId]);
         table.setRound(gamedatas.validatedTickets, gamedatas.currentTicket);
         this.playersTables.push(table);
-    };
-    /*private getPlayerTable(playerId: number): PlayerTable {
-        return this.playerTables.find(playerTable => playerTable.playerId === Number(playerId));
-    }*/
-    GetOnBoard.prototype.getZoom = function () {
-        //return this.tableManager.zoom;
-        return 1; // TODO
     };
     GetOnBoard.prototype.placeFirstPlayerToken = function (playerId) {
         var firstPlayerBoardToken = document.getElementById('firstPlayerBoardToken');
@@ -584,7 +566,7 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.startActionTimer = function (buttonId, time) {
         var _a;
-        if (((_a = this.prefs[202]) === null || _a === void 0 ? void 0 : _a.value) === 2) {
+        if (Number((_a = this.prefs[202]) === null || _a === void 0 ? void 0 : _a.value) === 2) {
             return;
         }
         var button = document.getElementById(buttonId);
@@ -593,7 +575,7 @@ var GetOnBoard = /** @class */ (function () {
         var _actionTimerSeconds = time;
         var actionTimerFunction = function () {
             var button = document.getElementById(buttonId);
-            if (button == null) {
+            if (button == null || button.classList.contains('disabled')) {
                 window.clearInterval(actionTimerId);
             }
             else if (_actionTimerSeconds-- > 1) {

@@ -118,7 +118,6 @@ interface GetOnBoardGamedatas {
 
 interface GetOnBoardGame extends Game {
     getPlayerId(): number;
-    getZoom(): number;    
     getPlayerColor(playerId: number): string;
 
     placeDeparturePawn(position: number): void;

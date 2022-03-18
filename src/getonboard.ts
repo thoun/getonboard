@@ -50,10 +50,6 @@ class GetOnBoard implements GetOnBoardGame {
         this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
 
         this.setupNotifications();
-        /*this.preferencesManager = new PreferencesManager(this);
-
-        document.getElementById('zoom-out').addEventListener('click', () => this.tableManager?.zoomOut());
-        document.getElementById('zoom-in').addEventListener('click', () => this.tableManager?.zoomIn());*/
 
         log( "Ending game setup" );
     }
@@ -124,30 +120,20 @@ class GetOnBoard implements GetOnBoardGame {
     //                        action status bar (ie: the HTML links in the status bar).
     //
     public onUpdateActionButtons(stateName: string, args: any) {
-
-        switch (stateName) {
-            /*case 'changeActivePlayerDie': case 'psychicProbeRollDie':
-                this.setDiceSelectorVisibility(true);
-                this.onEnteringPsychicProbeRollDie(args); // because it's multiplayer, enter action must be set here
-                break;*/
-        }
-
         if ((this as any).isCurrentPlayerActive()) {
             switch (stateName) {
                 case 'placeDeparturePawn':
                     const placeDeparturePawnArgs = args as EnteringPlaceDeparturePawnArgs;
-                    /*placeDeparturePawnArgs._private.tickets.forEach(ticket => 
-                        (this as any).addActionButton(`placeDeparturePawn${ticket}_button`, dojo.string.substitute(_("Start at ${ticket}"), { ticket }), () => this.placeDeparturePawn(ticket))
-                    );*/
                     placeDeparturePawnArgs._private.positions.forEach(position => 
-                        //document.getElementById(`position${position}-placeDeparturePawn`).classList.remove('disabled')
                         document.getElementById(`intersection${position}`).classList.add('selectable')
                     );
                     break;
                 case 'placeRoute':
                     (this as any).addActionButton(`confirmTurn_button`, _("Confirm turn"), () => this.confirmTurn());
                     const placeRouteArgs = args as EnteringPlaceRouteArgs;
-                    if (!placeRouteArgs.canConfirm) {
+                    if (placeRouteArgs.canConfirm) {
+                        this.startActionTimer(`confirmTurn_button`, 5);
+                    } else {
                         dojo.addClass(`confirmTurn_button`, `disabled`);
                     }
                     (this as any).addActionButton(`cancelLast_button`, _("Cancel last marker"), () => this.cancelLast(), null, null, 'grey');
@@ -214,15 +200,6 @@ class GetOnBoard implements GetOnBoardGame {
         const table = new PlayerTable(gamedatas.players[playerId]);
         table.setRound(gamedatas.validatedTickets, gamedatas.currentTicket);
         this.playersTables.push(table);
-    }
-
-    /*private getPlayerTable(playerId: number): PlayerTable {
-        return this.playerTables.find(playerTable => playerTable.playerId === Number(playerId));
-    }*/
-
-    public getZoom() {
-        //return this.tableManager.zoom;
-        return 1; // TODO
     }
 
     private placeFirstPlayerToken(playerId: number) {
@@ -320,7 +297,7 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     private startActionTimer(buttonId: string, time: number) {
-        if ((this as any).prefs[202]?.value === 2) {
+        if (Number((this as any).prefs[202]?.value) === 2) {
             return;
         }
 
@@ -331,7 +308,7 @@ class GetOnBoard implements GetOnBoardGame {
         let _actionTimerSeconds = time;
         const actionTimerFunction = () => {
           const button = document.getElementById(buttonId);
-          if (button == null) {
+          if (button == null || button.classList.contains('disabled')) {
             window.clearInterval(actionTimerId);
           } else if (_actionTimerSeconds-- > 1) {
             button.innerHTML = _actionTimerLabel + ' (' + _actionTimerSeconds + ')';

@@ -11,8 +11,8 @@ function slideToObjectAndAttach(game: GetOnBoardGame, object: HTMLElement, desti
         const objectCR = object.getBoundingClientRect();
         const destinationCR = destination.getBoundingClientRect();
 
-        const deltaX = destinationCR.left - objectCR.left + (posX ?? 0) * game.getZoom();
-        const deltaY = destinationCR.top - objectCR.top + (posY ?? 0) * game.getZoom();
+        const deltaX = destinationCR.left - objectCR.left + (posX ?? 0);
+        const deltaY = destinationCR.top - objectCR.top + (posY ?? 0);
 
         const attachToNewParent = () => {
             object.style.top = posY !== undefined ? `${posY}px` : 'unset';
@@ -29,7 +29,7 @@ function slideToObjectAndAttach(game: GetOnBoardGame, object: HTMLElement, desti
             attachToNewParent();
         } else {
             object.style.transition = `transform 0.5s ease-in`;
-            object.style.transform = `translate(${deltaX / game.getZoom()}px, ${deltaY / game.getZoom()}px) rotate(${rotation}deg)`;
+            object.style.transform = `translate(${deltaX}px, ${deltaY}px) rotate(${rotation}deg)`;
 
             let securityTimeoutId = null;
 
