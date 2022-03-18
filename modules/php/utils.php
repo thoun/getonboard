@@ -183,11 +183,16 @@ trait UtilTrait {
         return ($route->from === $from && $route->to === $to) || ($route->to === $from && $route->from === $to);
     }
 
-    function createPossibleRoute(int $position, int $destination, array $allPlacedRoutes, array $playerPlacedRoutes, array $unvalidatedRoutes, array $turnShape) {
+    function createPossibleRoute(int $position, int $destination, array $allPlacedRoutes, array $playerPlacedRoutes, array $unvalidatedRoutes, array $turnShape, array $busyRoutes) {
         $trafficJam = count(array_filter(
             $allPlacedRoutes, 
             fn($route) => $this->isSameRoute($route, $position, $destination)
         ));
+
+        if (in_array($destination, $busyRoutes[$position]) || in_array($position, $busyRoutes[$destination])) {
+            $trafficJam++;
+        }
+
         $useTurnZone = false;
         $angle = $turnShape[count($unvalidatedRoutes)]; // 0 means any shape, 1 straight, 2 turn.
         if ($angle > 0) {
@@ -220,6 +225,8 @@ trait UtilTrait {
     }
 
     function getPossibleRoutes(int $playerId, string $mapSize, array $turnShape, int $position, array $allPlacedRoutes) {
+        $busyRoutes = $this->BUSY_ROUTES[$mapSize];
+
         $playerPlacedRoutes = array_filter($allPlacedRoutes, fn($placedRoute) => $placedRoute->playerId === $playerId);
         $unvalidatedRoutes = array_filter($playerPlacedRoutes, fn($placedRoute) => !$placedRoute->validated);
 
@@ -238,7 +245,7 @@ trait UtilTrait {
             }
         }
 
-        return array_map(fn($destination) => $this->createPossibleRoute($position, $destination, $allPlacedRoutes, $playerPlacedRoutes, $unvalidatedRoutes, $turnShape), $possibleDestinations);
+        return array_map(fn($destination) => $this->createPossibleRoute($position, $destination, $allPlacedRoutes, $playerPlacedRoutes, $unvalidatedRoutes, $turnShape, $busyRoutes), $possibleDestinations);
     }
 
     function getRoundNumber() {
