@@ -190,9 +190,9 @@ class GetOnBoard implements GetOnBoardGame {
                 (this as any).addTooltipHtml('panel-board-personal-objective', _("Your personal objective"));
             }
 
-            /*if (eliminated) {
+            if (eliminated) {
                 setTimeout(() => this.eliminatePlayer(playerId), 200);
-            }*/   
+            }
 
             // first player token
             dojo.place(`<div id="player_board_${player.id}_firstPlayerWrapper" class="firstPlayerWrapper"></div>`, `player_board_${player.id}`);
@@ -248,6 +248,12 @@ class GetOnBoard implements GetOnBoardGame {
     private getPlayerTable(playerId: number): PlayerTable {
         return this.playersTables.find(playerTable => playerTable.playerId === playerId);
     }
+    
+    private eliminatePlayer(playerId: number) {
+        this.gamedatas.players[playerId].eliminated = 1;
+        document.getElementById(`overall_player_board_${playerId}`).classList.add('eliminated-player');
+        dojo.addClass(`player-table-${playerId}`, 'eliminated');
+    }
 
     public placeDeparturePawn(position: number) {
         if(!(this as any).checkAction('placeDeparturePawn')) {
@@ -264,10 +270,23 @@ class GetOnBoard implements GetOnBoardGame {
             return;
         }
 
-        this.takeAction('placeRoute', {
-            from, 
-            to,
-        });
+        const args: EnteringPlaceRouteArgs = this.gamedatas.gamestate.args;
+        const route = args.possibleRoutes.find(r => (r.from === from && r.to === to) || (r.from === to && r.to === from));
+        const eliminationWarning = route.isElimination && args.possibleRoutes.some(r => !r.isElimination);
+
+        if (eliminationWarning) {
+            (this as any).confirmationDialog(_('Are you sure you want to place that marker? You will be eliminated!'), () => {
+                this.takeAction('placeRoute', {
+                    from, 
+                    to,
+                });
+            });
+        } else {
+            this.takeAction('placeRoute', {
+                from, 
+                to,
+            });
+        }
     }
 
     public cancelLast() {
@@ -379,6 +398,12 @@ class GetOnBoard implements GetOnBoardGame {
 
     notif_removeMarkers(notif: Notif<NotifConfirmTurnArgs>) {
         notif.args.markers.forEach(marker => this.tableCenter.removeMarker(notif.args.playerId, marker));
+    }
+
+    notif_playerEliminated(notif: Notif<any>) {
+        const playerId = Number(notif.args.who_quits);
+        (this as any).scoreCtrl[playerId]?.toValue(0);
+        this.eliminatePlayer(playerId);
     }
 
     /* This enable to inject translatable styled things to logs or action bar */

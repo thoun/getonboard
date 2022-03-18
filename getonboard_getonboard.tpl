@@ -4,7 +4,6 @@
     <div id="center">
         <div id="map"></div>
     </div>
-    <div id="centerTODOTEMP"></div>
     <div id="player-tables"></div>
 </div>
 

@@ -63,6 +63,11 @@ trait ActionTrait {
             'marker' => PlacedRoute::forNotif($from, $to, false),
         ]);
 
+        if ($possibleRoute->isElimination) {
+            $this->setGameStateValue(ELIMINATE_PLAYER, $playerId);
+            $this->applyConfirmTurn($playerId);
+        }
+
         $this->notifUpdateScoreSheet($playerId);
 
         //self::incStat(1, 'placedRoutes');
@@ -118,12 +123,8 @@ trait ActionTrait {
 
         $this->applyCancel($unvalidatedRoutes);
     }
-  	
-    public function confirmTurn() {
-        self::checkAction('confirmTurn'); 
-        
-        $playerId = self::getActivePlayerId();
 
+    private function applyConfirmTurn(int $playerId) {
         $placedRoutes = $this->getPlacedRoutes($playerId);
         $unvalidatedRoutes = array_values(array_filter($placedRoutes, fn($placedRoute) => !$placedRoute->validated));
         $unvalidatedRoutesIds = array_map(fn($placedRoute) => $placedRoute->id, $unvalidatedRoutes);
@@ -141,5 +142,13 @@ trait ActionTrait {
         $this->DbQuery("UPDATE player SET `player_score` = $score WHERE `player_id` = $playerId");
 
         $this->gamestate->nextState('nextPlayer');
+    }
+  	
+    public function confirmTurn() {
+        self::checkAction('confirmTurn'); 
+        
+        $playerId = self::getActivePlayerId();
+
+        $this->applyConfirmTurn($playerId);
     }
 }

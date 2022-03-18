@@ -28,13 +28,32 @@ trait StateTrait {
         $this->gamestate->nextState('start');
     }
 
+    function checkPlayerToEliminate() {
+        $eliminatedPlayer = intval($this->getGameStateValue(ELIMINATE_PLAYER));
+        if ($eliminatedPlayer === 0 || $eliminatedPlayer === intval($this->getActivePlayerId())) {
+            return;
+        }
+
+        $this->DbQuery("UPDATE player SET `player_score` = 0 WHERE `player_id` = $eliminatedPlayer");
+        $this->eliminatePlayer($eliminatedPlayer);
+        $this->setGameStateValue(ELIMINATE_PLAYER, 0);
+    }
+
     function stNextPlayer() {
         $playerId = $this->getActivePlayerId();
+
+        $this->checkPlayerToEliminate();
+
         $this->giveExtraTime($playerId);
 
         $this->activeNextPlayer();
-
         $playerId = intval($this->getActivePlayerId());
+
+        if ($this->isEliminated($playerId)) {
+            return $this->stNextPlayer();
+        }
+
+        $this->checkPlayerToEliminate();
 
         $endOfRound = $playerId == intval($this->getGameStateValue(FIRST_PLAYER));
 

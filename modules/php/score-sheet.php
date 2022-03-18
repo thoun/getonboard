@@ -210,7 +210,15 @@ trait ScoreSheetTrait {
             }
         }
 
-        $scoreSheet->total = $scoreSheet->oldLadies->total + $scoreSheet->students->total + $scoreSheet->tourists->total + $scoreSheet->businessmen->total /* + TODO*/;
+        $scoreSheet->total = 
+            $scoreSheet->oldLadies->total + 
+            $scoreSheet->students->total + 
+            $scoreSheet->tourists->total + 
+            $scoreSheet->businessmen->total + 
+            $scoreSheet->commonObjectives->total + 
+            $scoreSheet->personalObjective->total + 
+            $scoreSheet->turnZones->total + 
+            $scoreSheet->trafficJam->total;
 
         return $scoreSheet;
     }

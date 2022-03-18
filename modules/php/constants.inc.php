@@ -24,10 +24,7 @@ define('END_SCORE', 100);
  * Variables
  */
 define('FIRST_PLAYER', 'FIRST_PLAYER');
-
-/*
- * Global variables
- */
+define('ELIMINATE_PLAYER', 'ELIMINATE_PLAYER');
 
 /*
  * Map elements

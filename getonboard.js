@@ -474,9 +474,9 @@ var GetOnBoard = /** @class */ (function () {
                 dojo.place("<div class=\"personal-objective-wrapper\"><div id=\"panel-board-personal-objective\" class=\"personal-objective\" data-type=\"".concat(player.personalObjective, "\"></div></div>"), "player_board_".concat(player.id));
                 _this.addTooltipHtml('panel-board-personal-objective', _("Your personal objective"));
             }
-            /*if (eliminated) {
-                setTimeout(() => this.eliminatePlayer(playerId), 200);
-            }*/
+            if (eliminated) {
+                setTimeout(function () { return _this.eliminatePlayer(playerId); }, 200);
+            }
             // first player token
             dojo.place("<div id=\"player_board_".concat(player.id, "_firstPlayerWrapper\" class=\"firstPlayerWrapper\"></div>"), "player_board_".concat(player.id));
         });
@@ -523,6 +523,11 @@ var GetOnBoard = /** @class */ (function () {
     GetOnBoard.prototype.getPlayerTable = function (playerId) {
         return this.playersTables.find(function (playerTable) { return playerTable.playerId === playerId; });
     };
+    GetOnBoard.prototype.eliminatePlayer = function (playerId) {
+        this.gamedatas.players[playerId].eliminated = 1;
+        document.getElementById("overall_player_board_".concat(playerId)).classList.add('eliminated-player');
+        dojo.addClass("player-table-".concat(playerId), 'eliminated');
+    };
     GetOnBoard.prototype.placeDeparturePawn = function (position) {
         if (!this.checkAction('placeDeparturePawn')) {
             return;
@@ -532,13 +537,27 @@ var GetOnBoard = /** @class */ (function () {
         });
     };
     GetOnBoard.prototype.placeRoute = function (from, to) {
+        var _this = this;
         if (!this.checkAction('placeRoute')) {
             return;
         }
-        this.takeAction('placeRoute', {
-            from: from,
-            to: to,
-        });
+        var args = this.gamedatas.gamestate.args;
+        var route = args.possibleRoutes.find(function (r) { return (r.from === from && r.to === to) || (r.from === to && r.to === from); });
+        var eliminationWarning = route.isElimination && args.possibleRoutes.some(function (r) { return !r.isElimination; });
+        if (eliminationWarning) {
+            this.confirmationDialog(_('Are you sure you want to place that marker? You will be eliminated!'), function () {
+                _this.takeAction('placeRoute', {
+                    from: from,
+                    to: to,
+                });
+            });
+        }
+        else {
+            this.takeAction('placeRoute', {
+                from: from,
+                to: to,
+            });
+        }
     };
     GetOnBoard.prototype.cancelLast = function () {
         if (!this.checkAction('cancelLast')) {
@@ -637,6 +656,12 @@ var GetOnBoard = /** @class */ (function () {
     GetOnBoard.prototype.notif_removeMarkers = function (notif) {
         var _this = this;
         notif.args.markers.forEach(function (marker) { return _this.tableCenter.removeMarker(notif.args.playerId, marker); });
+    };
+    GetOnBoard.prototype.notif_playerEliminated = function (notif) {
+        var _a;
+        var playerId = Number(notif.args.who_quits);
+        (_a = this.scoreCtrl[playerId]) === null || _a === void 0 ? void 0 : _a.toValue(0);
+        this.eliminatePlayer(playerId);
     };
     /* This enable to inject translatable styled things to logs or action bar */
     /* @Override */

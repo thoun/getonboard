@@ -12,6 +12,10 @@
   font-family: 'Caveat';
   font-size: 16pt;
 
+  &.eliminated {
+      filter: grayscale(1);
+  }
+
   .first-player-wrapper {
     position: absolute;
     top: 0;

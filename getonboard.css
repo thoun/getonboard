@@ -11,6 +11,26 @@ html, .mode_3d #game_play_area_background {
   font-style: normal;
   font-display: swap;
 }
+.player-board .personal-objective-wrapper {
+  display: flex;
+  justify-content: center;
+}
+.player-board .personal-objective-wrapper .personal-objective {
+  width: 150px;
+  height: 90px;
+  background: aquamarine;
+  margin: 10px;
+}
+.player-board.eliminated-player {
+  background-color: #b9b9b9;
+}
+.player-board.eliminated-player .player-name a {
+  text-decoration: line-through;
+}
+.player-board.eliminated-player .personal-objective-wrapper {
+  display: none;
+}
+
 .first-player-token {
   position: relative;
   background: url("img/first-player.png");
@@ -25,17 +45,6 @@ html, .mode_3d #game_play_area_background {
 #firstPlayerTableToken {
   width: 64px;
   height: 64px;
-}
-
-.personal-objective-wrapper {
-  display: flex;
-  justify-content: center;
-}
-.personal-objective-wrapper .personal-objective {
-  width: 150px;
-  height: 90px;
-  background: aquamarine;
-  margin: 10px;
 }
 
 #center {
@@ -150,6 +159,9 @@ html, .mode_3d #game_play_area_background {
   position: relative;
   font-family: "Caveat";
   font-size: 16pt;
+}
+.player-table.eliminated {
+  filter: grayscale(1);
 }
 .player-table .first-player-wrapper {
   position: absolute;

@@ -58,28 +58,6 @@ trait UtilTrait {
         return true;
     }
 
-    function setGlobalVariable(string $name, /*object|array*/ $obj) {
-        /*if ($obj == null) {
-            throw new \BgaSystemException('Global Variable null');
-        }*/
-        $jsonObj = json_encode($obj);
-        self::DbQuery("INSERT INTO `global_variables`(`name`, `value`)  VALUES ('$name', '$jsonObj') ON DUPLICATE KEY UPDATE `value` = '$jsonObj'");
-    }
-
-    function getGlobalVariable(string $name, $asArray = null) {
-        $json_obj = self::getUniqueValueFromDB("SELECT `value` FROM `global_variables` where `name` = '$name'");
-        if ($json_obj) {
-            $object = json_decode($json_obj, $asArray);
-            return $object;
-        } else {
-            return null;
-        }
-    }
-
-    function deleteGlobalVariable(string $name) {
-        self::DbQuery("DELETE FROM `global_variables` where `name` = '$name'");
-    }
-
     function getFirstPlayerId() {
         return intval(self::getGameStateValue(FIRST_PLAYER));
     }
@@ -90,6 +68,10 @@ trait UtilTrait {
 
     function getPlayerName(int $playerId) {
         return self::getUniqueValueFromDB("SELECT player_name FROM player WHERE player_id = $playerId");
+    }
+    
+    function isEliminated(int $playerId) {
+        return boolval(self::getUniqueValueFromDB("SELECT player_eliminated FROM player WHERE player_id = $playerId"));
     }
 
     function getCardFromDb(array $dbCard) {
@@ -107,7 +89,7 @@ trait UtilTrait {
     }
 
     function getMap() {
-        return /* TODO count($this->getPlayersIds()) > 3 ?*/ 'big' /*: 'small'*/;
+        return count($this->getPlayersIds()) > 3 ? 'big' : 'small';
     }
 
     function setupTickets(int $playerNumber) {

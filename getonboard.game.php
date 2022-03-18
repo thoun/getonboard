@@ -46,6 +46,7 @@ class GetOnBoard extends Table {
         
         self::initGameStateLabels([
             FIRST_PLAYER => 10,
+            ELIMINATE_PLAYER => 11,
         ]);   
 
         $this->tickets = self::getNew("module.common.deck");
@@ -100,6 +101,7 @@ class GetOnBoard extends Table {
 
         // Init global values with their initial values
         self::setGameStateInitialValue(FIRST_PLAYER, intval(array_keys($players)[0]));
+        self::setGameStateInitialValue(ELIMINATE_PLAYER, 0);
         
         // Init game statistics
         // (note: statistics used in this file must be defined in your stats.inc.php file)
