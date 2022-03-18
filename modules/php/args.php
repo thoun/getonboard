@@ -43,6 +43,13 @@ trait ArgsTrait {
         $possibleRoutes = $this->getPossibleRoutes($playerId, $this->getMap(), $turnShape, $currentPosition, $allPlacedRoutes);
         $canConfirm = count($possibleRoutes) === 0;
         $canCancel = count($playerPlacedRoutes) > 0 && !end($playerPlacedRoutes)->validated;
+
+        $stepNumber = count(array_filter($playerPlacedRoutes, fn($placedRoute) => !$placedRoute->validated)) + 1;
+        $shapeLength = count($turnShape);
+        $step = '';
+        if (!$canConfirm) {
+            $step = $stepNumber > $shapeLength ? clienttranslate('(Green light bonus)') : "($stepNumber/$shapeLength)";
+        }
     
         return [
             'currentPosition' => $currentPosition,
@@ -50,6 +57,8 @@ trait ArgsTrait {
             'canConfirm' => $canConfirm,
             'canCancel' => $canCancel,
             'shape' => $turnShape,
+            'step' => $step,
+            'i18n' => ['step'],
         ];
     }
     

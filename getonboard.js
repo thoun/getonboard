@@ -425,8 +425,8 @@ var GetOnBoard = /** @class */ (function () {
                     else {
                         dojo.addClass("confirmTurn_button", "disabled");
                     }
-                    this.addActionButton("cancelLast_button", _("Cancel last marker"), function () { return _this.cancelLast(); }, null, null, 'grey');
-                    this.addActionButton("resetTurn_button", _("Reset the whole turn"), function () { return _this.resetTurn(); }, null, null, 'grey');
+                    this.addActionButton("cancelLast_button", _("Cancel last marker"), function () { return _this.cancelLast(); }, null, null, 'gray');
+                    this.addActionButton("resetTurn_button", _("Reset the whole turn"), function () { return _this.resetTurn(); }, null, null, 'gray');
                     if (!placeRouteArgs.canCancel) {
                         dojo.addClass("cancelLast_button", "disabled");
                         dojo.addClass("resetTurn_button", "disabled");
@@ -643,34 +643,9 @@ var GetOnBoard = /** @class */ (function () {
     GetOnBoard.prototype.format_string_recursive = function (log, args) {
         try {
             if (log && args && !args.processed) {
-                // Representation of the color of a card
-                /*['card_name', 'card_name2'].forEach(cardArg => {
-                    if (args[cardArg]) {
-                        let types: number[] = null;
-                        if (typeof args[cardArg] == 'number') {
-                            types = [args[cardArg]];
-                        } else if (typeof args[cardArg] == 'string' && args[cardArg][0] >= '0' && args[cardArg][0] <= '9') {
-                            types = args[cardArg].split(',').map((cardType: string) => Number(cardType));
-                        }
-                        if (types !== null) {
-                            const tags: string[] = types.map((cardType: number) => {
-                                const cardLogId = this.cardLogId++;
-
-                                setTimeout(() => (this as any).addTooltipHtml(`card-log-${cardLogId}`, this.getLogCardTooltip(cardType)), 500);
-
-                                return `<strong id="card-log-${cardLogId}" data-log-type="${cardType}">${this.getLogCardName(cardType)}</strong>`;
-                            });
-                            args[cardArg] = tags.join(', ');
-                        }
-                    }
-                });*/
-                /*for (const property in args) {
-                    if (args[property]?.indexOf?.(']') > 0) {
-                        args[property] = formatTextIcons(_(args[property]));
-                    }
+                if (args.shape && args.shape[0] != '<') {
+                    args.shape = "<div class=\"shape\" data-shape=\"".concat(JSON.stringify(args.shape), "\"></div>");
                 }
-
-                log = formatTextIcons(_(log));*/
             }
         }
         catch (e) {
