@@ -220,6 +220,7 @@ var TableCenter = /** @class */ (function () {
         this.gamedatas = gamedatas;
         var map = document.getElementById('map');
         map.dataset.size = gamedatas.map;
+        var mapElements = document.getElementById('map-elements');
         // intersections
         Object.keys(gamedatas.MAP_POSITIONS).forEach(function (key) {
             var position = Number(key);
@@ -231,7 +232,7 @@ var TableCenter = /** @class */ (function () {
                 html += " departure\" data-departure=".concat(departure);
             }
             html += "\" style=\"top: ".concat(coordinates[0], "px; left: ").concat(coordinates[1], "px;\"></div>");
-            dojo.place(html, map);
+            dojo.place(html, mapElements);
             if (departure > 0) {
                 document.getElementById("intersection".concat(position)).addEventListener('click', function () { return _this.game.placeDeparturePawn(position); });
             }
@@ -243,7 +244,7 @@ var TableCenter = /** @class */ (function () {
             destinations.forEach(function (destination) {
                 var coordinates = _this.getCoordinatesFromPositions(position, destination);
                 var html = "<div id=\"route".concat(position, "-").concat(destination, "\" class=\"route\" style=\"top: ").concat(coordinates[0], "px; left: ").concat(coordinates[1], "px;\"></div>");
-                dojo.place(html, map);
+                dojo.place(html, mapElements);
                 document.getElementById("route".concat(position, "-").concat(destination)).addEventListener('click', function () { return _this.game.placeRoute(position, destination); });
             });
         });
@@ -271,41 +272,33 @@ var TableCenter = /** @class */ (function () {
         var div = document.getElementById("marker-".concat(playerId, "-").concat(min, "-").concat(max));
         div === null || div === void 0 ? void 0 : div.parentElement.removeChild(div);
     };
-    TableCenter.prototype.getCoordinatesFromPosition = function (position) {
-        var digit = (position % 10) - 1;
-        var number = Math.floor(position / 10) - 1;
-        var space = 65;
+    TableCenter.prototype.getCoordinatesFromNumberAndDigit = function (number, digit) {
         if (this.gamedatas.map === 'big') {
+            var space = 65;
             return [
                 165 + space * digit,
                 26 + space * number,
             ];
         }
         else if (this.gamedatas.map === 'small') {
+            var space = 60;
             return [
-                26 + space * number,
-                165 + space * digit,
+                28 + space * number,
+                196 + space * digit,
             ];
         }
     };
+    TableCenter.prototype.getCoordinatesFromPosition = function (position) {
+        var number = Math.floor(position / 10) - 1;
+        var digit = (position % 10) - 1;
+        return this.getCoordinatesFromNumberAndDigit(number, digit);
+    };
     TableCenter.prototype.getCoordinatesFromPositions = function (from, to) {
-        var fromDigit = (from % 10) - 1;
         var fromNumber = Math.floor(from / 10) - 1;
-        var toDigit = (to % 10) - 1;
+        var fromDigit = (from % 10) - 1;
         var toNumber = Math.floor(to / 10) - 1;
-        var space = 65;
-        if (this.gamedatas.map === 'big') {
-            return [
-                165 + space * (fromDigit + toDigit) / 2,
-                26 + space * (fromNumber + toNumber) / 2,
-            ];
-        }
-        else if (this.gamedatas.map === 'small') {
-            return [
-                26 + space * (fromNumber + toNumber) / 2,
-                165 + space * (fromDigit + toDigit) / 2,
-            ];
-        }
+        var toDigit = (to % 10) - 1;
+        return this.getCoordinatesFromNumberAndDigit((fromNumber + toNumber) / 2, (fromDigit + toDigit) / 2);
     };
     return TableCenter;
 }());

@@ -59,50 +59,61 @@ html, .mode_3d #game_play_area_background {
 #center #map[data-size=small] {
   background: url("img/map-small.jpg");
 }
+#center #map[data-size=small] #map-elements {
+  transform: rotate(45deg);
+}
 #center #map[data-size=big] {
   background: url("img/map-big.jpg");
 }
-#center #map .intersection {
+#center #map #map-elements {
+  width: 740px;
+  height: 740px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: center center;
+}
+#center #map #map-elements .intersection {
   position: absolute;
   width: 32px;
   height: 32px;
   border-radius: 50%;
 }
-#center #map .intersection.selectable {
+#center #map #map-elements .intersection.selectable {
   cursor: pointer;
   animation: highlight-intersection-animation 1s alternate infinite ease-in-out;
 }
-#center #map .departure-pawn {
+#center #map #map-elements .departure-pawn {
   width: 32px;
   height: 32px;
   border-radius: 50%;
   box-shadow: 2px 2px 2px 2px black;
 }
-#center #map .marker {
+#center #map #map-elements .marker {
   width: 32px;
   height: 32px;
   box-shadow: 2px 2px 2px 2px black;
   transition: opacity 0.5s;
 }
-#center #map .marker.unvalidated {
+#center #map #map-elements .marker.unvalidated {
   opacity: 0.5;
 }
-#center #map .route {
+#center #map #map-elements .route {
   position: absolute;
   width: 32px;
   height: 32px;
 }
-#center #map .route.selectable {
+#center #map #map-elements .route.selectable {
   cursor: pointer;
   animation: highlight-route-clean-animation 1s alternate infinite ease-in-out;
 }
-#center #map .route.selectable.traffic-jam {
+#center #map #map-elements .route.selectable.traffic-jam {
   animation: highlight-route-traffic-jam-animation 1s alternate infinite ease-in-out;
 }
-#center #map .route.selectable.turn-zone {
+#center #map #map-elements .route.selectable.turn-zone {
   animation: highlight-route-turn-zone-animation 1s alternate infinite ease-in-out;
 }
-#center #map .route.selectable.elimination {
+#center #map #map-elements .route.selectable.elimination {
   animation: highlight-route-elimination-animation 1s alternate infinite ease-in-out;
 }
 

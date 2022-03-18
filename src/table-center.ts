@@ -4,6 +4,7 @@ class TableCenter {
     constructor(private game: GetOnBoardGame, private gamedatas: GetOnBoardGamedatas) {
         const map = document.getElementById('map');
         map.dataset.size = gamedatas.map;
+        const mapElements = document.getElementById('map-elements');
 
         // intersections
         Object.keys(gamedatas.MAP_POSITIONS).forEach(key => {
@@ -17,7 +18,7 @@ class TableCenter {
                 html += ` departure" data-departure=${departure}`;
             }
             html += `" style="top: ${coordinates[0]}px; left: ${coordinates[1]}px;"></div>`;
-            dojo.place(html, map);
+            dojo.place(html, mapElements);
             
             if (departure > 0) {
                 document.getElementById(`intersection${position}`).addEventListener('click', () => this.game.placeDeparturePawn(position));
@@ -32,7 +33,7 @@ class TableCenter {
             destinations.forEach(destination => {
                 const coordinates = this.getCoordinatesFromPositions(position, destination);
                 let html = `<div id="route${position}-${destination}" class="route" style="top: ${coordinates[0]}px; left: ${coordinates[1]}px;"></div>`;
-                dojo.place(html, map);
+                dojo.place(html, mapElements);
                 document.getElementById(`route${position}-${destination}`).addEventListener('click', () => this.game.placeRoute(position, destination));
             });
         });
@@ -67,39 +68,34 @@ class TableCenter {
         div?.parentElement.removeChild(div);
     }
 
-    private getCoordinatesFromPosition(position: number): number[] {
-        const digit = (position % 10) - 1;
-        const number = Math.floor(position / 10) - 1;
-        const space = 65;
+    private getCoordinatesFromNumberAndDigit(number: number, digit: number): number[] {
         if (this.gamedatas.map === 'big') {
+            const space = 65;
             return [
                 165 + space * digit,
                 26 + space * number,
             ];
         } else if (this.gamedatas.map === 'small') {
+            const space = 60;
             return [
-                26 + space * number,
-                165 + space * digit,
+                28 + space * number,
+                196 + space * digit,
             ];
         }
     }
 
+
+    private getCoordinatesFromPosition(position: number): number[] {
+        const number = Math.floor(position / 10) - 1;
+        const digit = (position % 10) - 1;
+        return this.getCoordinatesFromNumberAndDigit(number, digit);
+    }
+
     private getCoordinatesFromPositions(from: number, to: number): number[] {
-        const fromDigit = (from % 10) - 1;
         const fromNumber = Math.floor(from / 10) - 1;
-        const toDigit = (to % 10) - 1;
+        const fromDigit = (from % 10) - 1;
         const toNumber = Math.floor(to / 10) - 1;
-        const space = 65;
-        if (this.gamedatas.map === 'big') {
-            return [
-                165 + space * (fromDigit + toDigit)/2,
-                26 + space * (fromNumber + toNumber)/2,
-            ];
-        } else if (this.gamedatas.map === 'small') {
-            return [
-                26 + space * (fromNumber + toNumber)/2,
-                165 + space * (fromDigit + toDigit)/2,
-            ];
-        }
+        const toDigit = (to % 10) - 1;
+        return this.getCoordinatesFromNumberAndDigit((fromNumber + toNumber) / 2, (fromDigit + toDigit) / 2);
     }
 }

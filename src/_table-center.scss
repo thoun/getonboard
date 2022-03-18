@@ -9,60 +9,73 @@
   
     &[data-size="small"] {
       background: url('img/map-small.jpg');
+      
+      #map-elements {
+        transform: rotate(45deg);
+      }
     }
     &[data-size="big"] {
       background: url('img/map-big.jpg');
     }
 
-    .intersection {
+    #map-elements {
+      width: 740px;
+      height: 740px;
       position: absolute;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
+      top: 0;
+      left: 0;
+      transform-origin: center center;
 
-      &.selectable {
-        cursor: pointer;
-        animation: highlight-intersection-animation 1s alternate infinite ease-in-out;
-      }
-    }
+      .intersection {
+        position: absolute;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
 
-    .departure-pawn {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      box-shadow: 2px 2px 2px 2px black;
-    }
-
-    .marker {
-      width: 32px;
-      height: 32px;
-      box-shadow: 2px 2px 2px 2px black;
-      transition: opacity 0.5s;
-
-      &.unvalidated {
-        opacity: 0.5;
-      }
-    }
-
-    .route {
-      position: absolute;
-      width: 32px;
-      height: 32px;
-
-      &.selectable {
-        cursor: pointer;
-        animation: highlight-route-clean-animation 1s alternate infinite ease-in-out;
-
-        &.traffic-jam {
-          animation: highlight-route-traffic-jam-animation 1s alternate infinite ease-in-out;
+        &.selectable {
+          cursor: pointer;
+          animation: highlight-intersection-animation 1s alternate infinite ease-in-out;
         }
+      }
 
-        &.turn-zone {
-          animation: highlight-route-turn-zone-animation 1s alternate infinite ease-in-out;
+      .departure-pawn {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        box-shadow: 2px 2px 2px 2px black;
+      }
+
+      .marker {
+        width: 32px;
+        height: 32px;
+        box-shadow: 2px 2px 2px 2px black;
+        transition: opacity 0.5s;
+
+        &.unvalidated {
+          opacity: 0.5;
         }
+      }
 
-        &.elimination {
-          animation: highlight-route-elimination-animation 1s alternate infinite ease-in-out;
+      .route {
+        position: absolute;
+        width: 32px;
+        height: 32px;
+
+        &.selectable {
+          cursor: pointer;
+          animation: highlight-route-clean-animation 1s alternate infinite ease-in-out;
+
+          &.traffic-jam {
+            animation: highlight-route-traffic-jam-animation 1s alternate infinite ease-in-out;
+          }
+
+          &.turn-zone {
+            animation: highlight-route-turn-zone-animation 1s alternate infinite ease-in-out;
+          }
+
+          &.elimination {
+            animation: highlight-route-elimination-animation 1s alternate infinite ease-in-out;
+          }
         }
       }
     }

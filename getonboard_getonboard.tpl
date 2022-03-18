@@ -2,7 +2,10 @@
 
 <div id="full-table">
     <div id="center">
-        <div id="map"></div>
+        <div id="map">
+            <div id="map-elements">
+            </div>
+        </div>
     </div>
     <div id="player-tables"></div>
 </div>
