@@ -1,11 +1,114 @@
-// TODO TEMP
-#center {
-  columns: 7rem auto;
+#center {  
+  display: flex;
+  justify-content: center;
+
+  #map {
+    width: 740px;
+    height: 740px;
+    position: relative;
   
-  button {
-    width: auto;
-    margin: 2px;
-    color: black;
+    &[data-size="small"] {
+      background: url('img/map-small.jpg');
+    }
+    &[data-size="big"] {
+      background: url('img/map-big.jpg');
+    }
+
+    .intersection {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+
+      &.selectable {
+        cursor: pointer;
+        animation: highlight-intersection-animation 1s alternate infinite ease-in-out;
+      }
+    }
+
+    .departure-pawn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      box-shadow: 2px 2px 2px 2px black;
+    }
+
+    .marker {
+      width: 32px;
+      height: 32px;
+      box-shadow: 2px 2px 2px 2px black;
+
+      &.unvalidated {
+        opacity: 0.7;
+      }
+    }
+
+    .route {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+
+      &.selectable {
+        cursor: pointer;
+        animation: highlight-route-clean-animation 1s alternate infinite ease-in-out;
+
+        &.traffic-jam {
+          animation: highlight-route-traffic-jam-animation 1s alternate infinite ease-in-out;
+        }
+
+        &.turn-zone {
+          animation: highlight-route-turn-zone-animation 1s alternate infinite ease-in-out;
+        }
+
+        &.elimination {
+          animation: highlight-route-elimination-animation 1s alternate infinite ease-in-out;
+        }
+      }
+    }
   }
 }
-// TODO TEMP
+
+@keyframes highlight-intersection-animation {
+  0% { 
+    box-shadow: 0 0 20px 15px white;
+  }
+  100% { 
+    box-shadow: 0 0 30px 15px white;
+  }
+}
+
+@keyframes highlight-route-clean-animation {
+  0% { 
+    box-shadow: 0 0 20px 15px green;
+  }
+  100% { 
+    box-shadow: 0 0 30px 15px green;
+  }
+}
+
+@keyframes highlight-route-traffic-jam-animation {
+  0% { 
+    box-shadow: 0 0 20px 15px greenyellow;
+  }
+  100% { 
+    box-shadow: 0 0 30px 15px greenyellow;
+  }
+}
+
+@keyframes highlight-route-turn-zone-animation {
+  0% { 
+    box-shadow: 0 0 20px 15px orange;
+  }
+  100% { 
+    box-shadow: 0 0 30px 15px orange;
+  }
+}
+
+@keyframes highlight-route-elimination-animation {
+  0% { 
+    box-shadow: 0 0 20px 15px black;
+  }
+  100% { 
+    box-shadow: 0 0 30px 15px black;
+  }
+}

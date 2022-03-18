@@ -144,7 +144,7 @@ class GetOnBoard extends Table {
             $playerDb['sheetType'] = intval($playerDb['sheetType']);
             $playerDb['departurePosition'] = intval($playerDb['departurePosition']);
             $placedRoutes = $this->getPlacedRoutes($playerId);
-            $playerDb['placedRoutes'] = $placedRoutes;
+            $playerDb['markers'] = $placedRoutes;
             $playerDb['scoreSheets'] = $this->getScoreSheets($playerId, $placedRoutes, $commonObjectives);
         }
         $result['players'][$currentPlayerId]['personalObjective'] = intval($this->getUniqueValueFromDB("SELECT player_personal_objective FROM `player` where `player_id` = $currentPlayerId"));
@@ -155,7 +155,7 @@ class GetOnBoard extends Table {
         $result['validatedTickets'] = $this->getValidatedTicketsForRound();
         $result['currentTicket'] = $this->getCurrentTicketForRound();
 
-        $result['TODO_TEMP_MAP_POSITIONS'] = $this->MAP_POSITIONS['small'];
+        $result['MAP_POSITIONS'] = $this->MAP_POSITIONS[$result['map']];
   
         return $result;
     }

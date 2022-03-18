@@ -33,9 +33,9 @@ class GetOnBoard implements GetOnBoardGame {
         const players = Object.values(gamedatas.players);
         // ignore loading of some pictures
         if (players.length > 3) {
-            (this as any).dontPreloadImage(`map23.jpg`);
-        } else {            
-            (this as any).dontPreloadImage(`map45.jpg`);
+            (this as any).dontPreloadImage(`map-small.jpg`);
+        } else {
+            (this as any).dontPreloadImage(`map-big.jpg`);
         }
 
         log( "Starting game setup" );
@@ -44,7 +44,7 @@ class GetOnBoard implements GetOnBoardGame {
 
         log('gamedatas', gamedatas);
         this.createPlayerPanels(gamedatas); 
-        this.tableCenter = new TableCenter(this);
+        this.tableCenter = new TableCenter(this, gamedatas);
         this.createPlayerTables(gamedatas);
 
         this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
@@ -75,20 +75,43 @@ class GetOnBoard implements GetOnBoardGame {
     }
     
     private onEnteringPlaceRoute(args: EnteringPlaceRouteArgs) {
-        args.possibleRoutes.forEach(route => {
-            const min = Math.min(route.from, route.to);
-            const max = Math.max(route.from, route.to);
-            document.getElementById(`position${min}-placeRoute-to${max}`).classList.remove('disabled');
-        });
+        if ((this as any).isCurrentPlayerActive()) {
+            args.possibleRoutes.forEach(route => {
+                const min = Math.min(route.from, route.to);
+                const max = Math.max(route.from, route.to);
+                const classes = ['selectable'];
+                if (route.isElimination) {
+                    classes.push('elimination');
+                } else if (route.useTurnZone) {
+                    classes.push('turn-zone');
+                } else if (route.trafficJam > 0) {
+                    classes.push('traffic-jam');
+                }
+                document.getElementById(`route${min}-${max}`).classList.add(...classes);
+            });
+        }
     }
 
     public onLeavingState(stateName: string) {
         log( 'Leaving state: '+stateName );
 
         switch (stateName) {
-            case 'placeRoute':                
-                Array.from(document.getElementsByClassName('placeRoute-button')).forEach(element => element.classList.add('disabled'));
+            case 'placeDeparturePawn':
+                this.onLeavingPlaceDeparturePawn();
                 break;
+            case 'placeRoute':                
+                this.onLeavingPlaceRoute();
+                break;
+        }
+    }
+
+    private onLeavingPlaceDeparturePawn() {
+        Array.from(document.getElementsByClassName('intersection')).forEach(element => element.classList.remove('selectable'));
+    }
+    
+    private onLeavingPlaceRoute() {
+        if ((this as any).isCurrentPlayerActive()) {
+            Array.from(document.getElementsByClassName('route')).forEach(element => element.classList.remove('selectable', 'traffic-jam', 'turn-zone', 'elimination'));
         }
     }
     
@@ -109,7 +132,7 @@ class GetOnBoard implements GetOnBoardGame {
                 break;*/
         }
 
-        if((this as any).isCurrentPlayerActive()) {
+        if ((this as any).isCurrentPlayerActive()) {
             switch (stateName) {
                 case 'placeDeparturePawn':
                     const placeDeparturePawnArgs = args as EnteringPlaceDeparturePawnArgs;
@@ -117,7 +140,8 @@ class GetOnBoard implements GetOnBoardGame {
                         (this as any).addActionButton(`placeDeparturePawn${ticket}_button`, dojo.string.substitute(_("Start at ${ticket}"), { ticket }), () => this.placeDeparturePawn(ticket))
                     );*/
                     placeDeparturePawnArgs._private.positions.forEach(position => 
-                        document.getElementById(`position${position}-placeDeparturePawn`).classList.remove('disabled')
+                        //document.getElementById(`position${position}-placeDeparturePawn`).classList.remove('disabled')
+                        document.getElementById(`intersection${position}`).classList.add('selectable')
                     );
                     break;
                 case 'placeRoute':
@@ -135,6 +159,8 @@ class GetOnBoard implements GetOnBoardGame {
                     break;
             }
 
+        } else {
+            this.onLeavingPlaceDeparturePawn();
         }
     } 
     
@@ -147,6 +173,10 @@ class GetOnBoard implements GetOnBoardGame {
 
     public getPlayerId(): number {
         return Number((this as any).player_id);
+    }
+
+    public getPlayerColor(playerId: number): string {
+        return this.gamedatas.players[playerId].color;
     }
 
     private createPlayerPanels(gamedatas: GetOnBoardGamedatas) {

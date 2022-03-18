@@ -39,14 +39,103 @@ html, .mode_3d #game_play_area_background {
 }
 
 #center {
-  columns: 7rem auto;
+  display: flex;
+  justify-content: center;
 }
-#center button {
-  width: auto;
-  margin: 2px;
-  color: black;
+#center #map {
+  width: 740px;
+  height: 740px;
+  position: relative;
+}
+#center #map[data-size=small] {
+  background: url("img/map-small.jpg");
+}
+#center #map[data-size=big] {
+  background: url("img/map-big.jpg");
+}
+#center #map .intersection {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+#center #map .intersection.selectable {
+  cursor: pointer;
+  animation: highlight-intersection-animation 1s alternate infinite ease-in-out;
+}
+#center #map .departure-pawn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  box-shadow: 2px 2px 2px 2px black;
+}
+#center #map .marker {
+  width: 32px;
+  height: 32px;
+  box-shadow: 2px 2px 2px 2px black;
+}
+#center #map .marker.unvalidated {
+  opacity: 0.7;
+}
+#center #map .route {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+}
+#center #map .route.selectable {
+  cursor: pointer;
+  animation: highlight-route-clean-animation 1s alternate infinite ease-in-out;
+}
+#center #map .route.selectable.traffic-jam {
+  animation: highlight-route-traffic-jam-animation 1s alternate infinite ease-in-out;
+}
+#center #map .route.selectable.turn-zone {
+  animation: highlight-route-turn-zone-animation 1s alternate infinite ease-in-out;
+}
+#center #map .route.selectable.elimination {
+  animation: highlight-route-elimination-animation 1s alternate infinite ease-in-out;
 }
 
+@keyframes highlight-intersection-animation {
+  0% {
+    box-shadow: 0 0 20px 15px white;
+  }
+  100% {
+    box-shadow: 0 0 30px 15px white;
+  }
+}
+@keyframes highlight-route-clean-animation {
+  0% {
+    box-shadow: 0 0 20px 15px green;
+  }
+  100% {
+    box-shadow: 0 0 30px 15px green;
+  }
+}
+@keyframes highlight-route-traffic-jam-animation {
+  0% {
+    box-shadow: 0 0 20px 15px greenyellow;
+  }
+  100% {
+    box-shadow: 0 0 30px 15px greenyellow;
+  }
+}
+@keyframes highlight-route-turn-zone-animation {
+  0% {
+    box-shadow: 0 0 20px 15px orange;
+  }
+  100% {
+    box-shadow: 0 0 30px 15px orange;
+  }
+}
+@keyframes highlight-route-elimination-animation {
+  0% {
+    box-shadow: 0 0 20px 15px black;
+  }
+  100% {
+    box-shadow: 0 0 30px 15px black;
+  }
+}
 #player-tables {
   display: flex;
   justify-content: center;

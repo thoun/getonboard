@@ -107,7 +107,7 @@ trait UtilTrait {
     }
 
     function getMap() {
-        return count($this->getPlayersIds()) > 3 ? 'big' : 'small';
+        return /* TODO count($this->getPlayersIds()) > 3 ?*/ 'big' /*: 'small'*/;
     }
 
     function setupTickets(int $playerNumber) {

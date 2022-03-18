@@ -18,6 +18,12 @@ interface PossibleRoute {
     isElimination: boolean;
 }
 
+interface PlacedRoute {
+    from: number;
+    to: number;
+    validated: boolean;
+}
+
 interface SimpleZoneScoreSheet {
     checked: number;
 
@@ -83,6 +89,7 @@ interface GetOnBoardPlayer extends Player {
     departurePosition: number;
     personalObjective?: number;
     scoreSheets: ScoreSheets;
+    markers: PlacedRoute[];
 }
 
 interface GetOnBoardGamedatas {
@@ -104,14 +111,15 @@ interface GetOnBoardGamedatas {
     currentTicket: number | null;
     round: number;
     map: 'small' | 'big';
+    
+    MAP_POSITIONS: { [position: number]: [] };
     MAP_ROUTES: { [position: number]: number[] };
-
-    TODO_TEMP_MAP_POSITIONS: { [position: number]: [] };
 }
 
 interface GetOnBoardGame extends Game {
     getPlayerId(): number;
     getZoom(): number;    
+    getPlayerColor(playerId: number): string;
 
     placeDeparturePawn(position: number): void;
     placeRoute(from: number, to: number): void;

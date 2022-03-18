@@ -214,62 +214,88 @@ var PlayerTable = /** @class */ (function () {
     return PlayerTable;
 }());
 var TableCenter = /** @class */ (function () {
-    function TableCenter(game) {
+    function TableCenter(game, gamedatas) {
         var _this = this;
         this.game = game;
-        // TODO TEMP
-        var center = document.getElementById('center');
-        dojo.place("<div id=\"departures\"></div>", center);
-        Object.keys(game.gamedatas.TODO_TEMP_MAP_POSITIONS).forEach(function (key) {
+        this.gamedatas = gamedatas;
+        var map = document.getElementById('map');
+        map.dataset.size = gamedatas.map;
+        // intersections
+        Object.keys(gamedatas.MAP_POSITIONS).forEach(function (key) {
             var position = Number(key);
-            var elements = game.gamedatas.TODO_TEMP_MAP_POSITIONS[position];
-            var departure = elements.some(function (element) { return element >= 1 && element <= 12; });
-            if (departure) {
-                dojo.place("<button id=\"position".concat(position, "-placeDeparturePawn\" class=\"bgabutton bgabutton_blue disabled\">Start at ").concat(position, "</button>"), "departures");
-                document.getElementById("position".concat(position, "-placeDeparturePawn")).addEventListener('click', function () { return _this.game.placeDeparturePawn(position); });
+            var elements = gamedatas.MAP_POSITIONS[position];
+            var departure = elements.find(function (element) { return element >= 1 && element <= 12; });
+            var coordinates = _this.getCoordinatesFromPosition(position);
+            var html = "<div id=\"intersection".concat(position, "\" class=\"intersection");
+            if (departure > 0) {
+                html += " departure\" data-departure=".concat(departure);
+            }
+            html += "\" style=\"top: ".concat(coordinates[0], "px; left: ").concat(coordinates[1], "px;\"></div>");
+            dojo.place(html, map);
+            if (departure > 0) {
+                document.getElementById("intersection".concat(position)).addEventListener('click', function () { return _this.game.placeDeparturePawn(position); });
             }
         });
-        Object.keys(game.gamedatas.MAP_ROUTES).forEach(function (key) {
+        // routes
+        Object.keys(gamedatas.MAP_ROUTES).forEach(function (key) {
             var position = Number(key);
-            var destinations = game.gamedatas.MAP_ROUTES[position];
-            dojo.place("<div id=\"position".concat(position, "\"></div>"), center);
+            var destinations = gamedatas.MAP_ROUTES[position];
             destinations.forEach(function (destination) {
-                var label = '';
-                var elements = game.gamedatas.TODO_TEMP_MAP_POSITIONS[position];
-                if (elements.some(function (element) { return element == 0; })) {
-                    label += '🟢';
-                }
-                if (elements.some(function (element) { return element == 20; })) {
-                    label += '👵';
-                }
-                if (elements.some(function (element) { return element == 30; })) {
-                    label += '🎓';
-                }
-                if (elements.some(function (element) { return element == 32; })) {
-                    label += '🏫';
-                }
-                if (elements.some(function (element) { return element == 40; })) {
-                    label += '🕶';
-                }
-                if (elements.some(function (element) { return element == 41 || element == 42; })) {
-                    label += '🗼';
-                }
-                if (elements.some(function (element) { return element == 50; })) {
-                    label += '🕴';
-                }
-                if (elements.some(function (element) { return element == 51; })) {
-                    label += '🏢';
-                }
-                if (elements.some(function (element) { return [35, 45, 46, 55].includes(element); })) {
-                    label += '★';
-                }
-                dojo.place("<button id=\"position".concat(position, "-placeRoute-to").concat(destination, "\" class=\"bgabutton bgabutton_blue placeRoute-button disabled\">").concat(label, "</button>"), "position".concat(position));
-                //dojo.place(`<button id="position${position}-placeRoute-to${destination}" class="bgabutton bgabutton_blue placeRoute-button disabled">${position} - ${destination}</button>`, `position${position}`);
-                document.getElementById("position".concat(position, "-placeRoute-to").concat(destination)).addEventListener('click', function () { return _this.game.placeRoute(position, destination); });
+                var coordinates = _this.getCoordinatesFromPositions(position, destination);
+                var html = "<div id=\"route".concat(position, "-").concat(destination, "\" class=\"route\" style=\"top: ").concat(coordinates[0], "px; left: ").concat(coordinates[1], "px;\"></div>");
+                dojo.place(html, map);
+                document.getElementById("route".concat(position, "-").concat(destination)).addEventListener('click', function () { return _this.game.placeRoute(position, destination); });
             });
         });
-        // TODO TEMP
+        // departure pawns
+        Object.values(gamedatas.players).filter(function (player) { return player.departurePosition; }).forEach(function (player) { return _this.addDeparturePawn(Number(player.id), player.departurePosition); });
+        // markers
+        Object.values(gamedatas.players).forEach(function (player) { return player.markers.forEach(function (marker) { return _this.addMarker(Number(player.id), marker); }); });
     }
+    TableCenter.prototype.addDeparturePawn = function (playerId, position) {
+        dojo.place("<div id=\"departure-pawn-".concat(playerId, "\" class=\"departure-pawn\" style=\"background: #").concat(this.game.getPlayerColor(playerId), ";\"></div>"), "intersection".concat(position));
+    };
+    TableCenter.prototype.addMarker = function (playerId, marker) {
+        var min = Math.min(marker.from, marker.to);
+        var max = Math.max(marker.from, marker.to);
+        dojo.place("<div id=\"marker-".concat(playerId, "-").concat(min, "-").concat(max, "\" class=\"marker ").concat(marker.validated ? '' : 'unvalidated', "\" style=\"background: #").concat(this.game.getPlayerColor(playerId), ";\"></div>"), "route".concat(min, "-").concat(max));
+    };
+    TableCenter.prototype.getCoordinatesFromPosition = function (position) {
+        var digit = (position % 10) - 1;
+        var number = Math.floor(position / 10) - 1;
+        var space = 65;
+        if (this.gamedatas.map === 'big') {
+            return [
+                165 + space * digit,
+                26 + space * number,
+            ];
+        }
+        else if (this.gamedatas.map === 'small') {
+            return [
+                26 + space * number,
+                165 + space * digit,
+            ];
+        }
+    };
+    TableCenter.prototype.getCoordinatesFromPositions = function (from, to) {
+        var fromDigit = (from % 10) - 1;
+        var fromNumber = Math.floor(from / 10) - 1;
+        var toDigit = (to % 10) - 1;
+        var toNumber = Math.floor(to / 10) - 1;
+        var space = 65;
+        if (this.gamedatas.map === 'big') {
+            return [
+                165 + space * (fromDigit + toDigit) / 2,
+                26 + space * (fromNumber + toNumber) / 2,
+            ];
+        }
+        else if (this.gamedatas.map === 'small') {
+            return [
+                26 + space * (fromNumber + toNumber) / 2,
+                165 + space * (fromDigit + toDigit) / 2,
+            ];
+        }
+    };
     return TableCenter;
 }());
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
@@ -302,16 +328,16 @@ var GetOnBoard = /** @class */ (function () {
         var players = Object.values(gamedatas.players);
         // ignore loading of some pictures
         if (players.length > 3) {
-            this.dontPreloadImage("map23.jpg");
+            this.dontPreloadImage("map-small.jpg");
         }
         else {
-            this.dontPreloadImage("map45.jpg");
+            this.dontPreloadImage("map-big.jpg");
         }
         log("Starting game setup");
         this.gamedatas = gamedatas;
         log('gamedatas', gamedatas);
         this.createPlayerPanels(gamedatas);
-        this.tableCenter = new TableCenter(this);
+        this.tableCenter = new TableCenter(this, gamedatas);
         this.createPlayerTables(gamedatas);
         this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
         this.setupNotifications();
@@ -335,18 +361,42 @@ var GetOnBoard = /** @class */ (function () {
         }
     };
     GetOnBoard.prototype.onEnteringPlaceRoute = function (args) {
-        args.possibleRoutes.forEach(function (route) {
-            var min = Math.min(route.from, route.to);
-            var max = Math.max(route.from, route.to);
-            document.getElementById("position".concat(min, "-placeRoute-to").concat(max)).classList.remove('disabled');
-        });
+        if (this.isCurrentPlayerActive()) {
+            args.possibleRoutes.forEach(function (route) {
+                var _a;
+                var min = Math.min(route.from, route.to);
+                var max = Math.max(route.from, route.to);
+                var classes = ['selectable'];
+                if (route.isElimination) {
+                    classes.push('elimination');
+                }
+                else if (route.useTurnZone) {
+                    classes.push('turn-zone');
+                }
+                else if (route.trafficJam > 0) {
+                    classes.push('traffic-jam');
+                }
+                (_a = document.getElementById("route".concat(min, "-").concat(max)).classList).add.apply(_a, classes);
+            });
+        }
     };
     GetOnBoard.prototype.onLeavingState = function (stateName) {
         log('Leaving state: ' + stateName);
         switch (stateName) {
-            case 'placeRoute':
-                Array.from(document.getElementsByClassName('placeRoute-button')).forEach(function (element) { return element.classList.add('disabled'); });
+            case 'placeDeparturePawn':
+                this.onLeavingPlaceDeparturePawn();
                 break;
+            case 'placeRoute':
+                this.onLeavingPlaceRoute();
+                break;
+        }
+    };
+    GetOnBoard.prototype.onLeavingPlaceDeparturePawn = function () {
+        Array.from(document.getElementsByClassName('intersection')).forEach(function (element) { return element.classList.remove('selectable'); });
+    };
+    GetOnBoard.prototype.onLeavingPlaceRoute = function () {
+        if (this.isCurrentPlayerActive()) {
+            Array.from(document.getElementsByClassName('route')).forEach(function (element) { return element.classList.remove('selectable', 'traffic-jam', 'turn-zone', 'elimination'); });
         }
     };
     /*private onLeavingStepEvolution() {
@@ -372,7 +422,8 @@ var GetOnBoard = /** @class */ (function () {
                         (this as any).addActionButton(`placeDeparturePawn${ticket}_button`, dojo.string.substitute(_("Start at ${ticket}"), { ticket }), () => this.placeDeparturePawn(ticket))
                     );*/
                     placeDeparturePawnArgs._private.positions.forEach(function (position) {
-                        return document.getElementById("position".concat(position, "-placeDeparturePawn")).classList.remove('disabled');
+                        //document.getElementById(`position${position}-placeDeparturePawn`).classList.remove('disabled')
+                        return document.getElementById("intersection".concat(position)).classList.add('selectable');
                     });
                     break;
                 case 'placeRoute':
@@ -390,12 +441,18 @@ var GetOnBoard = /** @class */ (function () {
                     break;
             }
         }
+        else {
+            this.onLeavingPlaceDeparturePawn();
+        }
     };
     ///////////////////////////////////////////////////
     //// Utility methods
     ///////////////////////////////////////////////////
     GetOnBoard.prototype.getPlayerId = function () {
         return Number(this.player_id);
+    };
+    GetOnBoard.prototype.getPlayerColor = function (playerId) {
+        return this.gamedatas.players[playerId].color;
     };
     GetOnBoard.prototype.createPlayerPanels = function (gamedatas) {
         var _this = this;
