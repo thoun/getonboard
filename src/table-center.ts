@@ -54,6 +54,19 @@ class TableCenter {
         dojo.place(`<div id="marker-${playerId}-${min}-${max}" class="marker ${marker.validated ? '' : 'unvalidated'}" style="background: #${this.game.getPlayerColor(playerId)};"></div>`, `route${min}-${max}`);
     }
 
+    public setMarkerValidated(playerId: number, marker: PlacedRoute): void {
+        const min = Math.min(marker.from, marker.to);
+        const max = Math.max(marker.from, marker.to);
+        document.getElementById(`marker-${playerId}-${min}-${max}`).classList.remove('unvalidated')
+    }
+
+    public removeMarker(playerId: number, marker: PlacedRoute) {
+        const min = Math.min(marker.from, marker.to);
+        const max = Math.max(marker.from, marker.to);
+        const div = document.getElementById(`marker-${playerId}-${min}-${max}`);
+        div?.parentElement.removeChild(div);
+    }
+
     private getCoordinatesFromPosition(position: number): number[] {
         const digit = (position % 10) - 1;
         const number = Math.floor(position / 10) - 1;

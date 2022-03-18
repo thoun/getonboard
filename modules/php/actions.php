@@ -60,8 +60,7 @@ trait ActionTrait {
         self::notifyAllPlayers('placedRoute', clienttranslate('${player_name} places a route marker'), [
             'playerId' => $playerId,
             'player_name' => self::getActivePlayerName(),
-            'from' => $from,
-            'to' => $to,
+            'marker' => PlacedRoute::forNotif($from, $to, false),
         ]);
 
         $this->notifUpdateScoreSheet($playerId);
@@ -72,10 +71,17 @@ trait ActionTrait {
         $this->gamestate->nextState('placeNext');
     }
 
-    private function applyCancel(array $routeIds) {
+    private function applyCancel(array $routes) {
         $playerId = intval(self::getActivePlayerId());
+        $routesIds = array_map(fn($route) => $route->id, $routes);
 
-        $this->DbQuery("DELETE FROM placed_routes WHERE `id` IN (".implode(',', $routeIds).")");
+        $this->DbQuery("DELETE FROM placed_routes WHERE `id` IN (".implode(',', $routesIds).")");
+
+        self::notifyAllPlayers('removeMarkers', '', [
+            'playerId' => $playerId,
+            'player_name' => self::getActivePlayerName(),
+            'markers' => array_map(fn($route) => PlacedRoute::forNotif($route->from, $route->to, false), $routes),
+        ]);
 
         $this->notifUpdateScoreSheet($playerId);
 
@@ -94,7 +100,7 @@ trait ActionTrait {
             throw new BgaUserException("No move to cancel");
         }
 
-        $routesToCancel = [end($placedRoutes)->id];
+        $routesToCancel = [end($placedRoutes)];
         $this->applyCancel($routesToCancel);
     }
   	
@@ -104,13 +110,13 @@ trait ActionTrait {
         $playerId = self::getActivePlayerId();
 
         $placedRoutes = $this->getPlacedRoutes($playerId);
-        $routesToCancel = array_map(fn($placedRoute) => $placedRoute->id, array_values(array_filter($placedRoutes, fn($placedRoute) => !$placedRoute->validated)));
+        $unvalidatedRoutes = array_values(array_filter($placedRoutes, fn($placedRoute) => !$placedRoute->validated));
 
-        if ($routesToCancel == 0) {
+        if (count($unvalidatedRoutes) == 0) {
             throw new BgaUserException("No move to cancel");
         }
 
-        $this->applyCancel($routesToCancel);
+        $this->applyCancel($unvalidatedRoutes);
     }
   	
     public function confirmTurn() {
@@ -118,7 +124,17 @@ trait ActionTrait {
         
         $playerId = self::getActivePlayerId();
 
-        $this->DbQuery("UPDATE placed_routes SET `validated` = 1 WHERE `player_id` = $playerId AND `validated` = 0");
+        $placedRoutes = $this->getPlacedRoutes($playerId);
+        $unvalidatedRoutes = array_values(array_filter($placedRoutes, fn($placedRoute) => !$placedRoute->validated));
+        $unvalidatedRoutesIds = array_map(fn($placedRoute) => $placedRoute->id, $unvalidatedRoutes);
+
+        $this->DbQuery("UPDATE placed_routes SET `validated` = 1 WHERE `id` IN (".implode(',', $unvalidatedRoutesIds).")");
+
+        self::notifyAllPlayers('confirmTurn', '', [
+            'playerId' => $playerId,
+            'player_name' => self::getActivePlayerName(),
+            'markers' => array_map(fn($route) => PlacedRoute::forNotif($route->from, $route->to, true), $unvalidatedRoutes),
+        ]);
         
         $scoreSheets = $this->notifUpdateScoreSheet($playerId);
         $score = $scoreSheets->validated->total;

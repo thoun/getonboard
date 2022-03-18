@@ -260,6 +260,17 @@ var TableCenter = /** @class */ (function () {
         var max = Math.max(marker.from, marker.to);
         dojo.place("<div id=\"marker-".concat(playerId, "-").concat(min, "-").concat(max, "\" class=\"marker ").concat(marker.validated ? '' : 'unvalidated', "\" style=\"background: #").concat(this.game.getPlayerColor(playerId), ";\"></div>"), "route".concat(min, "-").concat(max));
     };
+    TableCenter.prototype.setMarkerValidated = function (playerId, marker) {
+        var min = Math.min(marker.from, marker.to);
+        var max = Math.max(marker.from, marker.to);
+        document.getElementById("marker-".concat(playerId, "-").concat(min, "-").concat(max)).classList.remove('unvalidated');
+    };
+    TableCenter.prototype.removeMarker = function (playerId, marker) {
+        var min = Math.min(marker.from, marker.to);
+        var max = Math.max(marker.from, marker.to);
+        var div = document.getElementById("marker-".concat(playerId, "-").concat(min, "-").concat(max));
+        div === null || div === void 0 ? void 0 : div.parentElement.removeChild(div);
+    };
     TableCenter.prototype.getCoordinatesFromPosition = function (position) {
         var digit = (position % 10) - 1;
         var number = Math.floor(position / 10) - 1;
@@ -594,7 +605,10 @@ var GetOnBoard = /** @class */ (function () {
         var notifs = [
             ['newRound', 1],
             ['newFirstPlayer', ANIMATION_MS],
-            ['updateScoreSheet', 1], // TODO TEMP
+            ['placedRoute', ANIMATION_MS],
+            ['confirmTurn', ANIMATION_MS],
+            ['removeMarkers', 1],
+            ['updateScoreSheet', 1],
         ];
         notifs.forEach(function (notif) {
             dojo.subscribe(notif[0], _this, "notif_".concat(notif[0]));
@@ -602,7 +616,6 @@ var GetOnBoard = /** @class */ (function () {
         });
     };
     GetOnBoard.prototype.notif_newRound = function (notif) {
-        console.log(notif.args);
         this.playersTables.forEach(function (playerTable) { return playerTable.setRound(notif.args.validatedTickets, notif.args.currentTicket); });
     };
     GetOnBoard.prototype.notif_newFirstPlayer = function (notif) {
@@ -613,6 +626,17 @@ var GetOnBoard = /** @class */ (function () {
         var playerId = notif.args.playerId;
         this.getPlayerTable(playerId).updateScoreSheet(notif.args.scoreSheets);
         (_a = this.scoreCtrl[playerId]) === null || _a === void 0 ? void 0 : _a.toValue(notif.args.scoreSheets.current.total);
+    };
+    GetOnBoard.prototype.notif_placedRoute = function (notif) {
+        this.tableCenter.addMarker(notif.args.playerId, notif.args.marker);
+    };
+    GetOnBoard.prototype.notif_confirmTurn = function (notif) {
+        var _this = this;
+        notif.args.markers.forEach(function (marker) { return _this.tableCenter.setMarkerValidated(notif.args.playerId, marker); });
+    };
+    GetOnBoard.prototype.notif_removeMarkers = function (notif) {
+        var _this = this;
+        notif.args.markers.forEach(function (marker) { return _this.tableCenter.removeMarker(notif.args.playerId, marker); });
     };
     /* This enable to inject translatable styled things to logs or action bar */
     /* @Override */

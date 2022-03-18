@@ -153,3 +153,13 @@ interface NotifUpdateScoreSheetArgs {
     playerId: number;
     scoreSheets: ScoreSheets;
 }
+
+interface NotifPlacedRouteArgs {
+    playerId: number;
+    marker: PlacedRoute;
+} 
+
+interface NotifConfirmTurnArgs {
+    playerId: number;
+    markers: PlacedRoute[];
+}

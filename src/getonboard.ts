@@ -343,7 +343,10 @@ class GetOnBoard implements GetOnBoardGame {
         const notifs = [
             ['newRound', 1],
             ['newFirstPlayer', ANIMATION_MS],
-            ['updateScoreSheet', 1], // TODO TEMP
+            ['placedRoute', ANIMATION_MS],
+            ['confirmTurn', ANIMATION_MS],
+            ['removeMarkers', 1],
+            ['updateScoreSheet', 1],
         ];
     
         notifs.forEach((notif) => {
@@ -353,7 +356,6 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     notif_newRound(notif: Notif<NotifNewRoundArgs>) {
-        console.log(notif.args);
         this.playersTables.forEach(playerTable => playerTable.setRound(notif.args.validatedTickets, notif.args.currentTicket));
     }
 
@@ -365,6 +367,18 @@ class GetOnBoard implements GetOnBoardGame {
         const playerId = notif.args.playerId;
         this.getPlayerTable(playerId).updateScoreSheet(notif.args.scoreSheets);
         (this as any).scoreCtrl[playerId]?.toValue(notif.args.scoreSheets.current.total);
+    }
+
+    notif_placedRoute(notif: Notif<NotifPlacedRouteArgs>) {
+        this.tableCenter.addMarker(notif.args.playerId, notif.args.marker);
+    }
+
+    notif_confirmTurn(notif: Notif<NotifConfirmTurnArgs>) {
+        notif.args.markers.forEach(marker => this.tableCenter.setMarkerValidated(notif.args.playerId, marker));
+    }
+
+    notif_removeMarkers(notif: Notif<NotifConfirmTurnArgs>) {
+        notif.args.markers.forEach(marker => this.tableCenter.removeMarker(notif.args.playerId, marker));
     }
 
     /* This enable to inject translatable styled things to logs or action bar */

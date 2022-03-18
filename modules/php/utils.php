@@ -183,13 +183,19 @@ trait UtilTrait {
         return ($route->from === $from && $route->to === $to) || ($route->to === $from && $route->from === $to);
     }
 
+    function isBusyRoute(array $busyRoutes, int $position, int $destination) {
+        return 
+            (array_key_exists($position, $busyRoutes) && in_array($destination, $busyRoutes[$position])) ||
+            (array_key_exists($destination, $busyRoutes) && in_array($position, $busyRoutes[$destination]));
+    }
+
     function createPossibleRoute(int $position, int $destination, array $allPlacedRoutes, array $playerPlacedRoutes, array $unvalidatedRoutes, array $turnShape, array $busyRoutes) {
         $trafficJam = count(array_filter(
             $allPlacedRoutes, 
             fn($route) => $this->isSameRoute($route, $position, $destination)
         ));
 
-        if (in_array($destination, $busyRoutes[$position]) || in_array($position, $busyRoutes[$destination])) {
+        if ($this->isBusyRoute($busyRoutes, $position, $destination)) {
             $trafficJam++;
         }
 
