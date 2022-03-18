@@ -30,7 +30,7 @@ class TouristsScoreSheet {
 
 class BusinessmenScoreSheet {
     public array/*int[]*/ $checkedBusinessmen = [0, 0, 0];
-    public /*int|null*/ $specialBuilding = null;
+    public /*int|null*/ $specialOffice = null;
 
     public array/*int[]*/ $subTotals = [];
     public int $total = 0;

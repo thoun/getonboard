@@ -205,7 +205,7 @@ class PlayerTable {
     }
 
     private updateBusinessmenScoreSheet(current: BusinessmenScoreSheet, validated: BusinessmenScoreSheet) {
-        this.setContentAndValidation(`businessmen-special`, current.specialBuilding, current.specialBuilding !== validated.specialBuilding);
+        this.setContentAndValidation(`businessmen-special`, current.specialOffice, current.specialOffice !== validated.specialOffice);
         
         for(let row=1; row<=3; row++) {
             for(let i=1; i<=3; i++) {

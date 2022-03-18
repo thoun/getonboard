@@ -179,7 +179,7 @@ var PlayerTable = /** @class */ (function () {
         this.setContentAndValidation("tourists-total", current.total, current.total != validated.total);
     };
     PlayerTable.prototype.updateBusinessmenScoreSheet = function (current, validated) {
-        this.setContentAndValidation("businessmen-special", current.specialBuilding, current.specialBuilding !== validated.specialBuilding);
+        this.setContentAndValidation("businessmen-special", current.specialOffice, current.specialOffice !== validated.specialOffice);
         for (var row = 1; row <= 3; row++) {
             for (var i = 1; i <= 3; i++) {
                 this.setContentAndValidation("businessmen-checkmark".concat(row, "-").concat(i), current.checkedBusinessmen[row - 1] >= i ? '✔' : (current.subTotals[row - 1] ? '⎯⎯' : ''), current.checkedBusinessmen[row - 1] >= i && validated.checkedBusinessmen[row - 1] < i);

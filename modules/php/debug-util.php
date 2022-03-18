@@ -21,7 +21,7 @@ trait DebugUtilTrait {
             13, // [STUDENT],
             14, // [MONUMENT_LIGHT],
             15, // [TOURIST],
-            16, // [BUILDING, ord('b')],
+            16, // [OFFICE, ord('b')],
 
             21, // [BUSINESSMAN],
             22, // [TOURIST],
@@ -31,7 +31,7 @@ trait DebugUtilTrait {
             26, // [STUDENT],
             
             31, // [STUDENT],
-            32, // [BUILDING, ord('d')],
+            32, // [OFFICE, ord('d')],
             33, // [OLD_LADY],
             34, // [MONUMENT_DARK, MONUMENT_DARK_SPECIAL],
             35, // [OLD_LADY],

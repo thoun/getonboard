@@ -26,7 +26,7 @@ $this->MAP_POSITIONS = [
     13 => [STUDENT],
     14 => [MONUMENT_LIGHT],
     15 => [TOURIST],
-    16 => [BUILDING, ord('b')],
+    16 => [OFFICE, ord('b')],
 
     21 => [BUSINESSMAN],
     22 => [TOURIST],
@@ -36,7 +36,7 @@ $this->MAP_POSITIONS = [
     26 => [STUDENT],
     
     31 => [STUDENT],
-    32 => [BUILDING, ord('d')],
+    32 => [OFFICE, ord('d')],
     33 => [OLD_LADY],
     34 => [MONUMENT_DARK, MONUMENT_DARK_SPECIAL],
     35 => [OLD_LADY],
@@ -46,7 +46,7 @@ $this->MAP_POSITIONS = [
     42 => [BUSINESSMAN],
     43 => [MONUMENT_LIGHT],
     44 => [STUDENT],
-    45 => [BUILDING, ord('f')],
+    45 => [OFFICE, ord('f')],
     46 => [TOURIST],
     
     51 => [STUDENT],
@@ -58,7 +58,7 @@ $this->MAP_POSITIONS = [
     
     61 => [GREEN_LIGHT, 3],
     62 => [OLD_LADY],
-    63 => [BUILDING, ord('h')],
+    63 => [OFFICE, ord('h')],
     64 => [OLD_LADY],
     65 => [GREEN_LIGHT, 4],
     66 => [BUSINESSMAN],
@@ -86,12 +86,12 @@ $this->MAP_POSITIONS = [
     96 => [TOURIST],
     97 => [GREEN_LIGHT, 5],
     
-    101 => [BUILDING, ord('l')],
+    101 => [OFFICE, ord('l')],
     102 => [BUSINESSMAN],
     103 => [SCHOOL],
     104 => [OLD_LADY],
     105 => [TOURIST],
-    106 => [BUILDING, BUILDING_SPECIAL, ord('m')],
+    106 => [OFFICE, OFFICE_SPECIAL, ord('m')],
     107 => [STUDENT],
     
     112 => [GREEN_LIGHT, ord('n')],
@@ -105,34 +105,117 @@ $this->MAP_POSITIONS = [
     124 => [SCHOOL],
     125 => [MONUMENT_DARK],
     
-    133 => [BUILDING, ord('o')],
+    133 => [OFFICE, ord('o')],
     134 => [TOURIST],
   ],
 
   'big' => [
-    // TODO
-    
+    11 => [OLD_LADY, BUSINESSMAN],
+    12 => [TOURIST, STUDENT],
+    13 => [TOURIST],
+    14 => [OLD_LADY],
+    15 => [GREEN_LIGHT, 7],
+    17 => [SCHOOL],
+    18 => [OLD_LADY, BUSINESSMAN],
+    19 => [MONUMENT_LIGHT],
 
-/*define('GREEN_LIGHT', 0);
-// 1 to 6 : starting point
+    21 => [GREEN_LIGHT, ord('a')],
+    23 => [OFFICE, ord('d')],
+    24 => [BUSINESSMAN],
+    25 => [STUDENT],
+    27 => [GREEN_LIGHT, ord('k')],
+    28 => [TOURIST],
+    29 => [GREEN_LIGHT, 11],
 
-define('OLD_LADY', 10);
+    31 => [MONUMENT_DARK],
+    32 => [TOURIST],
+    33 => [OLD_LADY],
+    34 => [GREEN_LIGHT, 5],
+    35 => [TOURIST],
+    36 => [BUSINESSMAN],
+    37 => [OLD_LADY],
+    38 => [STUDENT],
+    39 => [OFFICE, ord('n')],
 
-define('STUDENT', 20);
-define('SCHOOL', 21);
-define('SCHOOL_SPECIAL', 25);
+    41 => [STUDENT],
+    42 => [GREEN_LIGHT, 3],
+    43 => [BUSINESSMAN],
+    44 => [STUDENT],
+    45 => [OFFICE, ord('g')],
+    46 => [SCHOOL],
+    47 => [GREEN_LIGHT, ord('l')],
+    48 => [MONUMENT_DARK, MONUMENT_DARK_SPECIAL],
+    49 => [TOURIST],
 
-define('TOURIST', 30);
-define('MONUMENT_LIGHT', 31);
-define('MONUMENT_DARK', 32);
-define('MONUMENT_LIGHT_SPECIAL', 35);
-define('MONUMENT_DARK_SPECIAL', 36);
+    51 => [GREEN_LIGHT, 1],
+    52 => [TOURIST],
+    53 => [SCHOOL],
+    54 => [MONUMENT_LIGHT, MONUMENT_LIGHT_SPECIAL],
+    55 => [OLD_LADY],
+    56 => [TOURIST],
+    57 => [BUSINESSMAN],
+    58 => [GREEN_LIGHT, 9],
+    59 => [STUDENT],
 
-define('BUSINESSMAN', 40);
-define('BUILDING', 21);
-define('BUILDING_SPECIAL', 25);
+    61 => [BUSINESSMAN],
+    62 => [OFFICE, ord('c')],
+    63 => [TOURIST],
+    64 => [BUSINESSMAN],
+    65 => [GREEN_LIGHT, ord('h')],
+    66 => [BUSINESSMAN],
+    67 => [TOURIST],
+    68 => [OLD_LADY],
+    69 => [MONUMENT_LIGHT],
 
-// 97 to 122 : objectives (using ord('a'))*/
+    71 => [GREEN_LIGHT, 2],
+    72 => [OLD_LADY],
+    73 => [STUDENT],
+    74 => [GREEN_LIGHT, ord('f')],
+    75 => [STUDENT],
+    76 => [OFFICE, ord('j')],
+    77 => [STUDENT],
+    78 => [TOURIST],
+    79 => [OLD_LADY, BUSINESSMAN],
+
+    81 => [STUDENT],
+    82 => [TOURIST],
+    83 => [BUSINESSMAN],
+    84 => [OLD_LADY],
+    85 => [MONUMENT_DARK],
+    86 => [OLD_LADY],
+    87 => [BUSINESSMAN],
+    88 => [SCHOOL, SCHOOL_SPECIAL],
+    89 => [GREEN_LIGHT, 12],
+
+    91 => [GREEN_LIGHT, ord('b')],
+    92 => [SCHOOL],
+    93 => [MONUMENT_DARK],
+    94 => [TOURIST],
+    95 => [GREEN_LIGHT, ord('i')],
+    96 => [TOURIST],
+    97 => [GREEN_LIGHT, ord('m')],
+    98 => [BUSINESSMAN],
+    99 => [OFFICE, ord('o')],
+
+    101 => [BUSINESSMAN],
+    102 => [TOURIST],
+    103 => [OFFICE, OFFICE_SPECIAL, ord('e')],
+    104 => [GREEN_LIGHT, 6],
+    105 => [STUDENT],
+    106 => [GREEN_LIGHT, 8],
+    107 => [STUDENT],
+    108 => [TOURIST],
+    109 => [STUDENT],
+
+    111 => [TOURIST, BUSINESSMAN],
+    112 => [GREEN_LIGHT, 4],
+    113 => [STUDENT],
+    114 => [BUSINESSMAN],
+    115 => [MONUMENT_LIGHT],
+    116 => [BUSINESSMAN],
+    117 => [OLD_LADY],
+    118 => [GREEN_LIGHT, 10],
+    119 => [TOURIST, BUSINESSMAN],
   ],
 ];
 
@@ -227,7 +310,112 @@ $this->MAP_ROUTES = [
  ],
 
  'big' => [
-  // TODO
+    11 => [12, 21],
+    12 => [13],
+    13 => [14, 23],
+    14 => [15, 24],
+    15 => [25],
+    17 => [18, 27],
+    18 => [19, 28],
+    19 => [29],
+
+    21 => [31],
+    23 => [24, 33],
+    24 => [25, 34],
+    25 => [35],
+    27 => [28, 37],
+    28 => [38],
+    29 => [39],
+
+    31 => [32, 41],
+    32 => [33],
+    33 => [34, 43],
+    34 => [35, 44],
+    35 => [36, 45],
+    36 => [37, 46],
+    37 => [38],
+    38 => [39, 48],
+    39 => [49],
+
+    41 => [42, 51],
+    42 => [43, 52],
+    43 => [44, 53],
+    44 => [45, 54],
+    45 => [46, 55],
+    46 => [47, 56],
+    47 => [57],
+    48 => [49, 58],
+    49 => [59],
+
+    51 => [52, 61],
+    52 => [53, 62],
+    53 => [54, 63],
+    54 => [55, 64],
+    55 => [56, 65],
+    56 => [57, 66],
+    57 => [58, 67],
+    58 => [59, 68],
+    59 => [69],
+
+    61 => [62, 71],
+    62 => [63, 72],
+    63 => [64, 73],
+    64 => [65, 74],
+    65 => [66, 75],
+    66 => [67, 76],
+    67 => [68, 77],
+    68 => [69, 78],
+    69 => [],
+
+    71 => [72, 81],
+    72 => [73, 82],
+    73 => [83],
+    74 => [75, 84],
+    75 => [76, 85],
+    76 => [77, 86],
+    77 => [78],
+    78 => [79, 88],
+    79 => [89],
+
+    81 => [91],
+    82 => [83, 92],
+    83 => [84, 93],
+    84 => [85],
+    85 => [86, 95],
+    86 => [87, 96],
+    87 => [88, 97],
+    88 => [89, 98],
+    89 => [99],
+
+    91 => [92, 101],
+    92 => [93, 102],
+    93 => [94, 103],
+    94 => [95, 104],
+    95 => [96, 105],
+    96 => [97, 106],
+    97 => [98, 107],
+    98 => [99, 108],
+    99 => [109],
+
+    101 => [102, 111],
+    102 => [103, 112],
+    103 => [104],
+    104 => [105, 114],
+    105 => [115],
+    106 => [107, 116],
+    107 => [108, 117],
+    108 => [118],
+    109 => [119],
+
+    111 => [112],
+    112 => [113],
+    113 => [114],
+    114 => [115],
+    115 => [116],
+    116 => [117],
+    117 => [118],
+    118 => [119],
+    119 => [],
  ],
 ];
 

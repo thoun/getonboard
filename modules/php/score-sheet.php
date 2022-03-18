@@ -81,7 +81,7 @@ trait ScoreSheetTrait {
         }
     }
 
-    function addBuildingToScoreSheet(ScoreSheet &$scoreSheet) {
+    function addOfficeToScoreSheet(ScoreSheet &$scoreSheet) {
         $rowIndex = count($scoreSheet->businessmen->subTotals);
         if ($rowIndex >= 3) {
             return;
@@ -102,18 +102,18 @@ trait ScoreSheetTrait {
         }
     }
 
-    function addSpecialBuildingToScoreSheet(ScoreSheet &$scoreSheet) {
+    function addSpecialOfficeToScoreSheet(ScoreSheet &$scoreSheet) {
         $totalCheckedBusinessmen = 0;
         foreach ($$scoreSheet->businessmen->checkedBusinessmen as $checkedBusinessmen) {
             $totalCheckedBusinessmen += $checkedBusinessmen;
         }
-        $scoreSheet->businessmen->specialBuilding = $totalCheckedBusinessmen;
+        $scoreSheet->businessmen->specialOffice = $totalCheckedBusinessmen;
 
         $this->updateTouristTotal($scoreSheet);
     }
     
     function updateBusinessmenTotal(ScoreSheet &$scoreSheet) {
-        $scoreSheet->businessmen->total = ($scoreSheet->businessmen->specialBuilding || 0);
+        $scoreSheet->businessmen->total = ($scoreSheet->businessmen->specialOffice || 0);
         foreach($scoreSheet->businessmen->subTotals as $subTotal) {
             $scoreSheet->businessmen->total += $subTotal;
         }   
@@ -190,11 +190,11 @@ trait ScoreSheetTrait {
                         case BUSINESSMAN:
                             $this->addBusinessmanToScoreSheet($scoreSheet, $endScoring);
                             break;
-                        case BUILDING:
-                            $this->addBuildingToScoreSheet($scoreSheet);
+                        case OFFICE:
+                            $this->addOfficeToScoreSheet($scoreSheet);
                             break;
-                        case BUILDING_SPECIAL: // special is also referenced as normal, don't count it twice!
-                            $this->addSpecialBuildingToScoreSheet($scoreSheet);
+                        case OFFICE_SPECIAL: // special is also referenced as normal, don't count it twice!
+                            $this->addSpecialOfficeToScoreSheet($scoreSheet);
                             break;
 
                         // TODO common objectives

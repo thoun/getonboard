@@ -49,8 +49,8 @@ define('MONUMENT_LIGHT_SPECIAL', 45);
 define('MONUMENT_DARK_SPECIAL', 46);
 
 define('BUSINESSMAN', 50);
-define('BUILDING', 51);
-define('BUILDING_SPECIAL', 55);
+define('OFFICE', 51);
+define('OFFICE_SPECIAL', 55);
 
 // 97 to 122 : objectives (using ord('a'))
 ?>

@@ -48,7 +48,7 @@ interface TouristsScoreSheet {
 
 interface BusinessmenScoreSheet {
     checkedBusinessmen: number[];
-    specialBuilding: number;
+    specialOffice: number;
 
     subTotals: number[];
     total: number;
