@@ -121,7 +121,7 @@ trait UtilTrait {
             $commonObjective = array_splice($commonObjectives, $commonObjectiveIndex, 1)[0];
             $commonObjectives = array_values($commonObjectives);
 
-            $this->DbQuery("INSERT INTO common_objectives(`id`) VALUES ($commonObjective)");
+            $this->DbQuery("INSERT INTO common_objectives(`id`, `number`) VALUES ($commonObjective, $i)");
         }
     }
 
@@ -259,7 +259,10 @@ trait UtilTrait {
     }
 
     function getCommonObjectives() {
-        return []; // TODO
+        $sql = "SELECT * FROM `common_objectives`";
+        $dbResult = self::getCollectionFromDb($sql);
+
+        return array_map(fn($dbCard) => new CommonObjective($dbCard), array_values($dbResult));
     }
     
     function notifCurrentRound() {
@@ -285,5 +288,27 @@ trait UtilTrait {
         ]);
 
         return $scoreSheets;
+    }
+    
+    function checkCommonObjectives() {
+        $objectives = $this->getCommonObjectives();
+        if (count(array_filter($objectives, fn($objective) => !$objective->completed)) === 0) {
+            return;
+        }
+
+        $playersIds = $this->getPlayersIds();
+        $allPlacedRoutes = $this->getPlacedRoutes();
+        $scoreSheets = array_map(fn($playerId) => $this->getScoreSheets(
+            $playerId, 
+            array_filter($allPlacedRoutes, fn($placedRoute) => $placedRoute->playerId === $playerId), 
+            $objectives
+        ), $playersIds);
+
+        foreach ($objectives as $objective) {
+            if ($this->array_some($scoreSheets, fn($scoreSheet) => $scoreSheet->validated->commonObjectives)) {
+                $round = $this->getRoundNumber();
+                $this->DbQuery("UPDATE player SET `completed_at_round` = $round WHERE `id` = $objective->id");
+            }
+        }
     }
 }

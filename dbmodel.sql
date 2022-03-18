@@ -33,7 +33,8 @@ ALTER TABLE `player` ADD `player_departure_position` INT UNSIGNED NOT NULL DEFAU
 
 CREATE TABLE IF NOT EXISTS `common_objectives` (
    `id` int(11) UNSIGNED NOT NULL,
-   `completed_at_round` TINYINT(2)  UNSIGNED NULL,
+   `number` TINYINT(1) UNSIGNED NULL,
+   `completed_at_round` TINYINT(2) UNSIGNED NULL,
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
