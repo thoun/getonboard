@@ -37,7 +37,7 @@ class BusinessmenScoreSheet {
 }
 
 class ObjectivesScoreSheet {
-    public array/*int[]*/ $subTotals = [];
+    public array/*int[]*/ $subTotals = [null, null];
     public int $total = 0;
 }
 

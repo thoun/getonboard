@@ -609,6 +609,7 @@ var GetOnBoard = /** @class */ (function () {
             ['placedRoute', ANIMATION_MS],
             ['confirmTurn', ANIMATION_MS],
             ['flipObjective', ANIMATION_MS],
+            ['placedDeparturePawn', 1],
             ['removeMarkers', 1],
             ['updateScoreSheet', 1],
         ];
@@ -628,6 +629,9 @@ var GetOnBoard = /** @class */ (function () {
         var playerId = notif.args.playerId;
         this.getPlayerTable(playerId).updateScoreSheet(notif.args.scoreSheets);
         (_a = this.scoreCtrl[playerId]) === null || _a === void 0 ? void 0 : _a.toValue(notif.args.scoreSheets.current.total);
+    };
+    GetOnBoard.prototype.notif_placedDeparturePawn = function (notif) {
+        this.tableCenter.addDeparturePawn(notif.args.playerId, notif.args.position);
     };
     GetOnBoard.prototype.notif_placedRoute = function (notif) {
         this.tableCenter.addMarker(notif.args.playerId, notif.args.marker);
@@ -656,7 +660,7 @@ var GetOnBoard = /** @class */ (function () {
         try {
             if (log && args && !args.processed) {
                 if (args.shape && args.shape[0] != '<') {
-                    args.shape = "<div class=\"shape\" data-shape=\"".concat(JSON.stringify(args.shape), "\"></div>");
+                    args.shape = "<div class=\"shape\" data-shape=\"".concat(JSON.stringify(args.shape), "\" data-step=\"").concat(args.step, "\"></div>");
                 }
             }
         }

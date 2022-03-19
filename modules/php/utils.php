@@ -306,9 +306,9 @@ trait UtilTrait {
         ), $playersIds);
 
         foreach ($objectives as $objective) {
-            if ($this->array_some($scoreSheets, fn($scoreSheet) => $scoreSheet->validated->commonObjectives)) {
+            if ($this->array_some($scoreSheets, fn($scoreSheet) => $scoreSheet->validated->commonObjectives->subTotals[$objective->number - 1] != null)) {
                 $round = $this->getRoundNumber();
-                $this->DbQuery("UPDATE player SET `completed_at_round` = $round WHERE `id` = $objective->id");
+                $this->DbQuery("UPDATE common_objectives SET `completed_at_round` = $round WHERE `id` = $objective->id");
 
                 $this->notifyAllPlayers('flipObjective', clienttranslate('A common objective have been completed'), [
                     'objective' => $objective,

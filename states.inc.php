@@ -91,8 +91,8 @@ $playerActionsGameStates = [
 
     ST_PLAYER_PLACE_ROUTE => [
         "name" => "placeRoute",
-        "description" => clienttranslate('${actplayer} must place a route ${shape} ${step}'),
-        "descriptionmyturn" => clienttranslate('${you} must place a route ${shape} ${step}'),
+        "description" => clienttranslate('${actplayer} must place a route ${shape}'),
+        "descriptionmyturn" => clienttranslate('${you} must place a route ${shape}'),
         "type" => "activeplayer",
         "args" => "argPlaceRoute",
         "possibleactions" => [ 

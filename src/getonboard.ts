@@ -330,6 +330,7 @@ class GetOnBoard implements GetOnBoardGame {
             ['placedRoute', ANIMATION_MS],
             ['confirmTurn', ANIMATION_MS],
             ['flipObjective', ANIMATION_MS],
+            ['placedDeparturePawn', 1],
             ['removeMarkers', 1],
             ['updateScoreSheet', 1],
         ];
@@ -352,6 +353,10 @@ class GetOnBoard implements GetOnBoardGame {
         const playerId = notif.args.playerId;
         this.getPlayerTable(playerId).updateScoreSheet(notif.args.scoreSheets);
         (this as any).scoreCtrl[playerId]?.toValue(notif.args.scoreSheets.current.total);
+    }
+
+    notif_placedDeparturePawn(notif: Notif<NotifPlacedDeparturePawnArgs>) {
+        this.tableCenter.addDeparturePawn(notif.args.playerId, notif.args.position);
     }
 
     notif_placedRoute(notif: Notif<NotifPlacedRouteArgs>) {
@@ -383,7 +388,7 @@ class GetOnBoard implements GetOnBoardGame {
         try {
             if (log && args && !args.processed) {
                 if (args.shape && args.shape[0] != '<') {
-                    args.shape = `<div class="shape" data-shape="${JSON.stringify(args.shape)}"></div>`
+                    args.shape = `<div class="shape" data-shape="${JSON.stringify(args.shape)}" data-step="${args.step}"></div>`
                 }
             }
         } catch (e) {

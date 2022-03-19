@@ -159,6 +159,11 @@ interface NotifUpdateScoreSheetArgs {
     scoreSheets: ScoreSheets;
 }
 
+interface NotifPlacedDeparturePawnArgs {
+    playerId: number;
+    position: number;
+} 
+
 interface NotifPlacedRouteArgs {
     playerId: number;
     marker: PlacedRoute;
