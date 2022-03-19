@@ -95,8 +95,26 @@ html, .mode_3d #game_play_area_background {
 #center #map[data-size=small] #map-elements {
   transform: rotate(45deg);
 }
+#center #map[data-size=small] #map-elements .route[data-direction="0"] {
+  flex-direction: column;
+}
+#center #map[data-size=small] #map-elements .route[data-direction="0"] .marker {
+  height: 6px;
+}
+#center #map[data-size=small] #map-elements .route[data-direction="1"] .marker {
+  width: 6px;
+}
 #center #map[data-size=big] {
   background: url("img/map-big.jpg");
+}
+#center #map[data-size=big] #map-elements .route[data-direction="0"] .marker {
+  width: 6px;
+}
+#center #map[data-size=big] #map-elements .route[data-direction="1"] {
+  flex-direction: column;
+}
+#center #map[data-size=big] #map-elements .route[data-direction="1"] .marker {
+  height: 6px;
 }
 #center #map #map-elements {
   width: 740px;
@@ -120,12 +138,12 @@ html, .mode_3d #game_play_area_background {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  box-shadow: 2px 2px 2px 2px black;
+  box-shadow: 1px 1px 1px 1px black;
 }
 #center #map #map-elements .marker {
   width: 32px;
   height: 32px;
-  box-shadow: 2px 2px 2px 2px black;
+  box-shadow: 1px 1px 1px 1px black;
   transition: opacity 0.5s;
 }
 #center #map #map-elements .marker.unvalidated {
@@ -133,6 +151,8 @@ html, .mode_3d #game_play_area_background {
 }
 #center #map #map-elements .route {
   position: absolute;
+  display: flex;
+  justify-content: center;
   width: 32px;
   height: 32px;
 }

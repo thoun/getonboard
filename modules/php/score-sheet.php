@@ -104,7 +104,7 @@ trait ScoreSheetTrait {
 
     function addSpecialOfficeToScoreSheet(ScoreSheet &$scoreSheet) {
         $totalCheckedBusinessmen = 0;
-        foreach ($$scoreSheet->businessmen->checkedBusinessmen as $checkedBusinessmen) {
+        foreach ($scoreSheet->businessmen->checkedBusinessmen as $checkedBusinessmen) {
             $totalCheckedBusinessmen += $checkedBusinessmen;
         }
         $scoreSheet->businessmen->specialOffice = $totalCheckedBusinessmen;

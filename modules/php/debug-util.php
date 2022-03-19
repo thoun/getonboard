@@ -45,6 +45,19 @@ trait DebugUtilTrait {
         }
     }
 
+    function debugStart() {
+        $playersIds = $this->getPlayersIds();
+        foreach ($playersIds as $playerId) {
+            $tickets = $this->getCardsFromDb($this->tickets->getCardsInLocation('hand', $playerId));
+            $ticketNumber = $tickets[0]->type;
+            $position = $this->MAP_DEPARTURE_POSITIONS[$this->getMap()][$ticketNumber]; 
+            $this->DbQuery("UPDATE player SET `player_departure_position` = $position WHERE `player_id` = $playerId");
+            $this->tickets->moveAllCardsInLocation('hand', 'discard', $playerId);
+        }
+
+        $this->gamestate->jumpToState(ST_START_GAME);
+    }
+
     function debug($debugData) {
         if ($this->getBgaEnvironment() != 'studio') { 
             return;

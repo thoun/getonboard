@@ -243,7 +243,7 @@ var TableCenter = /** @class */ (function () {
             var destinations = gamedatas.MAP_ROUTES[position];
             destinations.forEach(function (destination) {
                 var coordinates = _this.getCoordinatesFromPositions(position, destination);
-                var html = "<div id=\"route".concat(position, "-").concat(destination, "\" class=\"route\" style=\"top: ").concat(coordinates[0], "px; left: ").concat(coordinates[1], "px;\"></div>");
+                var html = "<div id=\"route".concat(position, "-").concat(destination, "\" class=\"route\" style=\"top: ").concat(coordinates[0], "px; left: ").concat(coordinates[1], "px;\" data-direction=\"").concat(Math.abs(position - destination) <= 1 ? 0 : 1, "\"></div>");
                 dojo.place(html, mapElements);
                 document.getElementById("route".concat(position, "-").concat(destination)).addEventListener('click', function () { return _this.game.placeRoute(position, destination); });
             });

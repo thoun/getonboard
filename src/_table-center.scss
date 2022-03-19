@@ -1,3 +1,5 @@
+$marker-size: 6px;
+
 #center {  
   display: flex;
   justify-content: center;
@@ -12,10 +14,43 @@
       
       #map-elements {
         transform: rotate(45deg);
+
+        .route {
+          &[data-direction="0"] {
+            flex-direction: column;
+
+            .marker {
+              height: $marker-size;
+            }
+          }
+          &[data-direction="1"] {
+            .marker {
+              width: $marker-size;
+            }
+          }
+        }
       }
+      
     }
     &[data-size="big"] {
       background: url('img/map-big.jpg');
+      
+      #map-elements {
+        .route {
+          &[data-direction="0"] {
+            .marker {
+              width: $marker-size;
+            }
+          }
+          &[data-direction="1"] {
+            flex-direction: column;
+
+            .marker {
+              height: $marker-size;
+            }
+          }
+        }
+      }
     }
 
     #map-elements {
@@ -42,13 +77,13 @@
         width: 32px;
         height: 32px;
         border-radius: 50%;
-        box-shadow: 2px 2px 2px 2px black;
+        box-shadow: 1px 1px 1px 1px black;
       }
 
       .marker {
         width: 32px;
         height: 32px;
-        box-shadow: 2px 2px 2px 2px black;
+        box-shadow: 1px 1px 1px 1px black;
         transition: opacity 0.5s;
 
         &.unvalidated {
@@ -58,6 +93,8 @@
 
       .route {
         position: absolute;
+        display: flex;
+        justify-content: center;
         width: 32px;
         height: 32px;
 

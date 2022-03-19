@@ -3,6 +3,7 @@
 require_once(__DIR__.'/objects/ticket.php');
 require_once(__DIR__.'/objects/placed-route.php');
 require_once(__DIR__.'/objects/possible-route.php');
+require_once(__DIR__.'/objects/common-objective.php');
 
 trait UtilTrait {
 

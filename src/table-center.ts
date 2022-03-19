@@ -32,7 +32,8 @@ class TableCenter {
 
             destinations.forEach(destination => {
                 const coordinates = this.getCoordinatesFromPositions(position, destination);
-                let html = `<div id="route${position}-${destination}" class="route" style="top: ${coordinates[0]}px; left: ${coordinates[1]}px;"></div>`;
+
+                let html = `<div id="route${position}-${destination}" class="route" style="top: ${coordinates[0]}px; left: ${coordinates[1]}px;" data-direction="${Math.abs(position-destination) <= 1 ? 0 : 1}"></div>`;
                 dojo.place(html, mapElements);
                 document.getElementById(`route${position}-${destination}`).addEventListener('click', () => this.game.placeRoute(position, destination));
             });
