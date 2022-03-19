@@ -215,8 +215,8 @@ trait ScoreSheetTrait {
             $scoreSheet->students->total + 
             $scoreSheet->tourists->total + 
             $scoreSheet->businessmen->total + 
-            $scoreSheet->commonObjectives->total + 
-            $scoreSheet->personalObjective->total + 
+            ($scoreSheet->commonObjectives->total || 0) + 
+            ($scoreSheet->personalObjective->total || 0) + 
             $scoreSheet->turnZones->total + 
             $scoreSheet->trafficJam->total;
 

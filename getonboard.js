@@ -51,82 +51,17 @@ function slideToObjectAndAttach(game, object, destinationId, posX, posY, rotatio
         }
     });
 }
-var isDebug = window.location.host == 'studio.boardgamearena.com' || window.location.hash.indexOf('debug') > -1;
-;
-var log = isDebug ? console.log.bind(window.console) : function () { };
-var PlayerTable = /** @class */ (function () {
-    function PlayerTable(player) {
-        this.playerId = Number(player.id);
-        var eliminated = Number(player.eliminated) > 0;
-        var html = "\n        <div id=\"player-table-".concat(player.id, "\" class=\"player-table ").concat(eliminated ? 'eliminated' : '', "\" style=\"box-shadow: 0 0 3px 3px #").concat(player.color, ";\">\n            <div id=\"player-table-").concat(player.id, "-top\" class=\"top\" data-type=\"").concat(player.sheetType, "\">\n            ");
-        for (var i = 1; i <= 12; i++) {
-            html += "\n                    <div id=\"player-table-".concat(player.id, "-top-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>");
-        }
-        html += " \n            </div>\n            <div id=\"player-table-".concat(player.id, "-main\" class=\"main\">\n                <div class=\"old-ladies block\">");
+var PlayerTableBlock = /** @class */ (function () {
+    function PlayerTableBlock(playerId) {
+        this.playerId = playerId;
+        var html = "\n        <div class=\"old-ladies block\">";
         for (var i = 1; i <= 8; i++) {
-            html += "\n                    <div id=\"player-table-".concat(player.id, "-old-ladies-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>");
+            html += "\n                <div id=\"player-table-".concat(playerId, "-old-ladies-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>\n            ");
         }
-        html += "        \n                    <div id=\"player-table-".concat(player.id, "-old-ladies-total\" class=\"total\"></div>\n                </div>\n                <div class=\"students block\">\n                ");
-        for (var i = 1; i <= 6; i++) {
-            html += "\n                    <div id=\"player-table-".concat(player.id, "-students-checkmark").concat(i, "\" class=\"students checkmark\" data-number=\"").concat(i, "\"></div>");
-        }
-        for (var i = 1; i <= 3; i++) {
-            html += "\n                    <div id=\"player-table-".concat(player.id, "-internships-checkmark").concat(i, "\" class=\"internships checkmark\" data-number=\"").concat(i, "\"></div>");
-        }
-        for (var i = 1; i <= 4; i++) {
-            html += "\n                    <div id=\"player-table-".concat(player.id, "-schools-checkmark").concat(i, "\" class=\"schools checkmark\" data-number=\"").concat(i, "\"></div>");
-        }
-        html += "\n                    <div id=\"player-table-".concat(player.id, "-students-special\" class=\"special\"></div>\n                    <div id=\"player-table-").concat(player.id, "-students-subtotal\" class=\"subtotal\"></div>\n                    <div id=\"player-table-").concat(player.id, "-students-total\" class=\"total\"></div>\n                </div>\n                <div class=\"tourists block\">");
-        for (var i = 1; i <= 3; i++) {
-            html += "\n                    <div id=\"player-table-".concat(player.id, "-tourists-light-checkmark").concat(i, "\" class=\"monument light checkmark\" data-number=\"").concat(i, "\"></div>");
-        }
-        for (var i = 1; i <= 3; i++) {
-            html += "\n                    <div id=\"player-table-".concat(player.id, "-tourists-dark-checkmark").concat(i, "\" class=\"monument dark checkmark\" data-number=\"").concat(i, "\"></div>");
-        }
-        html += "\n                    <div id=\"player-table-".concat(player.id, "-tourists-specialLight\" class=\"special\" data-style=\"Light\"></div>\n                    <div id=\"player-table-").concat(player.id, "-tourists-specialDark\" class=\"special\" data-style=\"Dark\"></div>\n                    <div id=\"player-table-").concat(player.id, "-tourists-specialMax\" class=\"special\"></div>");
-        for (var row = 1; row <= 3; row++) {
-            for (var i = 1; i <= 4; i++) {
-                html += "\n                        <div id=\"player-table-".concat(player.id, "-tourists-checkmark").concat(row, "-").concat(i, "\" class=\"tourists checkmark\" data-row=\"").concat(row, "\" data-number=\"").concat(i, "\"></div>");
-            }
-        }
-        html += " \n                    <div id=\"player-table-".concat(player.id, "-tourists-subtotal1\" class=\"subtotal\" data-number=\"1\"></div>\n                    <div id=\"player-table-").concat(player.id, "-tourists-subtotal2\" class=\"subtotal\" data-number=\"2\"></div>\n                    <div id=\"player-table-").concat(player.id, "-tourists-subtotal3\" class=\"subtotal\" data-number=\"3\"></div>\n                    <div id=\"player-table-").concat(player.id, "-tourists-total\" class=\"total\"></div>\n                </div>\n                <div class=\"businessmen block\">\n                    <div id=\"player-table-").concat(player.id, "-businessmen-special\" class=\"special\"></div>");
-        for (var row = 1; row <= 3; row++) {
-            for (var i = 1; i <= 3; i++) {
-                html += "\n                        <div id=\"player-table-".concat(player.id, "-businessmen-checkmark").concat(row, "-").concat(i, "\" class=\"checkmark\" data-row=\"").concat(row, "\" data-number=\"").concat(i, "\"></div>");
-            }
-        }
-        html += "\n                    <div id=\"player-table-".concat(player.id, "-businessmen-subtotal1\" class=\"subtotal\" data-number=\"1\"></div>\n                    <div id=\"player-table-").concat(player.id, "-businessmen-subtotal2\" class=\"subtotal\" data-number=\"2\"></div>\n                    <div id=\"player-table-").concat(player.id, "-businessmen-subtotal3\" class=\"subtotal\" data-number=\"3\"></div>\n                    <div id=\"player-table-").concat(player.id, "-businessmen-total\" class=\"total\"></div>\n                </div>\n                <div class=\"common-objectives block\">\n                    <div id=\"player-table-").concat(player.id, "-common-objectives-objective1\" class=\"subtotal\" data-number=\"1\"></div>\n                    <div id=\"player-table-").concat(player.id, "-common-objectives-objective2\" class=\"subtotal\" data-number=\"2\"></div>\n                    <div id=\"player-table-").concat(player.id, "-common-objectives-total\" class=\"total\"></div>\n                </div>\n                <div class=\"personal-objective block\">\n                    <div id=\"player-table-").concat(player.id, "-personal-objective-total\" class=\"total\"></div>\n                </div>\n                <div class=\"turn-zones block\">");
-        for (var i = 1; i <= 5; i++) {
-            html += "\n                    <div id=\"player-table-".concat(player.id, "-turn-zones-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>");
-        }
-        html += "\n                    <div id=\"player-table-".concat(player.id, "-turn-zones-total\" class=\"total\"></div>\n                </div>\n                <div class=\"traffic-jam block\">");
-        for (var i = 1; i <= 19; i++) {
-            html += "\n                    <div id=\"player-table-".concat(player.id, "-traffic-jam-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>");
-        }
-        html += "\n                    <div id=\"player-table-".concat(player.id, "-traffic-jam-total\" class=\"total\"></div>\n                </div>\n                <div id=\"player-table-").concat(player.id, "-total-score\" class=\"total score\"></div>\n            </div>\n            <div class=\"name\" style=\"color: #").concat(player.color, ";\">").concat(player.name, "</div>\n            <div id=\"player-table-").concat(player.id, "-first-player-wrapper\" class=\"first-player-wrapper\"></div>\n        </div>\n        ");
-        dojo.place(html, 'player-tables');
-        this.updateScoreSheet(player.scoreSheets);
+        html += "        \n                    <div id=\"player-table-".concat(playerId, "-old-ladies-total\" class=\"total\"></div>\n                </div>\n        ");
+        dojo.place(html, "player-table-".concat(playerId, "-main"));
     }
-    PlayerTable.prototype.setRound = function (validatedTickets, currentTicket) {
-        if (!currentTicket) {
-            return;
-        }
-        for (var i = 1; i <= 12; i++) {
-            this.setContentAndValidation("top-checkmark".concat(i), currentTicket === i || validatedTickets.includes(i) ? '✔' : '', currentTicket === i);
-        }
-    };
-    PlayerTable.prototype.updateScoreSheet = function (scoreSheets) {
-        this.updateOldLadiesScoreSheet(scoreSheets.current.oldLadies, scoreSheets.validated.oldLadies);
-        this.updateStudentsScoreSheet(scoreSheets.current.students, scoreSheets.validated.students);
-        this.updateTouristsScoreSheet(scoreSheets.current.tourists, scoreSheets.validated.tourists);
-        this.updateBusinessmenScoreSheet(scoreSheets.current.businessmen, scoreSheets.validated.businessmen);
-        this.updateCommonObjectivesScoreSheet(scoreSheets.current.commonObjectives, scoreSheets.validated.commonObjectives);
-        this.updatePersonalObjectiveScoreSheet(scoreSheets.current.personalObjective, scoreSheets.validated.personalObjective);
-        this.updateTurnZonesScoreSheet(scoreSheets.current.turnZones, scoreSheets.validated.turnZones);
-        this.updateTrafficJamScoreSheet(scoreSheets.current.trafficJam, scoreSheets.validated.trafficJam);
-        this.setContentAndValidation("total-score", scoreSheets.current.total, scoreSheets.current.total != scoreSheets.validated.total);
-    };
-    PlayerTable.prototype.setContentAndValidation = function (id, content, unvalidated) {
+    PlayerTableBlock.prototype.setContentAndValidation = function (id, content, unvalidated) {
         var div = document.getElementById("player-table-".concat(this.playerId, "-").concat(id));
         var contentStr = '';
         if (typeof content === 'string') {
@@ -138,13 +73,68 @@ var PlayerTable = /** @class */ (function () {
         div.innerHTML = contentStr;
         div.dataset.unvalidated = unvalidated.toString();
     };
-    PlayerTable.prototype.updateOldLadiesScoreSheet = function (current, validated) {
+    return PlayerTableBlock;
+}());
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var PlayerTableOldLadiesBlock = /** @class */ (function (_super) {
+    __extends(PlayerTableOldLadiesBlock, _super);
+    function PlayerTableOldLadiesBlock(playerId, scoreSheets) {
+        var _this = _super.call(this, playerId) || this;
+        var html = "\n        <div class=\"old-ladies block\">";
+        for (var i = 1; i <= 8; i++) {
+            html += "\n                <div id=\"player-table-".concat(playerId, "-old-ladies-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>\n            ");
+        }
+        html += "        \n                    <div id=\"player-table-".concat(playerId, "-old-ladies-total\" class=\"total\"></div>\n                </div>\n        ");
+        dojo.place(html, "player-table-".concat(playerId, "-main"));
+        _this.updateScoreSheet(scoreSheets);
+        return _this;
+    }
+    PlayerTableOldLadiesBlock.prototype.updateScoreSheet = function (scoreSheets) {
+        var current = scoreSheets.current.oldLadies;
+        var validated = scoreSheets.validated.oldLadies;
         for (var i = 1; i <= 8; i++) {
             this.setContentAndValidation("old-ladies-checkmark".concat(i), current.checked >= i ? '✔' : '', current.checked >= i && validated.checked < i);
         }
         this.setContentAndValidation("old-ladies-total", current.total, current.total !== validated.total);
     };
-    PlayerTable.prototype.updateStudentsScoreSheet = function (current, validated) {
+    return PlayerTableOldLadiesBlock;
+}(PlayerTableBlock));
+var PlayerTableStudentsBlock = /** @class */ (function (_super) {
+    __extends(PlayerTableStudentsBlock, _super);
+    function PlayerTableStudentsBlock(playerId, scoreSheets) {
+        var _this = _super.call(this, playerId) || this;
+        var html = "\n        <div class=\"students block\">\n                ";
+        for (var i = 1; i <= 6; i++) {
+            html += "\n                    <div id=\"player-table-".concat(playerId, "-students-checkmark").concat(i, "\" class=\"students checkmark\" data-number=\"").concat(i, "\"></div>");
+        }
+        for (var i = 1; i <= 3; i++) {
+            html += "\n                    <div id=\"player-table-".concat(playerId, "-internships-checkmark").concat(i, "\" class=\"internships checkmark\" data-number=\"").concat(i, "\"></div>");
+        }
+        for (var i = 1; i <= 4; i++) {
+            html += "\n                    <div id=\"player-table-".concat(playerId, "-schools-checkmark").concat(i, "\" class=\"schools checkmark\" data-number=\"").concat(i, "\"></div>");
+        }
+        html += "\n                    <div id=\"player-table-".concat(playerId, "-students-special\" class=\"special\"></div>\n                    <div id=\"player-table-").concat(playerId, "-students-subtotal\" class=\"subtotal\"></div>\n                    <div id=\"player-table-").concat(playerId, "-students-total\" class=\"total\"></div>\n                </div>\n        ");
+        dojo.place(html, "player-table-".concat(playerId, "-main"));
+        _this.updateScoreSheet(scoreSheets);
+        return _this;
+    }
+    PlayerTableStudentsBlock.prototype.updateScoreSheet = function (scoreSheets) {
+        var current = scoreSheets.current.students;
+        var validated = scoreSheets.validated.students;
         for (var i = 1; i <= 6; i++) {
             this.setContentAndValidation("students-checkmark".concat(i), current.checkedStudents >= i ? '✔' : '', current.checkedStudents >= i && validated.checkedStudents < i);
         }
@@ -158,7 +148,33 @@ var PlayerTable = /** @class */ (function () {
         this.setContentAndValidation("students-subtotal", current.subTotal, current.subTotal !== validated.subTotal);
         this.setContentAndValidation("students-total", current.total, current.total !== validated.total);
     };
-    PlayerTable.prototype.updateTouristsScoreSheet = function (current, validated) {
+    return PlayerTableStudentsBlock;
+}(PlayerTableBlock));
+var PlayerTableTouristsBlock = /** @class */ (function (_super) {
+    __extends(PlayerTableTouristsBlock, _super);
+    function PlayerTableTouristsBlock(playerId, scoreSheets) {
+        var _this = _super.call(this, playerId) || this;
+        var html = "\n        <div class=\"tourists block\">";
+        for (var i = 1; i <= 3; i++) {
+            html += "\n                    <div id=\"player-table-".concat(playerId, "-tourists-light-checkmark").concat(i, "\" class=\"monument light checkmark\" data-number=\"").concat(i, "\"></div>");
+        }
+        for (var i = 1; i <= 3; i++) {
+            html += "\n                    <div id=\"player-table-".concat(playerId, "-tourists-dark-checkmark").concat(i, "\" class=\"monument dark checkmark\" data-number=\"").concat(i, "\"></div>");
+        }
+        html += "\n                    <div id=\"player-table-".concat(playerId, "-tourists-specialLight\" class=\"special\" data-style=\"Light\"></div>\n                    <div id=\"player-table-").concat(playerId, "-tourists-specialDark\" class=\"special\" data-style=\"Dark\"></div>\n                    <div id=\"player-table-").concat(playerId, "-tourists-specialMax\" class=\"special\"></div>");
+        for (var row = 1; row <= 3; row++) {
+            for (var i = 1; i <= 4; i++) {
+                html += "\n                        <div id=\"player-table-".concat(playerId, "-tourists-checkmark").concat(row, "-").concat(i, "\" class=\"tourists checkmark\" data-row=\"").concat(row, "\" data-number=\"").concat(i, "\"></div>");
+            }
+        }
+        html += " \n                    <div id=\"player-table-".concat(playerId, "-tourists-subtotal1\" class=\"subtotal\" data-number=\"1\"></div>\n                    <div id=\"player-table-").concat(playerId, "-tourists-subtotal2\" class=\"subtotal\" data-number=\"2\"></div>\n                    <div id=\"player-table-").concat(playerId, "-tourists-subtotal3\" class=\"subtotal\" data-number=\"3\"></div>\n                    <div id=\"player-table-").concat(playerId, "-tourists-total\" class=\"total\"></div>\n                </div>\n        ");
+        dojo.place(html, "player-table-".concat(playerId, "-main"));
+        _this.updateScoreSheet(scoreSheets);
+        return _this;
+    }
+    PlayerTableTouristsBlock.prototype.updateScoreSheet = function (scoreSheets) {
+        var current = scoreSheets.current.tourists;
+        var validated = scoreSheets.validated.tourists;
         for (var i = 1; i <= 3; i++) {
             this.setContentAndValidation("tourists-light-checkmark".concat(i), current.checkedMonumentsLight >= i ? '✔' : '', current.checkedMonumentsLight >= i && validated.checkedMonumentsLight < i);
         }
@@ -178,7 +194,26 @@ var PlayerTable = /** @class */ (function () {
         }
         this.setContentAndValidation("tourists-total", current.total, current.total != validated.total);
     };
-    PlayerTable.prototype.updateBusinessmenScoreSheet = function (current, validated) {
+    return PlayerTableTouristsBlock;
+}(PlayerTableBlock));
+var PlayerTableBusinessmenBlock = /** @class */ (function (_super) {
+    __extends(PlayerTableBusinessmenBlock, _super);
+    function PlayerTableBusinessmenBlock(playerId, scoreSheets) {
+        var _this = _super.call(this, playerId) || this;
+        var html = "\n        <div class=\"businessmen block\">\n                    <div id=\"player-table-".concat(playerId, "-businessmen-special\" class=\"special\"></div>");
+        for (var row = 1; row <= 3; row++) {
+            for (var i = 1; i <= 3; i++) {
+                html += "\n                        <div id=\"player-table-".concat(playerId, "-businessmen-checkmark").concat(row, "-").concat(i, "\" class=\"checkmark\" data-row=\"").concat(row, "\" data-number=\"").concat(i, "\"></div>");
+            }
+        }
+        html += "\n                    <div id=\"player-table-".concat(playerId, "-businessmen-subtotal1\" class=\"subtotal\" data-number=\"1\"></div>\n                    <div id=\"player-table-").concat(playerId, "-businessmen-subtotal2\" class=\"subtotal\" data-number=\"2\"></div>\n                    <div id=\"player-table-").concat(playerId, "-businessmen-subtotal3\" class=\"subtotal\" data-number=\"3\"></div>\n                    <div id=\"player-table-").concat(playerId, "-businessmen-total\" class=\"total\"></div>\n                </div>\n        ");
+        dojo.place(html, "player-table-".concat(playerId, "-main"));
+        _this.updateScoreSheet(scoreSheets);
+        return _this;
+    }
+    PlayerTableBusinessmenBlock.prototype.updateScoreSheet = function (scoreSheets) {
+        var current = scoreSheets.current.businessmen;
+        var validated = scoreSheets.validated.businessmen;
         this.setContentAndValidation("businessmen-special", current.specialOffice, current.specialOffice !== validated.specialOffice);
         for (var row = 1; row <= 3; row++) {
             for (var i = 1; i <= 3; i++) {
@@ -190,26 +225,142 @@ var PlayerTable = /** @class */ (function () {
         }
         this.setContentAndValidation("businessmen-total", current.total, current.total != validated.total);
     };
-    PlayerTable.prototype.updateCommonObjectivesScoreSheet = function (current, validated) {
+    return PlayerTableBusinessmenBlock;
+}(PlayerTableBlock));
+var PlayerTableCommonObjectivesBlock = /** @class */ (function (_super) {
+    __extends(PlayerTableCommonObjectivesBlock, _super);
+    function PlayerTableCommonObjectivesBlock(playerId, scoreSheets) {
+        var _this = _super.call(this, playerId) || this;
+        var html = "\n        <div class=\"common-objectives block\">\n            <div id=\"player-table-".concat(playerId, "-common-objectives-objective1\" class=\"subtotal\" data-number=\"1\"></div>\n            <div id=\"player-table-").concat(playerId, "-common-objectives-objective2\" class=\"subtotal\" data-number=\"2\"></div>\n            <div id=\"player-table-").concat(playerId, "-common-objectives-total\" class=\"total\"></div>\n        </div>\n        ");
+        dojo.place(html, "player-table-".concat(playerId, "-main"));
+        _this.updateScoreSheet(scoreSheets);
+        return _this;
+    }
+    PlayerTableCommonObjectivesBlock.prototype.updateScoreSheet = function (scoreSheets) {
+        var current = scoreSheets.current.commonObjectives;
+        var validated = scoreSheets.validated.commonObjectives;
         for (var i = 1; i <= 2; i++) {
             this.setContentAndValidation("common-objectives-objective".concat(i), current.subTotals[i - 1], current.subTotals[i - 1] != validated.subTotals[i - 1]);
         }
         this.setContentAndValidation("common-objectives-total", current.total, current.total != validated.total);
     };
-    PlayerTable.prototype.updatePersonalObjectiveScoreSheet = function (current, validated) {
+    return PlayerTableCommonObjectivesBlock;
+}(PlayerTableBlock));
+var PlayerTablePersonalObjectiveBlock = /** @class */ (function (_super) {
+    __extends(PlayerTablePersonalObjectiveBlock, _super);
+    function PlayerTablePersonalObjectiveBlock(playerId, scoreSheets) {
+        var _this = _super.call(this, playerId) || this;
+        var html = "\n        <div class=\"personal-objective block\">\n            <div id=\"player-table-".concat(playerId, "-personal-objective-total\" class=\"total\"></div>\n        </div>\n        ");
+        dojo.place(html, "player-table-".concat(playerId, "-main"));
+        _this.updateScoreSheet(scoreSheets);
+        return _this;
+    }
+    PlayerTablePersonalObjectiveBlock.prototype.updateScoreSheet = function (scoreSheets) {
+        var current = scoreSheets.current.personalObjective;
+        var validated = scoreSheets.validated.personalObjective;
         this.setContentAndValidation("personal-objective-total", current.total, current.total != validated.total);
     };
-    PlayerTable.prototype.updateTurnZonesScoreSheet = function (current, validated) {
+    return PlayerTablePersonalObjectiveBlock;
+}(PlayerTableBlock));
+var PlayerTableTurnZonesBlock = /** @class */ (function (_super) {
+    __extends(PlayerTableTurnZonesBlock, _super);
+    function PlayerTableTurnZonesBlock(playerId, scoreSheets) {
+        var _this = _super.call(this, playerId) || this;
+        var html = "\n        <div class=\"turn-zones block\">";
+        for (var i = 1; i <= 5; i++) {
+            html += "\n                    <div id=\"player-table-".concat(playerId, "-turn-zones-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>");
+        }
+        html += "\n                    <div id=\"player-table-".concat(playerId, "-turn-zones-total\" class=\"total\"></div>\n                </div>\n        ");
+        dojo.place(html, "player-table-".concat(playerId, "-main"));
+        _this.updateScoreSheet(scoreSheets);
+        return _this;
+    }
+    PlayerTableTurnZonesBlock.prototype.updateScoreSheet = function (scoreSheets) {
+        var current = scoreSheets.current.turnZones;
+        var validated = scoreSheets.validated.turnZones;
         for (var i = 1; i <= 5; i++) {
             this.setContentAndValidation("turn-zones-checkmark".concat(i), current.checked >= i ? '✔' : '', current.checked >= i && validated.checked < i);
         }
         this.setContentAndValidation("turn-zones-total", -current.total, current.total !== validated.total);
     };
-    PlayerTable.prototype.updateTrafficJamScoreSheet = function (current, validated) {
+    return PlayerTableTurnZonesBlock;
+}(PlayerTableBlock));
+var PlayerTableTrafficJamBlock = /** @class */ (function (_super) {
+    __extends(PlayerTableTrafficJamBlock, _super);
+    function PlayerTableTrafficJamBlock(playerId, scoreSheets) {
+        var _this = _super.call(this, playerId) || this;
+        var html = "\n        <div class=\"traffic-jam block\">";
+        for (var i = 1; i <= 19; i++) {
+            html += "\n                    <div id=\"player-table-".concat(playerId, "-traffic-jam-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>");
+        }
+        html += "\n                    <div id=\"player-table-".concat(playerId, "-traffic-jam-total\" class=\"total\"></div>\n                </div>\n        ");
+        dojo.place(html, "player-table-".concat(playerId, "-main"));
+        _this.updateScoreSheet(scoreSheets);
+        return _this;
+    }
+    PlayerTableTrafficJamBlock.prototype.updateScoreSheet = function (scoreSheets) {
+        var current = scoreSheets.current.trafficJam;
+        var validated = scoreSheets.validated.trafficJam;
         for (var i = 1; i <= 19; i++) {
             this.setContentAndValidation("traffic-jam-checkmark".concat(i), current.checked >= i ? '✔' : '', current.checked >= i && validated.checked < i);
         }
         this.setContentAndValidation("traffic-jam-total", -current.total, current.total !== validated.total);
+    };
+    return PlayerTableTrafficJamBlock;
+}(PlayerTableBlock));
+var isDebug = window.location.host == 'studio.boardgamearena.com' || window.location.hash.indexOf('debug') > -1;
+;
+var log = isDebug ? console.log.bind(window.console) : function () { };
+var PlayerTable = /** @class */ (function () {
+    function PlayerTable(player) {
+        this.playerId = Number(player.id);
+        var eliminated = Number(player.eliminated) > 0;
+        var html = "\n        <div id=\"player-table-".concat(player.id, "\" class=\"player-table ").concat(eliminated ? 'eliminated' : '', "\" style=\"box-shadow: 0 0 3px 3px #").concat(player.color, ";\">\n            <div id=\"player-table-").concat(player.id, "-top\" class=\"top\" data-type=\"").concat(player.sheetType, "\">\n            ");
+        for (var i = 1; i <= 12; i++) {
+            html += "\n                    <div id=\"player-table-".concat(player.id, "-top-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>");
+        }
+        html += " \n            </div>\n            <div id=\"player-table-".concat(player.id, "-main\" class=\"main\">\n                <div id=\"player-table-").concat(player.id, "-total-score\" class=\"total score\"></div>\n            </div>\n            <div class=\"name\" style=\"color: #").concat(player.color, ";\">").concat(player.name, "</div>\n            <div id=\"player-table-").concat(player.id, "-first-player-wrapper\" class=\"first-player-wrapper\"></div>\n        </div>\n        ");
+        dojo.place(html, 'player-tables');
+        this.oldLadies = new PlayerTableOldLadiesBlock(this.playerId, player.scoreSheets);
+        this.students = new PlayerTableStudentsBlock(this.playerId, player.scoreSheets);
+        this.tourists = new PlayerTableTouristsBlock(this.playerId, player.scoreSheets);
+        this.businessmen = new PlayerTableBusinessmenBlock(this.playerId, player.scoreSheets);
+        this.commonObjectives = new PlayerTableCommonObjectivesBlock(this.playerId, player.scoreSheets);
+        this.personalObjective = new PlayerTablePersonalObjectiveBlock(this.playerId, player.scoreSheets);
+        this.turnZones = new PlayerTableTurnZonesBlock(this.playerId, player.scoreSheets);
+        this.trafficJam = new PlayerTableTrafficJamBlock(this.playerId, player.scoreSheets);
+        this.updateScoreSheet(player.scoreSheets);
+    }
+    PlayerTable.prototype.setRound = function (validatedTickets, currentTicket) {
+        if (!currentTicket) {
+            return;
+        }
+        for (var i = 1; i <= 12; i++) {
+            this.setContentAndValidation("top-checkmark".concat(i), currentTicket === i || validatedTickets.includes(i) ? '✔' : '', currentTicket === i);
+        }
+    };
+    PlayerTable.prototype.updateScoreSheet = function (scoreSheets) {
+        this.oldLadies.updateScoreSheet(scoreSheets);
+        this.students.updateScoreSheet(scoreSheets);
+        this.tourists.updateScoreSheet(scoreSheets);
+        this.businessmen.updateScoreSheet(scoreSheets);
+        this.commonObjectives.updateScoreSheet(scoreSheets);
+        this.personalObjective.updateScoreSheet(scoreSheets);
+        this.turnZones.updateScoreSheet(scoreSheets);
+        this.trafficJam.updateScoreSheet(scoreSheets);
+        this.setContentAndValidation("total-score", scoreSheets.current.total, scoreSheets.current.total != scoreSheets.validated.total);
+    };
+    PlayerTable.prototype.setContentAndValidation = function (id, content, unvalidated) {
+        var div = document.getElementById("player-table-".concat(this.playerId, "-").concat(id));
+        var contentStr = '';
+        if (typeof content === 'string') {
+            contentStr = content;
+        }
+        else if (typeof content === 'number') {
+            contentStr = '' + content;
+        }
+        div.innerHTML = contentStr;
+        div.dataset.unvalidated = unvalidated.toString();
     };
     return PlayerTable;
 }());

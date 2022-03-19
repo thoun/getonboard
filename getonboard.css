@@ -161,6 +161,7 @@ html, .mode_3d #game_play_area_background {
   height: 32px;
   box-shadow: 1px 1px 1px 1px black;
   transition: opacity 0.5s;
+  margin: 1px 0;
 }
 #center #map #map-elements .marker.unvalidated {
   opacity: 0.5;
