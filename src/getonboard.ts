@@ -72,19 +72,7 @@ class GetOnBoard implements GetOnBoardGame {
     
     private onEnteringPlaceRoute(args: EnteringPlaceRouteArgs) {
         if ((this as any).isCurrentPlayerActive()) {
-            args.possibleRoutes.forEach(route => {
-                const min = Math.min(route.from, route.to);
-                const max = Math.max(route.from, route.to);
-                const classes = ['selectable'];
-                if (route.isElimination) {
-                    classes.push('elimination');
-                } else if (route.useTurnZone) {
-                    classes.push('turn-zone');
-                } else if (route.trafficJam > 0) {
-                    classes.push('traffic-jam');
-                }
-                document.getElementById(`route${min}-${max}`).classList.add(...classes);
-            });
+            args.possibleRoutes.forEach(route => this.tableCenter.addGhostMarker(route));
         }
     }
 
@@ -107,7 +95,7 @@ class GetOnBoard implements GetOnBoardGame {
     
     private onLeavingPlaceRoute() {
         if ((this as any).isCurrentPlayerActive()) {
-            Array.from(document.getElementsByClassName('route')).forEach(element => element.classList.remove('selectable', 'traffic-jam', 'turn-zone', 'elimination'));
+            this.tableCenter.removeGhostMarkers();
         }
     }
     
@@ -341,6 +329,7 @@ class GetOnBoard implements GetOnBoardGame {
             ['newFirstPlayer', ANIMATION_MS],
             ['placedRoute', ANIMATION_MS],
             ['confirmTurn', ANIMATION_MS],
+            ['flipObjective', ANIMATION_MS],
             ['removeMarkers', 1],
             ['updateScoreSheet', 1],
         ];
@@ -381,6 +370,11 @@ class GetOnBoard implements GetOnBoardGame {
         const playerId = Number(notif.args.who_quits);
         (this as any).scoreCtrl[playerId]?.toValue(0);
         this.eliminatePlayer(playerId);
+    }
+
+    notif_flipObjective(notif: Notif<NotifFlipObjectiveArgs>) {
+        // TODO flip card
+        console.log('flipObjective', notif.args.objective);
     }
 
     /* This enable to inject translatable styled things to logs or action bar */

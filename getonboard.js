@@ -257,9 +257,12 @@ var TableCenter = /** @class */ (function () {
         dojo.place("<div id=\"departure-pawn-".concat(playerId, "\" class=\"departure-pawn\" style=\"background: #").concat(this.game.getPlayerColor(playerId), ";\"></div>"), "intersection".concat(position));
     };
     TableCenter.prototype.addMarker = function (playerId, marker) {
+        var _a;
         var min = Math.min(marker.from, marker.to);
         var max = Math.max(marker.from, marker.to);
         dojo.place("<div id=\"marker-".concat(playerId, "-").concat(min, "-").concat(max, "\" class=\"marker ").concat(marker.validated ? '' : 'unvalidated', "\" style=\"background: #").concat(this.game.getPlayerColor(playerId), ";\"></div>"), "route".concat(min, "-").concat(max));
+        var ghost = document.getElementById("ghost-marker-".concat(min, "-").concat(max));
+        (_a = ghost === null || ghost === void 0 ? void 0 : ghost.parentElement) === null || _a === void 0 ? void 0 : _a.removeChild(ghost);
     };
     TableCenter.prototype.setMarkerValidated = function (playerId, marker) {
         var min = Math.min(marker.from, marker.to);
@@ -271,6 +274,24 @@ var TableCenter = /** @class */ (function () {
         var max = Math.max(marker.from, marker.to);
         var div = document.getElementById("marker-".concat(playerId, "-").concat(min, "-").concat(max));
         div === null || div === void 0 ? void 0 : div.parentElement.removeChild(div);
+    };
+    TableCenter.prototype.addGhostMarker = function (route) {
+        var min = Math.min(route.from, route.to);
+        var max = Math.max(route.from, route.to);
+        var ghostClass = '';
+        if (route.isElimination) {
+            ghostClass = 'elimination';
+        }
+        else if (route.useTurnZone) {
+            ghostClass = 'turn-zone';
+        }
+        else if (route.trafficJam > 0) {
+            ghostClass = 'traffic-jam';
+        }
+        dojo.place("<div id=\"ghost-marker-".concat(min, "-").concat(max, "\" class=\"ghost marker ").concat(ghostClass, "\"></div>"), "route".concat(min, "-").concat(max));
+    };
+    TableCenter.prototype.removeGhostMarkers = function () {
+        Array.from(document.getElementsByClassName('ghost')).forEach(function (element) { var _a; return (_a = element.parentElement) === null || _a === void 0 ? void 0 : _a.removeChild(element); });
     };
     TableCenter.prototype.getCoordinatesFromNumberAndDigit = function (number, digit) {
         if (this.gamedatas.map === 'big') {
@@ -361,23 +382,9 @@ var GetOnBoard = /** @class */ (function () {
         }
     };
     GetOnBoard.prototype.onEnteringPlaceRoute = function (args) {
+        var _this = this;
         if (this.isCurrentPlayerActive()) {
-            args.possibleRoutes.forEach(function (route) {
-                var _a;
-                var min = Math.min(route.from, route.to);
-                var max = Math.max(route.from, route.to);
-                var classes = ['selectable'];
-                if (route.isElimination) {
-                    classes.push('elimination');
-                }
-                else if (route.useTurnZone) {
-                    classes.push('turn-zone');
-                }
-                else if (route.trafficJam > 0) {
-                    classes.push('traffic-jam');
-                }
-                (_a = document.getElementById("route".concat(min, "-").concat(max)).classList).add.apply(_a, classes);
-            });
+            args.possibleRoutes.forEach(function (route) { return _this.tableCenter.addGhostMarker(route); });
         }
     };
     GetOnBoard.prototype.onLeavingState = function (stateName) {
@@ -396,7 +403,7 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.onLeavingPlaceRoute = function () {
         if (this.isCurrentPlayerActive()) {
-            Array.from(document.getElementsByClassName('route')).forEach(function (element) { return element.classList.remove('selectable', 'traffic-jam', 'turn-zone', 'elimination'); });
+            this.tableCenter.removeGhostMarkers();
         }
     };
     /*private onLeavingStepEvolution() {
@@ -601,6 +608,7 @@ var GetOnBoard = /** @class */ (function () {
             ['newFirstPlayer', ANIMATION_MS],
             ['placedRoute', ANIMATION_MS],
             ['confirmTurn', ANIMATION_MS],
+            ['flipObjective', ANIMATION_MS],
             ['removeMarkers', 1],
             ['updateScoreSheet', 1],
         ];
@@ -637,6 +645,10 @@ var GetOnBoard = /** @class */ (function () {
         var playerId = Number(notif.args.who_quits);
         (_a = this.scoreCtrl[playerId]) === null || _a === void 0 ? void 0 : _a.toValue(0);
         this.eliminatePlayer(playerId);
+    };
+    GetOnBoard.prototype.notif_flipObjective = function (notif) {
+        // TODO flip card
+        console.log('flipObjective', notif.args.objective);
     };
     /* This enable to inject translatable styled things to logs or action bar */
     /* @Override */

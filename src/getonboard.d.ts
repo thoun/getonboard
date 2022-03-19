@@ -10,6 +10,12 @@ interface Card {
     location_arg: number;
 }
 
+interface CommonObjective {
+    id: number;
+    number: number;
+    completed: boolean;
+}
+
 interface PossibleRoute {
     from: number;
     to: number;
@@ -161,4 +167,8 @@ interface NotifPlacedRouteArgs {
 interface NotifConfirmTurnArgs {
     playerId: number;
     markers: PlacedRoute[];
+}
+
+interface NotifFlipObjectiveArgs {
+    objective: CommonObjective;
 }

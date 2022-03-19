@@ -309,6 +309,10 @@ trait UtilTrait {
             if ($this->array_some($scoreSheets, fn($scoreSheet) => $scoreSheet->validated->commonObjectives)) {
                 $round = $this->getRoundNumber();
                 $this->DbQuery("UPDATE player SET `completed_at_round` = $round WHERE `id` = $objective->id");
+
+                $this->notifyAllPlayers('flipObjective', clienttranslate('A common objective have been completed'), [
+                    'objective' => $objective,
+                ]);
             }
         }
     }

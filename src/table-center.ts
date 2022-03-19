@@ -54,6 +54,8 @@ class TableCenter {
         const min = Math.min(marker.from, marker.to);
         const max = Math.max(marker.from, marker.to);
         dojo.place(`<div id="marker-${playerId}-${min}-${max}" class="marker ${marker.validated ? '' : 'unvalidated'}" style="background: #${this.game.getPlayerColor(playerId)};"></div>`, `route${min}-${max}`);
+        const ghost = document.getElementById(`ghost-marker-${min}-${max}`);
+        ghost?.parentElement?.removeChild(ghost);
     }
 
     public setMarkerValidated(playerId: number, marker: PlacedRoute): void {
@@ -67,6 +69,26 @@ class TableCenter {
         const max = Math.max(marker.from, marker.to);
         const div = document.getElementById(`marker-${playerId}-${min}-${max}`);
         div?.parentElement.removeChild(div);
+    }
+
+    public addGhostMarker(route: PossibleRoute) {
+        const min = Math.min(route.from, route.to);
+        const max = Math.max(route.from, route.to);
+
+        let ghostClass = '';
+        if (route.isElimination) {
+            ghostClass = 'elimination';
+        } else if (route.useTurnZone) {
+            ghostClass = 'turn-zone';
+        } else if (route.trafficJam > 0) {
+            ghostClass = 'traffic-jam';
+        }
+
+        dojo.place(`<div id="ghost-marker-${min}-${max}" class="ghost marker ${ghostClass}"></div>`, `route${min}-${max}`);
+    }
+
+    public removeGhostMarkers() {
+        Array.from(document.getElementsByClassName('ghost')).forEach(element => element.parentElement?.removeChild(element));
     }
 
     private getCoordinatesFromNumberAndDigit(number: number, digit: number): number[] {

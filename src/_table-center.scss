@@ -89,16 +89,8 @@ $marker-size: 6px;
         &.unvalidated {
           opacity: 0.5;
         }
-      }
 
-      .route {
-        position: absolute;
-        display: flex;
-        justify-content: center;
-        width: 32px;
-        height: 32px;
-
-        &.selectable {
+        &.ghost {
           cursor: pointer;
           animation: highlight-route-clean-animation 1s alternate infinite ease-in-out;
 
@@ -115,13 +107,21 @@ $marker-size: 6px;
           }
         }
       }
+
+      .route {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+      }
     }
   }
 }
 
 @keyframes highlight-intersection-animation {
   0% { 
-    box-shadow: 0 0 20px 15px white;
+    box-shadow: 0 0 20px 10px white;
   }
   100% { 
     box-shadow: 0 0 30px 15px white;
@@ -130,36 +130,36 @@ $marker-size: 6px;
 
 @keyframes highlight-route-clean-animation {
   0% { 
-    box-shadow: 0 0 20px 15px green;
+    box-shadow: 0 0 5px 3px green;
   }
   100% { 
-    box-shadow: 0 0 30px 15px green;
+    box-shadow: 0 0 10px 5px green;
   }
 }
 
 @keyframes highlight-route-traffic-jam-animation {
   0% { 
-    box-shadow: 0 0 20px 15px greenyellow;
+    box-shadow: 0 0 5px 3px greenyellow;
   }
   100% { 
-    box-shadow: 0 0 30px 15px greenyellow;
+    box-shadow: 0 0 10px 5px greenyellow;
   }
 }
 
 @keyframes highlight-route-turn-zone-animation {
   0% { 
-    box-shadow: 0 0 20px 15px orange;
+    box-shadow: 0 0 5px 3px orange;
   }
   100% { 
-    box-shadow: 0 0 30px 15px orange;
+    box-shadow: 0 0 10px 5px orange;
   }
 }
 
 @keyframes highlight-route-elimination-animation {
   0% { 
-    box-shadow: 0 0 20px 15px black;
+    box-shadow: 0 0 5px 3px black;
   }
   100% { 
-    box-shadow: 0 0 30px 15px black;
+    box-shadow: 0 0 10px 5px black;
   }
 }
