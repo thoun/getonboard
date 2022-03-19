@@ -2,10 +2,13 @@
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+
+  .player-table {
+    margin: 20px;
+  }
 }
 
 .player-table {
-  margin: 20px;
   width: 700px;
   height: 700px;
   position: relative;

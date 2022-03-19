@@ -94,7 +94,7 @@ var PlayerTableOldLadiesBlock = /** @class */ (function (_super) {
     __extends(PlayerTableOldLadiesBlock, _super);
     function PlayerTableOldLadiesBlock(playerId, scoreSheets) {
         var _this = _super.call(this, playerId) || this;
-        var html = "\n        <div class=\"old-ladies block\">";
+        var html = "\n        <div class=\"old-ladies block\" data-zone=\"2\">";
         for (var i = 1; i <= 8; i++) {
             html += "\n                <div id=\"player-table-".concat(playerId, "-old-ladies-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>\n            ");
         }
@@ -117,7 +117,7 @@ var PlayerTableStudentsBlock = /** @class */ (function (_super) {
     __extends(PlayerTableStudentsBlock, _super);
     function PlayerTableStudentsBlock(playerId, scoreSheets) {
         var _this = _super.call(this, playerId) || this;
-        var html = "\n        <div class=\"students block\">\n                ";
+        var html = "\n        <div class=\"students block\" data-zone=\"3\">\n                ";
         for (var i = 1; i <= 6; i++) {
             html += "\n                    <div id=\"player-table-".concat(playerId, "-students-checkmark").concat(i, "\" class=\"students checkmark\" data-number=\"").concat(i, "\"></div>");
         }
@@ -154,7 +154,7 @@ var PlayerTableTouristsBlock = /** @class */ (function (_super) {
     __extends(PlayerTableTouristsBlock, _super);
     function PlayerTableTouristsBlock(playerId, scoreSheets) {
         var _this = _super.call(this, playerId) || this;
-        var html = "\n        <div class=\"tourists block\">";
+        var html = "\n        <div class=\"tourists block\" data-zone=\"4\">";
         for (var i = 1; i <= 3; i++) {
             html += "\n                    <div id=\"player-table-".concat(playerId, "-tourists-light-checkmark").concat(i, "\" class=\"monument light checkmark\" data-number=\"").concat(i, "\"></div>");
         }
@@ -200,7 +200,7 @@ var PlayerTableBusinessmenBlock = /** @class */ (function (_super) {
     __extends(PlayerTableBusinessmenBlock, _super);
     function PlayerTableBusinessmenBlock(playerId, scoreSheets) {
         var _this = _super.call(this, playerId) || this;
-        var html = "\n        <div class=\"businessmen block\">\n                    <div id=\"player-table-".concat(playerId, "-businessmen-special\" class=\"special\"></div>");
+        var html = "\n        <div class=\"businessmen block\" data-zone=\"5\">\n                    <div id=\"player-table-".concat(playerId, "-businessmen-special\" class=\"special\"></div>");
         for (var row = 1; row <= 3; row++) {
             for (var i = 1; i <= 3; i++) {
                 html += "\n                        <div id=\"player-table-".concat(playerId, "-businessmen-checkmark").concat(row, "-").concat(i, "\" class=\"checkmark\" data-row=\"").concat(row, "\" data-number=\"").concat(i, "\"></div>");
@@ -266,7 +266,7 @@ var PlayerTableTurnZonesBlock = /** @class */ (function (_super) {
     __extends(PlayerTableTurnZonesBlock, _super);
     function PlayerTableTurnZonesBlock(playerId, scoreSheets) {
         var _this = _super.call(this, playerId) || this;
-        var html = "\n        <div class=\"turn-zones block\">";
+        var html = "\n        <div class=\"turn-zones block\" data-zone=\"6\">";
         for (var i = 1; i <= 5; i++) {
             html += "\n                    <div id=\"player-table-".concat(playerId, "-turn-zones-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>");
         }
@@ -289,7 +289,7 @@ var PlayerTableTrafficJamBlock = /** @class */ (function (_super) {
     __extends(PlayerTableTrafficJamBlock, _super);
     function PlayerTableTrafficJamBlock(playerId, scoreSheets) {
         var _this = _super.call(this, playerId) || this;
-        var html = "\n        <div class=\"traffic-jam block\">";
+        var html = "\n        <div class=\"traffic-jam block\" data-zone=\"7\">";
         for (var i = 1; i <= 19; i++) {
             html += "\n                    <div id=\"player-table-".concat(playerId, "-traffic-jam-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>");
         }
@@ -312,15 +312,16 @@ var isDebug = window.location.host == 'studio.boardgamearena.com' || window.loca
 ;
 var log = isDebug ? console.log.bind(window.console) : function () { };
 var PlayerTable = /** @class */ (function () {
-    function PlayerTable(player) {
-        this.playerId = Number(player.id);
+    function PlayerTable(player, insertIn) {
+        if (insertIn === void 0) { insertIn = 'player-tables'; }
+        this.playerId = player.id;
         var eliminated = Number(player.eliminated) > 0;
         var html = "\n        <div id=\"player-table-".concat(player.id, "\" class=\"player-table ").concat(eliminated ? 'eliminated' : '', "\" style=\"box-shadow: 0 0 3px 3px #").concat(player.color, ";\">\n            <div id=\"player-table-").concat(player.id, "-top\" class=\"top\" data-type=\"").concat(player.sheetType, "\">\n            ");
         for (var i = 1; i <= 12; i++) {
             html += "\n                    <div id=\"player-table-".concat(player.id, "-top-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>");
         }
         html += " \n            </div>\n            <div id=\"player-table-".concat(player.id, "-main\" class=\"main\">\n                <div id=\"player-table-").concat(player.id, "-total-score\" class=\"total score\"></div>\n            </div>\n            <div class=\"name\" style=\"color: #").concat(player.color, ";\">").concat(player.name, "</div>\n            <div id=\"player-table-").concat(player.id, "-first-player-wrapper\" class=\"first-player-wrapper\"></div>\n        </div>\n        ");
-        dojo.place(html, 'player-tables');
+        dojo.place(html, insertIn);
         this.oldLadies = new PlayerTableOldLadiesBlock(this.playerId, player.scoreSheets);
         this.students = new PlayerTableStudentsBlock(this.playerId, player.scoreSheets);
         this.tourists = new PlayerTableTouristsBlock(this.playerId, player.scoreSheets);
@@ -484,6 +485,25 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 var ANIMATION_MS = 500;
+/*define('OLD_LADY', 20);
+
+define('STUDENT', 30);
+define('INTERNSHIP', 31);
+define('SCHOOL', 32);
+define('SCHOOL_SPECIAL', 35);
+
+define('TOURIST', 40);
+define('MONUMENT_LIGHT', 41);
+define('MONUMENT_DARK', 42);
+define('MONUMENT_LIGHT_SPECIAL', 45);
+define('MONUMENT_DARK_SPECIAL', 46);
+
+define('BUSINESSMAN', 50);
+define('OFFICE', 51);
+define('OFFICE_SPECIAL', 55);
+
+define('TURN_ZONES', 60);
+define('TRAFFIC_JAM', 70);*/
 var GetOnBoard = /** @class */ (function () {
     function GetOnBoard() {
         this.playersTables = [];
@@ -654,12 +674,23 @@ var GetOnBoard = /** @class */ (function () {
         }
     };
     GetOnBoard.prototype.getPlayerTable = function (playerId) {
-        return this.playersTables.find(function (playerTable) { return playerTable.playerId === playerId; });
+        return this.playersTables.find(function (playerTable) { return Number(playerTable.playerId) === playerId; });
     };
     GetOnBoard.prototype.eliminatePlayer = function (playerId) {
         this.gamedatas.players[playerId].eliminated = 1;
         document.getElementById("overall_player_board_".concat(playerId)).classList.add('eliminated-player');
         dojo.addClass("player-table-".concat(playerId), 'eliminated');
+    };
+    GetOnBoard.prototype.showZone = function (playerId, zone) {
+        dojo.place("<div class=\"pip\" id=\"pip-".concat(playerId, "-").concat(zone, "\"></div>"), 'pips');
+        new PlayerTable(this.gamedatas.players[playerId], "pip-".concat(playerId, "-").concat(zone));
+        var pipDiv = document.getElementById("pip-".concat(playerId, "-").concat(zone));
+        var zoneDiv = pipDiv.querySelector("[data-zone=\"".concat(zone, "\"]"));
+        var zoneStyle = window.getComputedStyle(zoneDiv);
+        pipDiv.style.width = zoneStyle.width;
+        pipDiv.style.height = zoneStyle.height;
+        pipDiv.scrollTo(Number(zoneStyle.left.match(/\d+/)[0]), 77 + Number(zoneStyle.top.match(/\d+/)[0]));
+        setTimeout(function () { var _a; return (_a = pipDiv.parentElement) === null || _a === void 0 ? void 0 : _a.removeChild(pipDiv); }, 2000);
     };
     GetOnBoard.prototype.placeDeparturePawn = function (position) {
         if (!this.checkAction('placeDeparturePawn')) {
@@ -785,7 +816,10 @@ var GetOnBoard = /** @class */ (function () {
         this.tableCenter.addDeparturePawn(notif.args.playerId, notif.args.position);
     };
     GetOnBoard.prototype.notif_placedRoute = function (notif) {
-        this.tableCenter.addMarker(notif.args.playerId, notif.args.marker);
+        var _this = this;
+        var playerId = notif.args.playerId;
+        this.tableCenter.addMarker(playerId, notif.args.marker);
+        notif.args.zones.forEach(function (zone) { return _this.showZone(playerId, zone); });
     };
     GetOnBoard.prototype.notif_confirmTurn = function (notif) {
         var _this = this;

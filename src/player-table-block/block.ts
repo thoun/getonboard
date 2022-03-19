@@ -1,5 +1,5 @@
 abstract class PlayerTableBlock {
-    constructor(protected playerId: number) {
+    constructor(protected playerId: string) {
 
         let html = `
         <div class="old-ladies block">`;

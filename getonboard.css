@@ -186,6 +186,14 @@ html, .mode_3d #game_play_area_background {
   width: 32px;
   height: 32px;
 }
+#center #map #pips {
+  position: absolute;
+}
+#center #map #pips .pip {
+  border: 5px ridge #e4273e;
+  border-radius: 10px;
+  overflow: hidden;
+}
 
 @keyframes highlight-intersection-animation {
   0% {
@@ -232,9 +240,11 @@ html, .mode_3d #game_play_area_background {
   justify-content: center;
   flex-wrap: wrap;
 }
+#player-tables .player-table {
+  margin: 20px;
+}
 
 .player-table {
-  margin: 20px;
   width: 700px;
   height: 700px;
   position: relative;

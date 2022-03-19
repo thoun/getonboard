@@ -7,6 +7,26 @@ declare const g_gamethemeurl;
 
 const ANIMATION_MS = 500;
 
+/*define('OLD_LADY', 20);
+
+define('STUDENT', 30);
+define('INTERNSHIP', 31);
+define('SCHOOL', 32);
+define('SCHOOL_SPECIAL', 35);
+
+define('TOURIST', 40);
+define('MONUMENT_LIGHT', 41);
+define('MONUMENT_DARK', 42);
+define('MONUMENT_LIGHT_SPECIAL', 45);
+define('MONUMENT_DARK_SPECIAL', 46);
+
+define('BUSINESSMAN', 50);
+define('OFFICE', 51);
+define('OFFICE_SPECIAL', 55);
+
+define('TURN_ZONES', 60);
+define('TRAFFIC_JAM', 70);*/
+
 class GetOnBoard implements GetOnBoardGame {
     private gamedatas: GetOnBoardGamedatas;
     //private healthCounters: Counter[] = [];
@@ -211,13 +231,29 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     private getPlayerTable(playerId: number): PlayerTable {
-        return this.playersTables.find(playerTable => playerTable.playerId === playerId);
+        return this.playersTables.find(playerTable => Number(playerTable.playerId) === playerId);
     }
     
     private eliminatePlayer(playerId: number) {
         this.gamedatas.players[playerId].eliminated = 1;
         document.getElementById(`overall_player_board_${playerId}`).classList.add('eliminated-player');
         dojo.addClass(`player-table-${playerId}`, 'eliminated');
+    }
+
+    private showZone(playerId: number, zone: number) {
+        dojo.place(`<div class="pip" id="pip-${playerId}-${zone}"></div>`, 'pips');
+        new PlayerTable(this.gamedatas.players[playerId], `pip-${playerId}-${zone}`);
+
+        const pipDiv = document.getElementById(`pip-${playerId}-${zone}`);
+        const zoneDiv = pipDiv.querySelector(`[data-zone="${zone}"]`) as HTMLDivElement;
+        const zoneStyle = window.getComputedStyle(zoneDiv);
+        pipDiv.style.width = zoneStyle.width;
+        pipDiv.style.height = zoneStyle.height;
+        pipDiv.scrollTo(
+            Number(zoneStyle.left.match(/\d+/)[0]), 
+            77 + Number(zoneStyle.top.match(/\d+/)[0]),
+        );
+        setTimeout(() => pipDiv.parentElement?.removeChild(pipDiv), 2000);
     }
 
     public placeDeparturePawn(position: number) {
@@ -360,7 +396,10 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     notif_placedRoute(notif: Notif<NotifPlacedRouteArgs>) {
-        this.tableCenter.addMarker(notif.args.playerId, notif.args.marker);
+        const playerId = notif.args.playerId;
+        this.tableCenter.addMarker(playerId, notif.args.marker);
+
+        notif.args.zones.forEach(zone => this.showZone(playerId, zone));
     }
 
     notif_confirmTurn(notif: Notif<NotifConfirmTurnArgs>) {

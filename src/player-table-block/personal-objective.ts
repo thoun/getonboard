@@ -1,5 +1,5 @@
 class PlayerTablePersonalObjectiveBlock extends PlayerTableBlock {
-    constructor(playerId: number, scoreSheets: ScoreSheets) {
+    constructor(playerId: string, scoreSheets: ScoreSheets) {
         super(playerId);
 
         let html = `

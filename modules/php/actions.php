@@ -60,11 +60,22 @@ trait ActionTrait {
         $round = $this->getRoundNumber();
         $useTurnZone = $possibleRoute->useTurnZone ? 1 : 0;
         $this->DbQuery("INSERT INTO placed_routes(`player_id`, `from`, `to`, `round`, `use_turn_zone`, `traffic_jam`) VALUES ($playerId, $from, $to, $round, $useTurnZone, $possibleRoute->trafficJam)");
+
+        $mapElements = $this->MAP_POSITIONS[$this->getMap()][$to];
+        $zones = array_map(fn($element) => floor($element / 10), $mapElements);
+        $zones = array_unique(array_filter($zones, fn($zone) => $zone >=2 && $zone <= 5));
+        if ($useTurnZone) {            
+            $zones[] = 6;
+        }
+        if ($possibleRoute->trafficJam > 0) {            
+            $zones[] = 7;
+        }
         
         self::notifyAllPlayers('placedRoute', clienttranslate('${player_name} places a route marker'), [
             'playerId' => $playerId,
             'player_name' => self::getActivePlayerName(),
             'marker' => PlacedRoute::forNotif($from, $to, false),
+            'zones' => $zones,
         ]);
 
         if ($possibleRoute->isElimination) {

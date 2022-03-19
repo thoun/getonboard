@@ -1,9 +1,9 @@
 class PlayerTableBusinessmenBlock extends PlayerTableBlock {
-    constructor(playerId: number, scoreSheets: ScoreSheets) {
+    constructor(playerId: string, scoreSheets: ScoreSheets) {
         super(playerId);
 
         let html = `
-        <div class="businessmen block">
+        <div class="businessmen block" data-zone="5">
                     <div id="player-table-${playerId}-businessmen-special" class="special"></div>`;
         for(let row=1; row<=3; row++) {
             for(let i=1; i<=3; i++) {

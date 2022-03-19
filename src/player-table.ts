@@ -2,7 +2,7 @@ const isDebug = window.location.host == 'studio.boardgamearena.com' || window.lo
 const log = isDebug ? console.log.bind(window.console) : function () { };
 
 class PlayerTable {
-    public playerId: number;
+    public playerId: string;
     
     private oldLadies: PlayerTableOldLadiesBlock;
     private students: PlayerTableStudentsBlock;
@@ -13,8 +13,8 @@ class PlayerTable {
     private turnZones: PlayerTableTurnZonesBlock;
     private trafficJam: PlayerTableTrafficJamBlock;
 
-    constructor(player: GetOnBoardPlayer) {
-        this.playerId = Number(player.id);
+    constructor(player: GetOnBoardPlayer, insertIn: string = 'player-tables') {
+        this.playerId = player.id;
 
         const eliminated = Number(player.eliminated) > 0;
 
@@ -35,7 +35,7 @@ class PlayerTable {
             <div id="player-table-${player.id}-first-player-wrapper" class="first-player-wrapper"></div>
         </div>
         `;
-        dojo.place(html, 'player-tables');
+        dojo.place(html, insertIn);
 
         this.oldLadies = new PlayerTableOldLadiesBlock(this.playerId, player.scoreSheets);
         this.students = new PlayerTableStudentsBlock(this.playerId, player.scoreSheets);

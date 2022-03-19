@@ -1,9 +1,9 @@
 class PlayerTableOldLadiesBlock extends PlayerTableBlock {
-    constructor(playerId: number, scoreSheets: ScoreSheets) {
+    constructor(playerId: string, scoreSheets: ScoreSheets) {
         super(playerId);
 
         let html = `
-        <div class="old-ladies block">`;
+        <div class="old-ladies block" data-zone="2">`;
         for(let i=1; i<=8; i++) {
             html += `
                 <div id="player-table-${playerId}-old-ladies-checkmark${i}" class="checkmark" data-number="${i}"></div>

@@ -118,6 +118,16 @@ $marker-size: 6px;
         height: 32px;
       }
     }
+
+    #pips {
+      position: absolute;
+
+      .pip {
+        border: 5px ridge #e4273e;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+    }
   }
 }
 

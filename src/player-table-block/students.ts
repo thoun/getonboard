@@ -1,9 +1,9 @@
 class PlayerTableStudentsBlock extends PlayerTableBlock {
-    constructor(playerId: number, scoreSheets: ScoreSheets) {
+    constructor(playerId: string, scoreSheets: ScoreSheets) {
         super(playerId);
 
         let html = `
-        <div class="students block">
+        <div class="students block" data-zone="3">
                 `;
         for(let i=1; i<=6; i++) {
             html += `

@@ -1,9 +1,9 @@
 class PlayerTableTrafficJamBlock extends PlayerTableBlock {
-    constructor(playerId: number, scoreSheets: ScoreSheets) {
+    constructor(playerId: string, scoreSheets: ScoreSheets) {
         super(playerId);
 
         let html = `
-        <div class="traffic-jam block">`;
+        <div class="traffic-jam block" data-zone="7">`;
         for(let i=1; i<=19; i++) {
             html += `
                     <div id="player-table-${playerId}-traffic-jam-checkmark${i}" class="checkmark" data-number="${i}"></div>`;

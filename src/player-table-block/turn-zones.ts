@@ -1,9 +1,9 @@
 class PlayerTableTurnZonesBlock extends PlayerTableBlock {
-    constructor(playerId: number, scoreSheets: ScoreSheets) {
+    constructor(playerId: string, scoreSheets: ScoreSheets) {
         super(playerId);
 
         let html = `
-        <div class="turn-zones block">`;
+        <div class="turn-zones block" data-zone="6">`;
         for(let i=1; i<=5; i++) {
             html += `
                     <div id="player-table-${playerId}-turn-zones-checkmark${i}" class="checkmark" data-number="${i}"></div>`;

@@ -167,6 +167,7 @@ interface NotifPlacedDeparturePawnArgs {
 interface NotifPlacedRouteArgs {
     playerId: number;
     marker: PlacedRoute;
+    zones: number[];
 } 
 
 interface NotifConfirmTurnArgs {
