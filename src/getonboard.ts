@@ -420,8 +420,7 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     notif_flipObjective(notif: Notif<NotifFlipObjectiveArgs>) {
-        document.getElementById(`common-objective-${notif.args.objective.id}`).dataset.side = 'completed';
-        // TODO animate
+        document.getElementById(`common-objective-${notif.args.objective.id}`).dataset.side = '1';
     }
 
     /* This enable to inject translatable styled things to logs or action bar */

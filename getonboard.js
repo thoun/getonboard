@@ -491,7 +491,7 @@ var TableCenter = /** @class */ (function () {
         }
     };
     TableCenter.prototype.placeCommonObjective = function (objective) {
-        dojo.place("<div id=\"common-objective-".concat(objective.id, "\" class=\"common-objective\" data-side=\"").concat(objective.completed ? 'completed' : 'uncompleted', "\"></div>"), "common-objective-slot-".concat(objective.number));
+        dojo.place("<div id=\"common-objective-".concat(objective.id, "\" class=\"common-objective card-inner\" data-side=\"").concat(objective.completed ? '1' : '0', "\">\n            <div class=\"card-side front\"></div>\n            <div class=\"card-side back\"></div>\n        </div>"), "common-objective-slot-".concat(objective.number));
     };
     return TableCenter;
 }());
@@ -857,8 +857,7 @@ var GetOnBoard = /** @class */ (function () {
         this.eliminatePlayer(playerId);
     };
     GetOnBoard.prototype.notif_flipObjective = function (notif) {
-        document.getElementById("common-objective-".concat(notif.args.objective.id)).dataset.side = 'completed';
-        // TODO animate
+        document.getElementById("common-objective-".concat(notif.args.objective.id)).dataset.side = '1';
     };
     /* This enable to inject translatable styled things to logs or action bar */
     /* @Override */

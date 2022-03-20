@@ -141,6 +141,9 @@ class TableCenter {
     }
 
     private placeCommonObjective(objective: CommonObjective) {
-        dojo.place(`<div id="common-objective-${objective.id}" class="common-objective" data-side="${objective.completed ? 'completed' : 'uncompleted'}"></div>`, `common-objective-slot-${objective.number}`);
+        dojo.place(`<div id="common-objective-${objective.id}" class="common-objective card-inner" data-side="${objective.completed ? '1' : '0'}">
+            <div class="card-side front"></div>
+            <div class="card-side back"></div>
+        </div>`, `common-objective-slot-${objective.number}`);
     }
 }

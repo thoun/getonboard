@@ -229,17 +229,83 @@ $marker-size: 6px;
   .common-objective {
     width: 86px;
     height: 120px;
-    background: url('img/common-objectives.png');
-    background-size: auto 200%;
-    background-position-y: 0%;
-  
+
     @for $i from 1 through 6 {
-      &[id="common-objective-#{$i}"] {
+      &[id="common-objective-#{$i}"] .card-side {
         background-position-x: #{($i - 1) * 20%};
       }
-      &[data-side="completed"] {
+    }
+    
+    .card-side {
+      background: url('img/common-objectives.png');
+      background-size: auto 200%;
+    
+      &.front {
+        background-position-y: 0%;
+      }
+      
+      &.back {
         background-position-y: 100%;
       }
+    }
+  }
+}
+
+.ticket-slot {
+  position: absolute;
+
+  .ticket {
+    width: 86px;
+    height: 120px;
+
+    @for $i from 1 through 12 {
+      &[data-side="1"][data-ticket="#{$i}"] .card-side {
+        background-position-x: #{$i * 100% / 12};
+      }
+    }
+    
+    .card-side {
+      background: url('img/common-objectives.png');
+      background-size: auto 200%;
+    
+      &.front {
+        background-position-y: 0%;
+      }
+      
+      &.back {
+        background-position-y: 100%;
+      }
+    }
+  }
+}
+
+.card-inner {
+  position: absolute;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+
+  &[data-side="1"] {
+    transform: rotateY(180deg);
+  }
+
+  .card-side {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 10px;
+    box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.5);
+    overflow: hidden;
+  
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+  
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+  
+    &.back {  
+      transform: rotateY(180deg);
     }
   }
 }

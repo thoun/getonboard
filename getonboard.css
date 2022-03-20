@@ -215,45 +215,115 @@
 .common-objective-slot .common-objective {
   width: 86px;
   height: 120px;
-  background: url("img/common-objectives.png");
-  background-size: auto 200%;
-  background-position-y: 0%;
 }
-.common-objective-slot .common-objective[id=common-objective-1] {
+.common-objective-slot .common-objective[id=common-objective-1] .card-side {
   background-position-x: 0%;
 }
-.common-objective-slot .common-objective[data-side=completed] {
-  background-position-y: 100%;
-}
-.common-objective-slot .common-objective[id=common-objective-2] {
+.common-objective-slot .common-objective[id=common-objective-2] .card-side {
   background-position-x: 20%;
 }
-.common-objective-slot .common-objective[data-side=completed] {
-  background-position-y: 100%;
-}
-.common-objective-slot .common-objective[id=common-objective-3] {
+.common-objective-slot .common-objective[id=common-objective-3] .card-side {
   background-position-x: 40%;
 }
-.common-objective-slot .common-objective[data-side=completed] {
-  background-position-y: 100%;
-}
-.common-objective-slot .common-objective[id=common-objective-4] {
+.common-objective-slot .common-objective[id=common-objective-4] .card-side {
   background-position-x: 60%;
 }
-.common-objective-slot .common-objective[data-side=completed] {
-  background-position-y: 100%;
-}
-.common-objective-slot .common-objective[id=common-objective-5] {
+.common-objective-slot .common-objective[id=common-objective-5] .card-side {
   background-position-x: 80%;
 }
-.common-objective-slot .common-objective[data-side=completed] {
-  background-position-y: 100%;
-}
-.common-objective-slot .common-objective[id=common-objective-6] {
+.common-objective-slot .common-objective[id=common-objective-6] .card-side {
   background-position-x: 100%;
 }
-.common-objective-slot .common-objective[data-side=completed] {
+.common-objective-slot .common-objective .card-side {
+  background: url("img/common-objectives.png");
+  background-size: auto 200%;
+}
+.common-objective-slot .common-objective .card-side.front {
+  background-position-y: 0%;
+}
+.common-objective-slot .common-objective .card-side.back {
   background-position-y: 100%;
+}
+
+.ticket-slot {
+  position: absolute;
+}
+.ticket-slot .ticket {
+  width: 86px;
+  height: 120px;
+}
+.ticket-slot .ticket[data-side="1"][data-ticket="1"] .card-side {
+  background-position-x: 8.3333333333%;
+}
+.ticket-slot .ticket[data-side="1"][data-ticket="2"] .card-side {
+  background-position-x: 16.6666666667%;
+}
+.ticket-slot .ticket[data-side="1"][data-ticket="3"] .card-side {
+  background-position-x: 25%;
+}
+.ticket-slot .ticket[data-side="1"][data-ticket="4"] .card-side {
+  background-position-x: 33.3333333333%;
+}
+.ticket-slot .ticket[data-side="1"][data-ticket="5"] .card-side {
+  background-position-x: 41.6666666667%;
+}
+.ticket-slot .ticket[data-side="1"][data-ticket="6"] .card-side {
+  background-position-x: 50%;
+}
+.ticket-slot .ticket[data-side="1"][data-ticket="7"] .card-side {
+  background-position-x: 58.3333333333%;
+}
+.ticket-slot .ticket[data-side="1"][data-ticket="8"] .card-side {
+  background-position-x: 66.6666666667%;
+}
+.ticket-slot .ticket[data-side="1"][data-ticket="9"] .card-side {
+  background-position-x: 75%;
+}
+.ticket-slot .ticket[data-side="1"][data-ticket="10"] .card-side {
+  background-position-x: 83.3333333333%;
+}
+.ticket-slot .ticket[data-side="1"][data-ticket="11"] .card-side {
+  background-position-x: 91.6666666667%;
+}
+.ticket-slot .ticket[data-side="1"][data-ticket="12"] .card-side {
+  background-position-x: 100%;
+}
+.ticket-slot .ticket .card-side {
+  background: url("img/common-objectives.png");
+  background-size: auto 200%;
+}
+.ticket-slot .ticket .card-side.front {
+  background-position-y: 0%;
+}
+.ticket-slot .ticket .card-side.back {
+  background-position-y: 100%;
+}
+
+.card-inner {
+  position: absolute;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+.card-inner[data-side="1"] {
+  transform: rotateY(180deg);
+}
+.card-inner .card-side {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 10px;
+  box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  -webkit-backface-visibility: hidden;
+  /* Safari */
+  backface-visibility: hidden;
+}
+.card-inner .card-side.back {
+  transform: rotateY(180deg);
 }
 
 #player-tables {
