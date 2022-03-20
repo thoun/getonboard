@@ -3,6 +3,7 @@
 <div id="full-table">
     <div id="center">
         <div id="map">
+            <div id="round-panel"></div>
             <div id="map-elements">
             </div>
             <div id="pips-top" class="pips"></div>

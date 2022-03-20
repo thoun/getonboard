@@ -13,6 +13,7 @@ class GetOnBoard implements GetOnBoardGame {
     private tableCenter: TableCenter;
     private playersTables: PlayerTable[] = [];
     private registeredTablesByPlayerId: PlayerTable[][] = [];
+    private roundNumberCounter: Counter;
 
     constructor() {
     }
@@ -49,6 +50,10 @@ class GetOnBoard implements GetOnBoardGame {
         this.createPlayerTables(gamedatas);
 
         this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
+        document.getElementById('round-panel').innerHTML = `${_('Round')}&nbsp;<span id="round-number-counter"></span>&nbsp;/&nbsp;12`;
+        this.roundNumberCounter = new ebg.counter();
+        this.roundNumberCounter.create(`round-number-counter`);
+        this.roundNumberCounter.setValue(gamedatas.roundNumber);
 
         this.setupNotifications();
 
@@ -375,6 +380,7 @@ class GetOnBoard implements GetOnBoardGame {
 
     notif_newFirstPlayer(notif: Notif<NotifNewFirstPlayerArgs>) {
         this.placeFirstPlayerToken(notif.args.playerId);
+        this.roundNumberCounter.toValue(notif.args.roundNumber);
     }
 
     notif_updateScoreSheet(notif: Notif<NotifUpdateScoreSheetArgs>) {

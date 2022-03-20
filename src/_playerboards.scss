@@ -1,0 +1,39 @@
+
+
+.player-board {
+  background-color: white;
+
+  .personal-objective-wrapper {
+    display: flex;
+    justify-content: center;
+    .personal-objective {
+      width: 150px;
+      height: 90px;
+      background: aquamarine;
+      margin: 10px;
+    }
+  }
+
+  &.eliminated-player {
+    background-color: #b9b9b9;
+
+    .player-name a {
+      text-decoration: line-through;
+    }
+
+    .personal-objective-wrapper {
+      display: none;
+    }
+  }
+
+  &.spectator-mode {
+    * {
+      background: white !important;
+    }
+  }
+}
+
+#firstPlayerBoardToken {
+  width: 32px;
+  height: 32px;
+}

@@ -133,7 +133,7 @@ class GetOnBoard extends Table {
     protected function getAllDatas() {
         $result = array();
     
-        $currentPlayerId = self::getCurrentPlayerId();    // !! We must only return informations visible by this player !!
+        $currentPlayerId = intval(self::getCurrentPlayerId());    // !! We must only return informations visible by this player !!
     
         // Get information about players
         // Note: you can retrieve some extra field you added for "player" table in "dbmodel.sql" if you need it.
@@ -150,10 +150,14 @@ class GetOnBoard extends Table {
             $placedRoutes = $this->getPlacedRoutes($playerId);
             $playerDb['markers'] = $placedRoutes;
             $playerDb['scoreSheets'] = $this->getScoreSheets($playerId, $placedRoutes, $commonObjectives);
+
+            if ($playerId === $currentPlayerId) {
+                $playerDb['personalObjective'] = $personalObjective;
+                $playerDb['personalObjectivePositions'] = $personalObjective == 0 ? null : $this->getPersonalObjectivePosition($personalObjective, $map);
+            }
         }
-        $result['players'][$currentPlayerId]['personalObjective'] = $personalObjective;
-        $result['players'][$currentPlayerId]['personalObjectivePositions'] = $this->getPersonalObjectivePosition($personalObjective, $map);
   
+        $result['roundNumber'] = $this->getRoundNumber();
         $result['map'] = $map;
         $result['MAP_ROUTES'] = $this->MAP_ROUTES[$map];
         $result['firstPlayerTokenPlayerId'] = intval($this->getGameStateValue(FIRST_PLAYER));

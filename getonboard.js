@@ -533,6 +533,10 @@ var GetOnBoard = /** @class */ (function () {
         this.tableCenter = new TableCenter(this, gamedatas);
         this.createPlayerTables(gamedatas);
         this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
+        document.getElementById('round-panel').innerHTML = "".concat(_('Round'), "&nbsp;<span id=\"round-number-counter\"></span>&nbsp;/&nbsp;12");
+        this.roundNumberCounter = new ebg.counter();
+        this.roundNumberCounter.create("round-number-counter");
+        this.roundNumberCounter.setValue(gamedatas.roundNumber);
         this.setupNotifications();
         log("Ending game setup");
     };
@@ -813,6 +817,7 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.notif_newFirstPlayer = function (notif) {
         this.placeFirstPlayerToken(notif.args.playerId);
+        this.roundNumberCounter.toValue(notif.args.roundNumber);
     };
     GetOnBoard.prototype.notif_updateScoreSheet = function (notif) {
         var _a;

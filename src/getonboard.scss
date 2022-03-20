@@ -1,3 +1,7 @@
+@import 'playerboards';
+@import 'table-center';
+@import 'player-table';
+
 html, .mode_3d #game_play_area_background {
   background: url('img/background.jpg') #102f50;
   background-size: 100% auto;
@@ -13,46 +17,10 @@ html, .mode_3d #game_play_area_background {
   font-display: swap;
 }
 
-.player-board {
-
-  .personal-objective-wrapper {
-    display: flex;
-    justify-content: center;
-    .personal-objective {
-      width: 150px;
-      height: 90px;
-      background: aquamarine;
-      margin: 10px;
-    }
-  }
-
-  &.eliminated-player {
-    background-color: #b9b9b9;
-
-    .player-name a {
-      text-decoration: line-through;
-    }
-
-    .personal-objective-wrapper {
-      display: none;
-    }
-  }
-}
-
 .first-player-token {
     position: relative;
     background: url('img/first-player.png');
     background-size: contain;
-}
-
-#firstPlayerBoardToken {
-  width: 32px;
-  height: 32px;
-}
-
-#firstPlayerTableToken {
-  width: 64px;
-  height: 64px;
 }
 
 .shape {
@@ -106,5 +74,18 @@ html, .mode_3d #game_play_area_background {
   }
 }
 
-@import 'table-center';
-@import 'player-table';
+#round-panel {
+  position: absolute;
+  background: url('img/round-number.png');
+  width: 120px;
+  height: 37px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 16px;
+  box-sizing: border-box;
+  font-weight: bold;
+  font-size: 85%;
+  right: -120px;
+  color: white;
+}

@@ -44,8 +44,9 @@
       top: 31px;
       width: 15px;
       height: 14px;
-      font-size: 13pt;
-      margin-top: -6px;
+      font-size: 20pt;
+      margin-top: -12px;
+      margin-left: -3px;
 
       @for $i from 0 through 11 {
         &[data-number="#{$i + 1}"] {
@@ -122,4 +123,9 @@
   [data-unvalidated="true"] {
     color: red;
   }
+}
+
+#firstPlayerTableToken {
+  width: 64px;
+  height: 64px;
 }

@@ -112,6 +112,7 @@ interface GetOnBoardGamedatas {
     tablespeed: string;
 
     // Add here variables you set up in getAllDatas
+    roundNumber: number;
     commonObjectives: Card[];
     firstPlayerTokenPlayerId: number;
     validatedTickets: number[];
@@ -153,6 +154,7 @@ interface NotifNewRoundArgs {
 
 interface NotifNewFirstPlayerArgs {
     playerId: number;
+    roundNumber: number;
 }
 
 interface NotifUpdateScoreSheetArgs {

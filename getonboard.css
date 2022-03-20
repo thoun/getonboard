@@ -1,15 +1,5 @@
-html, .mode_3d #game_play_area_background {
-  background: url("img/background.jpg") #102f50;
-  background-size: 100% auto;
-  background-repeat: no-repeat;
-}
-
-@font-face {
-  font-family: "Caveat";
-  src: url("img/font/Caveat-Regular.woff2") format("woff2"), url("img/font/Caveat-Regular.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+.player-board {
+  background-color: white;
 }
 .player-board .personal-objective-wrapper {
   display: flex;
@@ -30,69 +20,13 @@ html, .mode_3d #game_play_area_background {
 .player-board.eliminated-player .personal-objective-wrapper {
   display: none;
 }
-
-.first-player-token {
-  position: relative;
-  background: url("img/first-player.png");
-  background-size: contain;
+.player-board.spectator-mode * {
+  background: white !important;
 }
 
 #firstPlayerBoardToken {
   width: 32px;
   height: 32px;
-}
-
-#firstPlayerTableToken {
-  width: 64px;
-  height: 64px;
-}
-
-.shape {
-  background: url("img/shapes.png");
-  width: 101px;
-  height: 31px;
-  display: inline-block;
-  background-size: auto 500%;
-  vertical-align: middle;
-}
-.shape[data-shape="[0,1]"] {
-  background-position-x: 0%;
-  margin: 0 -30px;
-}
-.shape[data-shape="[0,2]"] {
-  background-position-x: 20%;
-  margin: 0 -35px;
-}
-.shape[data-shape="[0,0]"] {
-  background-position-x: 40%;
-  margin: 0 -18px;
-}
-.shape[data-shape="[0]"] {
-  background-position-x: 60%;
-  margin: 0 -35px;
-}
-.shape[data-shape="[0,1,1]"] {
-  background-position-x: 80%;
-  margin: 0 -25px;
-}
-.shape[data-shape="[0,0,0]"] {
-  background-position-x: 100%;
-  margin: 0 -15px;
-}
-.shape[data-step="0"] {
-  background-position-y: 0%;
-}
-.shape[data-step="1"] {
-  background-position-y: 25%;
-}
-.shape[data-step="2"] {
-  background-position-y: 50%;
-}
-.shape[data-step="3"] {
-  background-position-y: 75%;
-}
-.shape[data-step="4"] {
-  background-position-y: 100%;
 }
 
 #center {
@@ -309,8 +243,9 @@ html, .mode_3d #game_play_area_background {
   top: 31px;
   width: 15px;
   height: 14px;
-  font-size: 13pt;
-  margin-top: -6px;
+  font-size: 20pt;
+  margin-top: -12px;
+  margin-left: -3px;
 }
 .player-table .top .checkmark[data-number="1"] {
   left: 75px;
@@ -802,4 +737,92 @@ html, .mode_3d #game_play_area_background {
 }
 .player-table [data-unvalidated=true] {
   color: red;
+}
+
+#firstPlayerTableToken {
+  width: 64px;
+  height: 64px;
+}
+
+html, .mode_3d #game_play_area_background {
+  background: url("img/background.jpg") #102f50;
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+}
+
+@font-face {
+  font-family: "Caveat";
+  src: url("img/font/Caveat-Regular.woff2") format("woff2"), url("img/font/Caveat-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+.first-player-token {
+  position: relative;
+  background: url("img/first-player.png");
+  background-size: contain;
+}
+
+.shape {
+  background: url("img/shapes.png");
+  width: 101px;
+  height: 31px;
+  display: inline-block;
+  background-size: auto 500%;
+  vertical-align: middle;
+}
+.shape[data-shape="[0,1]"] {
+  background-position-x: 0%;
+  margin: 0 -30px;
+}
+.shape[data-shape="[0,2]"] {
+  background-position-x: 20%;
+  margin: 0 -35px;
+}
+.shape[data-shape="[0,0]"] {
+  background-position-x: 40%;
+  margin: 0 -18px;
+}
+.shape[data-shape="[0]"] {
+  background-position-x: 60%;
+  margin: 0 -35px;
+}
+.shape[data-shape="[0,1,1]"] {
+  background-position-x: 80%;
+  margin: 0 -25px;
+}
+.shape[data-shape="[0,0,0]"] {
+  background-position-x: 100%;
+  margin: 0 -15px;
+}
+.shape[data-step="0"] {
+  background-position-y: 0%;
+}
+.shape[data-step="1"] {
+  background-position-y: 25%;
+}
+.shape[data-step="2"] {
+  background-position-y: 50%;
+}
+.shape[data-step="3"] {
+  background-position-y: 75%;
+}
+.shape[data-step="4"] {
+  background-position-y: 100%;
+}
+
+#round-panel {
+  position: absolute;
+  background: url("img/round-number.png");
+  width: 120px;
+  height: 37px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 16px;
+  box-sizing: border-box;
+  font-weight: bold;
+  font-size: 85%;
+  right: -120px;
+  color: white;
 }

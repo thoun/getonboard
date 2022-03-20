@@ -94,8 +94,6 @@ trait StateTrait {
             $this->notifUpdateScoreSheet($playerId, true);
         }
 
-        // TODO
-        //$this->gamestate->nextState('endGame');
-        $this->gamestate->jumpToState(ST_PLAYER_PLACE_ROUTE);
+        $this->gamestate->nextState('endGame');
     }
 }
