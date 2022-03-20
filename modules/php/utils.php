@@ -316,4 +316,12 @@ trait UtilTrait {
             }
         }
     }
+
+    function getPersonalObjectivePosition(int $personalObjective, string $map) {
+        $letters = $this->PERSONAL_OBJECTIVES[$map][$personalObjective];
+        return array_map(
+            fn($letter) => $this->array_find_key($this->MAP_POSITIONS[$map], fn($positionElements) => in_array($letter, $positionElements)),
+            $letters
+        );
+    }
 }

@@ -44,6 +44,12 @@ class TableCenter {
 
         // markers
         Object.values(gamedatas.players).forEach(player => player.markers.forEach(marker => this.addMarker(Number(player.id), marker)));
+
+        // personal objective
+        const currentPlayer = gamedatas.players[this.game.getPlayerId()];
+        currentPlayer?.personalObjectivePositions.forEach(position => 
+            dojo.place(`<div class="objective-letter" style="box-shadow: 0 0 5px 5px #${currentPlayer.color};"></div>`, `intersection${position}`)
+        );
     }
 
     public addDeparturePawn(playerId: number, position: number) {

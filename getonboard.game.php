@@ -139,6 +139,8 @@ class GetOnBoard extends Table {
         // Note: you can retrieve some extra field you added for "player" table in "dbmodel.sql" if you need it.
         $sql = "SELECT player_id id, player_score score, player_no playerNo, player_sheet_type sheetType, player_departure_position departurePosition FROM player ";
         $result['players'] = self::getCollectionFromDb($sql);
+        $map = $this->getMap();
+        $personalObjective = intval($this->getUniqueValueFromDB("SELECT player_personal_objective FROM `player` where `player_id` = $currentPlayerId"));
 
         $commonObjectives = $this->getCommonObjectives();
         foreach ($result['players'] as $playerId => &$playerDb) {
@@ -149,15 +151,16 @@ class GetOnBoard extends Table {
             $playerDb['markers'] = $placedRoutes;
             $playerDb['scoreSheets'] = $this->getScoreSheets($playerId, $placedRoutes, $commonObjectives);
         }
-        $result['players'][$currentPlayerId]['personalObjective'] = intval($this->getUniqueValueFromDB("SELECT player_personal_objective FROM `player` where `player_id` = $currentPlayerId"));
+        $result['players'][$currentPlayerId]['personalObjective'] = $personalObjective;
+        $result['players'][$currentPlayerId]['personalObjectivePositions'] = $this->getPersonalObjectivePosition($personalObjective, $map);
   
-        $result['map'] = $this->getMap();
-        $result['MAP_ROUTES'] = $this->MAP_ROUTES[$result['map']];
+        $result['map'] = $map;
+        $result['MAP_ROUTES'] = $this->MAP_ROUTES[$map];
         $result['firstPlayerTokenPlayerId'] = intval($this->getGameStateValue(FIRST_PLAYER));
         $result['validatedTickets'] = $this->getValidatedTicketsForRound();
         $result['currentTicket'] = $this->getCurrentTicketForRound();
 
-        $result['MAP_POSITIONS'] = $this->MAP_POSITIONS[$result['map']];
+        $result['MAP_POSITIONS'] = $this->MAP_POSITIONS[$map];
   
         return $result;
     }

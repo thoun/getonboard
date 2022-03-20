@@ -72,6 +72,15 @@ $marker-size: 6px;
           cursor: pointer;
           animation: highlight-intersection-animation 1s alternate infinite ease-in-out;
         }
+
+        .objective-letter {
+          position: absolute;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          top: -9px;
+          right: -6px;
+        }
       }
 
       .departure-pawn {

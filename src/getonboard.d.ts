@@ -94,6 +94,7 @@ interface GetOnBoardPlayer extends Player {
     sheetType: number;
     departurePosition: number;
     personalObjective?: number;
+    personalObjectivePositions?: number[];
     scoreSheets: ScoreSheets;
     markers: PlacedRoute[];
 }

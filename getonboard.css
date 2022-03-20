@@ -150,6 +150,14 @@ html, .mode_3d #game_play_area_background {
   cursor: pointer;
   animation: highlight-intersection-animation 1s alternate infinite ease-in-out;
 }
+#center #map #map-elements .intersection .objective-letter {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  top: -9px;
+  right: -6px;
+}
 #center #map #map-elements .departure-pawn {
   width: 32px;
   height: 32px;

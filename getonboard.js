@@ -405,6 +405,11 @@ var TableCenter = /** @class */ (function () {
         Object.values(gamedatas.players).filter(function (player) { return player.departurePosition; }).forEach(function (player) { return _this.addDeparturePawn(Number(player.id), player.departurePosition); });
         // markers
         Object.values(gamedatas.players).forEach(function (player) { return player.markers.forEach(function (marker) { return _this.addMarker(Number(player.id), marker); }); });
+        // personal objective
+        var currentPlayer = gamedatas.players[this.game.getPlayerId()];
+        currentPlayer === null || currentPlayer === void 0 ? void 0 : currentPlayer.personalObjectivePositions.forEach(function (position) {
+            return dojo.place("<div class=\"objective-letter\" style=\"box-shadow: 0 0 5px 5px #".concat(currentPlayer.color, ";\"></div>"), "intersection".concat(position));
+        });
     }
     TableCenter.prototype.addDeparturePawn = function (playerId, position) {
         dojo.place("<div id=\"departure-pawn-".concat(playerId, "\" class=\"departure-pawn\" style=\"background: #").concat(this.game.getPlayerColor(playerId), ";\"></div>"), "intersection".concat(position));
