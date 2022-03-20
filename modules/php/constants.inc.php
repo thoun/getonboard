@@ -1,4 +1,5 @@
 <?php
+define('ROUND_NUMBER', 1);
 
 /*
  * State constants

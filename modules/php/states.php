@@ -65,7 +65,7 @@ trait StateTrait {
 
         $this->tickets->moveAllCardsInLocation('turn', 'discard');
 
-        $startNewRound = intval($this->tickets->countCardInLocation('discard')) < 12;
+        $startNewRound = intval($this->tickets->countCardInLocation('discard')) < ROUND_NUMBER;
 
         if ($startNewRound) {
 
@@ -89,6 +89,11 @@ trait StateTrait {
     }
 
     function stEndScore() {
+        $playersIds = $this->getPlayersIds();
+        foreach ($playersIds as $playerId) {
+            $this->notifUpdateScoreSheet($playerId, true);
+        }
+
         // TODO
         //$this->gamestate->nextState('endGame');
         $this->gamestate->jumpToState(ST_PLAYER_PLACE_ROUTE);

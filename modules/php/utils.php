@@ -279,8 +279,8 @@ trait UtilTrait {
         ]);
     }
 
-    function notifUpdateScoreSheet(int $playerId) {
-        $scoreSheets = $this->getScoreSheets($playerId, $this->getPlacedRoutes($playerId), $this->getCommonObjectives());
+    function notifUpdateScoreSheet(int $playerId, bool $endScoring = false) {
+        $scoreSheets = $this->getScoreSheets($playerId, $this->getPlacedRoutes($playerId), $this->getCommonObjectives(), $endScoring);
         
         $this->notifyAllPlayers('updateScoreSheet', '', [
             'playerId' => $playerId,
