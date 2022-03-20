@@ -104,7 +104,6 @@ $playerActionsGameStates = [
         "transitions" => [
             "placeNext" => ST_PLAYER_PLACE_ROUTE,
             "nextPlayer" => ST_NEXT_PLAYER,
-            "zombiePass" => ST_NEXT_PLAYER,
         ]
     ],
 ];

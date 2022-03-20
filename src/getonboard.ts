@@ -264,12 +264,17 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     public placeRoute(from: number, to: number) {
+
+        const args: EnteringPlaceRouteArgs = this.gamedatas.gamestate.args;
+        const route = args.possibleRoutes.find(r => (r.from === from && r.to === to) || (r.from === to && r.to === from));
+        if (!route) {
+            return;
+        }
+
         if(!(this as any).checkAction('placeRoute')) {
             return;
         }
 
-        const args: EnteringPlaceRouteArgs = this.gamedatas.gamestate.args;
-        const route = args.possibleRoutes.find(r => (r.from === from && r.to === to) || (r.from === to && r.to === from));
         const eliminationWarning = route.isElimination && args.possibleRoutes.some(r => !r.isElimination);
 
         if (eliminationWarning) {
@@ -415,8 +420,8 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     notif_flipObjective(notif: Notif<NotifFlipObjectiveArgs>) {
-        // TODO flip card
-        console.log('flipObjective', notif.args.objective);
+        document.getElementById(`common-objective-${notif.args.objective.id}`).dataset.side = 'completed';
+        // TODO animate
     }
 
     /* This enable to inject translatable styled things to logs or action bar */

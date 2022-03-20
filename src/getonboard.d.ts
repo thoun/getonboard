@@ -2,14 +2,6 @@
  * Your game interfaces
  */
 
-
-interface Card {
-    id: number;
-    type: number;
-    location: string;
-    location_arg: number;
-}
-
 interface CommonObjective {
     id: number;
     number: number;
@@ -113,7 +105,7 @@ interface GetOnBoardGamedatas {
 
     // Add here variables you set up in getAllDatas
     roundNumber: number;
-    commonObjectives: Card[];
+    commonObjectives: CommonObjective[];
     firstPlayerTokenPlayerId: number;
     validatedTickets: number[];
     currentTicket: number | null;

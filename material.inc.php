@@ -474,8 +474,6 @@ $this->COMMON_OBJECTIVES = [
   6 => [MONUMENT_DARK, 3],
 ];
 
-
-
 $this->PERSONAL_OBJECTIVES = [
   'small' => [
     1 => [ord('a'), ord('f'), ord('k')],

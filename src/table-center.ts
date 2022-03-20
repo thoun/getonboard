@@ -45,6 +45,9 @@ class TableCenter {
         // markers
         Object.values(gamedatas.players).forEach(player => player.markers.forEach(marker => this.addMarker(Number(player.id), marker)));
 
+        // common objectives
+        gamedatas.commonObjectives.forEach(commonObjective => this.placeCommonObjective(commonObjective));
+
         // personal objective
         const currentPlayer = gamedatas.players[this.game.getPlayerId()];
         currentPlayer?.personalObjectivePositions.forEach(position => 
@@ -135,5 +138,9 @@ class TableCenter {
             // TODO handle angle
             return this.getCoordinatesFromPosition(position)[0] > 370 ? 'right' : 'left';
         }
+    }
+
+    private placeCommonObjective(objective: CommonObjective) {
+        dojo.place(`<div id="common-objective-${objective.id}" class="common-objective" data-side="${objective.completed ? 'completed' : 'uncompleted'}"></div>`, `common-objective-slot-${objective.number}`);
     }
 }

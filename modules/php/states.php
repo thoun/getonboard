@@ -80,6 +80,7 @@ trait StateTrait {
             self::notifyAllPlayers('newFirstPlayer', clienttranslate('${player_name} is the new first player'), [
                 'playerId' => $playerId,
                 'player_name' => self::getActivePlayerName(),
+                'roundNumber' => $this->getRoundNumber(),
             ]);
         } else {
             $this->notifCurrentRound();

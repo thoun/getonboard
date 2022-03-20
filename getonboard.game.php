@@ -163,6 +163,7 @@ class GetOnBoard extends Table {
         $result['firstPlayerTokenPlayerId'] = intval($this->getGameStateValue(FIRST_PLAYER));
         $result['validatedTickets'] = $this->getValidatedTicketsForRound();
         $result['currentTicket'] = $this->getCurrentTicketForRound();
+        $result['commonObjectives'] = $this->getCommonObjectives();
 
         $result['MAP_POSITIONS'] = $this->MAP_POSITIONS[$map];
   
@@ -212,8 +213,18 @@ class GetOnBoard extends Table {
     	
         if ($state['type'] === "activeplayer") {
             switch ($statename) {
+                case 'placeRoute':
+                    $placedRoutes = $this->getPlacedRoutes($active_player);
+                    $unvalidatedRoutes = array_values(array_filter($placedRoutes, fn($placedRoute) => !$placedRoute->validated));
+
+                    if (count($unvalidatedRoutes) > 0) {
+                        $this->applyCancel($unvalidatedRoutes);
+                    }
+
+                    $this->gamestate->nextState("nextPlayer");
+                	break;
                 default:
-                    $this->gamestate->nextState( "zombiePass" );
+                    $this->gamestate->nextState("nextPlayer");
                 	break;
             }
 

@@ -405,6 +405,8 @@ var TableCenter = /** @class */ (function () {
         Object.values(gamedatas.players).filter(function (player) { return player.departurePosition; }).forEach(function (player) { return _this.addDeparturePawn(Number(player.id), player.departurePosition); });
         // markers
         Object.values(gamedatas.players).forEach(function (player) { return player.markers.forEach(function (marker) { return _this.addMarker(Number(player.id), marker); }); });
+        // common objectives
+        gamedatas.commonObjectives.forEach(function (commonObjective) { return _this.placeCommonObjective(commonObjective); });
         // personal objective
         var currentPlayer = gamedatas.players[this.game.getPlayerId()];
         currentPlayer === null || currentPlayer === void 0 ? void 0 : currentPlayer.personalObjectivePositions.forEach(function (position) {
@@ -487,6 +489,9 @@ var TableCenter = /** @class */ (function () {
             // TODO handle angle
             return this.getCoordinatesFromPosition(position)[0] > 370 ? 'right' : 'left';
         }
+    };
+    TableCenter.prototype.placeCommonObjective = function (objective) {
+        dojo.place("<div id=\"common-objective-".concat(objective.id, "\" class=\"common-objective\" data-side=\"").concat(objective.completed ? 'completed' : 'uncompleted', "\"></div>"), "common-objective-slot-".concat(objective.number));
     };
     return TableCenter;
 }());
@@ -714,11 +719,14 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.placeRoute = function (from, to) {
         var _this = this;
+        var args = this.gamedatas.gamestate.args;
+        var route = args.possibleRoutes.find(function (r) { return (r.from === from && r.to === to) || (r.from === to && r.to === from); });
+        if (!route) {
+            return;
+        }
         if (!this.checkAction('placeRoute')) {
             return;
         }
-        var args = this.gamedatas.gamestate.args;
-        var route = args.possibleRoutes.find(function (r) { return (r.from === from && r.to === to) || (r.from === to && r.to === from); });
         var eliminationWarning = route.isElimination && args.possibleRoutes.some(function (r) { return !r.isElimination; });
         if (eliminationWarning) {
             this.confirmationDialog(_('Are you sure you want to place that marker? You will be eliminated!'), function () {
@@ -849,8 +857,8 @@ var GetOnBoard = /** @class */ (function () {
         this.eliminatePlayer(playerId);
     };
     GetOnBoard.prototype.notif_flipObjective = function (notif) {
-        // TODO flip card
-        console.log('flipObjective', notif.args.objective);
+        document.getElementById("common-objective-".concat(notif.args.objective.id)).dataset.side = 'completed';
+        // TODO animate
     };
     /* This enable to inject translatable styled things to logs or action bar */
     /* @Override */

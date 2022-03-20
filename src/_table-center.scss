@@ -30,6 +30,17 @@ $marker-size: 6px;
             }
           }
         }
+
+        .common-objective-slot {
+          top: 374px;
+
+          &#common-objective-slot-1 {
+            left: -22px;
+          }
+          &#common-objective-slot-2 {
+            left: 88px;
+          }
+        }
       }
       
     }
@@ -49,6 +60,17 @@ $marker-size: 6px;
             .marker {
               height: $marker-size;
             }
+          }
+        }
+
+        .common-objective-slot {
+          top: 3px;
+
+          &#common-objective-slot-1 {
+            left: 344px;
+          }
+          &#common-objective-slot-2 {
+            left: 459px;
           }
         }
       }
@@ -198,5 +220,26 @@ $marker-size: 6px;
   }
   100% { 
     box-shadow: 0 0 10px 5px black;
+  }
+}
+
+.common-objective-slot {
+  position: absolute;
+
+  .common-objective {
+    width: 86px;
+    height: 120px;
+    background: url('img/common-objectives.png');
+    background-size: auto 200%;
+    background-position-y: 0%;
+  
+    @for $i from 1 through 6 {
+      &[id="common-objective-#{$i}"] {
+        background-position-x: #{($i - 1) * 20%};
+      }
+      &[data-side="completed"] {
+        background-position-y: 100%;
+      }
+    }
   }
 }
