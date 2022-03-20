@@ -466,12 +466,12 @@ $this->MAP_DEPARTURE_POSITIONS = [
 ];
 
 $this->COMMON_OBJECTIVES = [
-  1 => [5, OLD_LADY],
-  2 => [5, STUDENT],
-  3 => [5, TOURIST],
-  4 => [5, BUSINESSMAN],
-  5 => [3, MONUMENT_LIGHT],
-  6 => [3, MONUMENT_DARK],
+  1 => [OLD_LADY, 5],
+  2 => [STUDENT, 5],
+  3 => [TOURIST, 5],
+  4 => [BUSINESSMAN, 5],
+  5 => [MONUMENT_LIGHT, 3],
+  6 => [MONUMENT_DARK, 3],
 ];
 
 

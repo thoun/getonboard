@@ -61,7 +61,7 @@ trait StateTrait {
     }
 
     function stEndRound() {
-        $this->checkCommonObjectives();
+        $this->markCompletedCommonObjectives();
 
         $this->tickets->moveAllCardsInLocation('turn', 'discard');
 

@@ -291,7 +291,7 @@ trait UtilTrait {
         return $scoreSheets;
     }
     
-    function checkCommonObjectives() {
+    function markCompletedCommonObjectives() {
         $objectives = $this->getCommonObjectives();
         if (count(array_filter($objectives, fn($objective) => !$objective->completed)) === 0) {
             return;

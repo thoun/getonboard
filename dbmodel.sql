@@ -32,7 +32,7 @@ ALTER TABLE `player` ADD `player_personal_objective` INT UNSIGNED NOT NULL DEFAU
 ALTER TABLE `player` ADD `player_departure_position` INT UNSIGNED NOT NULL DEFAULT '0';
 
 CREATE TABLE IF NOT EXISTS `common_objectives` (
-   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+   `id` int(1) UNSIGNED NOT NULL,
    `number` TINYINT(1) UNSIGNED NULL,
    `completed_at_round` TINYINT(2) UNSIGNED NULL,
    PRIMARY KEY (`id`)

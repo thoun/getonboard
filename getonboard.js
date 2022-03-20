@@ -682,10 +682,11 @@ var GetOnBoard = /** @class */ (function () {
         var _this = this;
         var pipSide = this.tableCenter.getSide(position) === 'left' ? 'right' : 'left';
         Array.from(document.getElementsByClassName('pips')).forEach(function (pipDiv) { return pipDiv.dataset.side = pipSide; });
-        dojo.place("<div class=\"pip\" id=\"pip-".concat(playerId, "-").concat(zone, "\"></div>"), zone >= 6 ? 'pips-bottom' : 'pips-top');
-        var pipTable = new PlayerTable(this.gamedatas.players[playerId], "pip-".concat(playerId, "-").concat(zone), document.getElementById("pip-".concat(playerId, "-").concat(zone)));
+        var pipId = "pip-".concat(playerId, "-").concat(zone, "-").concat(position);
+        dojo.place("<div class=\"pip\" id=\"".concat(pipId, "\"></div>"), zone >= 6 ? 'pips-bottom' : 'pips-top');
+        var pipDiv = document.getElementById("pip-".concat(playerId, "-").concat(zone, "-").concat(position));
+        var pipTable = new PlayerTable(this.gamedatas.players[playerId], pipId, pipDiv);
         this.registeredTablesByPlayerId[playerId].push(pipTable);
-        var pipDiv = document.getElementById("pip-".concat(playerId, "-").concat(zone));
         this.cutZone(pipDiv, zone);
         setTimeout(function () {
             var _a;

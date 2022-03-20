@@ -232,12 +232,13 @@ class GetOnBoard implements GetOnBoardGame {
     private showZone(playerId: number, zone: number, position: number) {
         const pipSide = this.tableCenter.getSide(position) === 'left' ? 'right' : 'left';
         (Array.from(document.getElementsByClassName('pips')) as HTMLDivElement[]).forEach(pipDiv => pipDiv.dataset.side = pipSide);
-        
-        dojo.place(`<div class="pip" id="pip-${playerId}-${zone}"></div>`,  zone >=6 ? 'pips-bottom' : 'pips-top');
-        const pipTable = new PlayerTable(this.gamedatas.players[playerId], `pip-${playerId}-${zone}`, document.getElementById(`pip-${playerId}-${zone}`));
+
+        const pipId = `pip-${playerId}-${zone}-${position}`;
+        dojo.place(`<div class="pip" id="${pipId}"></div>`,  zone >=6 ? 'pips-bottom' : 'pips-top');
+        const pipDiv = document.getElementById(`pip-${playerId}-${zone}-${position}`);
+        const pipTable = new PlayerTable(this.gamedatas.players[playerId], pipId, pipDiv);
         this.registeredTablesByPlayerId[playerId].push(pipTable);
 
-        const pipDiv = document.getElementById(`pip-${playerId}-${zone}`);
         this.cutZone(pipDiv, zone);
 
         setTimeout(() => {
