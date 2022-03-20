@@ -13,26 +13,26 @@ class PlayerTable {
     private turnZones: PlayerTableTurnZonesBlock;
     private trafficJam: PlayerTableTrafficJamBlock;
 
-    constructor(player: GetOnBoardPlayer, insertIn: string = 'player-tables') {
-        this.playerId = player.id;
+    constructor(player: GetOnBoardPlayer, id: string = player.id, insertIn: HTMLElement = document.getElementById('player-tables')) {
+        this.playerId = id;
 
         const eliminated = Number(player.eliminated) > 0;
 
         let html = `
-        <div id="player-table-${player.id}" class="player-table ${eliminated ? 'eliminated' : ''}" style="box-shadow: 0 0 3px 3px #${player.color};">
-            <div id="player-table-${player.id}-top" class="top" data-type="${player.sheetType}">
+        <div id="player-table-${this.playerId}" class="player-table ${eliminated ? 'eliminated' : ''}" style="box-shadow: 0 0 3px 3px #${player.color};">
+            <div id="player-table-${this.playerId}-top" class="top" data-type="${player.sheetType}">
             `;
         for(let i=1; i<=12; i++) {
             html += `
-                    <div id="player-table-${player.id}-top-checkmark${i}" class="checkmark" data-number="${i}"></div>`;
+                    <div id="player-table-${this.playerId}-top-checkmark${i}" class="checkmark" data-number="${i}"></div>`;
         }
         html += ` 
             </div>
-            <div id="player-table-${player.id}-main" class="main">
-                <div id="player-table-${player.id}-total-score" class="total score"></div>
+            <div id="player-table-${this.playerId}-main" class="main">
+                <div id="player-table-${this.playerId}-total-score" class="total score"></div>
             </div>
             <div class="name" style="color: #${player.color};">${player.name}</div>
-            <div id="player-table-${player.id}-first-player-wrapper" class="first-player-wrapper"></div>
+            <div id="player-table-${this.playerId}-first-player-wrapper" class="first-player-wrapper"></div>
         </div>
         `;
         dojo.place(html, insertIn);

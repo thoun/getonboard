@@ -17,7 +17,7 @@ class TableCenter {
             if (departure > 0) {
                 html += ` departure" data-departure=${departure}`;
             }
-            html += `" style="top: ${coordinates[0]}px; left: ${coordinates[1]}px;"></div>`;
+            html += `" style="left: ${coordinates[0]}px; top: ${coordinates[1]}px;"></div>`;
             dojo.place(html, mapElements);
             
             if (departure > 0) {
@@ -33,7 +33,7 @@ class TableCenter {
             destinations.forEach(destination => {
                 const coordinates = this.getCoordinatesFromPositions(position, destination);
 
-                let html = `<div id="route${position}-${destination}" class="route" style="top: ${coordinates[0]}px; left: ${coordinates[1]}px;" data-direction="${Math.abs(position-destination) <= 1 ? 0 : 1}"></div>`;
+                let html = `<div id="route${position}-${destination}" class="route" style="left: ${coordinates[0]}px; top: ${coordinates[1]}px;" data-direction="${Math.abs(position-destination) <= 1 ? 0 : 1}"></div>`;
                 dojo.place(html, mapElements);
                 document.getElementById(`route${position}-${destination}`).addEventListener('click', () => this.game.placeRoute(position, destination));
             });
@@ -95,14 +95,14 @@ class TableCenter {
         if (this.gamedatas.map === 'big') {
             const space = 65;
             return [
-                165 + space * digit,
                 26 + space * number,
+                165 + space * digit,
             ];
         } else if (this.gamedatas.map === 'small') {
             const space = 60;
             return [
-                28 + space * number,
                 196 + space * digit,
+                28 + space * number,
             ];
         }
     }
@@ -120,5 +120,14 @@ class TableCenter {
         const toNumber = Math.floor(to / 10) - 1;
         const toDigit = (to % 10) - 1;
         return this.getCoordinatesFromNumberAndDigit((fromNumber + toNumber) / 2, (fromDigit + toDigit) / 2);
+    }
+
+    public getSide(position: number): 'left' | 'right' {
+        if (this.gamedatas.map === 'big') {
+            return this.getCoordinatesFromPosition(position)[0] > 370 ? 'right' : 'left';
+        } else if (this.gamedatas.map === 'small') {
+            // TODO handle angle
+            return this.getCoordinatesFromPosition(position)[0] > 370 ? 'right' : 'left';
+        }
     }
 }

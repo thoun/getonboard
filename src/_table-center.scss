@@ -119,10 +119,26 @@ $marker-size: 6px;
       }
     }
 
-    #pips {
+    .pips {
       position: absolute;
+      pointer-events: none;
+
+      &[data-side="left"] {
+        left: 0;
+      }
+      &[data-side="right"] {
+        right: 0;
+      }
+
+      &#pips-top {
+        top: 0;
+      }
+      &#pips-bottom {
+        bottom: 0;
+      }
 
       .pip {
+        position: relative;
         border: 5px ridge #e4273e;
         border-radius: 10px;
         overflow: hidden;

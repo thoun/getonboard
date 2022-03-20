@@ -168,6 +168,7 @@ interface NotifPlacedRouteArgs {
     playerId: number;
     marker: PlacedRoute;
     zones: number[];
+    position: number;
 } 
 
 interface NotifConfirmTurnArgs {

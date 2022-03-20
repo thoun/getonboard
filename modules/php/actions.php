@@ -76,6 +76,7 @@ trait ActionTrait {
             'player_name' => self::getActivePlayerName(),
             'marker' => PlacedRoute::forNotif($from, $to, false),
             'zones' => $zones,
+            'position' => $to,
         ]);
 
         if ($possibleRoute->isElimination) {

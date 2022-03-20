@@ -52,7 +52,7 @@ html, .mode_3d #game_play_area_background {
   width: 101px;
   height: 31px;
   display: inline-block;
-  background-size: auto 400%;
+  background-size: auto 500%;
   vertical-align: middle;
 }
 .shape[data-shape="[0,1]"] {
@@ -186,10 +186,24 @@ html, .mode_3d #game_play_area_background {
   width: 32px;
   height: 32px;
 }
-#center #map #pips {
+#center #map .pips {
   position: absolute;
+  pointer-events: none;
 }
-#center #map #pips .pip {
+#center #map .pips[data-side=left] {
+  left: 0;
+}
+#center #map .pips[data-side=right] {
+  right: 0;
+}
+#center #map .pips#pips-top {
+  top: 0;
+}
+#center #map .pips#pips-bottom {
+  bottom: 0;
+}
+#center #map .pips .pip {
+  position: relative;
   border: 5px ridge #e4273e;
   border-radius: 10px;
   overflow: hidden;

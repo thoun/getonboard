@@ -5,7 +5,8 @@
         <div id="map">
             <div id="map-elements">
             </div>
-            <div id="pips"></div>
+            <div id="pips-top" class="pips"></div>
+            <div id="pips-bottom" class="pips"></div>
         </div>
     </div>
     <div id="player-tables"></div>

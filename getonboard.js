@@ -312,15 +312,16 @@ var isDebug = window.location.host == 'studio.boardgamearena.com' || window.loca
 ;
 var log = isDebug ? console.log.bind(window.console) : function () { };
 var PlayerTable = /** @class */ (function () {
-    function PlayerTable(player, insertIn) {
-        if (insertIn === void 0) { insertIn = 'player-tables'; }
-        this.playerId = player.id;
+    function PlayerTable(player, id, insertIn) {
+        if (id === void 0) { id = player.id; }
+        if (insertIn === void 0) { insertIn = document.getElementById('player-tables'); }
+        this.playerId = id;
         var eliminated = Number(player.eliminated) > 0;
-        var html = "\n        <div id=\"player-table-".concat(player.id, "\" class=\"player-table ").concat(eliminated ? 'eliminated' : '', "\" style=\"box-shadow: 0 0 3px 3px #").concat(player.color, ";\">\n            <div id=\"player-table-").concat(player.id, "-top\" class=\"top\" data-type=\"").concat(player.sheetType, "\">\n            ");
+        var html = "\n        <div id=\"player-table-".concat(this.playerId, "\" class=\"player-table ").concat(eliminated ? 'eliminated' : '', "\" style=\"box-shadow: 0 0 3px 3px #").concat(player.color, ";\">\n            <div id=\"player-table-").concat(this.playerId, "-top\" class=\"top\" data-type=\"").concat(player.sheetType, "\">\n            ");
         for (var i = 1; i <= 12; i++) {
-            html += "\n                    <div id=\"player-table-".concat(player.id, "-top-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>");
+            html += "\n                    <div id=\"player-table-".concat(this.playerId, "-top-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>");
         }
-        html += " \n            </div>\n            <div id=\"player-table-".concat(player.id, "-main\" class=\"main\">\n                <div id=\"player-table-").concat(player.id, "-total-score\" class=\"total score\"></div>\n            </div>\n            <div class=\"name\" style=\"color: #").concat(player.color, ";\">").concat(player.name, "</div>\n            <div id=\"player-table-").concat(player.id, "-first-player-wrapper\" class=\"first-player-wrapper\"></div>\n        </div>\n        ");
+        html += " \n            </div>\n            <div id=\"player-table-".concat(this.playerId, "-main\" class=\"main\">\n                <div id=\"player-table-").concat(this.playerId, "-total-score\" class=\"total score\"></div>\n            </div>\n            <div class=\"name\" style=\"color: #").concat(player.color, ";\">").concat(player.name, "</div>\n            <div id=\"player-table-").concat(this.playerId, "-first-player-wrapper\" class=\"first-player-wrapper\"></div>\n        </div>\n        ");
         dojo.place(html, insertIn);
         this.oldLadies = new PlayerTableOldLadiesBlock(this.playerId, player.scoreSheets);
         this.students = new PlayerTableStudentsBlock(this.playerId, player.scoreSheets);
@@ -383,7 +384,7 @@ var TableCenter = /** @class */ (function () {
             if (departure > 0) {
                 html += " departure\" data-departure=".concat(departure);
             }
-            html += "\" style=\"top: ".concat(coordinates[0], "px; left: ").concat(coordinates[1], "px;\"></div>");
+            html += "\" style=\"left: ".concat(coordinates[0], "px; top: ").concat(coordinates[1], "px;\"></div>");
             dojo.place(html, mapElements);
             if (departure > 0) {
                 document.getElementById("intersection".concat(position)).addEventListener('click', function () { return _this.game.placeDeparturePawn(position); });
@@ -395,7 +396,7 @@ var TableCenter = /** @class */ (function () {
             var destinations = gamedatas.MAP_ROUTES[position];
             destinations.forEach(function (destination) {
                 var coordinates = _this.getCoordinatesFromPositions(position, destination);
-                var html = "<div id=\"route".concat(position, "-").concat(destination, "\" class=\"route\" style=\"top: ").concat(coordinates[0], "px; left: ").concat(coordinates[1], "px;\" data-direction=\"").concat(Math.abs(position - destination) <= 1 ? 0 : 1, "\"></div>");
+                var html = "<div id=\"route".concat(position, "-").concat(destination, "\" class=\"route\" style=\"left: ").concat(coordinates[0], "px; top: ").concat(coordinates[1], "px;\" data-direction=\"").concat(Math.abs(position - destination) <= 1 ? 0 : 1, "\"></div>");
                 dojo.place(html, mapElements);
                 document.getElementById("route".concat(position, "-").concat(destination)).addEventListener('click', function () { return _this.game.placeRoute(position, destination); });
             });
@@ -449,15 +450,15 @@ var TableCenter = /** @class */ (function () {
         if (this.gamedatas.map === 'big') {
             var space = 65;
             return [
-                165 + space * digit,
                 26 + space * number,
+                165 + space * digit,
             ];
         }
         else if (this.gamedatas.map === 'small') {
             var space = 60;
             return [
-                28 + space * number,
                 196 + space * digit,
+                28 + space * number,
             ];
         }
     };
@@ -473,6 +474,15 @@ var TableCenter = /** @class */ (function () {
         var toDigit = (to % 10) - 1;
         return this.getCoordinatesFromNumberAndDigit((fromNumber + toNumber) / 2, (fromDigit + toDigit) / 2);
     };
+    TableCenter.prototype.getSide = function (position) {
+        if (this.gamedatas.map === 'big') {
+            return this.getCoordinatesFromPosition(position)[0] > 370 ? 'right' : 'left';
+        }
+        else if (this.gamedatas.map === 'small') {
+            // TODO handle angle
+            return this.getCoordinatesFromPosition(position)[0] > 370 ? 'right' : 'left';
+        }
+    };
     return TableCenter;
 }());
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
@@ -485,28 +495,10 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 var ANIMATION_MS = 500;
-/*define('OLD_LADY', 20);
-
-define('STUDENT', 30);
-define('INTERNSHIP', 31);
-define('SCHOOL', 32);
-define('SCHOOL_SPECIAL', 35);
-
-define('TOURIST', 40);
-define('MONUMENT_LIGHT', 41);
-define('MONUMENT_DARK', 42);
-define('MONUMENT_LIGHT_SPECIAL', 45);
-define('MONUMENT_DARK_SPECIAL', 46);
-
-define('BUSINESSMAN', 50);
-define('OFFICE', 51);
-define('OFFICE_SPECIAL', 55);
-
-define('TURN_ZONES', 60);
-define('TRAFFIC_JAM', 70);*/
 var GetOnBoard = /** @class */ (function () {
     function GetOnBoard() {
         this.playersTables = [];
+        this.registeredTablesByPlayerId = [];
     }
     /*
         setup:
@@ -654,6 +646,7 @@ var GetOnBoard = /** @class */ (function () {
         var table = new PlayerTable(gamedatas.players[playerId]);
         table.setRound(gamedatas.validatedTickets, gamedatas.currentTicket);
         this.playersTables.push(table);
+        this.registeredTablesByPlayerId[playerId] = [table];
     };
     GetOnBoard.prototype.placeFirstPlayerToken = function (playerId) {
         var firstPlayerBoardToken = document.getElementById('firstPlayerBoardToken');
@@ -673,24 +666,33 @@ var GetOnBoard = /** @class */ (function () {
             this.addTooltipHtml('firstPlayerTableToken', _("Inspector pawn. This player is the first player of the round."));
         }
     };
-    GetOnBoard.prototype.getPlayerTable = function (playerId) {
-        return this.playersTables.find(function (playerTable) { return Number(playerTable.playerId) === playerId; });
-    };
     GetOnBoard.prototype.eliminatePlayer = function (playerId) {
         this.gamedatas.players[playerId].eliminated = 1;
         document.getElementById("overall_player_board_".concat(playerId)).classList.add('eliminated-player');
         dojo.addClass("player-table-".concat(playerId), 'eliminated');
     };
-    GetOnBoard.prototype.showZone = function (playerId, zone) {
-        dojo.place("<div class=\"pip\" id=\"pip-".concat(playerId, "-").concat(zone, "\"></div>"), 'pips');
-        new PlayerTable(this.gamedatas.players[playerId], "pip-".concat(playerId, "-").concat(zone));
-        var pipDiv = document.getElementById("pip-".concat(playerId, "-").concat(zone));
+    GetOnBoard.prototype.cutZone = function (pipDiv, zone) {
         var zoneDiv = pipDiv.querySelector("[data-zone=\"".concat(zone, "\"]"));
         var zoneStyle = window.getComputedStyle(zoneDiv);
         pipDiv.style.width = zoneStyle.width;
         pipDiv.style.height = zoneStyle.height;
         pipDiv.scrollTo(Number(zoneStyle.left.match(/\d+/)[0]), 77 + Number(zoneStyle.top.match(/\d+/)[0]));
-        setTimeout(function () { var _a; return (_a = pipDiv.parentElement) === null || _a === void 0 ? void 0 : _a.removeChild(pipDiv); }, 2000);
+    };
+    GetOnBoard.prototype.showZone = function (playerId, zone, position) {
+        var _this = this;
+        var pipSide = this.tableCenter.getSide(position) === 'left' ? 'right' : 'left';
+        Array.from(document.getElementsByClassName('pips')).forEach(function (pipDiv) { return pipDiv.dataset.side = pipSide; });
+        dojo.place("<div class=\"pip\" id=\"pip-".concat(playerId, "-").concat(zone, "\"></div>"), zone >= 6 ? 'pips-bottom' : 'pips-top');
+        var pipTable = new PlayerTable(this.gamedatas.players[playerId], "pip-".concat(playerId, "-").concat(zone), document.getElementById("pip-".concat(playerId, "-").concat(zone)));
+        this.registeredTablesByPlayerId[playerId].push(pipTable);
+        var pipDiv = document.getElementById("pip-".concat(playerId, "-").concat(zone));
+        this.cutZone(pipDiv, zone);
+        setTimeout(function () {
+            var _a;
+            var index = _this.registeredTablesByPlayerId[playerId].indexOf(pipTable);
+            _this.registeredTablesByPlayerId[playerId].splice(index, 1);
+            (_a = pipDiv.parentElement) === null || _a === void 0 ? void 0 : _a.removeChild(pipDiv);
+        }, 2000);
     };
     GetOnBoard.prototype.placeDeparturePawn = function (position) {
         if (!this.checkAction('placeDeparturePawn')) {
@@ -809,7 +811,7 @@ var GetOnBoard = /** @class */ (function () {
     GetOnBoard.prototype.notif_updateScoreSheet = function (notif) {
         var _a;
         var playerId = notif.args.playerId;
-        this.getPlayerTable(playerId).updateScoreSheet(notif.args.scoreSheets);
+        this.registeredTablesByPlayerId[playerId].forEach(function (table) { return table.updateScoreSheet(notif.args.scoreSheets); });
         (_a = this.scoreCtrl[playerId]) === null || _a === void 0 ? void 0 : _a.toValue(notif.args.scoreSheets.current.total);
     };
     GetOnBoard.prototype.notif_placedDeparturePawn = function (notif) {
@@ -819,7 +821,7 @@ var GetOnBoard = /** @class */ (function () {
         var _this = this;
         var playerId = notif.args.playerId;
         this.tableCenter.addMarker(playerId, notif.args.marker);
-        notif.args.zones.forEach(function (zone) { return _this.showZone(playerId, zone); });
+        notif.args.zones.forEach(function (zone) { return _this.showZone(playerId, zone, notif.args.position); });
     };
     GetOnBoard.prototype.notif_confirmTurn = function (notif) {
         var _this = this;
