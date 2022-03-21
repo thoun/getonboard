@@ -153,7 +153,8 @@ class GetOnBoard extends Table {
 
             if ($playerId === $currentPlayerId) {
                 $playerDb['personalObjective'] = $personalObjective;
-                $playerDb['personalObjectivePositions'] = $personalObjective == 0 ? null : $this->getPersonalObjectivePosition($personalObjective, $map);
+                $playerDb['personalObjectiveLetters'] = $personalObjective == 0 ? null : array_map(fn($code) => chr($code), $this->getPersonalObjectiveLetters($playerId));
+                $playerDb['personalObjectivePositions'] = $personalObjective == 0 ? null : $this->getPersonalObjectivePositions($personalObjective, $map);
             }
         }
   

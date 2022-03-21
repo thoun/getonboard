@@ -165,9 +165,15 @@ class GetOnBoard implements GetOnBoardGame {
             const playerId = Number(player.id);
             const eliminated = Number(player.eliminated) > 0;
 
-            if (playerId === this.getPlayerId()) {
-                dojo.place(`<div class="personal-objective-wrapper"><div id="panel-board-personal-objective" class="personal-objective" data-type="${player.personalObjective}"></div></div>`, `player_board_${player.id}`);
-                (this as any).addTooltipHtml('panel-board-personal-objective', _("Your personal objective"));
+            if (playerId === this.getPlayerId()) { // TODO use arrow to save expanded as option
+                let html = `<div class="personal-objective-wrapper" data-expanded="true">
+                    <div class="personal-objective collapsed">
+                        ${player.personalObjectiveLetters.map(letter => `<div class="letter">${letter}</div>`).join('')}
+                    </div>
+                    <div class="personal-objective expanded ${gamedatas.map}" data-type="${player.personalObjective}"></div>
+                </div>`;
+                dojo.place(html, `player_board_${player.id}`);
+                (this as any).addTooltipHtmlToClass('personal-objective', _("Your personal objective"));
             }
 
             if (eliminated) {
@@ -381,11 +387,11 @@ class GetOnBoard implements GetOnBoardGame {
 
     notif_newRound(notif: Notif<NotifNewRoundArgs>) {
         this.playersTables.forEach(playerTable => playerTable.setRound(notif.args.validatedTickets, notif.args.currentTicket));
+        this.roundNumberCounter.toValue(notif.args.roundNumber);
     }
 
     notif_newFirstPlayer(notif: Notif<NotifNewFirstPlayerArgs>) {
         this.placeFirstPlayerToken(notif.args.playerId);
-        this.roundNumberCounter.toValue(notif.args.roundNumber);
     }
 
     notif_updateScoreSheet(notif: Notif<NotifUpdateScoreSheetArgs>) {

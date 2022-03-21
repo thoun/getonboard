@@ -636,9 +636,10 @@ var GetOnBoard = /** @class */ (function () {
         Object.values(gamedatas.players).forEach(function (player) {
             var playerId = Number(player.id);
             var eliminated = Number(player.eliminated) > 0;
-            if (playerId === _this.getPlayerId()) {
-                dojo.place("<div class=\"personal-objective-wrapper\"><div id=\"panel-board-personal-objective\" class=\"personal-objective\" data-type=\"".concat(player.personalObjective, "\"></div></div>"), "player_board_".concat(player.id));
-                _this.addTooltipHtml('panel-board-personal-objective', _("Your personal objective"));
+            if (playerId === _this.getPlayerId()) { // TODO use arrow to save expanded as option
+                var html = "<div class=\"personal-objective-wrapper\" data-expanded=\"true\">\n                    <div class=\"personal-objective collapsed\">\n                        ".concat(player.personalObjectiveLetters.map(function (letter) { return "<div class=\"letter\">".concat(letter, "</div>"); }).join(''), "\n                    </div>\n                    <div class=\"personal-objective expanded ").concat(gamedatas.map, "\" data-type=\"").concat(player.personalObjective, "\"></div>\n                </div>");
+                dojo.place(html, "player_board_".concat(player.id));
+                _this.addTooltipHtmlToClass('personal-objective', _("Your personal objective"));
             }
             if (eliminated) {
                 setTimeout(function () { return _this.eliminatePlayer(playerId); }, 200);
@@ -822,10 +823,10 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.notif_newRound = function (notif) {
         this.playersTables.forEach(function (playerTable) { return playerTable.setRound(notif.args.validatedTickets, notif.args.currentTicket); });
+        this.roundNumberCounter.toValue(notif.args.roundNumber);
     };
     GetOnBoard.prototype.notif_newFirstPlayer = function (notif) {
         this.placeFirstPlayerToken(notif.args.playerId);
-        this.roundNumberCounter.toValue(notif.args.roundNumber);
     };
     GetOnBoard.prototype.notif_updateScoreSheet = function (notif) {
         var _a;

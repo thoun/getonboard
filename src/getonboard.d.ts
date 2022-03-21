@@ -86,6 +86,7 @@ interface GetOnBoardPlayer extends Player {
     sheetType: number;
     departurePosition: number;
     personalObjective?: number;
+    personalObjectiveLetters?: number[];
     personalObjectivePositions?: number[];
     scoreSheets: ScoreSheets;
     markers: PlacedRoute[];
@@ -140,13 +141,13 @@ interface EnteringPlaceRouteArgs {
 }
 
 interface NotifNewRoundArgs {
+    roundNumber: number;
     validatedTickets: number[];
     currentTicket: number | null;
 }
 
 interface NotifNewFirstPlayerArgs {
     playerId: number;
-    roundNumber: number;
 }
 
 interface NotifUpdateScoreSheetArgs {

@@ -5,11 +5,61 @@
   display: flex;
   justify-content: center;
 }
+.player-board .personal-objective-wrapper[data-expanded=true] .collapsed {
+  display: none;
+}
+.player-board .personal-objective-wrapper[data-expanded=false] .collapsed {
+  display: flex;
+}
+.player-board .personal-objective-wrapper[data-expanded=false] .expanded {
+  display: none;
+}
 .player-board .personal-objective-wrapper .personal-objective {
-  width: 150px;
-  height: 90px;
-  background: aquamarine;
   margin: 10px;
+}
+.player-board .personal-objective-wrapper .personal-objective.collapsed .letter {
+  border-radius: 50%;
+  background: black;
+  color: white;
+  width: 20px;
+  display: flex;
+  height: 20px;
+  justify-content: center;
+  align-items: center;
+  margin: 0 3px;
+}
+.player-board .personal-objective-wrapper .personal-objective.expanded {
+  background-size: auto 100%;
+  transform-origin: center center;
+}
+.player-board .personal-objective-wrapper .personal-objective.expanded.big {
+  width: 120px;
+  height: 86px;
+  background: url("img/personal-objectives-big.png");
+}
+.player-board .personal-objective-wrapper .personal-objective.expanded.small {
+  width: 86px;
+  height: 120px;
+  background: url("img/personal-objectives-small.png");
+}
+.player-board .personal-objective-wrapper .personal-objective.expanded[data-type="1"] {
+  background-position-x: 0%;
+}
+.player-board .personal-objective-wrapper .personal-objective.expanded[data-type="2"] {
+  background-position-x: 25%;
+}
+.player-board .personal-objective-wrapper .personal-objective.expanded[data-type="3"] {
+  background-position-x: 50%;
+}
+.player-board .personal-objective-wrapper .personal-objective.expanded[data-type="4"] {
+  background-position-x: 75%;
+}
+.player-board .personal-objective-wrapper .personal-objective.expanded[data-type="5"] {
+  background-position-x: 100%;
+}
+.player-board .personal-objective-wrapper .personal-objective.expanded:hover, .player-board .personal-objective-wrapper .personal-objective.expanded:active {
+  transform: scale(2);
+  z-index: 1;
 }
 .player-board.eliminated-player {
   background-color: #b9b9b9;

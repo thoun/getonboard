@@ -273,7 +273,7 @@ trait UtilTrait {
         $message = $currentTicket == null ? '' : clienttranslate('Round ${round}/12 starts!');
 
         $this->notifyAllPlayers('newRound', $message, [
-            'round' => count($validatedTickets) + 1,
+            'roundNumber' => count($validatedTickets) + 1,
             'validatedTickets' => $validatedTickets,
             'currentTicket' => $currentTicket,
         ]);
@@ -317,7 +317,7 @@ trait UtilTrait {
         }
     }
 
-    function getPersonalObjectivePosition(int $personalObjective, string $map) {
+    function getPersonalObjectivePositions(int $personalObjective, string $map) {
         $letters = $this->PERSONAL_OBJECTIVES[$map][$personalObjective];
         return array_map(
             fn($letter) => $this->array_find_key($this->MAP_POSITIONS[$map], fn($positionElements) => in_array($letter, $positionElements)),

@@ -6,13 +6,67 @@
   .personal-objective-wrapper {
     display: flex;
     justify-content: center;
-    .personal-objective {
-      width: 150px;
-      height: 90px;
-      background: aquamarine;
-      margin: 10px;
+
+    &[data-expanded="true"] {
+      .collapsed {
+        display: none;
+      }
     }
-  }
+    &[data-expanded="false"] {
+      .collapsed {
+        display: flex;
+      }
+      .expanded {
+        display: none;
+      }
+    }
+    
+    .personal-objective {
+      margin: 10px;
+
+      &.collapsed {
+        .letter {
+          border-radius: 50%;
+          background: black;
+          color: white;
+          width: 20px;
+          display: flex;
+          height: 20px;
+          justify-content: center;
+          align-items: center;
+          margin: 0 3px;
+        }
+      }
+
+      &.expanded {
+        background-size: auto 100%;
+        transform-origin: center center;
+  
+        &.big {
+          width: 120px;
+          height: 86px;
+          background: url('img/personal-objectives-big.png');
+        }
+        &.small {
+          width: 86px;
+          height: 120px;
+          background: url('img/personal-objectives-small.png');
+        }
+  
+        @for $i from 1 through 5 {
+          &[data-type="#{$i}"] {
+            background-position-x: #{($i - 1) * 25%};
+          }
+        }
+  
+        &:hover, &:active {
+          transform: scale(2);
+          z-index: 1;
+        }
+      }
+    }
+
+    }
 
   &.eliminated-player {
     background-color: #b9b9b9;
