@@ -31,16 +31,17 @@
 .player-board .personal-objective-wrapper .personal-objective.expanded {
   background-size: auto 100%;
   transform-origin: center center;
+  border-radius: 10px;
 }
 .player-board .personal-objective-wrapper .personal-objective.expanded.big {
   width: 120px;
-  height: 86px;
-  background: url("img/personal-objectives-big.png");
+  height: 84px;
+  background-image: url("img/personal-objectives-big.png");
 }
 .player-board .personal-objective-wrapper .personal-objective.expanded.small {
-  width: 86px;
+  width: 84px;
   height: 120px;
-  background: url("img/personal-objectives-small.png");
+  background-image: url("img/personal-objectives-small.png");
 }
 .player-board .personal-objective-wrapper .personal-objective.expanded[data-type="1"] {
   background-position-x: 0%;
@@ -95,6 +96,10 @@
   transform: rotate(45deg);
   clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
 }
+#center #map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter {
+  top: -13px;
+  right: -14px;
+}
 #center #map[data-size=small] #map-elements .route[data-direction="0"] {
   flex-direction: column;
 }
@@ -105,22 +110,22 @@
   width: 6px;
 }
 #center #map[data-size=small] #map-elements .common-objective-slot {
-  top: 374px;
+  top: 372px;
 }
 #center #map[data-size=small] #map-elements .common-objective-slot#common-objective-slot-1 {
-  left: -22px;
+  left: -9px;
 }
 #center #map[data-size=small] #map-elements .common-objective-slot#common-objective-slot-2 {
-  left: 88px;
+  left: 100px;
 }
 #center #map[data-size=small] #map-elements .ticket-slot {
-  top: 240px;
+  top: 241px;
 }
 #center #map[data-size=small] #map-elements .ticket-slot#ticket-slot-1 {
-  left: -22px;
+  left: -9px;
 }
 #center #map[data-size=small] #map-elements .ticket-slot#ticket-slot-2 {
-  left: 88px;
+  left: 100px;
 }
 #center #map[data-size=big] {
   background: url("img/map-big.jpg");
@@ -135,22 +140,22 @@
   height: 6px;
 }
 #center #map[data-size=big] #map-elements .common-objective-slot {
-  top: 3px;
+  top: 16px;
 }
 #center #map[data-size=big] #map-elements .common-objective-slot#common-objective-slot-1 {
-  left: 344px;
+  left: 356px;
 }
 #center #map[data-size=big] #map-elements .common-objective-slot#common-objective-slot-2 {
-  left: 459px;
+  left: 470px;
 }
 #center #map[data-size=big] #map-elements .ticket-slot {
-  top: 3px;
+  top: 16px;
 }
 #center #map[data-size=big] #map-elements .ticket-slot#ticket-slot-1 {
-  left: 138px;
+  left: 146px;
 }
 #center #map[data-size=big] #map-elements .ticket-slot#ticket-slot-2 {
-  left: 227px;
+  left: 241px;
 }
 #center #map #map-elements {
   width: 740px;
@@ -172,15 +177,22 @@
 }
 #center #map #map-elements .intersection .objective-letter {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
+}
+#center #map #map-elements .intersection.green-light .objective-letter {
+  top: -16px;
+  right: -8px;
+}
+#center #map #map-elements .intersection:not(.green-light) .objective-letter {
   top: -9px;
-  right: -6px;
+  right: -14px;
 }
 #center #map #map-elements .departure-pawn {
   width: 32px;
-  height: 32px;
+  height: 44px;
+  margin-top: -5px;
   mask: url("img/departure.svg") no-repeat center/contain;
   -webkit-mask: url("img/departure.svg") no-repeat center/contain;
 }
@@ -281,7 +293,7 @@
   position: absolute;
 }
 .common-objective-slot .common-objective {
-  width: 86px;
+  width: 84px;
   height: 120px;
 }
 .common-objective-slot .common-objective[id=common-objective-1] .card-side {
@@ -317,7 +329,7 @@
   position: absolute;
 }
 .ticket-slot .ticket {
-  width: 86px;
+  width: 84px;
   height: 120px;
 }
 .ticket-slot .ticket[data-ticket="1"] .back {
@@ -945,7 +957,7 @@
 }
 
 html, .mode_3d #game_play_area_background {
-  background: url("img/background.jpg") #102f50;
+  background: url("img/background.jpg") #f9f4e1;
   background-size: 100% auto;
   background-repeat: no-repeat;
 }

@@ -379,7 +379,7 @@ var TableCenter = /** @class */ (function () {
             var elements = gamedatas.MAP_POSITIONS[position];
             var departure = elements.find(function (element) { return element >= 1 && element <= 12; });
             var coordinates = _this.getCoordinatesFromPosition(position);
-            var html = "<div id=\"intersection".concat(position, "\" class=\"intersection");
+            var html = "<div id=\"intersection".concat(position, "\" class=\"intersection ").concat(elements.some(function (element) { return element == 0; }) ? 'green-light' : '');
             if (departure > 0) {
                 html += " departure\" data-departure=".concat(departure);
             }
@@ -456,17 +456,17 @@ var TableCenter = /** @class */ (function () {
     };
     TableCenter.prototype.getCoordinatesFromNumberAndDigit = function (number, digit) {
         if (this.gamedatas.map === 'big') {
-            var space = 65;
+            var space = 63.2;
             return [
-                26 + space * number,
-                165 + space * digit,
+                38 + space * number,
+                179 + space * digit,
             ];
         }
         else if (this.gamedatas.map === 'small') {
-            var space = 60;
+            var space = 57.4;
             return [
-                196 + space * digit,
-                28 + space * number,
+                203 + space * digit,
+                40 + space * number,
             ];
         }
     };

@@ -13,7 +13,7 @@ class TableCenter {
             const departure = elements.find(element => element >= 1 && element <= 12);
             const coordinates = this.getCoordinatesFromPosition(position);
 
-            let html = `<div id="intersection${position}" class="intersection`;
+            let html = `<div id="intersection${position}" class="intersection ${elements.some(element => element == 0) ? 'green-light' : ''}`;
             if (departure > 0) {
                 html += ` departure" data-departure=${departure}`;
             }
@@ -105,16 +105,16 @@ class TableCenter {
 
     private getCoordinatesFromNumberAndDigit(number: number, digit: number): number[] {
         if (this.gamedatas.map === 'big') {
-            const space = 65;
+            const space = 63.2;
             return [
-                26 + space * number,
-                165 + space * digit,
+                38 + space * number,
+                179 + space * digit,
             ];
         } else if (this.gamedatas.map === 'small') {
-            const space = 60;
+            const space = 57.4;
             return [
-                196 + space * digit,
-                28 + space * number,
+                203 + space * digit,
+                40 + space * number,
             ];
         }
     }

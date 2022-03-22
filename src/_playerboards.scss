@@ -41,16 +41,17 @@
       &.expanded {
         background-size: auto 100%;
         transform-origin: center center;
+        border-radius: 10px;
   
         &.big {
           width: 120px;
-          height: 86px;
-          background: url('img/personal-objectives-big.png');
+          height: 84px;
+          background-image: url('img/personal-objectives-big.png');
         }
         &.small {
-          width: 86px;
+          width: 84px;
           height: 120px;
-          background: url('img/personal-objectives-small.png');
+          background-image: url('img/personal-objectives-small.png');
         }
   
         @for $i from 1 through 5 {
