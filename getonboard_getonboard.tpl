@@ -5,6 +5,8 @@
         <div id="map">
             <div id="round-panel"></div>
             <div id="map-elements">
+                <div id="ticket-slot-1" class="ticket-slot"></div>
+                <div id="ticket-slot-2" class="ticket-slot"></div>
                 <div id="common-objective-slot-1" class="common-objective-slot"></div>
                 <div id="common-objective-slot-2" class="common-objective-slot"></div>
             </div>

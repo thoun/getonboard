@@ -238,15 +238,30 @@ trait UtilTrait {
     }
 
     function getRoundNumber() {
+        $stateId = intval($this->gamestate->state_id());
+        if ($stateId < ST_START_GAME) {
+            return 0;
+        }
+
         return intval($this->tickets->countCardInLocation('discard')) + 1;
     }
 
     function getValidatedTicketsForRound() {
+        $stateId = intval($this->gamestate->state_id());
+        if ($stateId < ST_START_GAME) {
+            return [];
+        }
+
         $tickets = $this->getCardsFromDb($this->tickets->getCardsInLocation('discard'));
         return array_map(fn($ticket) => $ticket->type, $tickets);
     }
 
     function getCurrentTicketForRound() {
+        $stateId = intval($this->gamestate->state_id());
+        if ($stateId < ST_START_GAME) {
+            return null;
+        }
+
         $tickets = $this->getCardsFromDb($this->tickets->getCardsInLocation('turn'));
         return count($tickets) > 0 ? $tickets[0]->type : null;
     }
@@ -273,7 +288,7 @@ trait UtilTrait {
         $message = $currentTicket == null ? '' : clienttranslate('Round ${round}/12 starts!');
 
         $this->notifyAllPlayers('newRound', $message, [
-            'roundNumber' => count($validatedTickets) + 1,
+            'round' => count($validatedTickets) + 1,
             'validatedTickets' => $validatedTickets,
             'currentTicket' => $currentTicket,
         ]);

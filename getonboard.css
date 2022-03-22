@@ -113,6 +113,15 @@
 #center #map[data-size=small] #map-elements .common-objective-slot#common-objective-slot-2 {
   left: 88px;
 }
+#center #map[data-size=small] #map-elements .ticket-slot {
+  top: 240px;
+}
+#center #map[data-size=small] #map-elements .ticket-slot#ticket-slot-1 {
+  left: -22px;
+}
+#center #map[data-size=small] #map-elements .ticket-slot#ticket-slot-2 {
+  left: 88px;
+}
 #center #map[data-size=big] {
   background: url("img/map-big.jpg");
 }
@@ -133,6 +142,15 @@
 }
 #center #map[data-size=big] #map-elements .common-objective-slot#common-objective-slot-2 {
   left: 459px;
+}
+#center #map[data-size=big] #map-elements .ticket-slot {
+  top: 3px;
+}
+#center #map[data-size=big] #map-elements .ticket-slot#ticket-slot-1 {
+  left: 138px;
+}
+#center #map[data-size=big] #map-elements .ticket-slot#ticket-slot-2 {
+  left: 227px;
 }
 #center #map #map-elements {
   width: 740px;
@@ -302,51 +320,48 @@
   width: 86px;
   height: 120px;
 }
-.ticket-slot .ticket[data-side="1"][data-ticket="1"] .card-side {
+.ticket-slot .ticket[data-ticket="1"] .back {
   background-position-x: 8.3333333333%;
 }
-.ticket-slot .ticket[data-side="1"][data-ticket="2"] .card-side {
+.ticket-slot .ticket[data-ticket="2"] .back {
   background-position-x: 16.6666666667%;
 }
-.ticket-slot .ticket[data-side="1"][data-ticket="3"] .card-side {
+.ticket-slot .ticket[data-ticket="3"] .back {
   background-position-x: 25%;
 }
-.ticket-slot .ticket[data-side="1"][data-ticket="4"] .card-side {
+.ticket-slot .ticket[data-ticket="4"] .back {
   background-position-x: 33.3333333333%;
 }
-.ticket-slot .ticket[data-side="1"][data-ticket="5"] .card-side {
+.ticket-slot .ticket[data-ticket="5"] .back {
   background-position-x: 41.6666666667%;
 }
-.ticket-slot .ticket[data-side="1"][data-ticket="6"] .card-side {
+.ticket-slot .ticket[data-ticket="6"] .back {
   background-position-x: 50%;
 }
-.ticket-slot .ticket[data-side="1"][data-ticket="7"] .card-side {
+.ticket-slot .ticket[data-ticket="7"] .back {
   background-position-x: 58.3333333333%;
 }
-.ticket-slot .ticket[data-side="1"][data-ticket="8"] .card-side {
+.ticket-slot .ticket[data-ticket="8"] .back {
   background-position-x: 66.6666666667%;
 }
-.ticket-slot .ticket[data-side="1"][data-ticket="9"] .card-side {
+.ticket-slot .ticket[data-ticket="9"] .back {
   background-position-x: 75%;
 }
-.ticket-slot .ticket[data-side="1"][data-ticket="10"] .card-side {
+.ticket-slot .ticket[data-ticket="10"] .back {
   background-position-x: 83.3333333333%;
 }
-.ticket-slot .ticket[data-side="1"][data-ticket="11"] .card-side {
+.ticket-slot .ticket[data-ticket="11"] .back {
   background-position-x: 91.6666666667%;
 }
-.ticket-slot .ticket[data-side="1"][data-ticket="12"] .card-side {
+.ticket-slot .ticket[data-ticket="12"] .back {
   background-position-x: 100%;
 }
 .ticket-slot .ticket .card-side {
-  background: url("img/common-objectives.png");
-  background-size: auto 200%;
+  background: url("img/tickets.png");
+  background-size: auto 100%;
 }
 .ticket-slot .ticket .card-side.front {
-  background-position-y: 0%;
-}
-.ticket-slot .ticket .card-side.back {
-  background-position-y: 100%;
+  background-position-x: 0%;
 }
 
 .card-inner {

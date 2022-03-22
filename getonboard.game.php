@@ -80,7 +80,7 @@ class GetOnBoard extends Table {
         $sql = "INSERT INTO player (player_id, player_color, player_canal, player_name, player_avatar, player_sheet_type, player_personal_objective) VALUES ";
         $values = [];
         foreach($players as $player_id => $player) {
-            $color = array_shift( $default_colors );
+            $color = array_shift($default_colors);
 
             $sheetTypeIndex = bga_rand(0, count($sheetTypes) - 1);
             $sheetType = array_splice($sheetTypes, $sheetTypeIndex, 1)[0];

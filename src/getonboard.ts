@@ -369,7 +369,7 @@ class GetOnBoard implements GetOnBoardGame {
         //log( 'notifications subscriptions setup' );
 
         const notifs = [
-            ['newRound', 1],
+            ['newRound', ANIMATION_MS],
             ['newFirstPlayer', ANIMATION_MS],
             ['placedRoute', ANIMATION_MS],
             ['confirmTurn', ANIMATION_MS],
@@ -386,8 +386,9 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     notif_newRound(notif: Notif<NotifNewRoundArgs>) {
+        this.tableCenter.setRound(notif.args.validatedTickets, notif.args.currentTicket);
         this.playersTables.forEach(playerTable => playerTable.setRound(notif.args.validatedTickets, notif.args.currentTicket));
-        this.roundNumberCounter.toValue(notif.args.roundNumber);
+        this.roundNumberCounter.toValue(notif.args.round);
     }
 
     notif_newFirstPlayer(notif: Notif<NotifNewFirstPlayerArgs>) {

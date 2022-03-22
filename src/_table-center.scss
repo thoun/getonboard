@@ -41,6 +41,17 @@ $marker-size: 6px;
             left: 88px;
           }
         }
+
+        .ticket-slot {
+          top: 240px;
+
+          &#ticket-slot-1 {
+            left: -22px;
+          }
+          &#ticket-slot-2 {
+            left: 88px;
+          }
+        }
       }
       
     }
@@ -71,6 +82,17 @@ $marker-size: 6px;
           }
           &#common-objective-slot-2 {
             left: 459px;
+          }
+        }
+
+        .ticket-slot {
+          top: 3px;
+
+          &#ticket-slot-1 {
+            left: 138px;
+          }
+          &#ticket-slot-2 {
+            left: 227px;
           }
         }
       }
@@ -259,21 +281,17 @@ $marker-size: 6px;
     height: 120px;
 
     @for $i from 1 through 12 {
-      &[data-side="1"][data-ticket="#{$i}"] .card-side {
+      &[data-ticket="#{$i}"] .back {
         background-position-x: #{$i * 100% / 12};
       }
     }
     
     .card-side {
-      background: url('img/common-objectives.png');
-      background-size: auto 200%;
+      background: url('img/tickets.png');
+      background-size: auto 100%;
     
       &.front {
-        background-position-y: 0%;
-      }
-      
-      &.back {
-        background-position-y: 100%;
+        background-position-x: 0%;
       }
     }
   }

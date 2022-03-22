@@ -1,5 +1,4 @@
-function slideToObjectAndAttach(game, object, destinationId, posX, posY, rotation) {
-    if (rotation === void 0) { rotation = 0; }
+function slideToObjectAndAttach(game, object, destinationId, posX, posY, keepTransform) {
     var destination = document.getElementById(destinationId);
     if (destination.contains(object)) {
         return Promise.resolve(true);
@@ -16,7 +15,7 @@ function slideToObjectAndAttach(game, object, destinationId, posX, posY, rotatio
             object.style.left = posX !== undefined ? "".concat(posX, "px") : 'unset';
             object.style.position = (posX !== undefined || posY !== undefined) ? 'absolute' : 'relative';
             object.style.zIndex = originalZIndex ? '' + originalZIndex : 'unset';
-            object.style.transform = rotation ? "rotate(".concat(rotation, "deg)") : 'unset';
+            object.style.transform = keepTransform !== null && keepTransform !== void 0 ? keepTransform : 'unset';
             object.style.transition = 'unset';
             destination.appendChild(object);
         };
@@ -26,7 +25,7 @@ function slideToObjectAndAttach(game, object, destinationId, posX, posY, rotatio
         }
         else {
             object.style.transition = "transform 0.5s ease-in";
-            object.style.transform = "translate(".concat(deltaX, "px, ").concat(deltaY, "px) rotate(").concat(rotation, "deg)");
+            object.style.transform = "translate(".concat(deltaX, "px, ").concat(deltaY, "px) ").concat(keepTransform !== null && keepTransform !== void 0 ? keepTransform : '');
             var securityTimeoutId_1 = null;
             var transitionend_1 = function () {
                 attachToNewParent();
@@ -412,6 +411,8 @@ var TableCenter = /** @class */ (function () {
         currentPlayer === null || currentPlayer === void 0 ? void 0 : currentPlayer.personalObjectivePositions.forEach(function (position) {
             return dojo.place("<div class=\"objective-letter\" style=\"box-shadow: 0 0 5px 5px #".concat(currentPlayer.color, ";\"></div>"), "intersection".concat(position));
         });
+        // tickets
+        this.setRound(gamedatas.validatedTickets, gamedatas.currentTicket, true);
     }
     TableCenter.prototype.addDeparturePawn = function (playerId, position) {
         dojo.place("<div id=\"departure-pawn-".concat(playerId, "\" class=\"departure-pawn\" style=\"background: #").concat(this.game.getPlayerColor(playerId), ";\"></div>"), "intersection".concat(position));
@@ -492,6 +493,22 @@ var TableCenter = /** @class */ (function () {
     };
     TableCenter.prototype.placeCommonObjective = function (objective) {
         dojo.place("<div id=\"common-objective-".concat(objective.id, "\" class=\"common-objective card-inner\" data-side=\"").concat(objective.completed ? '1' : '0', "\">\n            <div class=\"card-side front\"></div>\n            <div class=\"card-side back\"></div>\n        </div>"), "common-objective-slot-".concat(objective.number));
+    };
+    TableCenter.prototype.setRound = function (validatedTickets, currentTicket, initialization) {
+        if (initialization === void 0) { initialization = false; }
+        var roundNumber = validatedTickets.length + (!currentTicket ? 0 : 1);
+        if (initialization) {
+            for (var i = 1; i <= 12; i++) {
+                var visible = i <= roundNumber;
+                dojo.place("<div id=\"ticket-".concat(i, "\" class=\"ticket card-inner\" data-side=\"").concat(visible ? '1' : '0', "\" data-ticket=\"").concat(i === roundNumber ? currentTicket : 0, "\">\n                    <div class=\"card-side front\"></div>\n                    <div class=\"card-side back\"></div>\n                </div>"), "ticket-slot-".concat(visible ? 2 : 1));
+            }
+        }
+        else {
+            var roundTicketDiv = document.getElementById("ticket-".concat(roundNumber));
+            roundTicketDiv.dataset.ticket = "".concat(currentTicket);
+            slideToObjectAndAttach(this.game, roundTicketDiv, "ticket-slot-2", 0, 0, "rotateY(180deg)");
+            roundTicketDiv.dataset.side = "1";
+        }
     };
     return TableCenter;
 }());
@@ -807,7 +824,7 @@ var GetOnBoard = /** @class */ (function () {
         //log( 'notifications subscriptions setup' );
         var _this = this;
         var notifs = [
-            ['newRound', 1],
+            ['newRound', ANIMATION_MS],
             ['newFirstPlayer', ANIMATION_MS],
             ['placedRoute', ANIMATION_MS],
             ['confirmTurn', ANIMATION_MS],
@@ -822,8 +839,9 @@ var GetOnBoard = /** @class */ (function () {
         });
     };
     GetOnBoard.prototype.notif_newRound = function (notif) {
+        this.tableCenter.setRound(notif.args.validatedTickets, notif.args.currentTicket);
         this.playersTables.forEach(function (playerTable) { return playerTable.setRound(notif.args.validatedTickets, notif.args.currentTicket); });
-        this.roundNumberCounter.toValue(notif.args.roundNumber);
+        this.roundNumberCounter.toValue(notif.args.round);
     };
     GetOnBoard.prototype.notif_newFirstPlayer = function (notif) {
         this.placeFirstPlayerToken(notif.args.playerId);

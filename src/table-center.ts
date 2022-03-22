@@ -53,6 +53,9 @@ class TableCenter {
         currentPlayer?.personalObjectivePositions.forEach(position => 
             dojo.place(`<div class="objective-letter" style="box-shadow: 0 0 5px 5px #${currentPlayer.color};"></div>`, `intersection${position}`)
         );
+
+        // tickets
+        this.setRound(gamedatas.validatedTickets, gamedatas.currentTicket, true);
     }
 
     public addDeparturePawn(playerId: number, position: number) {
@@ -145,5 +148,23 @@ class TableCenter {
             <div class="card-side front"></div>
             <div class="card-side back"></div>
         </div>`, `common-objective-slot-${objective.number}`);
+    }
+
+    public setRound(validatedTickets: number[], currentTicket: number, initialization: boolean = false) {
+        const roundNumber = validatedTickets.length + (!currentTicket ? 0 : 1);
+        if (initialization) {
+            for(let i=1; i<=12; i++) {
+                const visible = i <= roundNumber;
+                dojo.place(`<div id="ticket-${i}" class="ticket card-inner" data-side="${visible ? '1' : '0'}" data-ticket="${i === roundNumber ? currentTicket : 0}">
+                    <div class="card-side front"></div>
+                    <div class="card-side back"></div>
+                </div>`, `ticket-slot-${visible ? 2 : 1}`);
+            }
+        } else {
+            const roundTicketDiv = document.getElementById(`ticket-${roundNumber}`);
+            roundTicketDiv.dataset.ticket = `${currentTicket}`;
+            slideToObjectAndAttach(this.game, roundTicketDiv, `ticket-slot-2`, 0, 0, `rotateY(180deg)`);
+            roundTicketDiv.dataset.side = `1`;
+        }
     }
 }

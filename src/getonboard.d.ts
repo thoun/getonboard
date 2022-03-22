@@ -141,7 +141,7 @@ interface EnteringPlaceRouteArgs {
 }
 
 interface NotifNewRoundArgs {
-    roundNumber: number;
+    round: number;
     validatedTickets: number[];
     currentTicket: number | null;
 }

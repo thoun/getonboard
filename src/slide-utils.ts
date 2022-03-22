@@ -1,4 +1,4 @@
-function slideToObjectAndAttach(game: GetOnBoardGame, object: HTMLElement, destinationId: string, posX?: number, posY?: number, rotation: number = 0): Promise<boolean> {
+function slideToObjectAndAttach(game: GetOnBoardGame, object: HTMLElement, destinationId: string, posX?: number, posY?: number, keepTransform?: string): Promise<boolean> {
     const destination = document.getElementById(destinationId);
     if (destination.contains(object)) {
         return Promise.resolve(true);
@@ -19,7 +19,7 @@ function slideToObjectAndAttach(game: GetOnBoardGame, object: HTMLElement, desti
             object.style.left = posX !== undefined ? `${posX}px` : 'unset';
             object.style.position = (posX !== undefined || posY !== undefined) ? 'absolute' : 'relative';
             object.style.zIndex = originalZIndex ? ''+originalZIndex : 'unset';
-            object.style.transform = rotation ? `rotate(${rotation}deg)` : 'unset';
+            object.style.transform = keepTransform ?? 'unset';
             object.style.transition = 'unset';
             destination.appendChild(object);
         }
@@ -29,7 +29,7 @@ function slideToObjectAndAttach(game: GetOnBoardGame, object: HTMLElement, desti
             attachToNewParent();
         } else {
             object.style.transition = `transform 0.5s ease-in`;
-            object.style.transform = `translate(${deltaX}px, ${deltaY}px) rotate(${rotation}deg)`;
+            object.style.transform = `translate(${deltaX}px, ${deltaY}px) ${keepTransform ?? ''}`;
 
             let securityTimeoutId = null;
 
