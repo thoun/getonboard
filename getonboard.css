@@ -93,8 +93,8 @@
   background: url("img/map-small.jpg");
 }
 #center #map[data-size=small] #map-elements {
-  transform: rotate(45deg);
-  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+  transform: rotate(45deg) translate(-10px, 20px);
+  clip-path: polygon(30% 0%, 75% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
 }
 #center #map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter {
   top: -13px;
@@ -110,22 +110,22 @@
   width: 6px;
 }
 #center #map[data-size=small] #map-elements .common-objective-slot {
-  top: 372px;
+  top: 352px;
 }
 #center #map[data-size=small] #map-elements .common-objective-slot#common-objective-slot-1 {
-  left: -9px;
+  left: 1px;
 }
 #center #map[data-size=small] #map-elements .common-objective-slot#common-objective-slot-2 {
-  left: 100px;
+  left: 110px;
 }
 #center #map[data-size=small] #map-elements .ticket-slot {
-  top: 241px;
+  top: 221px;
 }
 #center #map[data-size=small] #map-elements .ticket-slot#ticket-slot-1 {
-  left: -9px;
+  left: 1px;
 }
 #center #map[data-size=small] #map-elements .ticket-slot#ticket-slot-2 {
-  left: 100px;
+  left: 110px;
 }
 #center #map[data-size=big] {
   background: url("img/map-big.jpg");

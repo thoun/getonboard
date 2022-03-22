@@ -13,8 +13,8 @@ $marker-size: 6px;
       background: url('img/map-small.jpg');
       
       #map-elements {
-        transform: rotate(45deg);
-        clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+        transform: rotate(45deg) translate(-10px, 20px);
+        clip-path: polygon(30% 0%, 75% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
 
         .intersection:not(.green-light) {
           .objective-letter {
@@ -39,24 +39,24 @@ $marker-size: 6px;
         }
 
         .common-objective-slot {
-          top: 372px;
+          top: 352px;
 
           &#common-objective-slot-1 {
-            left: -9px;
+            left: 1px;
           }
           &#common-objective-slot-2 {
-            left: 100px;
+            left: 110px;
           }
         }
 
         .ticket-slot {
-          top: 241px;
+          top: 221px;
 
           &#ticket-slot-1 {
-            left: -9px;
+            left: 1px;
           }
           &#ticket-slot-2 {
-            left: 100px;
+            left: 110px;
           }
         }
       }

@@ -465,8 +465,8 @@ var TableCenter = /** @class */ (function () {
         else if (this.gamedatas.map === 'small') {
             var space = 57.4;
             return [
-                203 + space * digit,
-                40 + space * number,
+                213 + space * digit,
+                20 + space * number,
             ];
         }
     };
