@@ -737,8 +737,9 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.placeRoute = function (from, to) {
         var _this = this;
+        var _a;
         var args = this.gamedatas.gamestate.args;
-        var route = args.possibleRoutes.find(function (r) { return (r.from === from && r.to === to) || (r.from === to && r.to === from); });
+        var route = (_a = args.possibleRoutes) === null || _a === void 0 ? void 0 : _a.find(function (r) { return (r.from === from && r.to === to) || (r.from === to && r.to === from); });
         if (!route) {
             return;
         }

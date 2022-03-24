@@ -272,7 +272,7 @@ class GetOnBoard implements GetOnBoardGame {
     public placeRoute(from: number, to: number) {
 
         const args: EnteringPlaceRouteArgs = this.gamedatas.gamestate.args;
-        const route = args.possibleRoutes.find(r => (r.from === from && r.to === to) || (r.from === to && r.to === from));
+        const route = args.possibleRoutes?.find(r => (r.from === from && r.to === to) || (r.from === to && r.to === from));
         if (!route) {
             return;
         }
