@@ -3,7 +3,8 @@
 .player-board {
   background-color: white;
 
-  .personal-objective-wrapper {
+  #personal-objective-wrapper {
+    position: relative;
     display: flex;
     justify-content: center;
 
@@ -19,10 +20,28 @@
       .expanded {
         display: none;
       }
+      .arrow {        
+        transform: rotate(180deg);
+      }
+    }
+
+    .arrow {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 32px;
+      height: 32px;
+      background: url('img/fold.svg');
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+      cursor: pointer;
+      transition: transform 0.5s;
     }
     
     .personal-objective {
       margin: 10px;
+      user-select: none;
 
       &.collapsed {
         .letter {
@@ -76,7 +95,7 @@
       text-decoration: line-through;
     }
 
-    .personal-objective-wrapper {
+    #personal-objective-wrapper {
       display: none;
     }
   }

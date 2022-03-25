@@ -57,6 +57,10 @@ class GetOnBoard implements GetOnBoardGame {
 
         this.setupNotifications();
 
+        try {
+            (document.getElementById('preference_control_203').closest(".preference_choice") as HTMLDivElement).style.display = 'none';
+        } catch (e) {}
+
         log( "Ending game setup" );
     }
 
@@ -168,15 +172,28 @@ class GetOnBoard implements GetOnBoardGame {
             const playerId = Number(player.id);
             const eliminated = Number(player.eliminated) > 0;
 
-            if (playerId === this.getPlayerId()) { // TODO use arrow to save expanded as option
-                let html = `<div class="personal-objective-wrapper" data-expanded="true">
+            if (playerId === this.getPlayerId()) {
+                let html = `<div id="personal-objective-wrapper" data-expanded="${((this as any).prefs[203]?.value != 2).toString()}">
                     <div class="personal-objective collapsed">
                         ${player.personalObjectiveLetters.map(letter => `<div class="letter">${letter}</div>`).join('')}
                     </div>
                     <div class="personal-objective expanded ${gamedatas.map}" data-type="${player.personalObjective}"></div>
+                    <div id="toggle-objective-expand" class="arrow"></div>
                 </div>`;
                 dojo.place(html, `player_board_${player.id}`);
+
                 (this as any).addTooltipHtmlToClass('personal-objective', _("Your personal objective"));
+
+                document.getElementById('toggle-objective-expand').addEventListener('click', () => {
+                    const wrapper = document.getElementById(`personal-objective-wrapper`);
+                    const expanded = wrapper.dataset.expanded === 'true';
+                    wrapper.dataset.expanded = (!expanded).toString();
+
+                    const select = document.getElementById('preference_control_203') as HTMLSelectElement;
+                    select.value = expanded ? '2' : '1';
+                    var event = new Event('change');
+                    select.dispatchEvent(event);
+                });
             }
 
             if (eliminated) {

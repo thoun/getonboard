@@ -560,6 +560,10 @@ var GetOnBoard = /** @class */ (function () {
         this.roundNumberCounter.create("round-number-counter");
         this.roundNumberCounter.setValue(gamedatas.roundNumber);
         this.setupNotifications();
+        try {
+            document.getElementById('preference_control_203').closest(".preference_choice").style.display = 'none';
+        }
+        catch (e) { }
         log("Ending game setup");
     };
     ///////////////////////////////////////////////////
@@ -653,12 +657,22 @@ var GetOnBoard = /** @class */ (function () {
     GetOnBoard.prototype.createPlayerPanels = function (gamedatas) {
         var _this = this;
         Object.values(gamedatas.players).forEach(function (player) {
+            var _a;
             var playerId = Number(player.id);
             var eliminated = Number(player.eliminated) > 0;
-            if (playerId === _this.getPlayerId()) { // TODO use arrow to save expanded as option
-                var html = "<div class=\"personal-objective-wrapper\" data-expanded=\"true\">\n                    <div class=\"personal-objective collapsed\">\n                        ".concat(player.personalObjectiveLetters.map(function (letter) { return "<div class=\"letter\">".concat(letter, "</div>"); }).join(''), "\n                    </div>\n                    <div class=\"personal-objective expanded ").concat(gamedatas.map, "\" data-type=\"").concat(player.personalObjective, "\"></div>\n                </div>");
+            if (playerId === _this.getPlayerId()) {
+                var html = "<div id=\"personal-objective-wrapper\" data-expanded=\"".concat((((_a = _this.prefs[203]) === null || _a === void 0 ? void 0 : _a.value) != 2).toString(), "\">\n                    <div class=\"personal-objective collapsed\">\n                        ").concat(player.personalObjectiveLetters.map(function (letter) { return "<div class=\"letter\">".concat(letter, "</div>"); }).join(''), "\n                    </div>\n                    <div class=\"personal-objective expanded ").concat(gamedatas.map, "\" data-type=\"").concat(player.personalObjective, "\"></div>\n                    <div id=\"toggle-objective-expand\" class=\"arrow\"></div>\n                </div>");
                 dojo.place(html, "player_board_".concat(player.id));
                 _this.addTooltipHtmlToClass('personal-objective', _("Your personal objective"));
+                document.getElementById('toggle-objective-expand').addEventListener('click', function () {
+                    var wrapper = document.getElementById("personal-objective-wrapper");
+                    var expanded = wrapper.dataset.expanded === 'true';
+                    wrapper.dataset.expanded = (!expanded).toString();
+                    var select = document.getElementById('preference_control_203');
+                    select.value = expanded ? '2' : '1';
+                    var event = new Event('change');
+                    select.dispatchEvent(event);
+                });
             }
             if (eliminated) {
                 setTimeout(function () { return _this.eliminatePlayer(playerId); }, 200);
