@@ -73,7 +73,7 @@ trait ActionTrait {
         
         self::notifyAllPlayers('placedRoute', clienttranslate('${player_name} places a route marker'), [
             'playerId' => $playerId,
-            'player_name' => self::getActivePlayerName(),
+            'player_name' => $this->getPlayerName($playerId),
             'marker' => PlacedRoute::forNotif($from, $to, false),
             'zones' => $zones,
             'position' => $to,

@@ -612,9 +612,11 @@ var GetOnBoard = /** @class */ (function () {
         if (this.isCurrentPlayerActive()) {
             switch (stateName) {
                 case 'placeDeparturePawn':
-                    var placeDeparturePawnArgs = args;
-                    placeDeparturePawnArgs._private.positions.forEach(function (position) {
-                        return document.getElementById("intersection".concat(position)).classList.add('selectable');
+                    var placeDeparturePawnArgs_1 = args;
+                    placeDeparturePawnArgs_1._private.positions.forEach(function (position, index) {
+                        document.getElementById("intersection".concat(position)).classList.add('selectable');
+                        var ticketDiv = "<div class=\"ticket\" data-ticket=\"".concat(placeDeparturePawnArgs_1._private.tickets[index], "\"></div>");
+                        _this.addActionButton("placeDeparturePawn".concat(position, "_button"), dojo.string.substitute(_("Start at ${ticket}"), { ticket: ticketDiv }), function () { return _this.placeDeparturePawn(position); });
                     });
                     break;
                 case 'placeRoute':

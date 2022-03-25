@@ -118,9 +118,12 @@ class GetOnBoard implements GetOnBoardGame {
             switch (stateName) {
                 case 'placeDeparturePawn':
                     const placeDeparturePawnArgs = args as EnteringPlaceDeparturePawnArgs;
-                    placeDeparturePawnArgs._private.positions.forEach(position => 
-                        document.getElementById(`intersection${position}`).classList.add('selectable')
-                    );
+                    placeDeparturePawnArgs._private.positions.forEach((position, index) => {
+                        document.getElementById(`intersection${position}`).classList.add('selectable');
+                        
+                        const ticketDiv = `<div class="ticket" data-ticket="${placeDeparturePawnArgs._private.tickets[index]}"></div>`;
+                        (this as any).addActionButton(`placeDeparturePawn${position}_button`, dojo.string.substitute(_("Start at ${ticket}"), {ticket: ticketDiv}), () => this.placeDeparturePawn(position));
+                    });
                     break;
                 case 'placeRoute':
                     (this as any).addActionButton(`confirmTurn_button`, _("Confirm turn"), () => this.confirmTurn());

@@ -251,10 +251,10 @@
 
 @keyframes highlight-intersection-animation {
   0% {
-    box-shadow: 0 0 20px 10px white;
+    box-shadow: 0 0 10px 10px white;
   }
   100% {
-    box-shadow: 0 0 30px 15px white;
+    box-shadow: 0 0 15px 15px white;
   }
 }
 @keyframes highlight-route-clean-animation {
@@ -1037,4 +1037,53 @@ html, .mode_3d #game_play_area_background {
   font-size: 85%;
   right: -120px;
   color: white;
+}
+
+#page-title .ticket {
+  display: inline-block;
+  width: 42px;
+  height: 60px;
+  background: url("img/tickets.png");
+  background-size: auto 100%;
+  border-radius: 4px;
+  transform-origin: center;
+  transform: rotate(-90deg);
+  vertical-align: middle;
+  margin: -10px 10px;
+}
+#page-title .ticket[data-ticket="1"] {
+  background-position-x: 8.3333333333%;
+}
+#page-title .ticket[data-ticket="2"] {
+  background-position-x: 16.6666666667%;
+}
+#page-title .ticket[data-ticket="3"] {
+  background-position-x: 25%;
+}
+#page-title .ticket[data-ticket="4"] {
+  background-position-x: 33.3333333333%;
+}
+#page-title .ticket[data-ticket="5"] {
+  background-position-x: 41.6666666667%;
+}
+#page-title .ticket[data-ticket="6"] {
+  background-position-x: 50%;
+}
+#page-title .ticket[data-ticket="7"] {
+  background-position-x: 58.3333333333%;
+}
+#page-title .ticket[data-ticket="8"] {
+  background-position-x: 66.6666666667%;
+}
+#page-title .ticket[data-ticket="9"] {
+  background-position-x: 75%;
+}
+#page-title .ticket[data-ticket="10"] {
+  background-position-x: 83.3333333333%;
+}
+#page-title .ticket[data-ticket="11"] {
+  background-position-x: 91.6666666667%;
+}
+#page-title .ticket[data-ticket="12"] {
+  background-position-x: 100%;
 }
