@@ -163,7 +163,7 @@ class TableCenter {
         } else {
             const roundTicketDiv = document.getElementById(`ticket-${roundNumber}`);
             roundTicketDiv.dataset.ticket = `${currentTicket}`;
-            slideToObjectAndAttach(this.game, roundTicketDiv, `ticket-slot-2`, 0, 0, `rotateY(180deg)`);
+            slideToObjectTicketSlot2(this.game, roundTicketDiv, `ticket-slot-2`, `rotateY(180deg)`);
             roundTicketDiv.dataset.side = `1`;
         }
     }

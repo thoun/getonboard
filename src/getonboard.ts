@@ -182,7 +182,7 @@ class GetOnBoard implements GetOnBoardGame {
                 </div>`;
                 dojo.place(html, `player_board_${player.id}`);
 
-                (this as any).addTooltipHtmlToClass('personal-objective', _("Your personal objective"));
+                (this as any).addTooltipHtml('personal-objective-wrapper', _("Your personal objective"));
 
                 document.getElementById('toggle-objective-expand').addEventListener('click', () => {
                     const wrapper = document.getElementById(`personal-objective-wrapper`);

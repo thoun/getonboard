@@ -1,4 +1,4 @@
-function slideToObjectAndAttach(game, object, destinationId, posX, posY, keepTransform) {
+function slideToObjectAndAttach(game, object, destinationId, posX, posY) {
     var destination = document.getElementById(destinationId);
     if (destination.contains(object)) {
         return Promise.resolve(true);
@@ -15,7 +15,7 @@ function slideToObjectAndAttach(game, object, destinationId, posX, posY, keepTra
             object.style.left = posX !== undefined ? "".concat(posX, "px") : 'unset';
             object.style.position = (posX !== undefined || posY !== undefined) ? 'absolute' : 'relative';
             object.style.zIndex = originalZIndex ? '' + originalZIndex : 'unset';
-            object.style.transform = keepTransform !== null && keepTransform !== void 0 ? keepTransform : 'unset';
+            object.style.transform = 'unset';
             object.style.transition = 'unset';
             destination.appendChild(object);
         };
@@ -25,7 +25,7 @@ function slideToObjectAndAttach(game, object, destinationId, posX, posY, keepTra
         }
         else {
             object.style.transition = "transform 0.5s ease-in";
-            object.style.transform = "translate(".concat(deltaX, "px, ").concat(deltaY, "px) ").concat(keepTransform !== null && keepTransform !== void 0 ? keepTransform : '');
+            object.style.transform = "translate(".concat(deltaX, "px, ").concat(deltaY, "px)");
             var securityTimeoutId_1 = null;
             var transitionend_1 = function () {
                 attachToNewParent();
@@ -44,6 +44,54 @@ function slideToObjectAndAttach(game, object, destinationId, posX, posY, keepTra
                     attachToNewParent();
                     object.removeEventListener('transitionend', transitionend_1);
                     object.removeEventListener('transitioncancel', transitionend_1);
+                    resolve(true);
+                }
+            }, 700);
+        }
+    });
+}
+function slideToObjectTicketSlot2(game, object, destinationId, keepTransform) {
+    var destination = document.getElementById(destinationId);
+    if (destination.contains(object)) {
+        return Promise.resolve(true);
+    }
+    return new Promise(function (resolve) {
+        var originalZIndex = Number(object.style.zIndex);
+        object.style.zIndex = '10';
+        var slot1left = Number(window.getComputedStyle(document.getElementById('ticket-slot-1')).left.match(/\d+/)[0]);
+        var slot2left = Number(window.getComputedStyle(document.getElementById('ticket-slot-2')).left.match(/\d+/)[0]);
+        var deltaX = slot2left - slot1left;
+        var attachToNewParent = function () {
+            object.style.zIndex = originalZIndex ? '' + originalZIndex : 'unset';
+            object.style.transform = keepTransform !== null && keepTransform !== void 0 ? keepTransform : 'unset';
+            object.style.transition = 'unset';
+            destination.appendChild(object);
+        };
+        if (document.visibilityState === 'hidden' || game.instantaneousMode) {
+            // if tab is not visible, we skip animation (else they could be delayed or cancelled by browser)
+            attachToNewParent();
+        }
+        else {
+            object.style.transition = "transform 0.5s ease-in";
+            object.style.transform = "translateX(".concat(deltaX, "px) ").concat(keepTransform !== null && keepTransform !== void 0 ? keepTransform : '');
+            var securityTimeoutId_2 = null;
+            var transitionend_2 = function () {
+                attachToNewParent();
+                object.removeEventListener('transitionend', transitionend_2);
+                object.removeEventListener('transitioncancel', transitionend_2);
+                resolve(true);
+                if (securityTimeoutId_2) {
+                    clearTimeout(securityTimeoutId_2);
+                }
+            };
+            object.addEventListener('transitionend', transitionend_2);
+            object.addEventListener('transitioncancel', transitionend_2);
+            // security check : if transition fails, we force tile to destination
+            securityTimeoutId_2 = setTimeout(function () {
+                if (!destination.contains(object)) {
+                    attachToNewParent();
+                    object.removeEventListener('transitionend', transitionend_2);
+                    object.removeEventListener('transitioncancel', transitionend_2);
                     resolve(true);
                 }
             }, 700);
@@ -506,7 +554,7 @@ var TableCenter = /** @class */ (function () {
         else {
             var roundTicketDiv = document.getElementById("ticket-".concat(roundNumber));
             roundTicketDiv.dataset.ticket = "".concat(currentTicket);
-            slideToObjectAndAttach(this.game, roundTicketDiv, "ticket-slot-2", 0, 0, "rotateY(180deg)");
+            slideToObjectTicketSlot2(this.game, roundTicketDiv, "ticket-slot-2", "rotateY(180deg)");
             roundTicketDiv.dataset.side = "1";
         }
     };
@@ -663,7 +711,7 @@ var GetOnBoard = /** @class */ (function () {
             if (playerId === _this.getPlayerId()) {
                 var html = "<div id=\"personal-objective-wrapper\" data-expanded=\"".concat((((_a = _this.prefs[203]) === null || _a === void 0 ? void 0 : _a.value) != 2).toString(), "\">\n                    <div class=\"personal-objective collapsed\">\n                        ").concat(player.personalObjectiveLetters.map(function (letter) { return "<div class=\"letter\">".concat(letter, "</div>"); }).join(''), "\n                    </div>\n                    <div class=\"personal-objective expanded ").concat(gamedatas.map, "\" data-type=\"").concat(player.personalObjective, "\"></div>\n                    <div id=\"toggle-objective-expand\" class=\"arrow\"></div>\n                </div>");
                 dojo.place(html, "player_board_".concat(player.id));
-                _this.addTooltipHtmlToClass('personal-objective', _("Your personal objective"));
+                _this.addTooltipHtml('personal-objective-wrapper', _("Your personal objective"));
                 document.getElementById('toggle-objective-expand').addEventListener('click', function () {
                     var wrapper = document.getElementById("personal-objective-wrapper");
                     var expanded = wrapper.dataset.expanded === 'true';
