@@ -17,6 +17,49 @@ html, .mode_3d #game_play_area_background {
   font-display: swap;
 }
 
+#zoom-wrapper {
+  position: relative;
+
+  #zoom-controls {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    button {
+      width: 40px;
+      height: 40px;
+      background: url('img/zoom.svg');
+      background-size: auto 220%;
+
+      &:not(.disabled) {
+        cursor: pointer;
+      }
+
+      &.disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+    }
+
+    #zoom-in {
+      background-position: 6% 94%;
+    }
+    #zoom-out {
+      background-position: 82% 94%;
+    }
+  }
+
+  #full-table {
+    transform-origin: left top;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+}
+
 .first-player-token {
     position: relative;
     background: url('img/first-player.png');
@@ -86,7 +129,6 @@ html, .mode_3d #game_play_area_background {
   box-sizing: border-box;
   font-weight: bold;
   font-size: 85%;
-  right: -120px;
   color: white;
 }
 

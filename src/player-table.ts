@@ -13,7 +13,7 @@ class PlayerTable {
     private turnZones: PlayerTableTurnZonesBlock;
     private trafficJam: PlayerTableTrafficJamBlock;
 
-    constructor(player: GetOnBoardPlayer, id: string = player.id, insertIn: HTMLElement = document.getElementById('player-tables')) {
+    constructor(player: GetOnBoardPlayer, id: string = player.id, insertIn: HTMLElement = document.getElementById('full-table')) {
         this.playerId = id;
 
         const eliminated = Number(player.eliminated) > 0;

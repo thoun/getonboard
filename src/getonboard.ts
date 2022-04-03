@@ -7,7 +7,13 @@ declare const g_gamethemeurl;
 
 const ANIMATION_MS = 500;
 
+const ZOOM_LEVELS = [0.5, 0.625, 0.75, 0.875, 1];
+const ZOOM_LEVELS_MARGIN = [-100, -60, -33, -14, 0];
+const LOCAL_STORAGE_ZOOM_KEY = 'GetOnBoard-zoom';
+
 class GetOnBoard implements GetOnBoardGame {
+    public zoom: number = 1;
+
     private gamedatas: GetOnBoardGamedatas;
     //private healthCounters: Counter[] = [];
     private tableCenter: TableCenter;
@@ -16,6 +22,10 @@ class GetOnBoard implements GetOnBoardGame {
     private roundNumberCounter: Counter;
 
     constructor() {
+        const zoomStr = localStorage.getItem(LOCAL_STORAGE_ZOOM_KEY);
+        if (zoomStr) {
+            this.zoom = Number(zoomStr);
+        }
     }
     
     /*
@@ -60,6 +70,12 @@ class GetOnBoard implements GetOnBoardGame {
         try {
             (document.getElementById('preference_control_203').closest(".preference_choice") as HTMLDivElement).style.display = 'none';
         } catch (e) {}
+
+        document.getElementById('zoom-out').addEventListener('click', () => this.zoomOut());
+        document.getElementById('zoom-in').addEventListener('click', () => this.zoomIn());
+        if (this.zoom !== 1) {
+            this.setZoom(this.zoom);
+        }
 
         log( "Ending game setup" );
     }
@@ -164,6 +180,41 @@ class GetOnBoard implements GetOnBoardGame {
 
     public getPlayerColor(playerId: number): string {
         return this.gamedatas.players[playerId].color;
+    }
+
+    private setZoom(zoom: number = 1) {
+        this.zoom = zoom;
+        localStorage.setItem(LOCAL_STORAGE_ZOOM_KEY, ''+this.zoom);
+        const newIndex = ZOOM_LEVELS.indexOf(this.zoom);
+        dojo.toggleClass('zoom-in', 'disabled', newIndex === ZOOM_LEVELS.length - 1);
+        dojo.toggleClass('zoom-out', 'disabled', newIndex === 0);
+
+        const div = document.getElementById('full-table');
+        if (zoom === 1) {
+            div.style.transform = '';
+            div.style.margin = '';
+        } else {
+            div.style.transform = `scale(${zoom})`;
+            div.style.margin = `0 ${ZOOM_LEVELS_MARGIN[newIndex]}% ${(1-zoom)*-100}% 0`;
+        }
+
+        document.getElementById('zoom-wrapper').style.height = `${div.getBoundingClientRect().height}px`;
+    }
+
+    public zoomIn() {
+        if (this.zoom === ZOOM_LEVELS[ZOOM_LEVELS.length - 1]) {
+            return;
+        }
+        const newIndex = ZOOM_LEVELS.indexOf(this.zoom) + 1;
+        this.setZoom(ZOOM_LEVELS[newIndex]);
+    }
+
+    public zoomOut() {
+        if (this.zoom === ZOOM_LEVELS[0]) {
+            return;
+        }
+        const newIndex = ZOOM_LEVELS.indexOf(this.zoom) - 1;
+        this.setZoom(ZOOM_LEVELS[newIndex]);
     }
 
     private createPlayerPanels(gamedatas: GetOnBoardGamedatas) {

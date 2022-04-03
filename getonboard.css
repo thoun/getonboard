@@ -98,84 +98,85 @@
   height: 32px;
 }
 
-#center {
+/*
+#center {  
   display: flex;
-  justify-content: center;
-}
-#center #map {
+  justify-content: center;*/
+#map {
+  box-shadow: 1px 1px 2px 2px #00000099;
   width: 740px;
   height: 740px;
   position: relative;
 }
-#center #map[data-size=small] {
+#map[data-size=small] {
   background: url("img/map-small.jpg");
 }
-#center #map[data-size=small] #map-elements {
+#map[data-size=small] #map-elements {
   transform: rotate(45deg) translate(-10px, 20px);
   clip-path: polygon(30% 0%, 75% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
 }
-#center #map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter {
+#map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter {
   top: -13px;
   right: -14px;
 }
-#center #map[data-size=small] #map-elements .route[data-direction="0"] {
+#map[data-size=small] #map-elements .route[data-direction="0"] {
   flex-direction: column;
 }
-#center #map[data-size=small] #map-elements .route[data-direction="0"] .marker {
+#map[data-size=small] #map-elements .route[data-direction="0"] .marker {
   height: 6px;
 }
-#center #map[data-size=small] #map-elements .route[data-direction="1"] .marker {
+#map[data-size=small] #map-elements .route[data-direction="1"] .marker {
   width: 6px;
 }
-#center #map[data-size=small] #map-elements .common-objective-slot {
+#map[data-size=small] #map-elements .common-objective-slot {
   top: 352px;
 }
-#center #map[data-size=small] #map-elements .common-objective-slot#common-objective-slot-1 {
+#map[data-size=small] #map-elements .common-objective-slot#common-objective-slot-1 {
   left: 1px;
 }
-#center #map[data-size=small] #map-elements .common-objective-slot#common-objective-slot-2 {
+#map[data-size=small] #map-elements .common-objective-slot#common-objective-slot-2 {
   left: 110px;
 }
-#center #map[data-size=small] #map-elements .ticket-slot {
+#map[data-size=small] #map-elements .ticket-slot {
   top: 221px;
 }
-#center #map[data-size=small] #map-elements .ticket-slot#ticket-slot-1 {
+#map[data-size=small] #map-elements .ticket-slot#ticket-slot-1 {
   left: 1px;
 }
-#center #map[data-size=small] #map-elements .ticket-slot#ticket-slot-2 {
+#map[data-size=small] #map-elements .ticket-slot#ticket-slot-2 {
   left: 110px;
 }
-#center #map[data-size=big] {
+#map[data-size=big] {
   background: url("img/map-big.jpg");
 }
-#center #map[data-size=big] #map-elements .route[data-direction="0"] .marker {
+#map[data-size=big] #map-elements .route[data-direction="0"] .marker {
   width: 6px;
 }
-#center #map[data-size=big] #map-elements .route[data-direction="1"] {
+#map[data-size=big] #map-elements .route[data-direction="1"] {
   flex-direction: column;
 }
-#center #map[data-size=big] #map-elements .route[data-direction="1"] .marker {
+#map[data-size=big] #map-elements .route[data-direction="1"] .marker {
   height: 6px;
 }
-#center #map[data-size=big] #map-elements .common-objective-slot {
+#map[data-size=big] #map-elements .common-objective-slot {
   top: 16px;
 }
-#center #map[data-size=big] #map-elements .common-objective-slot#common-objective-slot-1 {
+#map[data-size=big] #map-elements .common-objective-slot#common-objective-slot-1 {
   left: 356px;
 }
-#center #map[data-size=big] #map-elements .common-objective-slot#common-objective-slot-2 {
+#map[data-size=big] #map-elements .common-objective-slot#common-objective-slot-2 {
   left: 470px;
 }
-#center #map[data-size=big] #map-elements .ticket-slot {
+#map[data-size=big] #map-elements .ticket-slot {
   top: 16px;
 }
-#center #map[data-size=big] #map-elements .ticket-slot#ticket-slot-1 {
+#map[data-size=big] #map-elements .ticket-slot#ticket-slot-1 {
   left: 146px;
 }
-#center #map[data-size=big] #map-elements .ticket-slot#ticket-slot-2 {
+#map[data-size=big] #map-elements .ticket-slot#ticket-slot-2 {
   left: 241px;
 }
-#center #map #map-elements {
+#map #map-elements {
   width: 740px;
   height: 740px;
   position: absolute;
@@ -183,90 +184,91 @@
   left: 0;
   transform-origin: center center;
 }
-#center #map #map-elements .intersection {
+#map #map-elements .intersection {
   position: absolute;
   width: 32px;
   height: 32px;
   border-radius: 20%;
 }
-#center #map #map-elements .intersection.selectable {
+#map #map-elements .intersection.selectable {
   cursor: pointer;
   animation: highlight-intersection-animation 1s alternate infinite ease-in-out;
 }
-#center #map #map-elements .intersection .objective-letter {
+#map #map-elements .intersection .objective-letter {
   position: absolute;
   width: 16px;
   height: 16px;
   border-radius: 50%;
 }
-#center #map #map-elements .intersection.green-light .objective-letter {
+#map #map-elements .intersection.green-light .objective-letter {
   top: -16px;
   right: -8px;
 }
-#center #map #map-elements .intersection:not(.green-light) .objective-letter {
+#map #map-elements .intersection:not(.green-light) .objective-letter {
   top: -9px;
   right: -14px;
 }
-#center #map #map-elements .departure-pawn {
+#map #map-elements .departure-pawn {
   width: 32px;
   height: 44px;
   margin-top: -5px;
   mask: url("img/departure.svg") no-repeat center/contain;
   -webkit-mask: url("img/departure.svg") no-repeat center/contain;
 }
-#center #map #map-elements .marker {
+#map #map-elements .marker {
   width: 32px;
   height: 32px;
   box-shadow: 1px 1px 1px 1px black;
   transition: opacity 0.5s;
   margin: 1px 0;
 }
-#center #map #map-elements .marker.unvalidated {
+#map #map-elements .marker.unvalidated {
   opacity: 0.5;
 }
-#center #map #map-elements .marker.ghost {
+#map #map-elements .marker.ghost {
   cursor: pointer;
   animation: highlight-route-clean-animation 1s alternate infinite ease-in-out;
 }
-#center #map #map-elements .marker.ghost.traffic-jam {
+#map #map-elements .marker.ghost.traffic-jam {
   animation: highlight-route-traffic-jam-animation 1s alternate infinite ease-in-out;
 }
-#center #map #map-elements .marker.ghost.turn-zone {
+#map #map-elements .marker.ghost.turn-zone {
   animation: highlight-route-turn-zone-animation 1s alternate infinite ease-in-out;
 }
-#center #map #map-elements .marker.ghost.elimination {
+#map #map-elements .marker.ghost.elimination {
   animation: highlight-route-elimination-animation 1s alternate infinite ease-in-out;
 }
-#center #map #map-elements .route {
+#map #map-elements .route {
   position: absolute;
   display: flex;
   justify-content: center;
   width: 32px;
   height: 32px;
 }
-#center #map .pips {
+#map .pips {
   position: absolute;
   pointer-events: none;
 }
-#center #map .pips[data-side=left] {
+#map .pips[data-side=left] {
   left: 0;
 }
-#center #map .pips[data-side=right] {
+#map .pips[data-side=right] {
   right: 0;
 }
-#center #map .pips#pips-top {
+#map .pips#pips-top {
   top: 0;
 }
-#center #map .pips#pips-bottom {
+#map .pips#pips-bottom {
   bottom: 0;
 }
-#center #map .pips .pip {
+#map .pips .pip {
   position: relative;
   border: 5px ridge #e4273e;
   border-radius: 10px;
   overflow: hidden;
 }
 
+/*}*/
 @keyframes highlight-intersection-animation {
   0% {
     box-shadow: 0 0 10px 10px white;
@@ -421,15 +423,15 @@
   transform: rotateY(180deg);
 }
 
-#player-tables {
+/*#player-tables {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-}
-#player-tables .player-table {
-  margin: 20px;
-}
 
+  .player-table {
+    margin: 20px;
+  }
+}*/
 .player-table {
   width: 700px;
   height: 700px;
@@ -987,6 +989,42 @@ html, .mode_3d #game_play_area_background {
   font-style: normal;
   font-display: swap;
 }
+#zoom-wrapper {
+  position: relative;
+}
+#zoom-wrapper #zoom-controls {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+#zoom-wrapper #zoom-controls button {
+  width: 40px;
+  height: 40px;
+  background: url("img/zoom.svg");
+  background-size: auto 220%;
+}
+#zoom-wrapper #zoom-controls button:not(.disabled) {
+  cursor: pointer;
+}
+#zoom-wrapper #zoom-controls button.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+#zoom-wrapper #zoom-controls #zoom-in {
+  background-position: 6% 94%;
+}
+#zoom-wrapper #zoom-controls #zoom-out {
+  background-position: 82% 94%;
+}
+#zoom-wrapper #full-table {
+  transform-origin: left top;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
 .first-player-token {
   position: relative;
   background: url("img/first-player.png");
@@ -1053,7 +1091,6 @@ html, .mode_3d #game_play_area_background {
   box-sizing: border-box;
   font-weight: bold;
   font-size: 85%;
-  right: -120px;
   color: white;
 }
 

@@ -361,7 +361,7 @@ var log = isDebug ? console.log.bind(window.console) : function () { };
 var PlayerTable = /** @class */ (function () {
     function PlayerTable(player, id, insertIn) {
         if (id === void 0) { id = player.id; }
-        if (insertIn === void 0) { insertIn = document.getElementById('player-tables'); }
+        if (insertIn === void 0) { insertIn = document.getElementById('full-table'); }
         this.playerId = id;
         var eliminated = Number(player.eliminated) > 0;
         var html = "\n        <div id=\"player-table-".concat(this.playerId, "\" class=\"player-table ").concat(eliminated ? 'eliminated' : '', "\" style=\"box-shadow: 0 0 3px 3px #").concat(player.color, ";\">\n            <div id=\"player-table-").concat(this.playerId, "-top\" class=\"top\" data-type=\"").concat(player.sheetType, "\">\n            ");
@@ -570,10 +570,18 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 var ANIMATION_MS = 500;
+var ZOOM_LEVELS = [0.5, 0.625, 0.75, 0.875, 1];
+var ZOOM_LEVELS_MARGIN = [-100, -60, -33, -14, 0];
+var LOCAL_STORAGE_ZOOM_KEY = 'GetOnBoard-zoom';
 var GetOnBoard = /** @class */ (function () {
     function GetOnBoard() {
+        this.zoom = 1;
         this.playersTables = [];
         this.registeredTablesByPlayerId = [];
+        var zoomStr = localStorage.getItem(LOCAL_STORAGE_ZOOM_KEY);
+        if (zoomStr) {
+            this.zoom = Number(zoomStr);
+        }
     }
     /*
         setup:
@@ -588,6 +596,7 @@ var GetOnBoard = /** @class */ (function () {
         "gamedatas" argument contains all datas retrieved by your "getAllDatas" PHP method.
     */
     GetOnBoard.prototype.setup = function (gamedatas) {
+        var _this = this;
         var players = Object.values(gamedatas.players);
         // ignore loading of some pictures
         if (players.length > 3) {
@@ -612,6 +621,11 @@ var GetOnBoard = /** @class */ (function () {
             document.getElementById('preference_control_203').closest(".preference_choice").style.display = 'none';
         }
         catch (e) { }
+        document.getElementById('zoom-out').addEventListener('click', function () { return _this.zoomOut(); });
+        document.getElementById('zoom-in').addEventListener('click', function () { return _this.zoomIn(); });
+        if (this.zoom !== 1) {
+            this.setZoom(this.zoom);
+        }
         log("Ending game setup");
     };
     ///////////////////////////////////////////////////
@@ -701,6 +715,38 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.getPlayerColor = function (playerId) {
         return this.gamedatas.players[playerId].color;
+    };
+    GetOnBoard.prototype.setZoom = function (zoom) {
+        if (zoom === void 0) { zoom = 1; }
+        this.zoom = zoom;
+        localStorage.setItem(LOCAL_STORAGE_ZOOM_KEY, '' + this.zoom);
+        var newIndex = ZOOM_LEVELS.indexOf(this.zoom);
+        dojo.toggleClass('zoom-in', 'disabled', newIndex === ZOOM_LEVELS.length - 1);
+        dojo.toggleClass('zoom-out', 'disabled', newIndex === 0);
+        var div = document.getElementById('full-table');
+        if (zoom === 1) {
+            div.style.transform = '';
+            div.style.margin = '';
+        }
+        else {
+            div.style.transform = "scale(".concat(zoom, ")");
+            div.style.margin = "0 ".concat(ZOOM_LEVELS_MARGIN[newIndex], "% ").concat((1 - zoom) * -100, "% 0");
+        }
+        document.getElementById('zoom-wrapper').style.height = "".concat(div.getBoundingClientRect().height, "px");
+    };
+    GetOnBoard.prototype.zoomIn = function () {
+        if (this.zoom === ZOOM_LEVELS[ZOOM_LEVELS.length - 1]) {
+            return;
+        }
+        var newIndex = ZOOM_LEVELS.indexOf(this.zoom) + 1;
+        this.setZoom(ZOOM_LEVELS[newIndex]);
+    };
+    GetOnBoard.prototype.zoomOut = function () {
+        if (this.zoom === ZOOM_LEVELS[0]) {
+            return;
+        }
+        var newIndex = ZOOM_LEVELS.indexOf(this.zoom) - 1;
+        this.setZoom(ZOOM_LEVELS[newIndex]);
     };
     GetOnBoard.prototype.createPlayerPanels = function (gamedatas) {
         var _this = this;

@@ -1,10 +1,11 @@
 $marker-size: 6px;
-
+/*
 #center {  
   display: flex;
-  justify-content: center;
+  justify-content: center;*/
 
   #map {
+    box-shadow: 1px 1px 2px 2px #00000099;
     width: 740px;
     height: 740px;
     position: relative;
@@ -218,7 +219,7 @@ $marker-size: 6px;
       }
     }
   }
-}
+/*}*/
 
 @keyframes highlight-intersection-animation {
   0% { 

@@ -1,7 +1,7 @@
 {OVERALL_GAME_HEADER}
 
-<div id="full-table">
-    <div id="center">
+<div id="zoom-wrapper">
+    <div id="full-table">
         <div id="map">
             <div id="round-panel"></div>
             <div id="map-elements">
@@ -14,7 +14,10 @@
             <div id="pips-bottom" class="pips"></div>
         </div>
     </div>
-    <div id="player-tables"></div>
+    <div id="zoom-controls">
+        <button id="zoom-out"></button>
+        <button id="zoom-in" class="disabled"></button>
+    </div>
 </div>
 
 {OVERALL_GAME_FOOTER}
