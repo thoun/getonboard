@@ -58,6 +58,7 @@ class GetOnBoard implements GetOnBoardGame {
         this.createPlayerPanels(gamedatas); 
         this.tableCenter = new TableCenter(this, gamedatas);
         this.createPlayerTables(gamedatas);
+        this.createPlayerJumps(gamedatas);
 
         this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
         document.getElementById('round-panel').innerHTML = `${_('Round')}&nbsp;<span id="round-number-counter"></span>&nbsp;/&nbsp;12`;
@@ -257,10 +258,15 @@ class GetOnBoard implements GetOnBoardGame {
 
     }
 
-    private createPlayerTables(gamedatas: GetOnBoardGamedatas) {
+    private getOrderedPlayers(gamedatas: GetOnBoardGamedatas) {
         const players = Object.values(gamedatas.players).sort((a, b) => a.playerNo - b.playerNo);
         const playerIndex = players.findIndex(player => Number(player.id) === Number((this as any).player_id));
         const orderedPlayers = playerIndex > 0 ? [...players.slice(playerIndex), ...players.slice(0, playerIndex)] : players;
+        return orderedPlayers;
+    }
+
+    private createPlayerTables(gamedatas: GetOnBoardGamedatas) {
+        const orderedPlayers = this.getOrderedPlayers(gamedatas);
 
         orderedPlayers.forEach(player => 
             this.createPlayerTable(gamedatas, Number(player.id))
@@ -272,6 +278,23 @@ class GetOnBoard implements GetOnBoardGame {
         table.setRound(gamedatas.validatedTickets, gamedatas.currentTicket);
         this.playersTables.push(table);
         this.registeredTablesByPlayerId[playerId] = [table];
+    }
+
+    private createPlayerJumps(gamedatas: GetOnBoardGamedatas) {
+        dojo.place(`<div id="jump-0" class="jump-link">${gamedatas.map === 'big' ? 'London' : 'New-York'}</div>`, `jump-controls`);
+        document.getElementById(`jump-0`).addEventListener('click', () => this.jumpToPlayer(0));	
+        
+        const orderedPlayers = this.getOrderedPlayers(gamedatas);
+
+        orderedPlayers.forEach(player => {
+            dojo.place(`<div id="jump-${player.id}" class="jump-link" style="color: #${player.color}; border-color: #${player.color};">${player.name}</div>`, `jump-controls`);
+            document.getElementById(`jump-${player.id}`).addEventListener('click', () => this.jumpToPlayer(Number(player.id)));	
+        });
+    }
+    
+    private jumpToPlayer(playerId: number): void {
+        const elementId = playerId === 0 ? `map` : `player-table-${playerId}`;
+        document.getElementById(elementId).scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
     }
 
     private placeFirstPlayerToken(playerId: number) {

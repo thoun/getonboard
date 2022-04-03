@@ -18,6 +18,8 @@
         <button id="zoom-out"></button>
         <button id="zoom-in" class="disabled"></button>
     </div>
+    <div id="jump-controls">
+    </div>
 </div>
 
 {OVERALL_GAME_FOOTER}

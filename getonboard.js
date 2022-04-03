@@ -611,6 +611,7 @@ var GetOnBoard = /** @class */ (function () {
         this.createPlayerPanels(gamedatas);
         this.tableCenter = new TableCenter(this, gamedatas);
         this.createPlayerTables(gamedatas);
+        this.createPlayerJumps(gamedatas);
         this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
         document.getElementById('round-panel').innerHTML = "".concat(_('Round'), "&nbsp;<span id=\"round-number-counter\"></span>&nbsp;/&nbsp;12");
         this.roundNumberCounter = new ebg.counter();
@@ -775,11 +776,16 @@ var GetOnBoard = /** @class */ (function () {
             dojo.place("<div id=\"player_board_".concat(player.id, "_firstPlayerWrapper\" class=\"firstPlayerWrapper\"></div>"), "player_board_".concat(player.id));
         });
     };
-    GetOnBoard.prototype.createPlayerTables = function (gamedatas) {
+    GetOnBoard.prototype.getOrderedPlayers = function (gamedatas) {
         var _this = this;
         var players = Object.values(gamedatas.players).sort(function (a, b) { return a.playerNo - b.playerNo; });
         var playerIndex = players.findIndex(function (player) { return Number(player.id) === Number(_this.player_id); });
         var orderedPlayers = playerIndex > 0 ? __spreadArray(__spreadArray([], players.slice(playerIndex), true), players.slice(0, playerIndex), true) : players;
+        return orderedPlayers;
+    };
+    GetOnBoard.prototype.createPlayerTables = function (gamedatas) {
+        var _this = this;
+        var orderedPlayers = this.getOrderedPlayers(gamedatas);
         orderedPlayers.forEach(function (player) {
             return _this.createPlayerTable(gamedatas, Number(player.id));
         });
@@ -789,6 +795,20 @@ var GetOnBoard = /** @class */ (function () {
         table.setRound(gamedatas.validatedTickets, gamedatas.currentTicket);
         this.playersTables.push(table);
         this.registeredTablesByPlayerId[playerId] = [table];
+    };
+    GetOnBoard.prototype.createPlayerJumps = function (gamedatas) {
+        var _this = this;
+        dojo.place("<div id=\"jump-0\" class=\"jump-link\">".concat(gamedatas.map === 'big' ? 'London' : 'New-York', "</div>"), "jump-controls");
+        document.getElementById("jump-0").addEventListener('click', function () { return _this.jumpToPlayer(0); });
+        var orderedPlayers = this.getOrderedPlayers(gamedatas);
+        orderedPlayers.forEach(function (player) {
+            dojo.place("<div id=\"jump-".concat(player.id, "\" class=\"jump-link\" style=\"color: #").concat(player.color, "; border-color: #").concat(player.color, ";\">").concat(player.name, "</div>"), "jump-controls");
+            document.getElementById("jump-".concat(player.id)).addEventListener('click', function () { return _this.jumpToPlayer(Number(player.id)); });
+        });
+    };
+    GetOnBoard.prototype.jumpToPlayer = function (playerId) {
+        var elementId = playerId === 0 ? "map" : "player-table-".concat(playerId);
+        document.getElementById(elementId).scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
     };
     GetOnBoard.prototype.placeFirstPlayerToken = function (playerId) {
         var firstPlayerBoardToken = document.getElementById('firstPlayerBoardToken');

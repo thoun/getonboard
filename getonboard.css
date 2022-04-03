@@ -1016,6 +1016,48 @@ html, .mode_3d #game_play_area_background {
 #zoom-wrapper #zoom-controls #zoom-out {
   background-position: 82% 94%;
 }
+#zoom-wrapper #jump-controls {
+  position: fixed;
+  top: 180px;
+}
+#zoom-wrapper #jump-controls .jump-link {
+  position: relative;
+  border-width: 2px;
+  border-style: solid;
+  border-right-width: 0;
+  margin: 10px 0;
+  width: fit-content;
+  cursor: pointer;
+  height: 22px;
+  padding: 2px 5px;
+  background: white;
+}
+#zoom-wrapper #jump-controls .jump-link::before {
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left-width: 15px;
+  border-left-style: solid;
+  content: "";
+  position: absolute;
+  right: -15px;
+  top: -2px;
+}
+#zoom-wrapper #jump-controls .jump-link::after {
+  width: 0;
+  height: 0;
+  border-top: 13px solid transparent;
+  border-bottom: 13px solid transparent;
+  border-left: 13px solid white;
+  content: "";
+  position: absolute;
+  right: -13px;
+  top: 0px;
+}
+#zoom-wrapper #jump-controls#jump-0 {
+  border-color: black;
+}
 #zoom-wrapper #full-table {
   transform-origin: left top;
   display: flex;
