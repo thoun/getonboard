@@ -47,30 +47,30 @@ trait ScoreSheetTrait {
         $this->checkCompletedCommonObjective($scoreSheet, $commonObjectives, STUDENT, $checked, $round);
     }
     
-    function addTouristToScoreSheet(ScoreSheet &$scoreSheet, array $commonObjectives, int $round, bool $endScoring) {
+    function addTouristToScoreSheet(ScoreSheet &$scoreSheet, array $commonObjectives, int $round) {
         $rowIndex = count($scoreSheet->tourists->subTotals);
         if ($rowIndex >= 3) {
             return;
         }
         if ($scoreSheet->tourists->checkedTourists[$rowIndex] < 4) {
             $scoreSheet->tourists->checkedTourists[$rowIndex]++;
-            $this->updateTouristTotal($scoreSheet, $commonObjectives, $round, $endScoring);
+            $this->updateTouristTotal($scoreSheet, $commonObjectives, $round);
         }
     }
 
-    function addMonumentToScoreSheet(ScoreSheet &$scoreSheet, string $type, array $commonObjectives, int $round, bool $endScoring) {
+    function addMonumentToScoreSheet(ScoreSheet &$scoreSheet, string $type, array $commonObjectives, int $round) {
         $rowIndex = count($scoreSheet->tourists->subTotals);
         if ($rowIndex >= 3) {
             return;
         }
         if ($scoreSheet->tourists->checkedTourists[$rowIndex] > 0) {
             $scoreSheet->tourists->subTotals[$rowIndex] = $this->TOURISTS_POINTS[$scoreSheet->tourists->checkedTourists[$rowIndex] - 1];
-            $this->updateTouristTotal($scoreSheet, $commonObjectives, $round, $endScoring);
+            $this->updateTouristTotal($scoreSheet, $commonObjectives, $round);
         }
         $scoreSheet->tourists->{'checkedMonuments'.$type}++;
     }
 
-    function addSpecialMonumentToScoreSheet(ScoreSheet &$scoreSheet, string $type, array $commonObjectives, int $round, bool $endScoring) {
+    function addSpecialMonumentToScoreSheet(ScoreSheet &$scoreSheet, string $type, array $commonObjectives, int $round) {
         $totalCheckedTourists = 0;
         foreach ($scoreSheet->tourists->checkedTourists as $checkedTourists) {
             $totalCheckedTourists += $checkedTourists;
@@ -81,10 +81,10 @@ trait ScoreSheetTrait {
             $scoreSheet->tourists->specialMonumentMax = max($scoreSheet->tourists->specialMonumentLight || 0, $scoreSheet->tourists->specialMonumentDark || 0);
         }
 
-        $this->updateTouristTotal($scoreSheet, $commonObjectives, $round, $endScoring);
+        $this->updateTouristTotal($scoreSheet, $commonObjectives, $round);
     }
     
-    function updateTouristTotal(ScoreSheet &$scoreSheet, array $commonObjectives, int $round, bool $endScoring) {
+    function updateTouristTotal(ScoreSheet &$scoreSheet, array $commonObjectives, int $round, bool $endScoring = false) {
         if ($endScoring) {
             $rowIndex = count($scoreSheet->tourists->subTotals);
             if ($rowIndex < 3) {
@@ -108,18 +108,18 @@ trait ScoreSheetTrait {
         $this->checkCompletedCommonObjective($scoreSheet, $commonObjectives, TOURIST, $totalCheckedTourists, $round);
     }
     
-    function addBusinessmanToScoreSheet(ScoreSheet &$scoreSheet, array $commonObjectives, int $round, bool $endScoring) {
+    function addBusinessmanToScoreSheet(ScoreSheet &$scoreSheet, array $commonObjectives, int $round) {
         $rowIndex = count($scoreSheet->businessmen->subTotals);
         if ($rowIndex >= 3) {
             return;
         }
         if ($scoreSheet->businessmen->checkedBusinessmen[$rowIndex] < 3) {
             $scoreSheet->businessmen->checkedBusinessmen[$rowIndex]++;
-            $this->updateBusinessmenTotal($scoreSheet, $commonObjectives, $round, $endScoring);
+            $this->updateBusinessmenTotal($scoreSheet, $commonObjectives, $round);
         }
     }
 
-    function addOfficeToScoreSheet(ScoreSheet &$scoreSheet, array $commonObjectives, int $round, bool $endScoring) {
+    function addOfficeToScoreSheet(ScoreSheet &$scoreSheet, array $commonObjectives, int $round) {
         $rowIndex = count($scoreSheet->businessmen->subTotals);
         if ($rowIndex >= 3) {
             return;
@@ -127,12 +127,12 @@ trait ScoreSheetTrait {
         if ($scoreSheet->businessmen->checkedBusinessmen[$rowIndex] > 0) {
             $checked = $scoreSheet->businessmen->checkedBusinessmen[$rowIndex];
             $scoreSheet->businessmen->subTotals[$rowIndex] = $this->BUSINESSMEN_POINTS[$checked - 1];
-            $this->updateBusinessmenTotal($scoreSheet, $commonObjectives, $round, $endScoring);
+            $this->updateBusinessmenTotal($scoreSheet, $commonObjectives, $round);
 
             if ($checked == 1) {
                 $this->addOldLadyToScoreSheetAndUpdateTotal($scoreSheet, $commonObjectives, $round);
             } else if ($checked == 2) {
-                $this->addTouristToScoreSheet($scoreSheet, $commonObjectives, $round, $endScoring);
+                $this->addTouristToScoreSheet($scoreSheet, $commonObjectives, $round);
             } else if ($checked == 3) {
                 $scoreSheet->students->checkedInternships++;
                 $this->updateStudentTotal($scoreSheet, $commonObjectives, $round);
@@ -140,17 +140,17 @@ trait ScoreSheetTrait {
         }
     }
 
-    function addSpecialOfficeToScoreSheet(ScoreSheet &$scoreSheet, array $commonObjectives, int $round, bool $endScoring) {
+    function addSpecialOfficeToScoreSheet(ScoreSheet &$scoreSheet, array $commonObjectives, int $round) {
         $totalCheckedBusinessmen = 0;
         foreach ($scoreSheet->businessmen->checkedBusinessmen as $checkedBusinessmen) {
             $totalCheckedBusinessmen += $checkedBusinessmen;
         }
         $scoreSheet->businessmen->specialOffice = $totalCheckedBusinessmen;
 
-        $this->updateBusinessmenTotal($scoreSheet, $commonObjectives, $round, $endScoring);
+        $this->updateBusinessmenTotal($scoreSheet, $commonObjectives, $round);
     }
     
-    function updateBusinessmenTotal(ScoreSheet &$scoreSheet, array $commonObjectives, int $round, bool $endScoring) {
+    function updateBusinessmenTotal(ScoreSheet &$scoreSheet, array $commonObjectives, int $round, bool $endScoring = false) {
         if ($endScoring) {
             $rowIndex = count($scoreSheet->businessmen->subTotals);
             if ($rowIndex < 3) {
@@ -223,30 +223,30 @@ trait ScoreSheetTrait {
 
                         // tourists
                         case TOURIST:
-                            $this->addTouristToScoreSheet($scoreSheet, $commonObjectives, $round, $endScoring);
+                            $this->addTouristToScoreSheet($scoreSheet, $commonObjectives, $round);
                             break;
                         case MONUMENT_LIGHT:
-                            $this->addMonumentToScoreSheet($scoreSheet, 'Light', $commonObjectives, $round, $endScoring);
+                            $this->addMonumentToScoreSheet($scoreSheet, 'Light', $commonObjectives, $round);
                             break;
                         case MONUMENT_DARK:
-                            $this->addMonumentToScoreSheet($scoreSheet, 'Dark', $commonObjectives, $round, $endScoring);
+                            $this->addMonumentToScoreSheet($scoreSheet, 'Dark', $commonObjectives, $round);
                             break;
                         case MONUMENT_LIGHT_SPECIAL: // special is also referenced as normal, don't count it twice!
-                            $this->addSpecialMonumentToScoreSheet($scoreSheet, 'Light', $commonObjectives, $round, $endScoring);
+                            $this->addSpecialMonumentToScoreSheet($scoreSheet, 'Light', $commonObjectives, $round);
                             break;
                         case MONUMENT_DARK_SPECIAL: // special is also referenced as normal, don't count it twice!
-                            $this->addSpecialMonumentToScoreSheet($scoreSheet, 'Dark', $commonObjectives, $round, $endScoring);
+                            $this->addSpecialMonumentToScoreSheet($scoreSheet, 'Dark', $commonObjectives, $round);
                             break;
 
                         // businessmen
                         case BUSINESSMAN:
-                            $this->addBusinessmanToScoreSheet($scoreSheet, $commonObjectives, $round, $endScoring);
+                            $this->addBusinessmanToScoreSheet($scoreSheet, $commonObjectives, $round);
                             break;
                         case OFFICE:
-                            $this->addOfficeToScoreSheet($scoreSheet, $commonObjectives, $round, $endScoring);
+                            $this->addOfficeToScoreSheet($scoreSheet, $commonObjectives, $round);
                             break;
                         case OFFICE_SPECIAL: // special is also referenced as normal, don't count it twice!
-                            $this->addSpecialOfficeToScoreSheet($scoreSheet, $commonObjectives, $round, $endScoring);
+                            $this->addSpecialOfficeToScoreSheet($scoreSheet, $commonObjectives, $round);
                             break;
                     }
                 }
@@ -258,6 +258,11 @@ trait ScoreSheetTrait {
             if ($placedRoute->trafficJam > 0) {
                 $this->addTrafficJamToScoreSheetAndUpdateTotal($scoreSheet, $placedRoute->trafficJam);
             }
+        }
+
+        if ($endScoring) {
+            $this->updateTouristTotal($scoreSheet, $commonObjectives, 0, true);
+            $this->updateBusinessmenTotal($scoreSheet, $commonObjectives, 0, true);
         }
 
         $scoreSheet->total = 

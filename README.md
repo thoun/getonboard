@@ -5,7 +5,7 @@ You can play here : https://boardgamearena.com
 # How to install the auto-build stack
 
 ## Install builders
-Intall node/npm then `npm i` on the root folder to get builders.
+Install node/npm then `npm i` on the root folder to get builders.
 
 ## Auto build JS and CSS files
 In VS Code, add extension https://marketplace.visualstudio.com/items?itemName=emeraldwalk.RunOnSave and then add to config.json extension part :
@@ -33,7 +33,8 @@ Also add one auto-FTP upload extension (for example https://marketplace.visualst
 Make sure ftp-sync.json and node_modules are in .gitignore
 
 # TODO
-fix end scoring
-fix 3 monuments objective
+
+icons on log ?
 shortcut for current player board/map ?
 make 2-3p horizontal
+make it clearer pip owner
