@@ -798,11 +798,11 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.createPlayerJumps = function (gamedatas) {
         var _this = this;
-        dojo.place("<div id=\"jump-0\" class=\"jump-link\">".concat(gamedatas.map === 'big' ? 'London' : 'New-York', "</div>"), "jump-controls");
+        dojo.place("<div id=\"jump-0\" class=\"jump-link\"><div class=\"eye\"></div> ".concat(gamedatas.map === 'big' ? 'London' : 'New-York', "</div>"), "jump-controls");
         document.getElementById("jump-0").addEventListener('click', function () { return _this.jumpToPlayer(0); });
         var orderedPlayers = this.getOrderedPlayers(gamedatas);
         orderedPlayers.forEach(function (player) {
-            dojo.place("<div id=\"jump-".concat(player.id, "\" class=\"jump-link\" style=\"color: #").concat(player.color, "; border-color: #").concat(player.color, ";\">").concat(player.name, "</div>"), "jump-controls");
+            dojo.place("<div id=\"jump-".concat(player.id, "\" class=\"jump-link\" style=\"color: #").concat(player.color, "; border-color: #").concat(player.color, ";\"><div class=\"eye\" style=\"background: #").concat(player.color, ";\"></div> ").concat(player.name, "</div>"), "jump-controls");
             document.getElementById("jump-".concat(player.id)).addEventListener('click', function () { return _this.jumpToPlayer(Number(player.id)); });
         });
     };

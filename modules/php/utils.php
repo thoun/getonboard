@@ -243,7 +243,7 @@ trait UtilTrait {
             return 0;
         }
 
-        return intval($this->tickets->countCardInLocation('discard')) + 1;
+        return min(12, intval($this->tickets->countCardInLocation('discard')) + 1);
     }
 
     function getValidatedTicketsForRound() {

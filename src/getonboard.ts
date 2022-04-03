@@ -281,13 +281,13 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     private createPlayerJumps(gamedatas: GetOnBoardGamedatas) {
-        dojo.place(`<div id="jump-0" class="jump-link">${gamedatas.map === 'big' ? 'London' : 'New-York'}</div>`, `jump-controls`);
+        dojo.place(`<div id="jump-0" class="jump-link"><div class="eye"></div> ${gamedatas.map === 'big' ? 'London' : 'New-York'}</div>`, `jump-controls`);
         document.getElementById(`jump-0`).addEventListener('click', () => this.jumpToPlayer(0));	
         
         const orderedPlayers = this.getOrderedPlayers(gamedatas);
 
         orderedPlayers.forEach(player => {
-            dojo.place(`<div id="jump-${player.id}" class="jump-link" style="color: #${player.color}; border-color: #${player.color};">${player.name}</div>`, `jump-controls`);
+            dojo.place(`<div id="jump-${player.id}" class="jump-link" style="color: #${player.color}; border-color: #${player.color};"><div class="eye" style="background: #${player.color};"></div> ${player.name}</div>`, `jump-controls`);
             document.getElementById(`jump-${player.id}`).addEventListener('click', () => this.jumpToPlayer(Number(player.id)));	
         });
     }

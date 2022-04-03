@@ -98,10 +98,6 @@
   height: 32px;
 }
 
-/*
-#center {  
-  display: flex;
-  justify-content: center;*/
 #map {
   box-shadow: 1px 1px 2px 2px #00000099;
   width: 740px;
@@ -223,20 +219,25 @@
   margin: 1px 0;
 }
 #map #map-elements .marker.unvalidated {
-  opacity: 0.5;
+  animation: unvalidated-animation 1s alternate infinite ease-in-out;
 }
 #map #map-elements .marker.ghost {
   cursor: pointer;
-  animation: highlight-route-clean-animation 1s alternate infinite ease-in-out;
+  animation: unvalidated-animation 1s alternate infinite ease-in-out;
+  box-shadow: 0 0 2px 1px green;
+  background: green;
 }
 #map #map-elements .marker.ghost.traffic-jam {
-  animation: highlight-route-traffic-jam-animation 1s alternate infinite ease-in-out;
+  box-shadow: 0 0 2px 1px greenyellow;
+  background: greenyellow;
 }
 #map #map-elements .marker.ghost.turn-zone {
-  animation: highlight-route-turn-zone-animation 1s alternate infinite ease-in-out;
+  box-shadow: 0 0 2px 1px orange;
+  background: orange;
 }
 #map #map-elements .marker.ghost.elimination {
-  animation: highlight-route-elimination-animation 1s alternate infinite ease-in-out;
+  box-shadow: 0 0 2px 1px black;
+  background: black;
 }
 #map #map-elements .route {
   position: absolute;
@@ -268,45 +269,20 @@
   overflow: hidden;
 }
 
-/*}*/
+@keyframes unvalidated-animation {
+  0% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 @keyframes highlight-intersection-animation {
   0% {
     box-shadow: 0 0 10px 10px white;
   }
   100% {
     box-shadow: 0 0 15px 15px white;
-  }
-}
-@keyframes highlight-route-clean-animation {
-  0% {
-    box-shadow: 0 0 5px 3px green;
-  }
-  100% {
-    box-shadow: 0 0 10px 5px green;
-  }
-}
-@keyframes highlight-route-traffic-jam-animation {
-  0% {
-    box-shadow: 0 0 5px 3px greenyellow;
-  }
-  100% {
-    box-shadow: 0 0 10px 5px greenyellow;
-  }
-}
-@keyframes highlight-route-turn-zone-animation {
-  0% {
-    box-shadow: 0 0 5px 3px orange;
-  }
-  100% {
-    box-shadow: 0 0 10px 5px orange;
-  }
-}
-@keyframes highlight-route-elimination-animation {
-  0% {
-    box-shadow: 0 0 5px 3px black;
-  }
-  100% {
-    box-shadow: 0 0 10px 5px black;
   }
 }
 .common-objective-slot {
@@ -339,10 +315,10 @@
   background-size: auto 200%;
 }
 .common-objective-slot .common-objective .card-side.front {
-  background-position-y: 0%;
+  background-position-y: 100%;
 }
 .common-objective-slot .common-objective .card-side.back {
-  background-position-y: 100%;
+  background-position-y: 0%;
 }
 
 .ticket-slot {
@@ -1054,6 +1030,18 @@ html, .mode_3d #game_play_area_background {
   position: absolute;
   right: -13px;
   top: 0px;
+}
+#zoom-wrapper #jump-controls .jump-link .eye {
+  width: 20px;
+  height: 20px;
+  mask: url("img/eye.svg") no-repeat center/contain;
+  -webkit-mask: url("img/eye.svg") no-repeat center/contain;
+  background: black;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+  vertical-align: middle;
 }
 #zoom-wrapper #jump-controls#jump-0 {
   border-color: black;

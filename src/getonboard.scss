@@ -89,6 +89,19 @@ html, .mode_3d #game_play_area_background {
         right: -13px;
         top: 0px;
       }
+
+      .eye {
+        width: 20px;
+        height: 20px;
+        mask: url('img/eye.svg') no-repeat center / contain;
+        -webkit-mask: url('img/eye.svg') no-repeat center / contain;
+        background: black;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+        display: inline-block;
+        vertical-align: middle;
+      }
     }
 
     &#jump-0 {
