@@ -309,7 +309,7 @@ class GetOnBoard implements GetOnBoardGame {
 
         const firstPlayerTableToken = document.getElementById('firstPlayerTableToken');
         if (firstPlayerTableToken) {
-            slideToObjectAndAttach(this, firstPlayerTableToken, `player-table-${playerId}-first-player-wrapper`);
+            slideToObjectAndAttach(this, firstPlayerTableToken, `player-table-${playerId}-first-player-wrapper`, this.zoom);
         } else {
             dojo.place('<div id="firstPlayerTableToken" class="first-player-token"></div>', `player-table-${playerId}-first-player-wrapper`);
 
@@ -339,7 +339,7 @@ class GetOnBoard implements GetOnBoardGame {
         (Array.from(document.getElementsByClassName('pips')) as HTMLDivElement[]).forEach(pipDiv => pipDiv.dataset.side = pipSide);
 
         const pipId = `pip-${playerId}-${zone}-${position}`;
-        dojo.place(`<div class="pip" id="${pipId}"></div>`,  zone >=6 ? 'pips-bottom' : 'pips-top');
+        dojo.place(`<div class="pip" id="${pipId}" style="border-color: #${this.getPlayerColor(playerId)}"></div>`,  zone >=6 ? 'pips-bottom' : 'pips-top');
         const pipDiv = document.getElementById(`pip-${playerId}-${zone}-${position}`);
         const pipTable = new PlayerTable(this.gamedatas.players[playerId], pipId, pipDiv);
         this.registeredTablesByPlayerId[playerId].push(pipTable);
@@ -350,7 +350,7 @@ class GetOnBoard implements GetOnBoardGame {
             const index = this.registeredTablesByPlayerId[playerId].indexOf(pipTable);
             this.registeredTablesByPlayerId[playerId].splice(index, 1);
             pipDiv.parentElement?.removeChild(pipDiv);
-        }, 2000);
+        }, 3000);
     }
 
     public placeDeparturePawn(position: number) {
@@ -531,6 +531,12 @@ class GetOnBoard implements GetOnBoardGame {
             if (log && args && !args.processed) {
                 if (args.shape && args.shape[0] != '<') {
                     args.shape = `<div class="shape" data-shape="${JSON.stringify(args.shape)}" data-step="${args.step}"></div>`
+                }
+
+                if (args.elements && typeof args.elements !== 'string') {
+                    args.elements = args.elements.map(element => 
+                        `<div class="map-icon" data-element="${element}"></div>`
+                    ).join('');
                 }
             }
         } catch (e) {

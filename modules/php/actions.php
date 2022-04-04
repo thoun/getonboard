@@ -70,13 +70,16 @@ trait ActionTrait {
         if ($possibleRoute->trafficJam > 0) {            
             $zones[] = 7;
         }
+
+        $logElements = array_values(array_filter($mapElements, fn($element) => in_array($element, [0, 20, 30, 32, 40, 41, 42, 50, 51])));
         
-        self::notifyAllPlayers('placedRoute', clienttranslate('${player_name} places a route marker'), [
+        self::notifyAllPlayers('placedRoute', clienttranslate('${player_name} places a route marker to ${elements}'), [
             'playerId' => $playerId,
             'player_name' => $this->getPlayerName($playerId),
             'marker' => PlacedRoute::forNotif($from, $to, false),
             'zones' => $zones,
             'position' => $to,
+            'elements' => $logElements,
         ]);
 
         if ($possibleRoute->isElimination) {

@@ -1,4 +1,5 @@
-function slideToObjectAndAttach(game, object, destinationId, posX, posY) {
+function slideToObjectAndAttach(game, object, destinationId, zoom) {
+    if (zoom === void 0) { zoom = 1; }
     var destination = document.getElementById(destinationId);
     if (destination.contains(object)) {
         return Promise.resolve(true);
@@ -8,12 +9,12 @@ function slideToObjectAndAttach(game, object, destinationId, posX, posY) {
         object.style.zIndex = '10';
         var objectCR = object.getBoundingClientRect();
         var destinationCR = destination.getBoundingClientRect();
-        var deltaX = destinationCR.left - objectCR.left + (posX !== null && posX !== void 0 ? posX : 0);
-        var deltaY = destinationCR.top - objectCR.top + (posY !== null && posY !== void 0 ? posY : 0);
+        var deltaX = destinationCR.left - objectCR.left;
+        var deltaY = destinationCR.top - objectCR.top;
         var attachToNewParent = function () {
-            object.style.top = posY !== undefined ? "".concat(posY, "px") : 'unset';
-            object.style.left = posX !== undefined ? "".concat(posX, "px") : 'unset';
-            object.style.position = (posX !== undefined || posY !== undefined) ? 'absolute' : 'relative';
+            object.style.top = 'unset';
+            object.style.left = 'unset';
+            object.style.position = 'relative';
             object.style.zIndex = originalZIndex ? '' + originalZIndex : 'unset';
             object.style.transform = 'unset';
             object.style.transition = 'unset';
@@ -25,7 +26,7 @@ function slideToObjectAndAttach(game, object, destinationId, posX, posY) {
         }
         else {
             object.style.transition = "transform 0.5s ease-in";
-            object.style.transform = "translate(".concat(deltaX, "px, ").concat(deltaY, "px)");
+            object.style.transform = "translate(".concat(deltaX / zoom, "px, ").concat(deltaY / zoom, "px)");
             var securityTimeoutId_1 = null;
             var transitionend_1 = function () {
                 attachToNewParent();
@@ -821,7 +822,7 @@ var GetOnBoard = /** @class */ (function () {
         }
         var firstPlayerTableToken = document.getElementById('firstPlayerTableToken');
         if (firstPlayerTableToken) {
-            slideToObjectAndAttach(this, firstPlayerTableToken, "player-table-".concat(playerId, "-first-player-wrapper"));
+            slideToObjectAndAttach(this, firstPlayerTableToken, "player-table-".concat(playerId, "-first-player-wrapper"), this.zoom);
         }
         else {
             dojo.place('<div id="firstPlayerTableToken" class="first-player-token"></div>', "player-table-".concat(playerId, "-first-player-wrapper"));
@@ -845,7 +846,7 @@ var GetOnBoard = /** @class */ (function () {
         var pipSide = this.tableCenter.getSide(position) === 'left' ? 'right' : 'left';
         Array.from(document.getElementsByClassName('pips')).forEach(function (pipDiv) { return pipDiv.dataset.side = pipSide; });
         var pipId = "pip-".concat(playerId, "-").concat(zone, "-").concat(position);
-        dojo.place("<div class=\"pip\" id=\"".concat(pipId, "\"></div>"), zone >= 6 ? 'pips-bottom' : 'pips-top');
+        dojo.place("<div class=\"pip\" id=\"".concat(pipId, "\" style=\"border-color: #").concat(this.getPlayerColor(playerId), "\"></div>"), zone >= 6 ? 'pips-bottom' : 'pips-top');
         var pipDiv = document.getElementById("pip-".concat(playerId, "-").concat(zone, "-").concat(position));
         var pipTable = new PlayerTable(this.gamedatas.players[playerId], pipId, pipDiv);
         this.registeredTablesByPlayerId[playerId].push(pipTable);
@@ -855,7 +856,7 @@ var GetOnBoard = /** @class */ (function () {
             var index = _this.registeredTablesByPlayerId[playerId].indexOf(pipTable);
             _this.registeredTablesByPlayerId[playerId].splice(index, 1);
             (_a = pipDiv.parentElement) === null || _a === void 0 ? void 0 : _a.removeChild(pipDiv);
-        }, 2000);
+        }, 3000);
     };
     GetOnBoard.prototype.placeDeparturePawn = function (position) {
         if (!this.checkAction('placeDeparturePawn')) {
@@ -1016,6 +1017,11 @@ var GetOnBoard = /** @class */ (function () {
             if (log && args && !args.processed) {
                 if (args.shape && args.shape[0] != '<') {
                     args.shape = "<div class=\"shape\" data-shape=\"".concat(JSON.stringify(args.shape), "\" data-step=\"").concat(args.step, "\"></div>");
+                }
+                if (args.elements && typeof args.elements !== 'string') {
+                    args.elements = args.elements.map(function (element) {
+                        return "<div class=\"map-icon\" data-element=\"".concat(element, "\"></div>");
+                    }).join('');
                 }
             }
         }

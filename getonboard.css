@@ -264,7 +264,7 @@
 }
 #map .pips .pip {
   position: relative;
-  border: 5px ridge #e4273e;
+  border: 8px ridge #e4273e;
   border-radius: 10px;
   overflow: hidden;
 }
@@ -1171,4 +1171,41 @@ html, .mode_3d #game_play_area_background {
 }
 #page-title .ticket[data-ticket="12"] {
   background-position-x: 100%;
+}
+
+.map-icon {
+  display: inline-block;
+  position: relative;
+  width: 32px;
+  height: 32px;
+  background-image: url("img/map-icons.png");
+  background-size: auto 100%;
+  vertical-align: middle;
+}
+.map-icon[data-element="0"] {
+  background-position: 0% 0%;
+}
+.map-icon[data-element="20"] {
+  background-position: 12.5% 0%;
+}
+.map-icon[data-element="30"] {
+  background-position: 25% 0%;
+}
+.map-icon[data-element="32"] {
+  background-position: 37.5% 0%;
+}
+.map-icon[data-element="40"] {
+  background-position: 50% 0%;
+}
+.map-icon[data-element="41"] {
+  background-position: 62.5% 0%;
+}
+.map-icon[data-element="42"] {
+  background-position: 75% 0%;
+}
+.map-icon[data-element="50"] {
+  background-position: 87.5% 0%;
+}
+.map-icon[data-element="51"] {
+  background-position: 100% 0%;
 }

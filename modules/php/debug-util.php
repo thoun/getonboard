@@ -11,8 +11,8 @@ trait DebugUtilTrait {
             return;
         } 
 
-        $this->insertRoutes(2343492, [16, 15, 14, 24, 34, 44, 43, 53, 63, 64, 74, 73]);
-        $this->insertRoutes(2343493, [16, 15, 14, 24, 34, 44, 43, 53, 63, 64, 74, 73]);
+        //$this->insertRoutes(2343492, [16, 15, 14, 24, 34, 44, 43, 53, 63, 64, 74, 73]);
+        //$this->insertRoutes(2343493, [16, 15, 14, 24, 34, 44, 43, 53, 63, 64, 74, 73]);
     }
 
     function insertRoutes(int $playerId, array $positions, int $validated = 1) {

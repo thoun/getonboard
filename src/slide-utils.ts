@@ -1,4 +1,4 @@
-function slideToObjectAndAttach(game: GetOnBoardGame, object: HTMLElement, destinationId: string, posX?: number, posY?: number): Promise<boolean> {
+function slideToObjectAndAttach(game: GetOnBoardGame, object: HTMLElement, destinationId: string, zoom: number = 1): Promise<boolean> {
     const destination = document.getElementById(destinationId);
     if (destination.contains(object)) {
         return Promise.resolve(true);
@@ -11,13 +11,13 @@ function slideToObjectAndAttach(game: GetOnBoardGame, object: HTMLElement, desti
         const objectCR = object.getBoundingClientRect();
         const destinationCR = destination.getBoundingClientRect();
 
-        const deltaX = destinationCR.left - objectCR.left + (posX ?? 0);
-        const deltaY = destinationCR.top - objectCR.top + (posY ?? 0);
+        const deltaX = destinationCR.left - objectCR.left;
+        const deltaY = destinationCR.top - objectCR.top;
 
         const attachToNewParent = () => {
-            object.style.top = posY !== undefined ? `${posY}px` : 'unset';
-            object.style.left = posX !== undefined ? `${posX}px` : 'unset';
-            object.style.position = (posX !== undefined || posY !== undefined) ? 'absolute' : 'relative';
+            object.style.top = 'unset';
+            object.style.left = 'unset';
+            object.style.position = 'relative';
             object.style.zIndex = originalZIndex ? ''+originalZIndex : 'unset';
             object.style.transform = 'unset';
             object.style.transition = 'unset';
@@ -29,7 +29,7 @@ function slideToObjectAndAttach(game: GetOnBoardGame, object: HTMLElement, desti
             attachToNewParent();
         } else {
             object.style.transition = `transform 0.5s ease-in`;
-            object.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+            object.style.transform = `translate(${deltaX / zoom}px, ${deltaY / zoom}px)`;
 
             let securityTimeoutId = null;
 

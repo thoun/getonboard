@@ -34,7 +34,6 @@ Make sure ftp-sync.json and node_modules are in .gitignore
 
 # TODO
 
-icons on log ?
 shortcut for current player board/map ?
 make 2-3p horizontal
-make it clearer pip owner
+animate pip ? only if displayed zone is not fully visible ?
