@@ -333,10 +333,26 @@ class GetOnBoard implements GetOnBoardGame {
             77 + Number(zoneStyle.top.match(/\d+/)[0]),
         );
     }
+    
+    private isElementIntoViewport(el: HTMLElement) {
+        var rect = el.getBoundingClientRect();
+        var elemTop = rect.top;
+        var elemBottom = rect.bottom;
+    
+        // Only completely visible elements return true:
+        var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+        // Partially visible elements return true:
+        //isVisible = elemTop < window.innerHeight && elemBottom >= 0;
+        return isVisible;
+    }
 
     private showZone(playerId: number, zone: number, position: number) {
         const pipSide = this.tableCenter.getSide(position) === 'left' ? 'right' : 'left';
         (Array.from(document.getElementsByClassName('pips')) as HTMLDivElement[]).forEach(pipDiv => pipDiv.dataset.side = pipSide);
+
+        const playerTableZoneDiv = document.getElementById(`player-table-${playerId}`).querySelector(`[data-zone="${zone}"]`) as HTMLDivElement;
+
+
 
         const pipId = `pip-${playerId}-${zone}-${position}`;
         dojo.place(`<div class="pip" id="${pipId}" style="border-color: #${this.getPlayerColor(playerId)}"></div>`,  zone >=6 ? 'pips-bottom' : 'pips-top');
@@ -345,6 +361,18 @@ class GetOnBoard implements GetOnBoardGame {
         this.registeredTablesByPlayerId[playerId].push(pipTable);
 
         this.cutZone(pipDiv, zone);
+
+        const originBR = playerTableZoneDiv.getBoundingClientRect();
+        const pipBR = pipDiv.getBoundingClientRect();
+
+        const deltaX = originBR.left - pipBR.left - 8;
+        const deltaY = originBR.top - pipBR.top - 8;
+
+        pipDiv.style.transform = `translate(${deltaX/this.zoom}px, ${deltaY/this.zoom}px)`;
+        if (!this.isElementIntoViewport(playerTableZoneDiv)) {
+            pipDiv.classList.add('animated');
+            setTimeout(() => pipDiv.style.transform = '', 0);
+        }
 
         setTimeout(() => {
             const index = this.registeredTablesByPlayerId[playerId].indexOf(pipTable);
@@ -465,7 +493,7 @@ class GetOnBoard implements GetOnBoardGame {
         const notifs = [
             ['newRound', ANIMATION_MS],
             ['newFirstPlayer', ANIMATION_MS],
-            ['placedRoute', ANIMATION_MS],
+            ['placedRoute', ANIMATION_MS*2],
             ['confirmTurn', ANIMATION_MS],
             ['flipObjective', ANIMATION_MS],
             ['placedDeparturePawn', 1],

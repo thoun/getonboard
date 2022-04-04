@@ -36,4 +36,3 @@ Make sure ftp-sync.json and node_modules are in .gitignore
 
 shortcut for current player board/map ?
 make 2-3p horizontal
-animate pip ? only if displayed zone is not fully visible ?

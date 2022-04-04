@@ -841,16 +841,36 @@ var GetOnBoard = /** @class */ (function () {
         pipDiv.style.height = zoneStyle.height;
         pipDiv.scrollTo(Number(zoneStyle.left.match(/\d+/)[0]), 77 + Number(zoneStyle.top.match(/\d+/)[0]));
     };
+    GetOnBoard.prototype.isElementIntoViewport = function (el) {
+        var rect = el.getBoundingClientRect();
+        var elemTop = rect.top;
+        var elemBottom = rect.bottom;
+        // Only completely visible elements return true:
+        var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+        // Partially visible elements return true:
+        //isVisible = elemTop < window.innerHeight && elemBottom >= 0;
+        return isVisible;
+    };
     GetOnBoard.prototype.showZone = function (playerId, zone, position) {
         var _this = this;
         var pipSide = this.tableCenter.getSide(position) === 'left' ? 'right' : 'left';
         Array.from(document.getElementsByClassName('pips')).forEach(function (pipDiv) { return pipDiv.dataset.side = pipSide; });
+        var playerTableZoneDiv = document.getElementById("player-table-".concat(playerId)).querySelector("[data-zone=\"".concat(zone, "\"]"));
         var pipId = "pip-".concat(playerId, "-").concat(zone, "-").concat(position);
         dojo.place("<div class=\"pip\" id=\"".concat(pipId, "\" style=\"border-color: #").concat(this.getPlayerColor(playerId), "\"></div>"), zone >= 6 ? 'pips-bottom' : 'pips-top');
         var pipDiv = document.getElementById("pip-".concat(playerId, "-").concat(zone, "-").concat(position));
         var pipTable = new PlayerTable(this.gamedatas.players[playerId], pipId, pipDiv);
         this.registeredTablesByPlayerId[playerId].push(pipTable);
         this.cutZone(pipDiv, zone);
+        var originBR = playerTableZoneDiv.getBoundingClientRect();
+        var pipBR = pipDiv.getBoundingClientRect();
+        var deltaX = originBR.left - pipBR.left - 8;
+        var deltaY = originBR.top - pipBR.top - 8;
+        pipDiv.style.transform = "translate(".concat(deltaX / this.zoom, "px, ").concat(deltaY / this.zoom, "px)");
+        if (!this.isElementIntoViewport(playerTableZoneDiv)) {
+            pipDiv.classList.add('animated');
+            setTimeout(function () { return pipDiv.style.transform = ''; }, 0);
+        }
         setTimeout(function () {
             var _a;
             var index = _this.registeredTablesByPlayerId[playerId].indexOf(pipTable);
@@ -958,7 +978,7 @@ var GetOnBoard = /** @class */ (function () {
         var notifs = [
             ['newRound', ANIMATION_MS],
             ['newFirstPlayer', ANIMATION_MS],
-            ['placedRoute', ANIMATION_MS],
+            ['placedRoute', ANIMATION_MS * 2],
             ['confirmTurn', ANIMATION_MS],
             ['flipObjective', ANIMATION_MS],
             ['placedDeparturePawn', 1],

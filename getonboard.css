@@ -267,6 +267,10 @@
   border: 8px ridge #e4273e;
   border-radius: 10px;
   overflow: hidden;
+  z-index: 50;
+}
+#map .pips .pip.animated {
+  transition: transform 0.5s ease-in-out;
 }
 
 @keyframes unvalidated-animation {
