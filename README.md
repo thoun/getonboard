@@ -33,6 +33,6 @@ Also add one auto-FTP upload extension (for example https://marketplace.visualst
 Make sure ftp-sync.json and node_modules are in .gitignore
 
 # TODO
-
+stats
 shortcut for current player board/map ?
 make 2-3p horizontal
