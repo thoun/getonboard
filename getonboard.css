@@ -998,7 +998,7 @@ html, .mode_3d #game_play_area_background {
 }
 #zoom-wrapper #jump-controls {
   position: fixed;
-  top: 180px;
+  top: 50vh;
 }
 #zoom-wrapper #jump-controls .jump-link {
   position: relative;

@@ -301,6 +301,9 @@ class GetOnBoard implements GetOnBoardGame {
             dojo.place(`<div id="jump-${player.id}" class="jump-link" style="color: #${player.color}; border-color: #${player.color};"><div class="eye" style="background: #${player.color};"></div> ${player.name}</div>`, `jump-controls`);
             document.getElementById(`jump-${player.id}`).addEventListener('click', () => this.jumpToPlayer(Number(player.id)));	
         });
+
+        const jumpDiv = document.getElementById(`jump-controls`);
+        jumpDiv.style.marginTop = `-${Math.round(jumpDiv.getBoundingClientRect().height / 2)}px`;
     }
     
     private jumpToPlayer(playerId: number): void {

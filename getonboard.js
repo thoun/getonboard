@@ -816,6 +816,8 @@ var GetOnBoard = /** @class */ (function () {
             dojo.place("<div id=\"jump-".concat(player.id, "\" class=\"jump-link\" style=\"color: #").concat(player.color, "; border-color: #").concat(player.color, ";\"><div class=\"eye\" style=\"background: #").concat(player.color, ";\"></div> ").concat(player.name, "</div>"), "jump-controls");
             document.getElementById("jump-".concat(player.id)).addEventListener('click', function () { return _this.jumpToPlayer(Number(player.id)); });
         });
+        var jumpDiv = document.getElementById("jump-controls");
+        jumpDiv.style.marginTop = "-".concat(Math.round(jumpDiv.getBoundingClientRect().height / 2), "px");
     };
     GetOnBoard.prototype.jumpToPlayer = function (playerId) {
         var elementId = playerId === 0 ? "map" : "player-table-".concat(playerId);
