@@ -97,7 +97,18 @@ class GetOnBoard implements GetOnBoardGame {
         }
     }
     
+    private setGamestateDescription(property: string = '') {
+        const originalState = this.gamedatas.gamestates[this.gamedatas.gamestate.id];
+        this.gamedatas.gamestate.description = `${originalState['description' + property]}`; 
+        this.gamedatas.gamestate.descriptionmyturn = `${originalState['descriptionmyturn' + property]}`;
+        (this as any).updatePageTitle();
+    }
+    
     private onEnteringPlaceRoute(args: EnteringPlaceRouteArgs) {
+        if (args.canConfirm) {
+            this.setGamestateDescription('Confirm');
+        }
+
         if ((this as any).isCurrentPlayerActive()) {
             args.possibleRoutes.forEach(route => this.tableCenter.addGhostMarker(route));
         }
@@ -437,7 +448,7 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     public confirmTurn() {
-        if(!(this as any).checkAction('confirmTurn')) {
+        if(!(this as any).checkAction('confirmTurn', true)) {
             return;
         }
 

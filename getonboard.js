@@ -545,7 +545,7 @@ var TableCenter = /** @class */ (function () {
     };
     TableCenter.prototype.setRound = function (validatedTickets, currentTicket, initialization) {
         if (initialization === void 0) { initialization = false; }
-        var roundNumber = validatedTickets.length + (!currentTicket ? 0 : 1);
+        var roundNumber = Math.min(12, validatedTickets.length + (!currentTicket ? 0 : 1));
         if (initialization) {
             for (var i = 1; i <= 12; i++) {
                 var visible = i <= roundNumber;
@@ -643,8 +643,18 @@ var GetOnBoard = /** @class */ (function () {
                 break;
         }
     };
+    GetOnBoard.prototype.setGamestateDescription = function (property) {
+        if (property === void 0) { property = ''; }
+        var originalState = this.gamedatas.gamestates[this.gamedatas.gamestate.id];
+        this.gamedatas.gamestate.description = "".concat(originalState['description' + property]);
+        this.gamedatas.gamestate.descriptionmyturn = "".concat(originalState['descriptionmyturn' + property]);
+        this.updatePageTitle();
+    };
     GetOnBoard.prototype.onEnteringPlaceRoute = function (args) {
         var _this = this;
+        if (args.canConfirm) {
+            this.setGamestateDescription('Confirm');
+        }
         if (this.isCurrentPlayerActive()) {
             args.possibleRoutes.forEach(function (route) { return _this.tableCenter.addGhostMarker(route); });
         }
@@ -926,7 +936,7 @@ var GetOnBoard = /** @class */ (function () {
         this.takeAction('resetTurn');
     };
     GetOnBoard.prototype.confirmTurn = function () {
-        if (!this.checkAction('confirmTurn')) {
+        if (!this.checkAction('confirmTurn', true)) {
             return;
         }
         this.takeAction('confirmTurn');

@@ -151,7 +151,7 @@ class TableCenter {
     }
 
     public setRound(validatedTickets: number[], currentTicket: number, initialization: boolean = false) {
-        const roundNumber = validatedTickets.length + (!currentTicket ? 0 : 1);
+        const roundNumber = Math.min(12, validatedTickets.length + (!currentTicket ? 0 : 1));
         if (initialization) {
             for(let i=1; i<=12; i++) {
                 const visible = i <= roundNumber;
