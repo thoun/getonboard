@@ -154,6 +154,13 @@
 #map[data-size=big] #map-elements .route[data-direction="1"] .marker {
   height: 6px;
 }
+#map[data-size=big] #map-elements .intersection:not(.green-light) .objective-letter {
+  top: -13px;
+  right: -14px;
+}
+#map[data-size=big] #map-elements .intersection:not(.green-light) .objective-letter[data-position="76"] {
+  top: -9px;
+}
 #map[data-size=big] #map-elements .common-objective-slot {
   top: 16px;
 }

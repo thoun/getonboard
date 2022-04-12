@@ -78,6 +78,17 @@ $marker-size: 6px;
         }
       }
 
+      .intersection:not(.green-light) {
+        .objective-letter {
+          top: -13px;
+          right: -14px;
+
+          &[data-position="76"] {
+            top: -9px;
+          }
+        }
+      }
+
       .common-objective-slot {
         top: 16px;
 

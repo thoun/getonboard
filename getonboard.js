@@ -458,7 +458,7 @@ var TableCenter = /** @class */ (function () {
         // personal objective
         var currentPlayer = gamedatas.players[this.game.getPlayerId()];
         currentPlayer === null || currentPlayer === void 0 ? void 0 : currentPlayer.personalObjectivePositions.forEach(function (position) {
-            return dojo.place("<div class=\"objective-letter\" style=\"box-shadow: 0 0 5px 5px #".concat(currentPlayer.color, ";\"></div>"), "intersection".concat(position));
+            return dojo.place("<div class=\"objective-letter\" style=\"box-shadow: 0 0 5px 5px #".concat(currentPlayer.color, ";\" data-position=\"").concat(position, "\"></div>"), "intersection".concat(position));
         });
         // tickets
         this.setRound(gamedatas.validatedTickets, gamedatas.currentTicket, true);

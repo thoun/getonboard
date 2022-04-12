@@ -51,7 +51,7 @@ class TableCenter {
         // personal objective
         const currentPlayer = gamedatas.players[this.game.getPlayerId()];
         currentPlayer?.personalObjectivePositions.forEach(position => 
-            dojo.place(`<div class="objective-letter" style="box-shadow: 0 0 5px 5px #${currentPlayer.color};"></div>`, `intersection${position}`)
+            dojo.place(`<div class="objective-letter" style="box-shadow: 0 0 5px 5px #${currentPlayer.color};" data-position="${position}"></div>`, `intersection${position}`)
         );
 
         // tickets

@@ -31,7 +31,7 @@ trait ActionTrait {
 
         self::notifyAllPlayers('placedDeparturePawn', clienttranslate('${player_name} places departure pawn'), [
             'playerId' => $playerId,
-            'player_name' => self::getActivePlayerName(),
+            'player_name' => $this->getPlayerName($playerId),
             'position' => $position,
         ]);
 

@@ -113,7 +113,7 @@ interface GetOnBoardGamedatas {
     round: number;
     map: 'small' | 'big';
     
-    MAP_POSITIONS: { [position: number]: [] };
+    MAP_POSITIONS: { [position: number]: number[] };
     MAP_ROUTES: { [position: number]: number[] };
 }
 
