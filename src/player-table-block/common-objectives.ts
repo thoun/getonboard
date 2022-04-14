@@ -3,7 +3,7 @@ class PlayerTableCommonObjectivesBlock extends PlayerTableBlock {
         super(playerId);
 
         let html = `
-        <div class="common-objectives block">
+        <div id="common-objectives-block-${playerId}" data-tooltip="[90]" class="common-objectives block">
             <div id="player-table-${playerId}-common-objectives-objective1" class="subtotal" data-number="1"></div>
             <div id="player-table-${playerId}-common-objectives-objective2" class="subtotal" data-number="2"></div>
             <div id="player-table-${playerId}-common-objectives-total" class="total"></div>

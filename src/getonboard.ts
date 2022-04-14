@@ -11,6 +11,21 @@ const ZOOM_LEVELS = [0.5, 0.625, 0.75, 0.875, 1];
 const ZOOM_LEVELS_MARGIN = [-100, -60, -33, -14, 0];
 const LOCAL_STORAGE_ZOOM_KEY = 'GetOnBoard-zoom';
 
+function formatTextIcons(rawText: string) {
+    if (!rawText) {
+        return '';
+    }
+    return rawText
+        .replace(/\[OldLady\]/ig, '<div class="map-icon" data-element="20"></div>')
+        .replace(/\[Student\]/ig, '<div class="map-icon" data-element="30"></div>')
+        .replace(/\[School\]/ig, '<div class="map-icon" data-element="32"></div>')
+        .replace(/\[Tourist\]/ig, '<div class="map-icon" data-element="40"></div>')
+        .replace(/\[MonumentLight\]/ig, '<div class="map-icon" data-element="41"></div>')
+        .replace(/\[MonumentDark\]/ig, '<div class="map-icon" data-element="42"></div>')
+        .replace(/\[Businessman\]/ig, '<div class="map-icon" data-element="50"></div>')
+        .replace(/\[Office\]/ig, '<div class="map-icon" data-element="51"></div>');
+}
+
 class GetOnBoard implements GetOnBoardGame {
     public zoom: number = 1;
 
@@ -77,6 +92,8 @@ class GetOnBoard implements GetOnBoardGame {
         if (this.zoom !== 1) {
             this.setZoom(this.zoom);
         }
+
+        this.addTooltips();
 
         log( "Ending game setup" );
     }
@@ -161,7 +178,7 @@ class GetOnBoard implements GetOnBoardGame {
                     (this as any).addActionButton(`confirmTurn_button`, _("Confirm turn"), () => this.confirmTurn());
                     const placeRouteArgs = args as EnteringPlaceRouteArgs;
                     if (placeRouteArgs.canConfirm) {
-                        this.startActionTimer(`confirmTurn_button`, 5);
+                        this.startActionTimer(`confirmTurn_button`, 8);
                     } else {
                         dojo.addClass(`confirmTurn_button`, `disabled`);
                     }
@@ -236,7 +253,9 @@ class GetOnBoard implements GetOnBoardGame {
             const eliminated = Number(player.eliminated) > 0;
 
             if (playerId === this.getPlayerId()) {
-                let html = `<div id="personal-objective-wrapper" data-expanded="${((this as any).prefs[203]?.value != 2).toString()}">
+                let html = `
+                <div class="personal-objective-label">${_("Your personal objective :")}</div>
+                <div id="personal-objective-wrapper" data-expanded="${((this as any).prefs[203]?.value != 2).toString()}">
                     <div class="personal-objective collapsed">
                         ${player.personalObjectiveLetters.map(letter => `<div class="letter">${letter}</div>`).join('')}
                     </div>
@@ -244,8 +263,6 @@ class GetOnBoard implements GetOnBoardGame {
                     <div id="toggle-objective-expand" class="arrow"></div>
                 </div>`;
                 dojo.place(html, `player_board_${player.id}`);
-
-                (this as any).addTooltipHtml('personal-objective-wrapper', _("Your personal objective"));
 
                 document.getElementById('toggle-objective-expand').addEventListener('click', () => {
                     const wrapper = document.getElementById(`personal-objective-wrapper`);
@@ -329,6 +346,37 @@ class GetOnBoard implements GetOnBoardGame {
 
             (this as any).addTooltipHtml('firstPlayerTableToken', _("Inspector pawn. This player is the first player of the round."));
         }
+    }
+
+    private getTooltip(element: number) {
+        switch (element) {
+            case 0: return _("<strong>Green lights:</strong> If your route ends at an intersection with a Green light, you place an additional marker.");
+            case 1: return _("<strong>Number:</strong> Possible starting point. You choose between 2 numbers at the beginning of the game to place your Departure Pawn.");
+            case 20: return '[OldLady] : ' + _("When a marker reach an [OldLady], check a box on the [OldLady] zone. Add the number next to each checked box at the end.");
+            case 30: return '[Student] : ' + _("When a marker reach an [Student], check a box on the [Student] zone. Multiply [Student] with [School] at the end.");
+            case 32: return '[School] : ' + _("When a marker reach a [School], check a box on the [School] zone. Multiply [Student] with [School] at the end.") + `<br><i>${_("If the [School] is marked with a Star, write the number of [Student] you have checked when a marker reach it.")}</i>`;
+            case 40: return '[Tourist] : ' + _("When a marker reach a [Tourist], check a box on the first available row on the [Tourist] zone. You will score when you drop the [Tourist] to [MonumentLight]/[MonumentDark]. If the current row is full and you didn't reach [MonumentLight]/[MonumentDark], nothing happens.");
+            case 41: return '[MonumentLight][MonumentDark] : ' +  _("When a marker reach [MonumentLight]/[MonumentDark], write the score on the column of the [Tourist] at the end of the current row. If the current row is empty, nothing happen.") + `<br><i>${_("If [MonumentLight]/[MonumentDark] is marked with a Star, write the number of [Tourist] you have checked when a marker reach it.")}</i>`;
+            case 50: return '[Businessman] : ' + _("When a marker reach [Businessman], check a box on the first available row on the [Businessman] zone. You will score when you drop the [Businessman] to [Office]. If the current row is full and you didn't reach [Office], nothing happens.");
+            case 51: return '[Office] : ' + _("When a marker reach [Office], write the score on the column of the [Businessman] at the end of the current row, and check the associated symbol ([OldLady], [Tourist] or [Student]) as if you reached it with a marker. If the current row is empty, nothing happen.") + `<br><i>${_("If the [Office] is marked with a Star, write the number of [Businessman] you have checked when a marker reach it.")}</i>`;
+            case 90: return _("<strong>Common Objective:</strong> Score 10 points when you complete the objective, or 6 points if another player completed it on a previous round.");
+            case 91: return _("<strong>Personal Objective:</strong> Score 10 points when your markers link the 3 Letters of your personal objective.");
+            case 92: return _("<strong>Turn Zone:</strong> If you chose to change a turn into a straight line or a straight line to a turn, check a box on the Turn Zone. The score here is negative, and you only have 5 of them!");
+            case 93: return _("<strong>Traffic Jam:</strong> For each marker already in place when you add a marker on a route, check a box on the Turn Zone. If the road is black, check an extra box. The score here is negative!");
+            case 94: return _("<strong>Total score:</strong> Sum of all green zone totals, with substraction of all red zone totals.");
+            case 95: return _("<strong>Tickets:</strong> The red check indicates the current round ticket. It defines the shape of the route you have to place. The black checks indicates the past rounds.");
+            case 97: return _("<strong>Letter:</strong> Used to define your personal objective.");
+
+        }
+    }
+
+    private addTooltips() {
+        document.querySelectorAll(`[data-tooltip]`).forEach((element: HTMLElement) => {
+            const tooltipsIds = JSON.parse(element.dataset.tooltip);
+            let tooltip = ``;
+            tooltipsIds.forEach(id => tooltip += `<div class="tooltip-section">${formatTextIcons(this.getTooltip(id))}</div>`);
+            (this as any).addTooltipHtml(element.id, tooltip);
+        });
     }
     
     private eliminatePlayer(playerId: number) {

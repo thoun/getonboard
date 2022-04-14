@@ -3,7 +3,7 @@ class PlayerTableTrafficJamBlock extends PlayerTableBlock {
         super(playerId);
 
         let html = `
-        <div class="traffic-jam block" data-zone="7">`;
+        <div id="traffic-jam-block-${playerId}" data-tooltip="[93]" class="traffic-jam block" data-zone="7">`;
         for(let i=1; i<=19; i++) {
             html += `
                     <div id="player-table-${playerId}-traffic-jam-checkmark${i}" class="checkmark" data-number="${i}"></div>`;

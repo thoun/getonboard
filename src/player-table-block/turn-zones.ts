@@ -3,7 +3,7 @@ class PlayerTableTurnZonesBlock extends PlayerTableBlock {
         super(playerId);
 
         let html = `
-        <div class="turn-zones block" data-zone="6">`;
+        <div id="turn-zones-block-${playerId}" data-tooltip="[92]" class="turn-zones block" data-zone="6">`;
         for(let i=1; i<=5; i++) {
             html += `
                     <div id="player-table-${playerId}-turn-zones-checkmark${i}" class="checkmark" data-number="${i}"></div>`;

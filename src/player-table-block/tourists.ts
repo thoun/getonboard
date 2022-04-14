@@ -3,7 +3,7 @@ class PlayerTableTouristsBlock extends PlayerTableBlock {
         super(playerId);
 
         let html = `
-        <div class="tourists block" data-zone="4">`;
+        <div id="tourists-block-${playerId}" data-tooltip="[40,41]" class="tourists block" data-zone="4">`;
         for(let i=1; i<=3; i++) {
             html += `
                     <div id="player-table-${playerId}-tourists-light-checkmark${i}" class="monument light checkmark" data-number="${i}"></div>`;

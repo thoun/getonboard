@@ -155,11 +155,35 @@ $marker-size: 6px;
     }
 
     .departure-pawn {
+      position: relative;
       width: 32px;
       height: 44px;
       margin-top: -5px;
-      mask: url('img/departure.svg') no-repeat center / contain;
-      -webkit-mask: url('img/departure.svg') no-repeat center / contain;
+      z-index: 1;
+
+      &::before {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        right: -2px;
+        bottom: -2px;
+        content: '';
+        mask: url('img/departure.svg') no-repeat center / contain;
+        -webkit-mask: url('img/departure.svg') no-repeat center / contain;
+        background: black;
+      }
+
+      &::after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        content: '';
+        mask: url('img/departure.svg') no-repeat center / contain;
+        -webkit-mask: url('img/departure.svg') no-repeat center / contain;
+        background: var(--background);
+      }
     }
 
     .marker {

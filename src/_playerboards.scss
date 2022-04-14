@@ -3,6 +3,10 @@
 .player-board {
   background-color: white;
 
+  .personal-objective-label {
+    text-align: center;
+  }
+
   #personal-objective-wrapper {
     position: relative;
     display: flex;

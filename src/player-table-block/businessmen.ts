@@ -3,7 +3,7 @@ class PlayerTableBusinessmenBlock extends PlayerTableBlock {
         super(playerId);
 
         let html = `
-        <div class="businessmen block" data-zone="5">
+        <div id="businessmen-block-${playerId}" data-tooltip="[50,51]" class="businessmen block" data-zone="5">
                     <div id="player-table-${playerId}-businessmen-special" class="special"></div>`;
         for(let row=1; row<=3; row++) {
             for(let i=1; i<=3; i++) {

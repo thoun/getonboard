@@ -3,7 +3,7 @@ class PlayerTableStudentsBlock extends PlayerTableBlock {
         super(playerId);
 
         let html = `
-        <div class="students block" data-zone="3">
+        <div id="students-block-${playerId}" data-tooltip="[30,32]" class="students block" data-zone="3">
                 `;
         for(let i=1; i<=6; i++) {
             html += `

@@ -1,6 +1,9 @@
 .player-board {
   background-color: white;
 }
+.player-board .personal-objective-label {
+  text-align: center;
+}
 .player-board #personal-objective-wrapper {
   position: relative;
   display: flex;
@@ -212,11 +215,33 @@
   right: -14px;
 }
 #map #map-elements .departure-pawn {
+  position: relative;
   width: 32px;
   height: 44px;
   margin-top: -5px;
+  z-index: 1;
+}
+#map #map-elements .departure-pawn::before {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: -2px;
+  bottom: -2px;
+  content: "";
   mask: url("img/departure.svg") no-repeat center/contain;
   -webkit-mask: url("img/departure.svg") no-repeat center/contain;
+  background: black;
+}
+#map #map-elements .departure-pawn::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  content: "";
+  mask: url("img/departure.svg") no-repeat center/contain;
+  -webkit-mask: url("img/departure.svg") no-repeat center/contain;
+  background: var(--background);
 }
 #map #map-elements .marker {
   width: 32px;
@@ -1219,4 +1244,12 @@ html, .mode_3d #game_play_area_background {
 }
 .map-icon[data-element="51"] {
   background-position: 100% 0%;
+}
+
+.tooltip-section:not(:first-child) {
+  margin-top: 2em;
+}
+.tooltip-section .map-icon {
+  width: 24px;
+  height: 24px;
 }

@@ -20,7 +20,7 @@ class PlayerTable {
 
         let html = `
         <div id="player-table-${this.playerId}" class="player-table ${eliminated ? 'eliminated' : ''}" style="box-shadow: 0 0 3px 3px #${player.color};">
-            <div id="player-table-${this.playerId}-top" class="top" data-type="${player.sheetType}">
+            <div id="player-table-${this.playerId}-top" data-tooltip="[95]" class="top" data-type="${player.sheetType}">
             `;
         for(let i=1; i<=12; i++) {
             html += `
@@ -29,7 +29,7 @@ class PlayerTable {
         html += ` 
             </div>
             <div id="player-table-${this.playerId}-main" class="main">
-                <div id="player-table-${this.playerId}-total-score" class="total score"></div>
+                <div id="player-table-${this.playerId}-total-score" data-tooltip="[94]" class="total score"></div>
             </div>
             <div class="name" style="color: #${player.color};">${player.name}</div>
             <div id="player-table-${this.playerId}-first-player-wrapper" class="first-player-wrapper"></div>

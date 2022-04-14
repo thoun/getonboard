@@ -3,7 +3,7 @@ class PlayerTablePersonalObjectiveBlock extends PlayerTableBlock {
         super(playerId);
 
         let html = `
-        <div class="personal-objective block">
+        <div id="personal-objective-block-${playerId}" data-tooltip="[91]" class="personal-objective block">
             <div id="player-table-${playerId}-personal-objective-total" class="total"></div>
         </div>
         `;

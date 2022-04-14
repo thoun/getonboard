@@ -259,3 +259,14 @@ html, .mode_3d #game_play_area_background {
     background-position: #{8 * 100% / 8} 0%;
   }
 }
+
+.tooltip-section {
+  &:not(:first-child) {
+    margin-top: 2em;
+  }
+
+  .map-icon {
+    width: 24px;
+    height: 24px;
+  }
+}

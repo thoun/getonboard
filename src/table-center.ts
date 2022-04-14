@@ -10,6 +10,18 @@ class TableCenter {
         Object.keys(gamedatas.MAP_POSITIONS).forEach(key => {
             const position = Number(key);
             const elements = gamedatas.MAP_POSITIONS[position];
+            const tooltipsIds = [];
+            if (elements.includes(0)) { tooltipsIds.push(0); }
+            if (elements.some(element => element >= 1 && element <= 12)) { tooltipsIds.push(1); }
+            if (elements.includes(20)) { tooltipsIds.push(20); }
+            if (elements.includes(30)) { tooltipsIds.push(30); }
+            if (elements.includes(32)) { tooltipsIds.push(32); }
+            if (elements.includes(40)) { tooltipsIds.push(40); }
+            if (elements.includes(41) || elements.includes(42)) { tooltipsIds.push(41); }
+            if (elements.includes(50)) { tooltipsIds.push(50); }
+            if (elements.includes(51)) { tooltipsIds.push(51); }
+            if (elements.some(element => element >= 97 && element <= 122)) { tooltipsIds.push(97); }
+
             const departure = elements.find(element => element >= 1 && element <= 12);
             const coordinates = this.getCoordinatesFromPosition(position);
 
@@ -17,7 +29,7 @@ class TableCenter {
             if (departure > 0) {
                 html += ` departure" data-departure=${departure}`;
             }
-            html += `" style="left: ${coordinates[0]}px; top: ${coordinates[1]}px;"></div>`;
+            html += `" data-tooltip="${JSON.stringify(tooltipsIds)}" style="left: ${coordinates[0]}px; top: ${coordinates[1]}px;"></div>`;
             dojo.place(html, mapElements);
             
             if (departure > 0) {
@@ -59,7 +71,8 @@ class TableCenter {
     }
 
     public addDeparturePawn(playerId: number, position: number) {
-        dojo.place(`<div id="departure-pawn-${playerId}" class="departure-pawn" style="background: #${this.game.getPlayerColor(playerId)};"></div>`, `intersection${position}`);
+        dojo.place(`<div id="departure-pawn-${playerId}" class="departure-pawn"></div>`, `intersection${position}`);
+        document.getElementById(`departure-pawn-${playerId}`).style.setProperty('--background', `#${this.game.getPlayerColor(playerId)}`);
     }
 
     public addMarker(playerId: number, marker: PlacedRoute) {
