@@ -18,7 +18,7 @@ trait ScoreSheetTrait {
                 // update totals
                 $scoreSheet->commonObjectives->total = 0;
                 foreach ($scoreSheet->commonObjectives->subTotals as $subTotal) {
-                    $scoreSheet->commonObjectives->total += ($subTotal || 0);
+                    $scoreSheet->commonObjectives->total += ($subTotal ?? 0);
                 }
             }
         }
@@ -42,7 +42,7 @@ trait ScoreSheetTrait {
     function updateStudentTotal(ScoreSheet &$scoreSheet, array $commonObjectives, int $round) {
         $checked = $scoreSheet->students->checkedInternships + $scoreSheet->students->checkedStudents;
         $scoreSheet->students->subTotal = $checked * $scoreSheet->students->checkedSchools;
-        $scoreSheet->students->total = ($scoreSheet->students->specialSchool || 0) + $scoreSheet->students->subTotal;
+        $scoreSheet->students->total = ($scoreSheet->students->specialSchool ?? 0) + $scoreSheet->students->subTotal;
         
         $this->checkCompletedCommonObjective($scoreSheet, $commonObjectives, STUDENT, $checked, $round);
     }
@@ -78,7 +78,7 @@ trait ScoreSheetTrait {
         $scoreSheet->tourists->{'specialMonument'.$type} = $totalCheckedTourists;
 
         if ($scoreSheet->tourists->specialMonumentLight !== null || $scoreSheet->tourists->specialMonumentMax !== null) {
-            $scoreSheet->tourists->specialMonumentMax = max($scoreSheet->tourists->specialMonumentLight || 0, $scoreSheet->tourists->specialMonumentDark || 0);
+            $scoreSheet->tourists->specialMonumentMax = max($scoreSheet->tourists->specialMonumentLight ?? 0, $scoreSheet->tourists->specialMonumentDark ?? 0);
         }
 
         $this->updateTouristTotal($scoreSheet, $commonObjectives, $round);
@@ -93,7 +93,7 @@ trait ScoreSheetTrait {
             }
         }
 
-        $scoreSheet->tourists->total = $scoreSheet->tourists->specialMonumentMax || 0;
+        $scoreSheet->tourists->total = $scoreSheet->tourists->specialMonumentMax ?? 0;
         foreach($scoreSheet->tourists->subTotals as $subTotal) {
             $scoreSheet->tourists->total += $subTotal;
         }   
@@ -159,7 +159,7 @@ trait ScoreSheetTrait {
             }
         }
 
-        $scoreSheet->businessmen->total = ($scoreSheet->businessmen->specialOffice || 0);
+        $scoreSheet->businessmen->total = ($scoreSheet->businessmen->specialOffice ?? 0);
         foreach($scoreSheet->businessmen->subTotals as $subTotal) {
             $scoreSheet->businessmen->total += $subTotal;
         }   
@@ -271,8 +271,8 @@ trait ScoreSheetTrait {
             $scoreSheet->students->total + 
             $scoreSheet->tourists->total + 
             $scoreSheet->businessmen->total + 
-            ($scoreSheet->commonObjectives->total || 0) + 
-            ($scoreSheet->personalObjective->total || 0) + 
+            ($scoreSheet->commonObjectives->total ?? 0) + 
+            ($scoreSheet->personalObjective->total ?? 0) + 
             $scoreSheet->turnZones->total + 
             $scoreSheet->trafficJam->total;
 
