@@ -216,6 +216,7 @@ trait ScoreSheetTrait {
                         case SCHOOL:
                             $scoreSheet->students->checkedSchools++;
                             $this->updateStudentTotal($scoreSheet, $commonObjectives, $round);
+                            break;
                         case SCHOOL_SPECIAL: // special is also referenced as normal, don't count it twice!
                             $scoreSheet->students->specialSchool = $scoreSheet->students->checkedInternships + $scoreSheet->students->checkedStudents;
                             $this->updateStudentTotal($scoreSheet, $commonObjectives, $round);
