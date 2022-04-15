@@ -605,6 +605,7 @@ function formatTextIcons(rawText) {
         return '';
     }
     return rawText
+        .replace(/\[GreenLight\]/ig, '<div class="map-icon" data-element="0"></div>')
         .replace(/\[OldLady\]/ig, '<div class="map-icon" data-element="20"></div>')
         .replace(/\[Student\]/ig, '<div class="map-icon" data-element="30"></div>')
         .replace(/\[School\]/ig, '<div class="map-icon" data-element="32"></div>')
@@ -883,7 +884,7 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.getTooltip = function (element) {
         switch (element) {
-            case 0: return _("<strong>Green lights:</strong> If your route ends at an intersection with a Green light, you place an additional marker.");
+            case 0: return '[GreenLight] : ' + _("If your route ends at an intersection with a [GreenLight], you place an additional marker.");
             case 1: return _("<strong>Number:</strong> Possible starting point. You choose between 2 numbers at the beginning of the game to place your Departure Pawn.");
             case 20: return '[OldLady] : ' + _("When a marker reach an [OldLady], check a box on the [OldLady] zone. Add the number next to each checked box at the end.");
             case 30: return '[Student] : ' + _("When a marker reach an [Student], check a box on the [Student] zone. Multiply [Student] with [School] at the end.");
