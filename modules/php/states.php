@@ -50,7 +50,13 @@ trait StateTrait {
         $playerId = intval($this->getActivePlayerId());
 
         if ($this->isEliminated($playerId)) {
-            return $this->stNextPlayer();
+            $endOfRound = $playerId == intval($this->getGameStateValue(FIRST_PLAYER));
+            if ($endOfRound) {
+                $this->gamestate->nextState('endRound');
+                return;
+            } else {
+                return $this->stNextPlayer();
+            }
         }
 
         $this->checkPlayerToEliminate();
@@ -72,6 +78,10 @@ trait StateTrait {
             $this->activeNextPlayer();
     
             $playerId = intval($this->getActivePlayerId());
+            if ($this->isEliminated($playerId)) {
+                return $this->stEndRound();
+            }
+
             $this->setGameStateValue(FIRST_PLAYER, $playerId);
 
             $this->tickets->pickCardForLocation('deck', 'turn');
