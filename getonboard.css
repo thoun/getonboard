@@ -1033,6 +1033,9 @@ html, .mode_3d #game_play_area_background {
   top: 50vh;
   z-index: 5;
 }
+#zoom-wrapper #jump-controls.folded .jump-link:not(.toggle) {
+  display: none;
+}
 #zoom-wrapper #jump-controls .jump-link {
   position: relative;
   border-width: 2px;

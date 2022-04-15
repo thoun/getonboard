@@ -255,7 +255,7 @@ class GetOnBoard implements GetOnBoardGame {
 
             if (playerId === this.getPlayerId()) {
                 let html = `
-                <div class="personal-objective-label">${_("Your personal objective :")}</div>
+                <div class="personal-objective-label">${_("Your personal objective:")}</div>
                 <div id="personal-objective-wrapper" data-expanded="${((this as any).prefs[203]?.value != 2).toString()}">
                     <div class="personal-objective collapsed">
                         ${player.personalObjectiveLetters.map(letter => `<div class="letter">${letter}</div>`).join('')}
@@ -310,8 +310,15 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     private createPlayerJumps(gamedatas: GetOnBoardGamedatas) {
-        dojo.place(`<div id="jump-0" class="jump-link"><div class="eye"></div> ${gamedatas.map === 'big' ? 'London' : 'New-York'}</div>`, `jump-controls`);
-        document.getElementById(`jump-0`).addEventListener('click', () => this.jumpToPlayer(0));	
+        dojo.place(`
+        <div id="jump-toggle" class="jump-link toggle">
+            ⇔
+        </div>
+        <div id="jump-0" class="jump-link">
+            <div class="eye"></div> ${gamedatas.map === 'big' ? 'London' : 'New-York'}
+        </div>`, `jump-controls`);
+        document.getElementById(`jump-toggle`).addEventListener('click', () => this.jumpToggle());
+        document.getElementById(`jump-0`).addEventListener('click', () => this.jumpToPlayer(0));
         
         const orderedPlayers = this.getOrderedPlayers(gamedatas);
 
@@ -322,6 +329,10 @@ class GetOnBoard implements GetOnBoardGame {
 
         const jumpDiv = document.getElementById(`jump-controls`);
         jumpDiv.style.marginTop = `-${Math.round(jumpDiv.getBoundingClientRect().height / 2)}px`;
+    }
+    
+    private jumpToggle(): void {
+        document.getElementById(`jump-controls`).classList.toggle('folded');
     }
     
     private jumpToPlayer(playerId: number): void {

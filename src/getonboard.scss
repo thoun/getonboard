@@ -54,6 +54,12 @@ html, .mode_3d #game_play_area_background {
     top: 50vh;
     z-index: 5;
 
+    &.folded {
+      .jump-link:not(.toggle) {
+        display: none;
+      }
+    }
+
     .jump-link {
       position: relative;
       border-width: 2px;

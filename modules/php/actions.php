@@ -95,13 +95,13 @@ trait ActionTrait {
         $this->gamestate->nextState('placeNext');
     }
 
-    private function applyCancel(array $routes) {
+    private function applyCancel(array $routes, string $message) {
         $playerId = intval(self::getActivePlayerId());
         $routesIds = array_map(fn($route) => $route->id, $routes);
 
         $this->DbQuery("DELETE FROM placed_routes WHERE `id` IN (".implode(',', $routesIds).")");
 
-        self::notifyAllPlayers('removeMarkers', '', [
+        self::notifyAllPlayers('removeMarkers', $message, [
             'playerId' => $playerId,
             'player_name' => self::getActivePlayerName(),
             'markers' => array_map(fn($route) => PlacedRoute::forNotif($route->from, $route->to, false), $routes),
@@ -125,7 +125,7 @@ trait ActionTrait {
         }
 
         $routesToCancel = [end($placedRoutes)];
-        $this->applyCancel($routesToCancel);
+        $this->applyCancel($routesToCancel, clienttranslate('${player_name} cancels the last marker'));
     }
   	
     public function resetTurn() {
@@ -140,7 +140,7 @@ trait ActionTrait {
             throw new BgaUserException("No move to cancel");
         }
 
-        $this->applyCancel($unvalidatedRoutes);
+        $this->applyCancel($unvalidatedRoutes, clienttranslate('${player_name} resets its turn'));
     }
 
     private function applyConfirmTurn(int $playerId) {

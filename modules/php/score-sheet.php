@@ -89,7 +89,9 @@ trait ScoreSheetTrait {
             $rowIndex = count($scoreSheet->tourists->subTotals);
             if ($rowIndex < 3) {
                 $checked = $scoreSheet->tourists->checkedTourists[$rowIndex];
-                $scoreSheet->tourists->subTotals[$rowIndex] = floor($this->TOURISTS_POINTS[$checked - 1] / 2);
+                if ($checked > 0) {
+                    $scoreSheet->tourists->subTotals[$rowIndex] = floor($this->TOURISTS_POINTS[$checked - 1] / 2);
+                }
             }
         }
 
@@ -155,7 +157,9 @@ trait ScoreSheetTrait {
             $rowIndex = count($scoreSheet->businessmen->subTotals);
             if ($rowIndex < 3) {
                 $checked = $scoreSheet->businessmen->checkedBusinessmen[$rowIndex];
-                $scoreSheet->businessmen->subTotals[$rowIndex] = floor($this->BUSINESSMEN_POINTS[$checked - 1] / 2);
+                if ($checked > 0) {
+                    $scoreSheet->businessmen->subTotals[$rowIndex] = floor($this->BUSINESSMEN_POINTS[$checked - 1] / 2);
+                }
             }
         }
 
@@ -194,7 +198,7 @@ trait ScoreSheetTrait {
                 if ($element > 90 && $scoreSheet->personalObjective->total != 10) {
                     $visitedLetters[] = $element;
 
-                    if ($this->array_every($personalObjectives, fn($letter) => in_array($letter, $visitedLetters))) {
+                    if ($endScoring && $this->array_every($personalObjectives, fn($letter) => in_array($letter, $visitedLetters))) {
                         $scoreSheet->personalObjective->total = 10;
                     }
                 } else {

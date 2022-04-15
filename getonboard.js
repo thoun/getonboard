@@ -809,7 +809,7 @@ var GetOnBoard = /** @class */ (function () {
             var playerId = Number(player.id);
             var eliminated = Number(player.eliminated) > 0;
             if (playerId === _this.getPlayerId()) {
-                var html = "\n                <div class=\"personal-objective-label\">".concat(_("Your personal objective :"), "</div>\n                <div id=\"personal-objective-wrapper\" data-expanded=\"").concat((((_a = _this.prefs[203]) === null || _a === void 0 ? void 0 : _a.value) != 2).toString(), "\">\n                    <div class=\"personal-objective collapsed\">\n                        ").concat(player.personalObjectiveLetters.map(function (letter) { return "<div class=\"letter\">".concat(letter, "</div>"); }).join(''), "\n                    </div>\n                    <div class=\"personal-objective expanded ").concat(gamedatas.map, "\" data-type=\"").concat(player.personalObjective, "\"></div>\n                    <div id=\"toggle-objective-expand\" class=\"arrow\"></div>\n                </div>");
+                var html = "\n                <div class=\"personal-objective-label\">".concat(_("Your personal objective:"), "</div>\n                <div id=\"personal-objective-wrapper\" data-expanded=\"").concat((((_a = _this.prefs[203]) === null || _a === void 0 ? void 0 : _a.value) != 2).toString(), "\">\n                    <div class=\"personal-objective collapsed\">\n                        ").concat(player.personalObjectiveLetters.map(function (letter) { return "<div class=\"letter\">".concat(letter, "</div>"); }).join(''), "\n                    </div>\n                    <div class=\"personal-objective expanded ").concat(gamedatas.map, "\" data-type=\"").concat(player.personalObjective, "\"></div>\n                    <div id=\"toggle-objective-expand\" class=\"arrow\"></div>\n                </div>");
                 dojo.place(html, "player_board_".concat(player.id));
                 document.getElementById('toggle-objective-expand').addEventListener('click', function () {
                     var wrapper = document.getElementById("personal-objective-wrapper");
@@ -850,7 +850,8 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.createPlayerJumps = function (gamedatas) {
         var _this = this;
-        dojo.place("<div id=\"jump-0\" class=\"jump-link\"><div class=\"eye\"></div> ".concat(gamedatas.map === 'big' ? 'London' : 'New-York', "</div>"), "jump-controls");
+        dojo.place("\n        <div id=\"jump-toggle\" class=\"jump-link toggle\">\n            \u21D4\n        </div>\n        <div id=\"jump-0\" class=\"jump-link\">\n            <div class=\"eye\"></div> ".concat(gamedatas.map === 'big' ? 'London' : 'New-York', "\n        </div>"), "jump-controls");
+        document.getElementById("jump-toggle").addEventListener('click', function () { return _this.jumpToggle(); });
         document.getElementById("jump-0").addEventListener('click', function () { return _this.jumpToPlayer(0); });
         var orderedPlayers = this.getOrderedPlayers(gamedatas);
         orderedPlayers.forEach(function (player) {
@@ -859,6 +860,9 @@ var GetOnBoard = /** @class */ (function () {
         });
         var jumpDiv = document.getElementById("jump-controls");
         jumpDiv.style.marginTop = "-".concat(Math.round(jumpDiv.getBoundingClientRect().height / 2), "px");
+    };
+    GetOnBoard.prototype.jumpToggle = function () {
+        document.getElementById("jump-controls").classList.toggle('folded');
     };
     GetOnBoard.prototype.jumpToPlayer = function (playerId) {
         var elementId = playerId === 0 ? "map" : "player-table-".concat(playerId);

@@ -101,7 +101,9 @@ trait StateTrait {
     function stEndScore() {
         $playersIds = $this->getPlayersIds();
         foreach ($playersIds as $playerId) {
-            $this->notifUpdateScoreSheet($playerId, true);
+            $scoreSheets = $this->notifUpdateScoreSheet($playerId, true);
+            $score = $scoreSheets->validated->total;
+            $this->DbQuery("UPDATE player SET `player_score` = $score WHERE `player_id` = $playerId");
         }
 
         $this->gamestate->nextState('endGame');
