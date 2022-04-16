@@ -112,6 +112,7 @@ interface GetOnBoardGamedatas {
     currentTicket: number | null;
     round: number;
     map: 'small' | 'big';
+    hiddenScore: boolean;
     
     MAP_POSITIONS: { [position: number]: number[] };
     MAP_ROUTES: { [position: number]: number[] };
@@ -123,6 +124,7 @@ interface GetOnBoardGame extends Game {
 
     placeDeparturePawn(position: number): void;
     placeRoute(from: number, to: number): void;
+    isVisibleScoring(): boolean;
 }
 
 interface EnteringPlaceDeparturePawnArgs {

@@ -94,6 +94,10 @@ class GetOnBoard implements GetOnBoardGame {
             this.setZoom(this.zoom);
         }
 
+        if (Number(gamedatas.gamestate.id) >= 90) { // score or end
+            this.onEnteringShowScore();
+        }
+
         this.addTooltips();
 
         log( "Ending game setup" );
@@ -111,6 +115,9 @@ class GetOnBoard implements GetOnBoardGame {
         switch (stateName) {
             case 'placeRoute':
                 this.onEnteringPlaceRoute(args.args);
+                break;
+            case 'endScore':
+                this.onEnteringShowScore();
                 break;
         }
     }
@@ -130,6 +137,11 @@ class GetOnBoard implements GetOnBoardGame {
         if ((this as any).isCurrentPlayerActive()) {
             args.possibleRoutes.forEach(route => this.tableCenter.addGhostMarker(route));
         }
+    }
+
+    onEnteringShowScore() {
+        Object.keys(this.gamedatas.players).forEach(playerId => (this as any).scoreCtrl[playerId].setValue(0));
+        this.gamedatas.hiddenScore = false;
     }
 
     public onLeavingState(stateName: string) {
@@ -203,6 +215,10 @@ class GetOnBoard implements GetOnBoardGame {
 
 
     ///////////////////////////////////////////////////
+
+    public isVisibleScoring(): boolean {
+        return !this.gamedatas.hiddenScore;
+    }
 
     public getPlayerId(): number {
         return Number((this as any).player_id);
@@ -283,8 +299,10 @@ class GetOnBoard implements GetOnBoardGame {
 
             // first player token
             dojo.place(`<div id="player_board_${player.id}_firstPlayerWrapper" class="firstPlayerWrapper"></div>`, `player_board_${player.id}`);
-        });
 
+
+            this.setNewScore(playerId, Number(player.score));
+        });
     }
 
     private getOrderedPlayers(gamedatas: GetOnBoardGamedatas) {
@@ -303,7 +321,7 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     private createPlayerTable(gamedatas: GetOnBoardGamedatas, playerId: number) {
-        const table = new PlayerTable(gamedatas.players[playerId]);
+        const table = new PlayerTable(this, gamedatas.players[playerId]);
         table.setRound(gamedatas.validatedTickets, gamedatas.currentTicket);
         this.playersTables.push(table);
         this.registeredTablesByPlayerId[playerId] = [table];
@@ -397,6 +415,18 @@ class GetOnBoard implements GetOnBoardGame {
         dojo.addClass(`player-table-${playerId}`, 'eliminated');
     }
 
+    private setNewScore(playerId: number, score: number) {
+        if (this.gamedatas.hiddenScore) {
+            setTimeout(() => {
+                Object.keys(this.gamedatas.players).filter(pId => this.gamedatas.players[pId].eliminated == 0).forEach(pId => document.getElementById(`player_score_${pId}`).innerHTML = '-')
+            }, 100);
+        } else {
+            if (!isNaN(score)) {
+                (this as any).scoreCtrl[playerId]?.toValue(score);
+            }
+        }
+    }
+
     private cutZone(pipDiv: HTMLElement, zone: number) {
         const zoneDiv = pipDiv.querySelector(`[data-zone="${zone}"]`) as HTMLDivElement;
         const zoneStyle = window.getComputedStyle(zoneDiv);
@@ -431,7 +461,7 @@ class GetOnBoard implements GetOnBoardGame {
         const pipId = `pip-${playerId}-${zone}-${position}`;
         dojo.place(`<div class="pip" id="${pipId}" style="border-color: #${this.getPlayerColor(playerId)}"></div>`,  zone >=6 ? 'pips-bottom' : 'pips-top');
         const pipDiv = document.getElementById(`pip-${playerId}-${zone}-${position}`);
-        const pipTable = new PlayerTable(this.gamedatas.players[playerId], pipId, pipDiv);
+        const pipTable = new PlayerTable(this, this.gamedatas.players[playerId], pipId, pipDiv);
         this.registeredTablesByPlayerId[playerId].push(pipTable);
 
         this.cutZone(pipDiv, zone);
@@ -593,8 +623,8 @@ class GetOnBoard implements GetOnBoardGame {
 
     notif_updateScoreSheet(notif: Notif<NotifUpdateScoreSheetArgs>) {
         const playerId = notif.args.playerId;
-        this.registeredTablesByPlayerId[playerId].forEach(table => table.updateScoreSheet(notif.args.scoreSheets));
-        (this as any).scoreCtrl[playerId]?.toValue(notif.args.scoreSheets.current.total);
+        this.registeredTablesByPlayerId[playerId].forEach(table => table.updateScoreSheet(notif.args.scoreSheets, !this.gamedatas.hiddenScore));        
+        this.setNewScore(playerId, notif.args.scoreSheets.current.total);
     }
 
     notif_placedDeparturePawn(notif: Notif<NotifPlacedDeparturePawnArgs>) {
@@ -618,7 +648,7 @@ class GetOnBoard implements GetOnBoardGame {
 
     notif_playerEliminated(notif: Notif<any>) {
         const playerId = Number(notif.args.who_quits);
-        (this as any).scoreCtrl[playerId]?.toValue(0);
+        this.setNewScore(playerId, 0);
         this.eliminatePlayer(playerId);
     }
 

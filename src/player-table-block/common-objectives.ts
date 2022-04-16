@@ -1,5 +1,5 @@
 class PlayerTableCommonObjectivesBlock extends PlayerTableBlock {
-    constructor(playerId: string, scoreSheets: ScoreSheets) {
+    constructor(playerId: string, scoreSheets: ScoreSheets, visibleScoring: boolean) {
         super(playerId);
 
         let html = `
@@ -11,17 +11,19 @@ class PlayerTableCommonObjectivesBlock extends PlayerTableBlock {
         `;
         dojo.place(html, `player-table-${playerId}-main`);
 
-        this.updateScoreSheet(scoreSheets);
+        this.updateScoreSheet(scoreSheets, visibleScoring);
     }
 
-    public updateScoreSheet(scoreSheets: ScoreSheets) {
+    public updateScoreSheet(scoreSheets: ScoreSheets, visibleScoring: boolean) {
         const current = scoreSheets.current.commonObjectives;
         const validated = scoreSheets.validated.commonObjectives;
 
         for(let i=1; i<=2; i++) {
             this.setContentAndValidation(`common-objectives-objective${i}`, current.subTotals[i-1], current.subTotals[i-1] != validated.subTotals[i-1]);
         }
-        this.setContentAndValidation(`common-objectives-total`, current.total, current.total != validated.total);
+        if (visibleScoring) {
+            this.setContentAndValidation(`common-objectives-total`, current.total, current.total != validated.total);
+        }
     }
 
 }

@@ -2,7 +2,7 @@ abstract class PlayerTableBlock {
     constructor(protected playerId: string) {
     }
 
-    public abstract updateScoreSheet(scoreSheets: ScoreSheets);
+    public abstract updateScoreSheet(scoreSheets: ScoreSheets, visibleScoring: boolean);
 
     protected setContentAndValidation(id: string, content: string | number | undefined | null, unvalidated: boolean) {
         const div = document.getElementById(`player-table-${this.playerId}-${id}`);

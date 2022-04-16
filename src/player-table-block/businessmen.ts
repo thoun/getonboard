@@ -1,5 +1,5 @@
 class PlayerTableBusinessmenBlock extends PlayerTableBlock {
-    constructor(playerId: string, scoreSheets: ScoreSheets) {
+    constructor(playerId: string, scoreSheets: ScoreSheets, visibleScoring: boolean) {
         super(playerId);
 
         let html = `
@@ -20,10 +20,10 @@ class PlayerTableBusinessmenBlock extends PlayerTableBlock {
         `;
         dojo.place(html, `player-table-${playerId}-main`);
 
-        this.updateScoreSheet(scoreSheets);
+        this.updateScoreSheet(scoreSheets, visibleScoring);
     }
 
-    public updateScoreSheet(scoreSheets: ScoreSheets) {
+    public updateScoreSheet(scoreSheets: ScoreSheets, visibleScoring: boolean) {
         const current = scoreSheets.current.businessmen;
         const validated = scoreSheets.validated.businessmen;
 
@@ -35,10 +35,12 @@ class PlayerTableBusinessmenBlock extends PlayerTableBlock {
             }
         }
         
-        for(let i=1; i<=3; i++) {
-            this.setContentAndValidation(`businessmen-subtotal${i}`, current.subTotals[i-1], current.subTotals[i-1] != validated.subTotals[i-1]);
+        if (visibleScoring) {
+            for(let i=1; i<=3; i++) {
+                this.setContentAndValidation(`businessmen-subtotal${i}`, current.subTotals[i-1], current.subTotals[i-1] != validated.subTotals[i-1]);
+            }
+            this.setContentAndValidation(`businessmen-total`, current.total, current.total != validated.total);
         }
-        this.setContentAndValidation(`businessmen-total`, current.total, current.total != validated.total);
     }
 
 }

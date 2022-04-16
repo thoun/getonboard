@@ -24,7 +24,21 @@
  *
  */
 
-$game_options = [];
+$game_options = [    
+    100 => [
+        'name' => totranslate('Scoring'),
+        'values' => [
+            1 => [
+                'name' => totranslate('Hidden'),
+            ],
+            2 => [
+                'name' => totranslate('Visible'),
+                'tmdisplay' => totranslate('Visible scoring'),
+            ],
+        ],
+        'default' => 1,
+    ],
+];
 
 $game_preferences = [
     202 => [

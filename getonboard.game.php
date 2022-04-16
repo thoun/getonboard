@@ -47,6 +47,8 @@ class GetOnBoard extends Table {
         self::initGameStateLabels([
             FIRST_PLAYER => 10,
             ELIMINATE_PLAYER => 11,
+
+            SCORING_OPTION => 100,
         ]);   
 
         $this->tickets = self::getNew("module.common.deck");
@@ -167,6 +169,7 @@ class GetOnBoard extends Table {
         $result['validatedTickets'] = $this->getValidatedTicketsForRound();
         $result['currentTicket'] = $this->getCurrentTicketForRound();
         $result['commonObjectives'] = $this->getCommonObjectives();
+        $result['hiddenScore'] = intval(self::getGameStateValue('SCORING_OPTION')) !== 2;
 
         $result['MAP_POSITIONS'] = $this->MAP_POSITIONS[$map];
   

@@ -28,6 +28,11 @@ define('FIRST_PLAYER', 'FIRST_PLAYER');
 define('ELIMINATE_PLAYER', 'ELIMINATE_PLAYER');
 
 /*
+ * Game option
+ */
+define('SCORING_OPTION', 'SCORING_OPTION');
+
+/*
  * Map elements
  */
 define('GREEN_LIGHT', 0);

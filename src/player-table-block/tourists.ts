@@ -1,5 +1,5 @@
 class PlayerTableTouristsBlock extends PlayerTableBlock {
-    constructor(playerId: string, scoreSheets: ScoreSheets) {
+    constructor(playerId: string, scoreSheets: ScoreSheets, visibleScoring: boolean) {
         super(playerId);
 
         let html = `
@@ -31,10 +31,10 @@ class PlayerTableTouristsBlock extends PlayerTableBlock {
         `;
         dojo.place(html, `player-table-${playerId}-main`);
 
-        this.updateScoreSheet(scoreSheets);
+        this.updateScoreSheet(scoreSheets, visibleScoring);
     }
 
-    public updateScoreSheet(scoreSheets: ScoreSheets) {
+    public updateScoreSheet(scoreSheets: ScoreSheets, visibleScoring: boolean) {
         const current = scoreSheets.current.tourists;
         const validated = scoreSheets.validated.tourists;
 
@@ -47,7 +47,9 @@ class PlayerTableTouristsBlock extends PlayerTableBlock {
 
         this.setContentAndValidation(`tourists-specialLight`, current.specialMonumentLight, current.specialMonumentLight !== validated.specialMonumentLight);
         this.setContentAndValidation(`tourists-specialDark`, current.specialMonumentDark, current.specialMonumentDark !== validated.specialMonumentDark);
-        this.setContentAndValidation(`tourists-specialMax`, current.specialMonumentMax, current.specialMonumentMax !== validated.specialMonumentMax);
+        if (visibleScoring) {
+            this.setContentAndValidation(`tourists-specialMax`, current.specialMonumentMax, current.specialMonumentMax !== validated.specialMonumentMax);
+        }
         
         for(let row=1; row<=3; row++) {
             for(let i=1; i<=4; i++) {
@@ -55,10 +57,12 @@ class PlayerTableTouristsBlock extends PlayerTableBlock {
             }
         }
         
-        for(let i=1; i<=3; i++) {
-            this.setContentAndValidation(`tourists-subtotal${i}`, current.subTotals[i-1], current.subTotals[i-1] != validated.subTotals[i-1]);
+        if (visibleScoring) {
+            for(let i=1; i<=3; i++) {
+                this.setContentAndValidation(`tourists-subtotal${i}`, current.subTotals[i-1], current.subTotals[i-1] != validated.subTotals[i-1]);
+            }
+            this.setContentAndValidation(`tourists-total`, current.total, current.total != validated.total);
         }
-        this.setContentAndValidation(`tourists-total`, current.total, current.total != validated.total);
     }
 
 }

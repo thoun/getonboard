@@ -1,5 +1,5 @@
 class PlayerTableTrafficJamBlock extends PlayerTableBlock {
-    constructor(playerId: string, scoreSheets: ScoreSheets) {
+    constructor(playerId: string, scoreSheets: ScoreSheets, visibleScoring: boolean) {
         super(playerId);
 
         let html = `
@@ -14,10 +14,10 @@ class PlayerTableTrafficJamBlock extends PlayerTableBlock {
         `;
         dojo.place(html, `player-table-${playerId}-main`);
 
-        this.updateScoreSheet(scoreSheets);
+        this.updateScoreSheet(scoreSheets, visibleScoring);
     }
 
-    public updateScoreSheet(scoreSheets: ScoreSheets) {
+    public updateScoreSheet(scoreSheets: ScoreSheets, visibleScoring: boolean) {
         const current = scoreSheets.current.trafficJam;
         const validated = scoreSheets.validated.trafficJam;
 
@@ -25,7 +25,9 @@ class PlayerTableTrafficJamBlock extends PlayerTableBlock {
             this.setContentAndValidation(`traffic-jam-checkmark${i}`, current.checked >= i ? '✔' : '', current.checked >= i && validated.checked < i);
         }
 
-        this.setContentAndValidation(`traffic-jam-total`, -current.total, current.total !== validated.total);
+        if (visibleScoring) {
+            this.setContentAndValidation(`traffic-jam-total`, -current.total, current.total !== validated.total);
+        }
     }
 
 }

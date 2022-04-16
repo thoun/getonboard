@@ -1,5 +1,5 @@
 class PlayerTableOldLadiesBlock extends PlayerTableBlock {
-    constructor(playerId: string, scoreSheets: ScoreSheets) {
+    constructor(playerId: string, scoreSheets: ScoreSheets, visibleScoring: boolean) {
         super(playerId);
 
         let html = `
@@ -15,10 +15,10 @@ class PlayerTableOldLadiesBlock extends PlayerTableBlock {
         `;
         dojo.place(html, `player-table-${playerId}-main`);
 
-        this.updateScoreSheet(scoreSheets);
+        this.updateScoreSheet(scoreSheets, visibleScoring);
     }
 
-    public updateScoreSheet(scoreSheets: ScoreSheets) {
+    public updateScoreSheet(scoreSheets: ScoreSheets, visibleScoring: boolean) {
         const current = scoreSheets.current.oldLadies;
         const validated = scoreSheets.validated.oldLadies;
 
@@ -26,7 +26,9 @@ class PlayerTableOldLadiesBlock extends PlayerTableBlock {
             this.setContentAndValidation(`old-ladies-checkmark${i}`, current.checked >= i ? '✔' : '', current.checked >= i && validated.checked < i);
         }
 
-        this.setContentAndValidation(`old-ladies-total`, current.total, current.total !== validated.total);
+        if (visibleScoring) {
+            this.setContentAndValidation(`old-ladies-total`, current.total, current.total !== validated.total);
+        }
     }
 
 }

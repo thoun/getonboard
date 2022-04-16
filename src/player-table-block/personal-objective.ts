@@ -1,5 +1,5 @@
 class PlayerTablePersonalObjectiveBlock extends PlayerTableBlock {
-    constructor(playerId: string, scoreSheets: ScoreSheets) {
+    constructor(playerId: string, scoreSheets: ScoreSheets, visibleScoring: boolean) {
         super(playerId);
 
         let html = `
@@ -9,14 +9,16 @@ class PlayerTablePersonalObjectiveBlock extends PlayerTableBlock {
         `;
         dojo.place(html, `player-table-${playerId}-main`);
 
-        this.updateScoreSheet(scoreSheets);
+        this.updateScoreSheet(scoreSheets, visibleScoring);
     }
 
-    public updateScoreSheet(scoreSheets: ScoreSheets) {
+    public updateScoreSheet(scoreSheets: ScoreSheets, visibleScoring: boolean) {
         const current = scoreSheets.current.personalObjective;
         const validated = scoreSheets.validated.personalObjective;
 
-        this.setContentAndValidation(`personal-objective-total`, current.total, current.total != validated.total);
+        if (visibleScoring) {
+            this.setContentAndValidation(`personal-objective-total`, current.total, current.total != validated.total);
+        }
     }
 
 }

@@ -13,7 +13,7 @@ class PlayerTable {
     private turnZones: PlayerTableTurnZonesBlock;
     private trafficJam: PlayerTableTrafficJamBlock;
 
-    constructor(player: GetOnBoardPlayer, id: string = player.id, insertIn: HTMLElement = document.getElementById('full-table')) {
+    constructor(game: GetOnBoardGame, player: GetOnBoardPlayer, id: string = player.id, insertIn: HTMLElement = document.getElementById('full-table')) {
         this.playerId = id;
 
         const eliminated = Number(player.eliminated) > 0;
@@ -37,16 +37,16 @@ class PlayerTable {
         `;
         dojo.place(html, insertIn);
 
-        this.oldLadies = new PlayerTableOldLadiesBlock(this.playerId, player.scoreSheets);
-        this.students = new PlayerTableStudentsBlock(this.playerId, player.scoreSheets);
-        this.tourists = new PlayerTableTouristsBlock(this.playerId, player.scoreSheets);
-        this.businessmen = new PlayerTableBusinessmenBlock(this.playerId, player.scoreSheets);
-        this.commonObjectives = new PlayerTableCommonObjectivesBlock(this.playerId, player.scoreSheets);
-        this.personalObjective = new PlayerTablePersonalObjectiveBlock(this.playerId, player.scoreSheets);
-        this.turnZones = new PlayerTableTurnZonesBlock(this.playerId, player.scoreSheets);
-        this.trafficJam = new PlayerTableTrafficJamBlock(this.playerId, player.scoreSheets);
+        this.oldLadies = new PlayerTableOldLadiesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
+        this.students = new PlayerTableStudentsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
+        this.tourists = new PlayerTableTouristsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
+        this.businessmen = new PlayerTableBusinessmenBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
+        this.commonObjectives = new PlayerTableCommonObjectivesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
+        this.personalObjective = new PlayerTablePersonalObjectiveBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
+        this.turnZones = new PlayerTableTurnZonesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
+        this.trafficJam = new PlayerTableTrafficJamBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
 
-        this.updateScoreSheet(player.scoreSheets);
+        this.updateScoreSheet(player.scoreSheets, game.isVisibleScoring());
     }
 
     public setRound(validatedTickets: number[], currentTicket: number) {
@@ -59,17 +59,19 @@ class PlayerTable {
         }
     }
 
-    public updateScoreSheet(scoreSheets: ScoreSheets) {
-       this.oldLadies.updateScoreSheet(scoreSheets);
-       this.students.updateScoreSheet(scoreSheets);
-       this.tourists.updateScoreSheet(scoreSheets);
-       this.businessmen.updateScoreSheet(scoreSheets);
-       this.commonObjectives.updateScoreSheet(scoreSheets);
-       this.personalObjective.updateScoreSheet(scoreSheets);
-       this.turnZones.updateScoreSheet(scoreSheets);
-       this.trafficJam.updateScoreSheet(scoreSheets);
+    public updateScoreSheet(scoreSheets: ScoreSheets, visibleScoring: boolean) {
+        this.oldLadies.updateScoreSheet(scoreSheets, visibleScoring);
+        this.students.updateScoreSheet(scoreSheets, visibleScoring);
+        this.tourists.updateScoreSheet(scoreSheets, visibleScoring);
+        this.businessmen.updateScoreSheet(scoreSheets, visibleScoring);
+        this.commonObjectives.updateScoreSheet(scoreSheets, visibleScoring);
+        this.personalObjective.updateScoreSheet(scoreSheets, visibleScoring);
+        this.turnZones.updateScoreSheet(scoreSheets, visibleScoring);
+        this.trafficJam.updateScoreSheet(scoreSheets, visibleScoring);
 
-       this.setContentAndValidation(`total-score`, scoreSheets.current.total, scoreSheets.current.total != scoreSheets.validated.total);
+        if (visibleScoring) {
+            this.setContentAndValidation(`total-score`, scoreSheets.current.total, scoreSheets.current.total != scoreSheets.validated.total);
+        }
     }
 
     private setContentAndValidation(id: string, content: string | number | undefined | null, unvalidated: boolean) {
