@@ -27,12 +27,11 @@ trait ActionTrait {
 
         $position = $this->MAP_DEPARTURE_POSITIONS[$this->getMap()][$ticketNumber]; 
 
-        $this->DbQuery("UPDATE player SET `player_departure_position` = $position WHERE `player_id` = $playerId"); 
-
-        self::notifyAllPlayers('placedDeparturePawn', clienttranslate('${player_name} places departure pawn'), [
+        $this->DbQuery("UPDATE player SET `player_departure_position` = $position WHERE `player_id` = $playerId");
+        
+        self::notifyAllPlayers('log', clienttranslate('${player_name} has chose the position for its departure pawn'), [
             'playerId' => $playerId,
             'player_name' => $this->getPlayerName($playerId),
-            'position' => $position,
         ]);
 
         $this->gamestate->setPlayerNonMultiactive($playerId, 'next');

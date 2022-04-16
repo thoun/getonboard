@@ -142,11 +142,13 @@ class GetOnBoard extends Table {
         $map = $this->getMap();
         $personalObjective = intval($this->getUniqueValueFromDB("SELECT player_personal_objective FROM `player` where `player_id` = $currentPlayerId"));
 
+        $showDeparturePosition = intval($this->gamestate->state_id()) >= ST_START_GAME;
+
         $commonObjectives = $this->getCommonObjectives();
         foreach ($result['players'] as $playerId => &$playerDb) {
             $playerDb['playerNo'] = intval($playerDb['playerNo']);
             $playerDb['sheetType'] = intval($playerDb['sheetType']);
-            $playerDb['departurePosition'] = intval($playerDb['departurePosition']);
+            $playerDb['departurePosition'] = $showDeparturePosition ? intval($playerDb['departurePosition']) : null;
             $placedRoutes = $this->getPlacedRoutes($playerId);
             $playerDb['markers'] = $placedRoutes;
             $playerDb['scoreSheets'] = $this->getScoreSheets($playerId, $placedRoutes, $commonObjectives);
@@ -219,7 +221,7 @@ class GetOnBoard extends Table {
                     $unvalidatedRoutes = array_values(array_filter($placedRoutes, fn($placedRoute) => !$placedRoute->validated));
 
                     if (count($unvalidatedRoutes) > 0) {
-                        $this->applyCancel($unvalidatedRoutes);
+                        $this->applyCancel($unvalidatedRoutes, '');
                     }
 
                     $this->gamestate->nextState("nextPlayer");

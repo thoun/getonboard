@@ -570,7 +570,7 @@ class GetOnBoard implements GetOnBoardGame {
             ['placedRoute', ANIMATION_MS*2],
             ['confirmTurn', ANIMATION_MS],
             ['flipObjective', ANIMATION_MS],
-            ['placedDeparturePawn', 1],
+            ['placedDeparturePawn', ANIMATION_MS],
             ['removeMarkers', 1],
             ['updateScoreSheet', 1],
         ];

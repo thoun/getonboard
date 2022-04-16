@@ -17,7 +17,27 @@ trait StateTrait {
         //$this->gamestate->nextState('refillHand');
     }
 
+    
     function stStartGame() {
+        $sql = "SELECT `player_id`, `player_departure_position` FROM `player` ORDER BY `player_no`";
+        $dbResult = self::getCollectionFromDb($sql);
+
+        $mapPositions = $this->MAP_POSITIONS[$this->getMap()];
+
+        foreach ($dbResult as $dbLine) {
+            $playerId = intval($dbLine['player_id']);
+            $position = intval($dbLine['player_departure_position']);
+
+            $number = $this->array_find($mapPositions[$position], fn($element) => $element >= 1 && $element <= 12);
+
+            self::notifyAllPlayers('placedDeparturePawn', clienttranslate('${player_name} places departure pawn to number ${number}'), [
+                'playerId' => $playerId,
+                'player_name' => $this->getPlayerName($playerId),
+                'position' => $position,
+                'number' => $number,
+            ]);
+        }
+
         $this->tickets->moveAllCardsInLocation(null, 'deck');
         $this->tickets->shuffle('deck');
 
