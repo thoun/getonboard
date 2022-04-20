@@ -55,12 +55,11 @@ class PlayerTableTouristsBlock extends PlayerTableBlock {
             for(let i=1; i<=4; i++) {
                 this.setContentAndValidation(`tourists-checkmark${row}-${i}`, current.checkedTourists[row-1] >= i ? '✔' : (current.subTotals[row-1] ? '⎯⎯' : ''), current.checkedTourists[row-1] >= i && validated.checkedTourists[row-1] < i);
             }
+
+            this.setContentAndValidation(`tourists-subtotal${row}`, current.subTotals[row-1], current.subTotals[row-1] != validated.subTotals[row-1]);
         }
         
         if (visibleScoring) {
-            for(let i=1; i<=3; i++) {
-                this.setContentAndValidation(`tourists-subtotal${i}`, current.subTotals[i-1], current.subTotals[i-1] != validated.subTotals[i-1]);
-            }
             this.setContentAndValidation(`tourists-total`, current.total, current.total != validated.total);
         }
     }

@@ -242,7 +242,7 @@
   mask: url("img/departure.svg") no-repeat center/contain;
   -webkit-mask: url("img/departure.svg") no-repeat center/contain;
   background: var(--background);
-  animation: departure-pawn-animation 0.5s;
+  animation: new-element-animation 0.5s;
 }
 #map #map-elements .marker {
   width: 32px;
@@ -306,7 +306,7 @@
   transition: transform 0.5s ease-in-out;
 }
 
-@keyframes departure-pawn-animation {
+@keyframes new-element-animation {
   0% {
     transform: scale(10);
   }
@@ -1181,7 +1181,7 @@ html, .mode_3d #game_play_area_background {
   background-size: auto 100%;
   border-radius: 4px;
   transform-origin: center;
-  transform: rotate(-90deg);
+  transform: rotate(90deg);
   vertical-align: middle;
   margin: -10px 10px;
 }

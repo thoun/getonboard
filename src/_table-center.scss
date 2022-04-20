@@ -183,7 +183,7 @@ $marker-size: 6px;
         mask: url('img/departure.svg') no-repeat center / contain;
         -webkit-mask: url('img/departure.svg') no-repeat center / contain;
         background: var(--background);
-        animation: departure-pawn-animation 0.5s;
+        animation: new-element-animation 0.5s;
       }
     }
 
@@ -262,7 +262,7 @@ $marker-size: 6px;
   }
 }
 
-@keyframes departure-pawn-animation {
+@keyframes new-element-animation {
   0% { 
     transform: scale(10);
   }

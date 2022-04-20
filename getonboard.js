@@ -185,7 +185,7 @@ var PlayerTableStudentsBlock = /** @class */ (function (_super) {
         for (var i = 1; i <= 3; i++) {
             this.setContentAndValidation("internships-checkmark".concat(i), current.checkedInternships >= i ? '✔' : '', current.checkedInternships >= i && validated.checkedInternships < i);
         }
-        for (var i = 1; i <= 3; i++) {
+        for (var i = 1; i <= 4; i++) {
             this.setContentAndValidation("schools-checkmark".concat(i), current.checkedSchools >= i ? '✔' : '', current.checkedSchools >= i && validated.checkedSchools < i);
         }
         this.setContentAndValidation("students-special", current.specialSchool, current.specialSchool !== validated.specialSchool);
@@ -236,11 +236,9 @@ var PlayerTableTouristsBlock = /** @class */ (function (_super) {
             for (var i = 1; i <= 4; i++) {
                 this.setContentAndValidation("tourists-checkmark".concat(row, "-").concat(i), current.checkedTourists[row - 1] >= i ? '✔' : (current.subTotals[row - 1] ? '⎯⎯' : ''), current.checkedTourists[row - 1] >= i && validated.checkedTourists[row - 1] < i);
             }
+            this.setContentAndValidation("tourists-subtotal".concat(row), current.subTotals[row - 1], current.subTotals[row - 1] != validated.subTotals[row - 1]);
         }
         if (visibleScoring) {
-            for (var i = 1; i <= 3; i++) {
-                this.setContentAndValidation("tourists-subtotal".concat(i), current.subTotals[i - 1], current.subTotals[i - 1] != validated.subTotals[i - 1]);
-            }
             this.setContentAndValidation("tourists-total", current.total, current.total != validated.total);
         }
     };
@@ -269,11 +267,9 @@ var PlayerTableBusinessmenBlock = /** @class */ (function (_super) {
             for (var i = 1; i <= 3; i++) {
                 this.setContentAndValidation("businessmen-checkmark".concat(row, "-").concat(i), current.checkedBusinessmen[row - 1] >= i ? '✔' : (current.subTotals[row - 1] ? '⎯⎯' : ''), current.checkedBusinessmen[row - 1] >= i && validated.checkedBusinessmen[row - 1] < i);
             }
+            this.setContentAndValidation("businessmen-subtotal".concat(row), current.subTotals[row - 1], current.subTotals[row - 1] != validated.subTotals[row - 1]);
         }
         if (visibleScoring) {
-            for (var i = 1; i <= 3; i++) {
-                this.setContentAndValidation("businessmen-subtotal".concat(i), current.subTotals[i - 1], current.subTotals[i - 1] != validated.subTotals[i - 1]);
-            }
             this.setContentAndValidation("businessmen-total", current.total, current.total != validated.total);
         }
     };

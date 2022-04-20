@@ -288,7 +288,7 @@ trait UtilTrait {
         $message = $currentTicket == null ? '' : clienttranslate('Round ${round}/12 starts!');
 
         $this->notifyAllPlayers('newRound', $message, [
-            'round' => count($validatedTickets) + 1,
+            'round' => min(12, count($validatedTickets) + 1),
             'validatedTickets' => $validatedTickets,
             'currentTicket' => $currentTicket,
         ]);

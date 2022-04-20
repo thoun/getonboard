@@ -33,12 +33,11 @@ class PlayerTableBusinessmenBlock extends PlayerTableBlock {
             for(let i=1; i<=3; i++) {
                 this.setContentAndValidation(`businessmen-checkmark${row}-${i}`, current.checkedBusinessmen[row-1] >= i ? '✔' : (current.subTotals[row-1] ? '⎯⎯' : ''), current.checkedBusinessmen[row-1] >= i && validated.checkedBusinessmen[row-1] < i);
             }
+
+            this.setContentAndValidation(`businessmen-subtotal${row}`, current.subTotals[row-1], current.subTotals[row-1] != validated.subTotals[row-1]);
         }
         
         if (visibleScoring) {
-            for(let i=1; i<=3; i++) {
-                this.setContentAndValidation(`businessmen-subtotal${i}`, current.subTotals[i-1], current.subTotals[i-1] != validated.subTotals[i-1]);
-            }
             this.setContentAndValidation(`businessmen-total`, current.total, current.total != validated.total);
         }
     }

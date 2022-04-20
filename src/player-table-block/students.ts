@@ -38,7 +38,7 @@ class PlayerTableStudentsBlock extends PlayerTableBlock {
         for(let i=1; i<=3; i++) {
             this.setContentAndValidation(`internships-checkmark${i}`, current.checkedInternships >= i ? '✔' : '', current.checkedInternships >= i && validated.checkedInternships < i);
         }
-        for(let i=1; i<=3; i++) {
+        for(let i=1; i<=4; i++) {
             this.setContentAndValidation(`schools-checkmark${i}`, current.checkedSchools >= i ? '✔' : '', current.checkedSchools >= i && validated.checkedSchools < i);
         }
 
