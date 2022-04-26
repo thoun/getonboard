@@ -77,7 +77,7 @@ trait ScoreSheetTrait {
         }
         $scoreSheet->tourists->{'specialMonument'.$type} = $totalCheckedTourists;
 
-        if ($scoreSheet->tourists->specialMonumentLight !== null || $scoreSheet->tourists->specialMonumentMax !== null) {
+        if ($scoreSheet->tourists->specialMonumentLight !== null || $scoreSheet->tourists->specialMonumentDark !== null) {
             $scoreSheet->tourists->specialMonumentMax = max($scoreSheet->tourists->specialMonumentLight ?? 0, $scoreSheet->tourists->specialMonumentDark ?? 0);
         }
 

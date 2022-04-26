@@ -725,7 +725,7 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.onEnteringShowScore = function () {
         var _this = this;
-        Object.keys(this.gamedatas.players).forEach(function (playerId) { return _this.scoreCtrl[playerId].setValue(0); });
+        Object.keys(this.gamedatas.players).forEach(function (playerId) { var _a; return (_a = _this.scoreCtrl[playerId]) === null || _a === void 0 ? void 0 : _a.setValue(0); });
         this.gamedatas.hiddenScore = false;
     };
     GetOnBoard.prototype.onLeavingState = function (stateName) {

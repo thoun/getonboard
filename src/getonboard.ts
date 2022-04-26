@@ -140,7 +140,7 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     onEnteringShowScore() {
-        Object.keys(this.gamedatas.players).forEach(playerId => (this as any).scoreCtrl[playerId].setValue(0));
+        Object.keys(this.gamedatas.players).forEach(playerId => (this as any).scoreCtrl[playerId]?.setValue(0));
         this.gamedatas.hiddenScore = false;
     }
 
