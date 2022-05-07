@@ -663,6 +663,8 @@ var GetOnBoard = /** @class */ (function () {
         else {
             this.dontPreloadImage("map-big.jpg");
         }
+        this.dontPreloadImage("map-small-no-building.jpg");
+        this.dontPreloadImage("map-big-no-building.jpg");
         log("Starting game setup");
         this.gamedatas = gamedatas;
         log('gamedatas', gamedatas);
@@ -676,10 +678,7 @@ var GetOnBoard = /** @class */ (function () {
         this.roundNumberCounter.create("round-number-counter");
         this.roundNumberCounter.setValue(gamedatas.roundNumber);
         this.setupNotifications();
-        try {
-            document.getElementById('preference_control_203').closest(".preference_choice").style.display = 'none';
-        }
-        catch (e) { }
+        this.setupPreferences();
         document.getElementById('zoom-out').addEventListener('click', function () { return _this.zoomOut(); });
         document.getElementById('zoom-in').addEventListener('click', function () { return _this.zoomIn(); });
         if (this.zoom !== 1) {
@@ -831,6 +830,35 @@ var GetOnBoard = /** @class */ (function () {
         }
         var newIndex = ZOOM_LEVELS.indexOf(this.zoom) - 1;
         this.setZoom(ZOOM_LEVELS[newIndex]);
+    };
+    GetOnBoard.prototype.setupPreferences = function () {
+        var _this = this;
+        // Extract the ID and value from the UI control
+        var onchange = function (e) {
+            var match = e.target.id.match(/^preference_control_(\d+)$/);
+            if (!match) {
+                return;
+            }
+            var prefId = +match[1];
+            var prefValue = +e.target.value;
+            _this.prefs[prefId].value = prefValue;
+            _this.onPreferenceChange(prefId, prefValue);
+        };
+        // Call onPreferenceChange() when any value changes
+        dojo.query(".preference_control").connect("onchange", onchange);
+        // Call onPreferenceChange() now
+        dojo.forEach(dojo.query("#ingame_menu_content .preference_control"), function (el) { return onchange({ target: el }); });
+        try {
+            document.getElementById('preference_control_203').closest(".preference_choice").style.display = 'none';
+        }
+        catch (e) { }
+    };
+    GetOnBoard.prototype.onPreferenceChange = function (prefId, prefValue) {
+        switch (prefId) {
+            case 204:
+                document.getElementsByTagName('html')[0].dataset.noBuilding = (prefValue == 2).toString();
+                break;
+        }
     };
     GetOnBoard.prototype.createPlayerPanels = function (gamedatas) {
         var _this = this;

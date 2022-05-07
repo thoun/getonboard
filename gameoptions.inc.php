@@ -52,7 +52,17 @@ $game_preferences = [
     ],
 
     203 => [
-        'name' => '',
+        'name' => '', // expanded personal objective
+        'needReload' => false,
+        'values' => [
+            1 => ['name' => totranslate('Enabled')],
+            2 => ['name' => totranslate('Disabled')],
+        ],
+        'default' => 1,
+    ],
+
+    204 => [
+        'name' => totranslate('Map decoration'),
         'needReload' => false,
         'values' => [
             1 => ['name' => totranslate('Enabled')],

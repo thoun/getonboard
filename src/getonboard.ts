@@ -65,6 +65,8 @@ class GetOnBoard implements GetOnBoardGame {
         } else {
             (this as any).dontPreloadImage(`map-big.jpg`);
         }
+        (this as any).dontPreloadImage(`map-small-no-building.jpg`);
+        (this as any).dontPreloadImage(`map-big-no-building.jpg`);
 
         log( "Starting game setup" );
         
@@ -83,10 +85,7 @@ class GetOnBoard implements GetOnBoardGame {
         this.roundNumberCounter.setValue(gamedatas.roundNumber);
 
         this.setupNotifications();
-
-        try {
-            (document.getElementById('preference_control_203').closest(".preference_choice") as HTMLDivElement).style.display = 'none';
-        } catch (e) {}
+        this.setupPreferences();
 
         document.getElementById('zoom-out').addEventListener('click', () => this.zoomOut());
         document.getElementById('zoom-in').addEventListener('click', () => this.zoomIn());
@@ -261,6 +260,41 @@ class GetOnBoard implements GetOnBoardGame {
         }
         const newIndex = ZOOM_LEVELS.indexOf(this.zoom) - 1;
         this.setZoom(ZOOM_LEVELS[newIndex]);
+    }
+
+    private setupPreferences() {
+        // Extract the ID and value from the UI control
+        const onchange = (e) => {
+          var match = e.target.id.match(/^preference_control_(\d+)$/);
+          if (!match) {
+            return;
+          }
+          var prefId = +match[1];
+          var prefValue = +e.target.value;
+          (this as any).prefs[prefId].value = prefValue;
+          this.onPreferenceChange(prefId, prefValue);
+        }
+        
+        // Call onPreferenceChange() when any value changes
+        dojo.query(".preference_control").connect("onchange", onchange);
+        
+        // Call onPreferenceChange() now
+        dojo.forEach(
+          dojo.query("#ingame_menu_content .preference_control"),
+          el => onchange({ target: el })
+        );
+
+        try {
+            (document.getElementById('preference_control_203').closest(".preference_choice") as HTMLDivElement).style.display = 'none';
+        } catch (e) {}
+    }
+      
+    private onPreferenceChange(prefId: number, prefValue: number) {
+        switch (prefId) {
+            case 204:
+                document.getElementsByTagName('html')[0].dataset.noBuilding = (prefValue == 2).toString();
+                break;
+        }
     }
 
     private createPlayerPanels(gamedatas: GetOnBoardGamedatas) {

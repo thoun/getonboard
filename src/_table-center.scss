@@ -13,10 +13,21 @@ $marker-size: 6px;
       transform: rotate(45deg) translate(-10px, 20px);
       clip-path: polygon(30% 0%, 75% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
 
-      .intersection:not(.green-light) {
-        .objective-letter {
-          top: -13px;
-          right: -14px;
+      .intersection {
+        transform: rotate(-45deg);
+
+        &:not(.green-light) {
+          .objective-letter {
+            top: -19px;
+            right: 8px;
+          }
+        }        
+
+        &.green-light {
+          .objective-letter {
+            top: -28px;
+            right: 9px;
+          }
         }
       }
 
@@ -368,6 +379,18 @@ $marker-size: 6px;
   
     &.back {  
       transform: rotateY(180deg);
+    }
+  }
+}
+
+html[data-no-building="true"] {
+  #map {
+    &[data-size="small"] {
+      background: url('img/map-small-no-building.jpg');
+      
+    }
+    &[data-size="big"] {
+      background: url('img/map-big-no-building.jpg');
     }
   }
 }

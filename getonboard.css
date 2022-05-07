@@ -114,9 +114,16 @@
   transform: rotate(45deg) translate(-10px, 20px);
   clip-path: polygon(30% 0%, 75% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
 }
+#map[data-size=small] #map-elements .intersection {
+  transform: rotate(-45deg);
+}
 #map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter {
-  top: -13px;
-  right: -14px;
+  top: -19px;
+  right: 8px;
+}
+#map[data-size=small] #map-elements .intersection.green-light .objective-letter {
+  top: -28px;
+  right: 9px;
 }
 #map[data-size=small] #map-elements .route[data-direction="0"] {
   flex-direction: column;
@@ -442,6 +449,13 @@
 }
 .card-inner .card-side.back {
   transform: rotateY(180deg);
+}
+
+html[data-no-building=true] #map[data-size=small] {
+  background: url("img/map-small-no-building.jpg");
+}
+html[data-no-building=true] #map[data-size=big] {
+  background: url("img/map-big-no-building.jpg");
 }
 
 /*#player-tables {
