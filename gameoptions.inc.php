@@ -70,4 +70,14 @@ $game_preferences = [
         ],
         'default' => 1,
     ],
+
+    205 => [
+        'name' => totranslate('Map grid'),
+        'needReload' => false,
+        'values' => [
+            1 => ['name' => totranslate('Enabled')],
+            2 => ['name' => totranslate('Disabled')],
+        ],
+        'default' => 1,
+    ],
 ];

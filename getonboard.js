@@ -665,6 +665,10 @@ var GetOnBoard = /** @class */ (function () {
         }
         this.dontPreloadImage("map-small-no-building.jpg");
         this.dontPreloadImage("map-big-no-building.jpg");
+        this.dontPreloadImage("map-small-no-grid.jpg");
+        this.dontPreloadImage("map-big-no-grid.jpg");
+        this.dontPreloadImage("map-small-no-grid-no-building.jpg");
+        this.dontPreloadImage("map-big-no-grid-no-building.jpg");
         log("Starting game setup");
         this.gamedatas = gamedatas;
         log('gamedatas', gamedatas);
@@ -857,6 +861,9 @@ var GetOnBoard = /** @class */ (function () {
         switch (prefId) {
             case 204:
                 document.getElementsByTagName('html')[0].dataset.noBuilding = (prefValue == 2).toString();
+                break;
+            case 205:
+                document.getElementsByTagName('html')[0].dataset.noGrid = (prefValue == 2).toString();
                 break;
         }
     };

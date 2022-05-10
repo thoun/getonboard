@@ -394,3 +394,27 @@ html[data-no-building="true"] {
     }
   }
 }
+
+html[data-no-grid="true"] {
+  #map {
+    &[data-size="small"] {
+      background: url('img/map-small-no-grid.jpg');
+      
+    }
+    &[data-size="big"] {
+      background: url('img/map-big-no-grid.jpg');
+    }
+  }
+}
+
+html[data-no-grid="true"][data-no-building="true"] {
+  #map {
+    &[data-size="small"] {
+      background: url('img/map-small-no-grid-no-building.jpg');
+      
+    }
+    &[data-size="big"] {
+      background: url('img/map-big-no-grid-no-building.jpg');
+    }
+  }
+}
