@@ -20,13 +20,61 @@ $marker-size: 6px;
           .objective-letter {
             top: -19px;
             right: 8px;
+
+            &[data-position="16"] {
+              top: -23px;
+            }
+            &[data-position="32"] {
+              top: -22px;
+            }
+            &[data-position="45"] {
+              top: -22px;
+            }
+            &[data-position="63"] {
+              top: -19px;
+            }
+            &[data-position="101"] {
+              top: -22px;
+              right: 9px;
+            }
+            &[data-position="106"] {
+              top: -45px;
+            }
+            &[data-position="133"] {
+              top: -22px;
+              right: 9px;
+            }
           }
         }        
 
         &.green-light {
           .objective-letter {
             top: -28px;
-            right: 9px;
+            right: 8px;
+
+            &[data-position="12"] {
+              top: -27px;
+            }
+            &[data-position="41"] {
+              top: -25px;
+            }
+            &[data-position="54"] {
+              top: -26px;
+            }
+            &[data-position="81"] {
+              top: -27px;
+              right: 9px;
+            }
+            &[data-position="85"] {
+              top: -24px;
+              right: 2px;
+            }
+            &[data-position="92"] {
+              top: -27px;
+            }
+            &[data-position="112"] {
+              top: -26px;
+            }
           }
         }
       }

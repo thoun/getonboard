@@ -498,6 +498,7 @@ var TableCenter = /** @class */ (function () {
         gamedatas.commonObjectives.forEach(function (commonObjective) { return _this.placeCommonObjective(commonObjective); });
         // personal objective
         var currentPlayer = gamedatas.players[this.game.getPlayerId()];
+        //Object.keys(gamedatas.MAP_POSITIONS).filter(key => gamedatas.MAP_POSITIONS[key].some(element => element >= 97 && element <= 122)).forEach(position =>
         currentPlayer === null || currentPlayer === void 0 ? void 0 : currentPlayer.personalObjectivePositions.forEach(function (position) {
             return dojo.place("<div class=\"objective-letter\" style=\"box-shadow: 0 0 5px 5px #".concat(currentPlayer.color, ";\" data-position=\"").concat(position, "\"></div>"), "intersection".concat(position));
         });

@@ -121,9 +121,55 @@
   top: -19px;
   right: 8px;
 }
+#map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter[data-position="16"] {
+  top: -23px;
+}
+#map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter[data-position="32"] {
+  top: -22px;
+}
+#map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter[data-position="45"] {
+  top: -22px;
+}
+#map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter[data-position="63"] {
+  top: -19px;
+}
+#map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter[data-position="101"] {
+  top: -22px;
+  right: 9px;
+}
+#map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter[data-position="106"] {
+  top: -45px;
+}
+#map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter[data-position="133"] {
+  top: -22px;
+  right: 9px;
+}
 #map[data-size=small] #map-elements .intersection.green-light .objective-letter {
   top: -28px;
+  right: 8px;
+}
+#map[data-size=small] #map-elements .intersection.green-light .objective-letter[data-position="12"] {
+  top: -27px;
+}
+#map[data-size=small] #map-elements .intersection.green-light .objective-letter[data-position="41"] {
+  top: -25px;
+}
+#map[data-size=small] #map-elements .intersection.green-light .objective-letter[data-position="54"] {
+  top: -26px;
+}
+#map[data-size=small] #map-elements .intersection.green-light .objective-letter[data-position="81"] {
+  top: -27px;
   right: 9px;
+}
+#map[data-size=small] #map-elements .intersection.green-light .objective-letter[data-position="85"] {
+  top: -24px;
+  right: 2px;
+}
+#map[data-size=small] #map-elements .intersection.green-light .objective-letter[data-position="92"] {
+  top: -27px;
+}
+#map[data-size=small] #map-elements .intersection.green-light .objective-letter[data-position="112"] {
+  top: -26px;
 }
 #map[data-size=small] #map-elements .route[data-direction="0"] {
   flex-direction: column;
