@@ -658,17 +658,17 @@ var GetOnBoard = /** @class */ (function () {
         var players = Object.values(gamedatas.players);
         // ignore loading of some pictures
         if (players.length > 3) {
-            this.dontPreloadImage("map-small.jpg");
+            this.dontPreloadImage("map-small-no-grid.jpg");
         }
         else {
-            this.dontPreloadImage("map-big.jpg");
+            this.dontPreloadImage("map-big-no-grid.jpg");
         }
-        this.dontPreloadImage("map-small-no-building.jpg");
-        this.dontPreloadImage("map-big-no-building.jpg");
-        this.dontPreloadImage("map-small-no-grid.jpg");
-        this.dontPreloadImage("map-big-no-grid.jpg");
+        this.dontPreloadImage("map-small.jpg");
+        this.dontPreloadImage("map-big.jpg");
         this.dontPreloadImage("map-small-no-grid-no-building.jpg");
         this.dontPreloadImage("map-big-no-grid-no-building.jpg");
+        this.dontPreloadImage("map-small-no-building.jpg");
+        this.dontPreloadImage("map-big-no-building.jpg");
         log("Starting game setup");
         this.gamedatas = gamedatas;
         log('gamedatas', gamedatas);

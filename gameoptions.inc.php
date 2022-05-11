@@ -78,6 +78,6 @@ $game_preferences = [
             1 => ['name' => totranslate('Enabled')],
             2 => ['name' => totranslate('Disabled')],
         ],
-        'default' => 1,
+        'default' => 2,
     ],
 ];

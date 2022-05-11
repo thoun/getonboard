@@ -61,16 +61,16 @@ class GetOnBoard implements GetOnBoardGame {
         const players = Object.values(gamedatas.players);
         // ignore loading of some pictures
         if (players.length > 3) {
-            (this as any).dontPreloadImage(`map-small.jpg`);
+            (this as any).dontPreloadImage(`map-small-no-grid.jpg`);
         } else {
-            (this as any).dontPreloadImage(`map-big.jpg`);
+            (this as any).dontPreloadImage(`map-big-no-grid.jpg`);
         }
-        (this as any).dontPreloadImage(`map-small-no-building.jpg`);
-        (this as any).dontPreloadImage(`map-big-no-building.jpg`);
-        (this as any).dontPreloadImage(`map-small-no-grid.jpg`);
-        (this as any).dontPreloadImage(`map-big-no-grid.jpg`);
+        (this as any).dontPreloadImage(`map-small.jpg`);
+        (this as any).dontPreloadImage(`map-big.jpg`);
         (this as any).dontPreloadImage(`map-small-no-grid-no-building.jpg`);
         (this as any).dontPreloadImage(`map-big-no-grid-no-building.jpg`);
+        (this as any).dontPreloadImage(`map-small-no-building.jpg`);
+        (this as any).dontPreloadImage(`map-big-no-building.jpg`);
 
         log( "Starting game setup" );
         
