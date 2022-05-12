@@ -14,9 +14,8 @@ trait DebugUtilTrait {
         //$this->insertRoutes(2343492, [16, 15, 14, 24, 34, 44, 43, 53, 63, 64, 74, 73]);
         //$this->insertRoutes(2343493, [16, 15, 14, 24, 34, 44, 43, 53, 63, 64, 74, 73]);
 
-        // table de test de Quentin https://boardgamearena.com/archive/replay/220414-1000/?table=258872653&player=91350005&comments=86175279;#
-        //$this->insertRoutes(2343492, [97, 87, 86, 85, 95, 105, 106, 116, 115, 114, 124, 134, 133, 123, 122, 112, 113, 103, 102, 92, 82, 72, 62, 52, 42, 32, 31, 41, 51]);
-        //$this->insertRoutes(2343493, [36, 35, 45, 44, 43, 33, 23, 22, 12, 11, 21, 31, 32, 42, 52, 62, 63, 73, 72, 82, 92, 102, 103, 104, 105, 95, 94, 84, 74]);
+        // table https://boardgamearena.com/archive/replay/220504-1002/?table=266758551&player=86175279&comments=86175279;
+        //$this->insertRoutes(2343492, [23, 22, 32, 42, 52, 51, 61, 71, 81, 91, 92, 93, 94, 84, 85, 95, 105, 115, 116, 106, 96, 86, 76, 66, 56, 55, 45, 44, 34, 35, 36, 26]);
     }
 
     function insertRoutes(int $playerId, array $positions, int $validated = 1) {

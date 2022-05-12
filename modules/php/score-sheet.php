@@ -60,12 +60,11 @@ trait ScoreSheetTrait {
 
     function addMonumentToScoreSheet(ScoreSheet &$scoreSheet, string $type, array $commonObjectives, int $round) {
         $rowIndex = count($scoreSheet->tourists->subTotals);
-        if ($rowIndex >= 3) {
-            return;
-        }
-        if ($scoreSheet->tourists->checkedTourists[$rowIndex] > 0) {
-            $scoreSheet->tourists->subTotals[$rowIndex] = $this->TOURISTS_POINTS[$scoreSheet->tourists->checkedTourists[$rowIndex] - 1];
-            $this->updateTouristTotal($scoreSheet, $commonObjectives, $round);
+        if ($rowIndex < 3) {
+            if ($scoreSheet->tourists->checkedTourists[$rowIndex] > 0) {
+                $scoreSheet->tourists->subTotals[$rowIndex] = $this->TOURISTS_POINTS[$scoreSheet->tourists->checkedTourists[$rowIndex] - 1];
+                $this->updateTouristTotal($scoreSheet, $commonObjectives, $round);
+            }
         }
         $scoreSheet->tourists->{'checkedMonuments'.$type}++;
     }
