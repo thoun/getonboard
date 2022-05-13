@@ -25,8 +25,6 @@ trait ActionTrait {
             throw new BgaUserException("Invalid departure");
         }
 
-        $position = $this->MAP_DEPARTURE_POSITIONS[$this->getMap()][$ticketNumber]; 
-
         $this->DbQuery("UPDATE player SET `player_departure_position` = $position WHERE `player_id` = $playerId");
         
         self::notifyAllPlayers('log', clienttranslate('${player_name} has chose the position for its departure pawn'), [

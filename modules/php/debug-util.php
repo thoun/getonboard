@@ -29,10 +29,37 @@ trait DebugUtilTrait {
 
     function debugStart() {
         $playersIds = $this->getPlayersIds();
+
+        $MAP_DEPARTURE_POSITIONS = [
+            'small' => [
+              1 => 23,
+              2 => 36,
+              3 => 61,
+              4 => 65,
+              5 => 97,
+              6 => 114,
+            ],
+          
+            'big' => [
+              1 => 51,
+              2 => 71,
+              3 => 42,
+              4 => 112,
+              5 => 34,
+              6 => 104,
+              7 => 15,
+              8 => 106,
+              9 => 58,
+              10 => 118,
+              11 => 29,
+              12 => 89,
+            ],
+          ];
+
         foreach ($playersIds as $playerId) {
             $tickets = $this->getCardsFromDb($this->tickets->getCardsInLocation('hand', $playerId));
             $ticketNumber = $tickets[0]->type;
-            $position = $this->MAP_DEPARTURE_POSITIONS[$this->getMap()][$ticketNumber]; 
+            $position = $MAP_DEPARTURE_POSITIONS[$this->getMap()][$ticketNumber]; 
             $this->DbQuery("UPDATE player SET `player_departure_position` = $position WHERE `player_id` = $playerId");
             $this->tickets->moveAllCardsInLocation('hand', 'discard', $playerId);
         }
