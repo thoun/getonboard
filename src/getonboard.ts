@@ -7,8 +7,8 @@ declare const g_gamethemeurl;
 
 const ANIMATION_MS = 500;
 
-const ZOOM_LEVELS = [0.5, 0.625, 0.75, 0.875, 1];
-const ZOOM_LEVELS_MARGIN = [-100, -60, -33, -14, 0];
+const ZOOM_LEVELS = [0.5, 0.625, 0.75, 0.875, 1, 1.25, 1.5];
+const ZOOM_LEVELS_MARGIN = [-100, -60, -33, -14, 0, 20, 33.34];
 const LOCAL_STORAGE_ZOOM_KEY = 'GetOnBoard-zoom';
 
 function formatTextIcons(rawText: string) {

@@ -614,8 +614,8 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 var ANIMATION_MS = 500;
-var ZOOM_LEVELS = [0.5, 0.625, 0.75, 0.875, 1];
-var ZOOM_LEVELS_MARGIN = [-100, -60, -33, -14, 0];
+var ZOOM_LEVELS = [0.5, 0.625, 0.75, 0.875, 1, 1.25, 1.5];
+var ZOOM_LEVELS_MARGIN = [-100, -60, -33, -14, 0, 20, 33.34];
 var LOCAL_STORAGE_ZOOM_KEY = 'GetOnBoard-zoom';
 function formatTextIcons(rawText) {
     if (!rawText) {

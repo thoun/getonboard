@@ -16,7 +16,7 @@
     </div>
     <div id="zoom-controls">
         <button id="zoom-out"></button>
-        <button id="zoom-in" class="disabled"></button>
+        <button id="zoom-in"></button>
     </div>
     <div id="jump-controls">
     </div>
