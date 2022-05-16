@@ -211,6 +211,11 @@ $marker-size: 6px;
           right: -14px;
         }
       }
+
+      &.glow {
+        background: var(--background);
+        animation: glow-intersection-animation 1s alternate infinite ease-in-out;
+      }
     }
 
     .departure-pawn {
@@ -345,6 +350,17 @@ $marker-size: 6px;
   }
   100% { 
     box-shadow: 0 0 15px 15px white;
+  }
+}
+
+@keyframes glow-intersection-animation {
+  0% { 
+    opacity: 0.2;
+    box-shadow: 0 0 5px 10px var(--background);
+  }
+  100% { 
+    opacity: 0.8;
+    box-shadow: 0 0 5px 8px var(--background);
   }
 }
 

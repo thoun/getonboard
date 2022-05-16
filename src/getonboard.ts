@@ -137,6 +137,10 @@ class GetOnBoard implements GetOnBoardGame {
             this.setGamestateDescription('Confirm');
         }
 
+        const currentPositionIntersection = document.getElementById(`intersection${args.currentPosition}`);
+        currentPositionIntersection.classList.add('glow');
+        currentPositionIntersection.style.setProperty('--background', `#${this.getPlayerColor((this as any).getActivePlayerId())}`);
+
         if ((this as any).isCurrentPlayerActive()) {
             args.possibleRoutes.forEach(route => this.tableCenter.addGhostMarker(route));
         }
@@ -165,6 +169,8 @@ class GetOnBoard implements GetOnBoardGame {
     }
     
     private onLeavingPlaceRoute() {
+        document.querySelectorAll('.intersection.glow').forEach(element => element.classList.remove('glow'));
+        
         if ((this as any).isCurrentPlayerActive()) {
             this.tableCenter.removeGhostMarkers();
         }

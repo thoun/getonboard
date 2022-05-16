@@ -723,6 +723,9 @@ var GetOnBoard = /** @class */ (function () {
         if (args.canConfirm) {
             this.setGamestateDescription('Confirm');
         }
+        var currentPositionIntersection = document.getElementById("intersection".concat(args.currentPosition));
+        currentPositionIntersection.classList.add('glow');
+        currentPositionIntersection.style.setProperty('--background', "#".concat(this.getPlayerColor(this.getActivePlayerId())));
         if (this.isCurrentPlayerActive()) {
             args.possibleRoutes.forEach(function (route) { return _this.tableCenter.addGhostMarker(route); });
         }
@@ -747,6 +750,7 @@ var GetOnBoard = /** @class */ (function () {
         Array.from(document.getElementsByClassName('intersection')).forEach(function (element) { return element.classList.remove('selectable'); });
     };
     GetOnBoard.prototype.onLeavingPlaceRoute = function () {
+        document.querySelectorAll('.intersection.glow').forEach(function (element) { return element.classList.remove('glow'); });
         if (this.isCurrentPlayerActive()) {
             this.tableCenter.removeGhostMarkers();
         }
