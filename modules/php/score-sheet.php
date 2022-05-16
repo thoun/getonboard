@@ -63,10 +63,10 @@ trait ScoreSheetTrait {
         if ($rowIndex < 3) {
             if ($scoreSheet->tourists->checkedTourists[$rowIndex] > 0) {
                 $scoreSheet->tourists->subTotals[$rowIndex] = $this->TOURISTS_POINTS[$scoreSheet->tourists->checkedTourists[$rowIndex] - 1];
-                $this->updateTouristTotal($scoreSheet, $commonObjectives, $round);
             }
         }
         $scoreSheet->tourists->{'checkedMonuments'.$type}++;
+        $this->updateTouristTotal($scoreSheet, $commonObjectives, $round);
     }
 
     function addSpecialMonumentToScoreSheet(ScoreSheet &$scoreSheet, string $type, array $commonObjectives, int $round) {
@@ -128,7 +128,6 @@ trait ScoreSheetTrait {
         if ($scoreSheet->businessmen->checkedBusinessmen[$rowIndex] > 0) {
             $checked = $scoreSheet->businessmen->checkedBusinessmen[$rowIndex];
             $scoreSheet->businessmen->subTotals[$rowIndex] = $this->BUSINESSMEN_POINTS[$checked - 1];
-            $this->updateBusinessmenTotal($scoreSheet, $commonObjectives, $round);
 
             if ($checked == 1) {
                 $this->addOldLadyToScoreSheetAndUpdateTotal($scoreSheet, $commonObjectives, $round);
@@ -139,6 +138,7 @@ trait ScoreSheetTrait {
                 $this->updateStudentTotal($scoreSheet, $commonObjectives, $round);
             }
         }
+        $this->updateBusinessmenTotal($scoreSheet, $commonObjectives, $round);
     }
 
     function addSpecialOfficeToScoreSheet(ScoreSheet &$scoreSheet, array $commonObjectives, int $round) {

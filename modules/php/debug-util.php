@@ -14,8 +14,15 @@ trait DebugUtilTrait {
         //$this->insertRoutes(2343492, [16, 15, 14, 24, 34, 44, 43, 53, 63, 64, 74, 73]);
         //$this->insertRoutes(2343493, [16, 15, 14, 24, 34, 44, 43, 53, 63, 64, 74, 73]);
 
-        // table https://boardgamearena.com/archive/replay/220504-1002/?table=266758551&player=86175279&comments=86175279;
-        //$this->insertRoutes(2343492, [23, 22, 32, 42, 52, 51, 61, 71, 81, 91, 92, 93, 94, 84, 85, 95, 105, 115, 116, 106, 96, 86, 76, 66, 56, 55, 45, 44, 34, 35, 36, 26]);
+        // table https://boardgamearena.com/archive/replay/220513-1000/?table=267222414&player=1559197&comments=86175279;#
+        $this->insertRoutes(2343492, [36, 46, 56, 55, 65, 66, 76, 75, 85, 95, 96, 106, 105, 115, 125, 124, 123, 113, 103, 102, 101, 91]);
+        
+        //$this->debugSetStart(2343492, 36);
+        //$this->debugSetStart(2343493, 23);
+        //$this->gamestate->jumpToState(ST_START_GAME);
+
+        $this->debugSetCommonObjective(1, 6);
+        $this->debugSetCommonObjective(2, 5);
     }
 
     function insertRoutes(int $playerId, array $positions, int $validated = 1) {
@@ -65,6 +72,15 @@ trait DebugUtilTrait {
         }
 
         $this->gamestate->jumpToState(ST_START_GAME);
+    }
+
+    function debugSetStart(int $playerId, int $position) {
+        $this->DbQuery("UPDATE player SET `player_departure_position` = $position WHERE `player_id` = $playerId");
+        $this->tickets->moveAllCardsInLocation('hand', 'discard', $playerId);
+    }
+
+    function debugSetCommonObjective(int $number, int $objective) {
+        $this->DbQuery("UPDATE common_objectives SET `id` = $objective WHERE `number` = $number");
     }
 
     function debugLastRound() {
