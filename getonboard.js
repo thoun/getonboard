@@ -500,7 +500,7 @@ var TableCenter = /** @class */ (function () {
         var currentPlayer = gamedatas.players[this.game.getPlayerId()];
         //Object.keys(gamedatas.MAP_POSITIONS).filter(key => gamedatas.MAP_POSITIONS[key].some(element => element >= 97 && element <= 122)).forEach(position =>
         currentPlayer === null || currentPlayer === void 0 ? void 0 : currentPlayer.personalObjectivePositions.forEach(function (position) {
-            return dojo.place("<div class=\"objective-letter\" style=\"box-shadow: 0 0 5px 5px #".concat(currentPlayer.color, ";\" data-position=\"").concat(position, "\"></div>"), "intersection".concat(position));
+            return dojo.place("<div class=\"objective-letter\" data-position=\"".concat(position, "\"></div>"), "intersection".concat(position));
         });
         // tickets
         this.setRound(gamedatas.validatedTickets, gamedatas.currentTicket, true);
@@ -677,6 +677,7 @@ var GetOnBoard = /** @class */ (function () {
         this.tableCenter = new TableCenter(this, gamedatas);
         this.createPlayerTables(gamedatas);
         this.createPlayerJumps(gamedatas);
+        Object.values(gamedatas.players).forEach(function (player) { return _this.highlightObjectiveLetters(player); });
         this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
         document.getElementById('round-panel').innerHTML = "".concat(_('Round'), "&nbsp;<span id=\"round-number-counter\"></span>&nbsp;/&nbsp;12");
         this.roundNumberCounter = new ebg.counter();
@@ -725,7 +726,8 @@ var GetOnBoard = /** @class */ (function () {
         }
         var currentPositionIntersection = document.getElementById("intersection".concat(args.currentPosition));
         currentPositionIntersection.classList.add('glow');
-        currentPositionIntersection.style.setProperty('--background', "#".concat(this.getPlayerColor(this.getActivePlayerId())));
+        currentPositionIntersection.style.setProperty('--background-lighter', "#".concat(this.getPlayerColor(this.getActivePlayerId()), "66"));
+        currentPositionIntersection.style.setProperty('--background-darker', "#".concat(this.getPlayerColor(this.getActivePlayerId()), "CC"));
         if (this.isCurrentPlayerActive()) {
             args.possibleRoutes.forEach(function (route) { return _this.tableCenter.addGhostMarker(route); });
         }
@@ -879,7 +881,7 @@ var GetOnBoard = /** @class */ (function () {
             var playerId = Number(player.id);
             var eliminated = Number(player.eliminated) > 0;
             if (playerId === _this.getPlayerId()) {
-                var html = "\n                <div class=\"personal-objective-label\">".concat(_("Your personal objective:"), "</div>\n                <div id=\"personal-objective-wrapper\" data-expanded=\"").concat((((_a = _this.prefs[203]) === null || _a === void 0 ? void 0 : _a.value) != 2).toString(), "\">\n                    <div class=\"personal-objective collapsed\">\n                        ").concat(player.personalObjectiveLetters.map(function (letter) { return "<div class=\"letter\">".concat(letter, "</div>"); }).join(''), "\n                    </div>\n                    <div class=\"personal-objective expanded ").concat(gamedatas.map, "\" data-type=\"").concat(player.personalObjective, "\"></div>\n                    <div id=\"toggle-objective-expand\" class=\"arrow\"></div>\n                </div>");
+                var html = "\n                <div class=\"personal-objective-label\">".concat(_("Your personal objective:"), "</div>\n                <div id=\"personal-objective-wrapper\" data-expanded=\"").concat((((_a = _this.prefs[203]) === null || _a === void 0 ? void 0 : _a.value) != 2).toString(), "\">\n                    <div class=\"personal-objective collapsed\">\n                        ").concat(player.personalObjectiveLetters.map(function (letter, letterIndex) { return "<div class=\"letter\" data-position=\"".concat(player.personalObjectivePositions[letterIndex], "\">").concat(letter, "</div>"); }).join(''), "\n                    </div>\n                    <div class=\"personal-objective expanded ").concat(gamedatas.map, "\" data-type=\"").concat(player.personalObjective, "\"></div>\n                    <div id=\"toggle-objective-expand\" class=\"arrow\"></div>\n                </div>");
                 dojo.place(html, "player_board_".concat(player.id));
                 document.getElementById('toggle-objective-expand').addEventListener('click', function () {
                     var wrapper = document.getElementById("personal-objective-wrapper");
@@ -1049,6 +1051,20 @@ var GetOnBoard = /** @class */ (function () {
             (_a = pipDiv.parentElement) === null || _a === void 0 ? void 0 : _a.removeChild(pipDiv);
         }, 3000);
     };
+    GetOnBoard.prototype.positionReached = function (position, playerMarkers) {
+        return playerMarkers.some(function (marker) { return marker.from == position || marker.to == position; });
+    };
+    GetOnBoard.prototype.highlightObjectiveLetters = function (player) {
+        var _this = this;
+        if (Number(player.id) == this.getPlayerId()) {
+            var lettersPositions = player.personalObjectivePositions;
+            lettersPositions.forEach(function (lettersPosition) {
+                var reached = _this.positionReached(lettersPosition, player.markers).toString();
+                document.querySelector(".objective-letter[data-position=\"".concat(lettersPosition, "\"]")).dataset.reached = reached;
+                document.querySelector(".letter[data-position=\"".concat(lettersPosition, "\"]")).dataset.reached = reached;
+            });
+        }
+    };
     GetOnBoard.prototype.placeDeparturePawn = function (position) {
         if (!this.checkAction('placeDeparturePawn')) {
             return;
@@ -1182,6 +1198,8 @@ var GetOnBoard = /** @class */ (function () {
         var _this = this;
         var playerId = notif.args.playerId;
         this.tableCenter.addMarker(playerId, notif.args.marker);
+        this.gamedatas.players[notif.args.playerId].markers.push(notif.args.marker);
+        this.highlightObjectiveLetters(this.gamedatas.players[notif.args.playerId]);
         notif.args.zones.forEach(function (zone) { return _this.showZone(playerId, zone, notif.args.position); });
     };
     GetOnBoard.prototype.notif_confirmTurn = function (notif) {
@@ -1190,7 +1208,14 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.notif_removeMarkers = function (notif) {
         var _this = this;
-        notif.args.markers.forEach(function (marker) { return _this.tableCenter.removeMarker(notif.args.playerId, marker); });
+        notif.args.markers.forEach(function (marker) {
+            _this.tableCenter.removeMarker(notif.args.playerId, marker);
+            var markerIndex = _this.gamedatas.players[notif.args.playerId].markers.findIndex(function (m) { return m.from == marker.from && m.to == marker.to; });
+            if (markerIndex !== -1) {
+                _this.gamedatas.players[notif.args.playerId].markers.splice(markerIndex, 1);
+            }
+        });
+        this.highlightObjectiveLetters(this.gamedatas.players[notif.args.playerId]);
     };
     GetOnBoard.prototype.notif_playerEliminated = function (notif) {
         var playerId = Number(notif.args.who_quits);

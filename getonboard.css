@@ -49,6 +49,12 @@
   align-items: center;
   margin: 0 3px;
 }
+.player-board #personal-objective-wrapper .personal-objective.collapsed .letter[data-reached=true] {
+  background: green;
+}
+.player-board #personal-objective-wrapper .personal-objective.collapsed .letter[data-reached=false] {
+  background: #940000;
+}
 .player-board #personal-objective-wrapper .personal-objective.expanded {
   background-size: auto 100%;
   transform-origin: center center;
@@ -259,6 +265,12 @@
   height: 16px;
   border-radius: 50%;
 }
+#map #map-elements .intersection .objective-letter[data-reached=true] {
+  box-shadow: 0 0 5px 5px lime;
+}
+#map #map-elements .intersection .objective-letter[data-reached=false] {
+  box-shadow: 0 0 5px 5px red;
+}
 #map #map-elements .intersection.green-light .objective-letter {
   top: -16px;
   right: -8px;
@@ -389,12 +401,10 @@
 }
 @keyframes glow-intersection-animation {
   0% {
-    opacity: 0.2;
-    box-shadow: 0 0 5px 10px var(--background);
+    box-shadow: 0 0 3px 5px var(--background-lighter);
   }
   100% {
-    opacity: 0.8;
-    box-shadow: 0 0 5px 8px var(--background);
+    box-shadow: 0 0 5px 8px var(--background-darker);
   }
 }
 .common-objective-slot {

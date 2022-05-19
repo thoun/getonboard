@@ -81,6 +81,7 @@ class GetOnBoard implements GetOnBoardGame {
         this.tableCenter = new TableCenter(this, gamedatas);
         this.createPlayerTables(gamedatas);
         this.createPlayerJumps(gamedatas);
+        Object.values(gamedatas.players).forEach(player => this.highlightObjectiveLetters(player));
 
         this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
         document.getElementById('round-panel').innerHTML = `${_('Round')}&nbsp;<span id="round-number-counter"></span>&nbsp;/&nbsp;12`;
@@ -139,7 +140,8 @@ class GetOnBoard implements GetOnBoardGame {
 
         const currentPositionIntersection = document.getElementById(`intersection${args.currentPosition}`);
         currentPositionIntersection.classList.add('glow');
-        currentPositionIntersection.style.setProperty('--background', `#${this.getPlayerColor((this as any).getActivePlayerId())}`);
+        currentPositionIntersection.style.setProperty('--background-lighter', `#${this.getPlayerColor((this as any).getActivePlayerId())}66`);
+        currentPositionIntersection.style.setProperty('--background-darker', `#${this.getPlayerColor((this as any).getActivePlayerId())}CC`);
 
         if ((this as any).isCurrentPlayerActive()) {
             args.possibleRoutes.forEach(route => this.tableCenter.addGhostMarker(route));
@@ -321,7 +323,7 @@ class GetOnBoard implements GetOnBoardGame {
                 <div class="personal-objective-label">${_("Your personal objective:")}</div>
                 <div id="personal-objective-wrapper" data-expanded="${((this as any).prefs[203]?.value != 2).toString()}">
                     <div class="personal-objective collapsed">
-                        ${player.personalObjectiveLetters.map(letter => `<div class="letter">${letter}</div>`).join('')}
+                        ${player.personalObjectiveLetters.map((letter, letterIndex) => `<div class="letter" data-position="${player.personalObjectivePositions[letterIndex]}">${letter}</div>`).join('')}
                     </div>
                     <div class="personal-objective expanded ${gamedatas.map}" data-type="${player.personalObjective}"></div>
                     <div id="toggle-objective-expand" class="arrow"></div>
@@ -532,6 +534,21 @@ class GetOnBoard implements GetOnBoardGame {
         }, 3000);
     }
 
+    private positionReached(position: number, playerMarkers: PlacedRoute[]) {
+        return playerMarkers.some(marker => marker.from == position || marker.to == position);
+    }
+
+    private highlightObjectiveLetters(player: GetOnBoardPlayer) {
+        if (Number(player.id) == this.getPlayerId()) {
+            const lettersPositions = player.personalObjectivePositions;
+            lettersPositions.forEach(lettersPosition => {
+                const reached = this.positionReached(lettersPosition, player.markers).toString();
+                (document.querySelector(`.objective-letter[data-position="${lettersPosition}"]`) as HTMLDivElement).dataset.reached = reached;
+                (document.querySelector(`.letter[data-position="${lettersPosition}"]`) as HTMLDivElement).dataset.reached = reached;
+            });
+        }
+    }
+
     public placeDeparturePawn(position: number) {
         if(!(this as any).checkAction('placeDeparturePawn')) {
             return;
@@ -681,6 +698,8 @@ class GetOnBoard implements GetOnBoardGame {
     notif_placedRoute(notif: Notif<NotifPlacedRouteArgs>) {
         const playerId = notif.args.playerId;
         this.tableCenter.addMarker(playerId, notif.args.marker);
+        this.gamedatas.players[notif.args.playerId].markers.push(notif.args.marker);
+        this.highlightObjectiveLetters(this.gamedatas.players[notif.args.playerId]);
 
         notif.args.zones.forEach(zone => this.showZone(playerId, zone, notif.args.position));
     }
@@ -690,7 +709,14 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     notif_removeMarkers(notif: Notif<NotifConfirmTurnArgs>) {
-        notif.args.markers.forEach(marker => this.tableCenter.removeMarker(notif.args.playerId, marker));
+        notif.args.markers.forEach(marker => {
+            this.tableCenter.removeMarker(notif.args.playerId, marker)
+            const markerIndex = this.gamedatas.players[notif.args.playerId].markers.findIndex(m => m.from == marker.from && m.to == marker.to);
+            if (markerIndex !== -1) {
+                this.gamedatas.players[notif.args.playerId].markers.splice(markerIndex, 1);
+            }
+        });
+        this.highlightObjectiveLetters(this.gamedatas.players[notif.args.playerId]);
     }
 
     notif_playerEliminated(notif: Notif<any>) {

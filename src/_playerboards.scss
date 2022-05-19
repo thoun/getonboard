@@ -58,6 +58,13 @@
           justify-content: center;
           align-items: center;
           margin: 0 3px;
+
+          &[data-reached="true"] {
+            background: green;
+          }
+          &[data-reached="false"] {
+            background: rgb(148, 0, 0);
+          }
         }
       }
 

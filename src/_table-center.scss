@@ -196,6 +196,13 @@ $marker-size: 6px;
         width: 16px;
         height: 16px;
         border-radius: 50%;
+
+        &[data-reached="true"] {
+          box-shadow: 0 0 5px 5px lime;
+        }
+        &[data-reached="false"] {
+          box-shadow: 0 0 5px 5px red;
+        }
       }
 
       &.green-light {
@@ -355,12 +362,12 @@ $marker-size: 6px;
 
 @keyframes glow-intersection-animation {
   0% { 
-    opacity: 0.2;
-    box-shadow: 0 0 5px 10px var(--background);
+    //background: var(--background-lighter);
+    box-shadow: 0 0 3px 5px var(--background-lighter);
   }
   100% { 
-    opacity: 0.8;
-    box-shadow: 0 0 5px 8px var(--background);
+    //background: var(--background-darker);
+    box-shadow: 0 0 5px 8px var(--background-darker);
   }
 }
 
