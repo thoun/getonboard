@@ -987,7 +987,7 @@ var GetOnBoard = /** @class */ (function () {
             case 90: return _("<strong>Common Objective:</strong> Score 10 points when you complete the objective, or 6 points if another player completed it on a previous round.");
             case 91: return _("<strong>Personal Objective:</strong> Score 10 points when your markers link the 3 Letters of your personal objective.");
             case 92: return _("<strong>Turn Zone:</strong> If you chose to change a turn into a straight line or a straight line to a turn, check a box on the Turn Zone. The score here is negative, and you only have 5 of them!");
-            case 93: return _("<strong>Traffic Jam:</strong> For each marker already in place when you add a marker on a route, check a box on the Turn Zone. If the road is black, check an extra box. The score here is negative!");
+            case 93: return _("<strong>Traffic Jam:</strong> For each marker already in place when you add a marker on a route, check a Traffic Jam box. If the road is black, check an extra box. The score here is negative!");
             case 94: return _("<strong>Total score:</strong> Add sum of all green zone totals, subtract sum of all red zone totals.");
             case 95: return _("<strong>Tickets:</strong> The red check indicates the current round ticket. It defines the shape of the route you have to place. The black checks indicates past rounds.");
             case 97: return _("<strong>Letter:</strong> Used to define your personal objective.");
