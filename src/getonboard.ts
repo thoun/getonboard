@@ -312,6 +312,35 @@ class GetOnBoard implements GetOnBoardGame {
         }
     }
 
+    private expandObjectiveClick() {
+        const wrappers = document.querySelectorAll(`.personal-objective-wrapper`);
+        const expanded = (this as any).prefs[203].value == '1';
+        wrappers.forEach((wrapper: HTMLDivElement) => wrapper.dataset.expanded = (!expanded).toString());
+
+        const select = document.getElementById('preference_control_203') as HTMLSelectElement;
+        select.value = expanded ? '2' : '1';
+        var event = new Event('change');
+        select.dispatchEvent(event);
+    }
+
+    private showPersonalObjective(playerId: number) {
+        if (document.getElementById(`personal-objective-wrapper-${playerId}`).childElementCount > 0) {
+            return;
+        }
+        
+        const player = this.gamedatas.players[playerId];
+        let html = `
+            <div class="personal-objective collapsed">
+                ${player.personalObjectiveLetters.map((letter, letterIndex) => `<div class="letter" data-player-id="${playerId}" data-position="${player.personalObjectivePositions[letterIndex]}">${letter}</div>`).join('')}
+            </div>
+            <div class="personal-objective expanded ${ this.gamedatas.map}" data-type="${player.personalObjective}"></div>
+            <div id="toggle-objective-expand-${playerId}" class="arrow"></div>
+        `;
+        dojo.place(html, `personal-objective-wrapper-${playerId}`);
+
+        document.getElementById(`toggle-objective-expand-${playerId}`).addEventListener('click', () => this.expandObjectiveClick());
+    }
+
     private createPlayerPanels(gamedatas: GetOnBoardGamedatas) {
 
         Object.values(gamedatas.players).forEach(player => {
@@ -319,27 +348,15 @@ class GetOnBoard implements GetOnBoardGame {
             const eliminated = Number(player.eliminated) > 0;
 
             if (playerId === this.getPlayerId()) {
-                let html = `
-                <div class="personal-objective-label">${_("Your personal objective:")}</div>
-                <div id="personal-objective-wrapper" data-expanded="${((this as any).prefs[203]?.value != 2).toString()}">
-                    <div class="personal-objective collapsed">
-                        ${player.personalObjectiveLetters.map((letter, letterIndex) => `<div class="letter" data-position="${player.personalObjectivePositions[letterIndex]}">${letter}</div>`).join('')}
-                    </div>
-                    <div class="personal-objective expanded ${gamedatas.map}" data-type="${player.personalObjective}"></div>
-                    <div id="toggle-objective-expand" class="arrow"></div>
-                </div>`;
-                dojo.place(html, `player_board_${player.id}`);
+                dojo.place(`<div class="personal-objective-label">${_("Your personal objective:")}</div>`, `player_board_${player.id}`);
+            }
 
-                document.getElementById('toggle-objective-expand').addEventListener('click', () => {
-                    const wrapper = document.getElementById(`personal-objective-wrapper`);
-                    const expanded = wrapper.dataset.expanded === 'true';
-                    wrapper.dataset.expanded = (!expanded).toString();
+            let html = `
+            <div id="personal-objective-wrapper-${playerId}" class="personal-objective-wrapper" data-expanded="${((this as any).prefs[203]?.value != 2).toString()}"></div>`;
+            dojo.place(html, `player_board_${player.id}`);
 
-                    const select = document.getElementById('preference_control_203') as HTMLSelectElement;
-                    select.value = expanded ? '2' : '1';
-                    var event = new Event('change');
-                    select.dispatchEvent(event);
-                });
+            if (player.personalObjective) {
+                this.showPersonalObjective(playerId);
             }
 
             if (eliminated) {
@@ -539,12 +556,18 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     private highlightObjectiveLetters(player: GetOnBoardPlayer) {
-        if (Number(player.id) == this.getPlayerId()) {
+        if (player.personalObjective) {
             const lettersPositions = player.personalObjectivePositions;
             lettersPositions.forEach(lettersPosition => {
                 const reached = this.positionReached(lettersPosition, player.markers).toString();
-                (document.querySelector(`.objective-letter[data-position="${lettersPosition}"]`) as HTMLDivElement).dataset.reached = reached;
-                (document.querySelector(`.letter[data-position="${lettersPosition}"]`) as HTMLDivElement).dataset.reached = reached;
+                const mapLetter = document.querySelector(`.objective-letter[data-position="${lettersPosition}"]`) as HTMLDivElement;
+                const panelLetter = document.querySelector(`.letter[data-player-id="${player.id}"][data-position="${lettersPosition}"]`) as HTMLDivElement;
+                if (mapLetter) {
+                    mapLetter.dataset.reached = reached;
+                }
+                if (panelLetter) {
+                    panelLetter.dataset.reached = reached;
+                }
             });
         }
     }
@@ -666,6 +689,7 @@ class GetOnBoard implements GetOnBoardGame {
             ['flipObjective', ANIMATION_MS],
             ['placedDeparturePawn', ANIMATION_MS],
             ['removeMarkers', 1],
+            ['revealPersonalObjective', 1],
             ['updateScoreSheet', 1],
         ];
     
@@ -729,6 +753,18 @@ class GetOnBoard implements GetOnBoardGame {
         document.getElementById(`common-objective-${notif.args.objective.id}`).dataset.side = '1';
     }
 
+    notif_revealPersonalObjective(notif: Notif<NotifRevealPersonalObjectiveArgs>) {
+        const playerId = notif.args.playerId;
+        const player = this.gamedatas.players[playerId];
+        player.personalObjective = notif.args.personalObjective;
+        player.personalObjectiveLetters = notif.args.personalObjectiveLetters;
+        player.personalObjectivePositions = notif.args.personalObjectivePositions;
+
+        this.showPersonalObjective(playerId);
+        this.highlightObjectiveLetters(player);
+    }
+    
+
     /* This enable to inject translatable styled things to logs or action bar */
     /* @Override */
     public format_string_recursive(log: string, args: any) {
@@ -742,6 +778,10 @@ class GetOnBoard implements GetOnBoardGame {
                     args.elements = args.elements.map(element => 
                         `<div class="map-icon" data-element="${element}"></div>`
                     ).join('');
+                }
+
+                if (args.objectiveLetters && args.objectiveLetters[0] != '<') {
+                    args.objectiveLetters = `<strong>${args.objectiveLetters}</strong>`;
                 }
             }
         } catch (e) {

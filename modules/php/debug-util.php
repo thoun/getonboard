@@ -15,14 +15,14 @@ trait DebugUtilTrait {
         //$this->insertRoutes(2343493, [16, 15, 14, 24, 34, 44, 43, 53, 63, 64, 74, 73]);
 
         // table https://boardgamearena.com/archive/replay/220513-1000/?table=267222414&player=1559197&comments=86175279;#
-    $this->insertRoutes(2343492, [36, 46, 56, 55, 65, 66, 76, 75, 85, 95, 96, 106, 105, 115, 125, 124, 123, 113, 103, 102/*, 101, 91*/]);
+        //$this->insertRoutes(2343492, [36, 46, 56, 55, 65, 66, 76, 75, 85, 95, 96, 106, 105, 115, 125, 124, 123, 113, 103, 102/*, 101, 91*/]);
         
         //$this->debugSetStart(2343492, 36);
         //$this->debugSetStart(2343493, 23);
         //$this->gamestate->jumpToState(ST_START_GAME);
 
-        $this->debugSetCommonObjective(1, 6);
-        $this->debugSetCommonObjective(2, 5);
+        //$this->debugSetCommonObjective(1, 6);
+        //$this->debugSetCommonObjective(2, 5);
     }
 
     function insertRoutes(int $playerId, array $positions, int $validated = 1) {

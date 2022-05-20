@@ -120,12 +120,25 @@ trait StateTrait {
 
     function stEndScore() {
         $playersIds = $this->getPlayersIds();
+        $map = $this->getMap();
         foreach ($playersIds as $playerId) {
             if (!$this->isEliminated($playerId)) {
                 $scoreSheets = $this->notifUpdateScoreSheet($playerId, true);
                 $score = $scoreSheets->validated->total;
                 $this->DbQuery("UPDATE player SET `player_score` = $score WHERE `player_id` = $playerId");
             }
+
+            $personalObjective = intval($this->getUniqueValueFromDB("SELECT player_personal_objective FROM `player` where `player_id` = $playerId"));
+
+            $personalObjectiveLetters = array_map(fn($code) => chr($code), $this->getPersonalObjectiveLetters($playerId));
+            self::notifyAllPlayers('revealPersonalObjective', clienttranslate('${player_name} personal objective was ${objectiveLetters}'), [
+                'playerId' => $playerId,
+                'player_name' => self::getActivePlayerName(),
+                'objectiveLetters' => implode(' ', $personalObjectiveLetters),
+                'personalObjective' => $personalObjective,
+                'personalObjectiveLetters' => $personalObjectiveLetters,
+                'personalObjectivePositions' => $this->getPersonalObjectivePositions($personalObjective, $map),
+            ]);
         }
 
         $this->gamestate->nextState('endGame');

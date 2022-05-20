@@ -177,3 +177,12 @@ interface NotifConfirmTurnArgs {
 interface NotifFlipObjectiveArgs {
     objective: CommonObjective;
 }
+
+interface NotifRevealPersonalObjectiveArgs {
+    playerId: number;
+    personalObjective: number;
+    personalObjectiveLetters: number[];
+    personalObjectivePositions: number[];
+}
+
+self::notifyAllPlayers('revealPersonalObjective', clienttranslate('${player_name} personal objective was ${objectiveLetters}'), [

@@ -7,7 +7,7 @@
     text-align: center;
   }
 
-  #personal-objective-wrapper {
+  .personal-objective-wrapper {
     position: relative;
     display: flex;
     justify-content: center;
@@ -106,7 +106,7 @@
       text-decoration: line-through;
     }
 
-    #personal-objective-wrapper {
+    .personal-objective-wrapper {
       display: none;
     }
   }

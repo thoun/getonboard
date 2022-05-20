@@ -874,6 +874,25 @@ var GetOnBoard = /** @class */ (function () {
                 break;
         }
     };
+    GetOnBoard.prototype.expandObjectiveClick = function () {
+        var wrappers = document.querySelectorAll(".personal-objective-wrapper");
+        var expanded = this.prefs[203].value == '1';
+        wrappers.forEach(function (wrapper) { return wrapper.dataset.expanded = (!expanded).toString(); });
+        var select = document.getElementById('preference_control_203');
+        select.value = expanded ? '2' : '1';
+        var event = new Event('change');
+        select.dispatchEvent(event);
+    };
+    GetOnBoard.prototype.showPersonalObjective = function (playerId) {
+        var _this = this;
+        if (document.getElementById("personal-objective-wrapper-".concat(playerId)).childElementCount > 0) {
+            return;
+        }
+        var player = this.gamedatas.players[playerId];
+        var html = "\n            <div class=\"personal-objective collapsed\">\n                ".concat(player.personalObjectiveLetters.map(function (letter, letterIndex) { return "<div class=\"letter\" data-player-id=\"".concat(playerId, "\" data-position=\"").concat(player.personalObjectivePositions[letterIndex], "\">").concat(letter, "</div>"); }).join(''), "\n            </div>\n            <div class=\"personal-objective expanded ").concat(this.gamedatas.map, "\" data-type=\"").concat(player.personalObjective, "\"></div>\n            <div id=\"toggle-objective-expand-").concat(playerId, "\" class=\"arrow\"></div>\n        ");
+        dojo.place(html, "personal-objective-wrapper-".concat(playerId));
+        document.getElementById("toggle-objective-expand-".concat(playerId)).addEventListener('click', function () { return _this.expandObjectiveClick(); });
+    };
     GetOnBoard.prototype.createPlayerPanels = function (gamedatas) {
         var _this = this;
         Object.values(gamedatas.players).forEach(function (player) {
@@ -881,17 +900,12 @@ var GetOnBoard = /** @class */ (function () {
             var playerId = Number(player.id);
             var eliminated = Number(player.eliminated) > 0;
             if (playerId === _this.getPlayerId()) {
-                var html = "\n                <div class=\"personal-objective-label\">".concat(_("Your personal objective:"), "</div>\n                <div id=\"personal-objective-wrapper\" data-expanded=\"").concat((((_a = _this.prefs[203]) === null || _a === void 0 ? void 0 : _a.value) != 2).toString(), "\">\n                    <div class=\"personal-objective collapsed\">\n                        ").concat(player.personalObjectiveLetters.map(function (letter, letterIndex) { return "<div class=\"letter\" data-position=\"".concat(player.personalObjectivePositions[letterIndex], "\">").concat(letter, "</div>"); }).join(''), "\n                    </div>\n                    <div class=\"personal-objective expanded ").concat(gamedatas.map, "\" data-type=\"").concat(player.personalObjective, "\"></div>\n                    <div id=\"toggle-objective-expand\" class=\"arrow\"></div>\n                </div>");
-                dojo.place(html, "player_board_".concat(player.id));
-                document.getElementById('toggle-objective-expand').addEventListener('click', function () {
-                    var wrapper = document.getElementById("personal-objective-wrapper");
-                    var expanded = wrapper.dataset.expanded === 'true';
-                    wrapper.dataset.expanded = (!expanded).toString();
-                    var select = document.getElementById('preference_control_203');
-                    select.value = expanded ? '2' : '1';
-                    var event = new Event('change');
-                    select.dispatchEvent(event);
-                });
+                dojo.place("<div class=\"personal-objective-label\">".concat(_("Your personal objective:"), "</div>"), "player_board_".concat(player.id));
+            }
+            var html = "\n            <div id=\"personal-objective-wrapper-".concat(playerId, "\" class=\"personal-objective-wrapper\" data-expanded=\"").concat((((_a = _this.prefs[203]) === null || _a === void 0 ? void 0 : _a.value) != 2).toString(), "\"></div>");
+            dojo.place(html, "player_board_".concat(player.id));
+            if (player.personalObjective) {
+                _this.showPersonalObjective(playerId);
             }
             if (eliminated) {
                 setTimeout(function () { return _this.eliminatePlayer(playerId); }, 200);
@@ -1056,12 +1070,18 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.highlightObjectiveLetters = function (player) {
         var _this = this;
-        if (Number(player.id) == this.getPlayerId()) {
+        if (player.personalObjective) {
             var lettersPositions = player.personalObjectivePositions;
             lettersPositions.forEach(function (lettersPosition) {
                 var reached = _this.positionReached(lettersPosition, player.markers).toString();
-                document.querySelector(".objective-letter[data-position=\"".concat(lettersPosition, "\"]")).dataset.reached = reached;
-                document.querySelector(".letter[data-position=\"".concat(lettersPosition, "\"]")).dataset.reached = reached;
+                var mapLetter = document.querySelector(".objective-letter[data-position=\"".concat(lettersPosition, "\"]"));
+                var panelLetter = document.querySelector(".letter[data-player-id=\"".concat(player.id, "\"][data-position=\"").concat(lettersPosition, "\"]"));
+                if (mapLetter) {
+                    mapLetter.dataset.reached = reached;
+                }
+                if (panelLetter) {
+                    panelLetter.dataset.reached = reached;
+                }
             });
         }
     };
@@ -1170,6 +1190,7 @@ var GetOnBoard = /** @class */ (function () {
             ['flipObjective', ANIMATION_MS],
             ['placedDeparturePawn', ANIMATION_MS],
             ['removeMarkers', 1],
+            ['revealPersonalObjective', 1],
             ['updateScoreSheet', 1],
         ];
         notifs.forEach(function (notif) {
@@ -1225,6 +1246,15 @@ var GetOnBoard = /** @class */ (function () {
     GetOnBoard.prototype.notif_flipObjective = function (notif) {
         document.getElementById("common-objective-".concat(notif.args.objective.id)).dataset.side = '1';
     };
+    GetOnBoard.prototype.notif_revealPersonalObjective = function (notif) {
+        var playerId = notif.args.playerId;
+        var player = this.gamedatas.players[playerId];
+        player.personalObjective = notif.args.personalObjective;
+        player.personalObjectiveLetters = notif.args.personalObjectiveLetters;
+        player.personalObjectivePositions = notif.args.personalObjectivePositions;
+        this.showPersonalObjective(playerId);
+        this.highlightObjectiveLetters(player);
+    };
     /* This enable to inject translatable styled things to logs or action bar */
     /* @Override */
     GetOnBoard.prototype.format_string_recursive = function (log, args) {
@@ -1237,6 +1267,9 @@ var GetOnBoard = /** @class */ (function () {
                     args.elements = args.elements.map(function (element) {
                         return "<div class=\"map-icon\" data-element=\"".concat(element, "\"></div>");
                     }).join('');
+                }
+                if (args.objectiveLetters && args.objectiveLetters[0] != '<') {
+                    args.objectiveLetters = "<strong>".concat(args.objectiveLetters, "</strong>");
                 }
             }
         }

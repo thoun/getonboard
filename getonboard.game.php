@@ -142,9 +142,9 @@ class GetOnBoard extends Table {
         $sql = "SELECT player_id id, player_score score, player_no playerNo, player_sheet_type sheetType, player_departure_position departurePosition FROM player ";
         $result['players'] = self::getCollectionFromDb($sql);
         $map = $this->getMap();
-        $personalObjective = intval($this->getUniqueValueFromDB("SELECT player_personal_objective FROM `player` where `player_id` = $currentPlayerId"));
 
         $showDeparturePosition = intval($this->gamestate->state_id()) >= ST_START_GAME;
+        $isEndScore = intval($this->gamestate->state_id()) >= ST_END_SCORE;
 
         $commonObjectives = $this->getCommonObjectives();
         foreach ($result['players'] as $playerId => &$playerDb) {
@@ -155,7 +155,8 @@ class GetOnBoard extends Table {
             $playerDb['markers'] = $placedRoutes;
             $playerDb['scoreSheets'] = $this->getScoreSheets($playerId, $placedRoutes, $commonObjectives);
 
-            if ($playerId === $currentPlayerId) {
+            if ($playerId === $currentPlayerId || $isEndScore) {
+                $personalObjective = intval($this->getUniqueValueFromDB("SELECT player_personal_objective FROM `player` where `player_id` = $playerId"));
                 $playerDb['personalObjective'] = $personalObjective;
                 $playerDb['personalObjectiveLetters'] = $personalObjective == 0 ? null : array_map(fn($code) => chr($code), $this->getPersonalObjectiveLetters($playerId));
                 $playerDb['personalObjectivePositions'] = $personalObjective == 0 ? null : $this->getPersonalObjectivePositions($personalObjective, $map);
