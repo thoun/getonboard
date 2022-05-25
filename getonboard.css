@@ -409,6 +409,8 @@
 }
 .common-objective-slot {
   position: absolute;
+  width: 84px;
+  height: 120px;
 }
 .common-objective-slot .common-objective {
   width: 84px;
@@ -441,6 +443,19 @@
 }
 .common-objective-slot .common-objective .card-side.back {
   background-position-y: 0%;
+}
+.common-objective-slot .common-objective-counter {
+  z-index: 1;
+  position: absolute;
+  right: 5px;
+  bottom: 0;
+  font-size: 90%;
+}
+.common-objective-slot .common-objective-counter [data-reached=true] {
+  color: green;
+}
+.common-objective-slot .common-objective-counter [data-reached=false] {
+  color: #940000;
 }
 
 .ticket-slot {

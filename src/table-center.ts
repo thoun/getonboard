@@ -1,6 +1,15 @@
 
-class TableCenter {
+const COMMON_OBJECTIVES = [
+    null,
+    [20, 5],
+    [30, 5],
+    [40, 5],
+    [50, 5],
+    [41, 3],
+    [42, 3],
+  ];
 
+class TableCenter {
     constructor(private game: GetOnBoardGame, private gamedatas: GetOnBoardGamedatas) {
         const map = document.getElementById('map');
         map.dataset.size = gamedatas.map;
@@ -57,11 +66,12 @@ class TableCenter {
         // markers
         Object.values(gamedatas.players).forEach(player => player.markers.forEach(marker => this.addMarker(Number(player.id), marker)));
 
+        const currentPlayer = gamedatas.players[this.game.getPlayerId()];
+
         // common objectives
-        gamedatas.commonObjectives.forEach(commonObjective => this.placeCommonObjective(commonObjective));
+        gamedatas.commonObjectives.forEach(commonObjective => this.placeCommonObjective(commonObjective, !!currentPlayer));
 
         // personal objective
-        const currentPlayer = gamedatas.players[this.game.getPlayerId()];
         //Object.keys(gamedatas.MAP_POSITIONS).filter(key => gamedatas.MAP_POSITIONS[key].some(element => element >= 97 && element <= 122)).forEach(position =>
         currentPlayer?.personalObjectivePositions.forEach(position => 
             dojo.place(`<div class="objective-letter" data-position="${position}"></div>`, `intersection${position}`)
@@ -157,11 +167,18 @@ class TableCenter {
         }
     }
 
-    private placeCommonObjective(objective: CommonObjective) {
+    private placeCommonObjective(objective: CommonObjective, isPlayer: boolean) {
         dojo.place(`<div id="common-objective-${objective.id}" class="common-objective card-inner" data-side="${objective.completed ? '1' : '0'}">
             <div class="card-side front"></div>
             <div class="card-side back"></div>
-        </div>`, `common-objective-slot-${objective.number}`);
+        </div>
+        `, `common-objective-slot-${objective.number}`);
+
+        if (isPlayer) { // objective progress counter only if player is not a spectator
+            dojo.place(`
+            <div class="common-objective-counter"><span id="common-objective-${objective.number}-counter" data-type="${objective.id}">0</span>/${COMMON_OBJECTIVES[objective.id][1]}</div>
+            `, `common-objective-slot-${objective.number}`);
+        }
     }
 
     public setRound(validatedTickets: number[], currentTicket: number, initialization: boolean = false) {

@@ -81,7 +81,10 @@ class GetOnBoard implements GetOnBoardGame {
         this.tableCenter = new TableCenter(this, gamedatas);
         this.createPlayerTables(gamedatas);
         this.createPlayerJumps(gamedatas);
-        Object.values(gamedatas.players).forEach(player => this.highlightObjectiveLetters(player));
+        Object.values(gamedatas.players).forEach(player => {
+            this.highlightObjectiveLetters(player);
+            this.setObjectivesCounters(player);
+        });
 
         this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
         document.getElementById('round-panel').innerHTML = `${_('Round')}&nbsp;<span id="round-number-counter"></span>&nbsp;/&nbsp;12`;
@@ -572,6 +575,19 @@ class GetOnBoard implements GetOnBoardGame {
         }
     }
 
+    private setObjectivesCounters(player: GetOnBoardPlayer) {
+        if (Number(player.id) === this.getPlayerId()) {
+            [1, 2].forEach(objectiveNumber => {
+                const span = document.getElementById(`common-objective-${objectiveNumber}-counter`);
+                const objective = COMMON_OBJECTIVES[Number(span.dataset.type)];
+                const playerPositionsElements = player.markers.map(marker => this.gamedatas.MAP_POSITIONS[marker.to]);
+                const elementReachedCount = playerPositionsElements.filter(position => position.includes(objective[0])).length;
+                span.innerHTML = elementReachedCount.toString();
+                span.dataset.reached = (elementReachedCount >= objective[1]).toString();
+            });
+        }
+    }
+
     public placeDeparturePawn(position: number) {
         if(!(this as any).checkAction('placeDeparturePawn')) {
             return;
@@ -723,7 +739,9 @@ class GetOnBoard implements GetOnBoardGame {
         const playerId = notif.args.playerId;
         this.tableCenter.addMarker(playerId, notif.args.marker);
         this.gamedatas.players[notif.args.playerId].markers.push(notif.args.marker);
-        this.highlightObjectiveLetters(this.gamedatas.players[notif.args.playerId]);
+        const player = this.gamedatas.players[notif.args.playerId];
+        this.highlightObjectiveLetters(player);
+        this.setObjectivesCounters(player);
 
         notif.args.zones.forEach(zone => this.showZone(playerId, zone, notif.args.position));
     }
@@ -740,7 +758,9 @@ class GetOnBoard implements GetOnBoardGame {
                 this.gamedatas.players[notif.args.playerId].markers.splice(markerIndex, 1);
             }
         });
-        this.highlightObjectiveLetters(this.gamedatas.players[notif.args.playerId]);
+        const player = this.gamedatas.players[notif.args.playerId];
+        this.highlightObjectiveLetters(player);
+        this.setObjectivesCounters(player);
     }
 
     notif_playerEliminated(notif: Notif<any>) {
@@ -762,6 +782,7 @@ class GetOnBoard implements GetOnBoardGame {
 
         this.showPersonalObjective(playerId);
         this.highlightObjectiveLetters(player);
+        this.setObjectivesCounters(player);
     }
     
 

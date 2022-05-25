@@ -424,6 +424,15 @@ var PlayerTable = /** @class */ (function () {
     };
     return PlayerTable;
 }());
+var COMMON_OBJECTIVES = [
+    null,
+    [20, 5],
+    [30, 5],
+    [40, 5],
+    [50, 5],
+    [41, 3],
+    [42, 3],
+];
 var TableCenter = /** @class */ (function () {
     function TableCenter(game, gamedatas) {
         var _this = this;
@@ -494,10 +503,10 @@ var TableCenter = /** @class */ (function () {
         Object.values(gamedatas.players).filter(function (player) { return player.departurePosition; }).forEach(function (player) { return _this.addDeparturePawn(Number(player.id), player.departurePosition); });
         // markers
         Object.values(gamedatas.players).forEach(function (player) { return player.markers.forEach(function (marker) { return _this.addMarker(Number(player.id), marker); }); });
-        // common objectives
-        gamedatas.commonObjectives.forEach(function (commonObjective) { return _this.placeCommonObjective(commonObjective); });
-        // personal objective
         var currentPlayer = gamedatas.players[this.game.getPlayerId()];
+        // common objectives
+        gamedatas.commonObjectives.forEach(function (commonObjective) { return _this.placeCommonObjective(commonObjective, !!currentPlayer); });
+        // personal objective
         //Object.keys(gamedatas.MAP_POSITIONS).filter(key => gamedatas.MAP_POSITIONS[key].some(element => element >= 97 && element <= 122)).forEach(position =>
         currentPlayer === null || currentPlayer === void 0 ? void 0 : currentPlayer.personalObjectivePositions.forEach(function (position) {
             return dojo.place("<div class=\"objective-letter\" data-position=\"".concat(position, "\"></div>"), "intersection".concat(position));
@@ -583,8 +592,11 @@ var TableCenter = /** @class */ (function () {
             return this.getCoordinatesFromPosition(position)[0] > 370 ? 'right' : 'left';
         }
     };
-    TableCenter.prototype.placeCommonObjective = function (objective) {
-        dojo.place("<div id=\"common-objective-".concat(objective.id, "\" class=\"common-objective card-inner\" data-side=\"").concat(objective.completed ? '1' : '0', "\">\n            <div class=\"card-side front\"></div>\n            <div class=\"card-side back\"></div>\n        </div>"), "common-objective-slot-".concat(objective.number));
+    TableCenter.prototype.placeCommonObjective = function (objective, isPlayer) {
+        dojo.place("<div id=\"common-objective-".concat(objective.id, "\" class=\"common-objective card-inner\" data-side=\"").concat(objective.completed ? '1' : '0', "\">\n            <div class=\"card-side front\"></div>\n            <div class=\"card-side back\"></div>\n        </div>\n        "), "common-objective-slot-".concat(objective.number));
+        if (isPlayer) { // objective progress counter only if player is not a spectator
+            dojo.place("\n            <div class=\"common-objective-counter\"><span id=\"common-objective-".concat(objective.number, "-counter\" data-type=\"").concat(objective.id, "\">0</span>/").concat(COMMON_OBJECTIVES[objective.id][1], "</div>\n            "), "common-objective-slot-".concat(objective.number));
+        }
     };
     TableCenter.prototype.setRound = function (validatedTickets, currentTicket, initialization) {
         if (initialization === void 0) { initialization = false; }
@@ -677,7 +689,10 @@ var GetOnBoard = /** @class */ (function () {
         this.tableCenter = new TableCenter(this, gamedatas);
         this.createPlayerTables(gamedatas);
         this.createPlayerJumps(gamedatas);
-        Object.values(gamedatas.players).forEach(function (player) { return _this.highlightObjectiveLetters(player); });
+        Object.values(gamedatas.players).forEach(function (player) {
+            _this.highlightObjectiveLetters(player);
+            _this.setObjectivesCounters(player);
+        });
         this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
         document.getElementById('round-panel').innerHTML = "".concat(_('Round'), "&nbsp;<span id=\"round-number-counter\"></span>&nbsp;/&nbsp;12");
         this.roundNumberCounter = new ebg.counter();
@@ -1085,6 +1100,19 @@ var GetOnBoard = /** @class */ (function () {
             });
         }
     };
+    GetOnBoard.prototype.setObjectivesCounters = function (player) {
+        var _this = this;
+        if (Number(player.id) === this.getPlayerId()) {
+            [1, 2].forEach(function (objectiveNumber) {
+                var span = document.getElementById("common-objective-".concat(objectiveNumber, "-counter"));
+                var objective = COMMON_OBJECTIVES[Number(span.dataset.type)];
+                var playerPositionsElements = player.markers.map(function (marker) { return _this.gamedatas.MAP_POSITIONS[marker.to]; });
+                var elementReachedCount = playerPositionsElements.filter(function (position) { return position.includes(objective[0]); }).length;
+                span.innerHTML = elementReachedCount.toString();
+                span.dataset.reached = (elementReachedCount >= objective[1]).toString();
+            });
+        }
+    };
     GetOnBoard.prototype.placeDeparturePawn = function (position) {
         if (!this.checkAction('placeDeparturePawn')) {
             return;
@@ -1220,7 +1248,9 @@ var GetOnBoard = /** @class */ (function () {
         var playerId = notif.args.playerId;
         this.tableCenter.addMarker(playerId, notif.args.marker);
         this.gamedatas.players[notif.args.playerId].markers.push(notif.args.marker);
-        this.highlightObjectiveLetters(this.gamedatas.players[notif.args.playerId]);
+        var player = this.gamedatas.players[notif.args.playerId];
+        this.highlightObjectiveLetters(player);
+        this.setObjectivesCounters(player);
         notif.args.zones.forEach(function (zone) { return _this.showZone(playerId, zone, notif.args.position); });
     };
     GetOnBoard.prototype.notif_confirmTurn = function (notif) {
@@ -1236,7 +1266,9 @@ var GetOnBoard = /** @class */ (function () {
                 _this.gamedatas.players[notif.args.playerId].markers.splice(markerIndex, 1);
             }
         });
-        this.highlightObjectiveLetters(this.gamedatas.players[notif.args.playerId]);
+        var player = this.gamedatas.players[notif.args.playerId];
+        this.highlightObjectiveLetters(player);
+        this.setObjectivesCounters(player);
     };
     GetOnBoard.prototype.notif_playerEliminated = function (notif) {
         var playerId = Number(notif.args.who_quits);
@@ -1254,6 +1286,7 @@ var GetOnBoard = /** @class */ (function () {
         player.personalObjectivePositions = notif.args.personalObjectivePositions;
         this.showPersonalObjective(playerId);
         this.highlightObjectiveLetters(player);
+        this.setObjectivesCounters(player);
     };
     /* This enable to inject translatable styled things to logs or action bar */
     /* @Override */

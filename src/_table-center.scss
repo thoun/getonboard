@@ -373,6 +373,8 @@ $marker-size: 6px;
 
 .common-objective-slot {
   position: absolute;
+  width: 84px;
+  height: 120px;
 
   .common-objective {
     width: 84px;
@@ -395,6 +397,22 @@ $marker-size: 6px;
       &.back {
         background-position-y: 0%;
       }
+    }
+  }
+
+  .common-objective-counter {    
+    z-index: 1;
+    position: absolute;
+    right: 5px;
+    bottom: 0;
+    font-size: 90%;
+    
+
+    [data-reached="true"] {
+      color: green;
+    }
+    [data-reached="false"] {
+      color: rgb(148, 0, 0);
     }
   }
 }
