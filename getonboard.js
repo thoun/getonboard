@@ -691,7 +691,7 @@ var GetOnBoard = /** @class */ (function () {
         this.createPlayerJumps(gamedatas);
         Object.values(gamedatas.players).forEach(function (player) {
             _this.highlightObjectiveLetters(player);
-            _this.setObjectivesCounters(player);
+            _this.setObjectivesCounters(Number(player.id), player.scoreSheets.current);
         });
         this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
         document.getElementById('round-panel').innerHTML = "".concat(_('Round'), "&nbsp;<span id=\"round-number-counter\"></span>&nbsp;/&nbsp;12");
@@ -1100,16 +1100,34 @@ var GetOnBoard = /** @class */ (function () {
             });
         }
     };
-    GetOnBoard.prototype.setObjectivesCounters = function (player) {
-        var _this = this;
-        if (Number(player.id) === this.getPlayerId()) {
+    GetOnBoard.prototype.setObjectivesCounters = function (playerId, scoreSheet) {
+        if (playerId === this.getPlayerId()) {
             [1, 2].forEach(function (objectiveNumber) {
                 var span = document.getElementById("common-objective-".concat(objectiveNumber, "-counter"));
                 var objective = COMMON_OBJECTIVES[Number(span.dataset.type)];
-                var playerPositionsElements = player.markers.map(function (marker) { return _this.gamedatas.MAP_POSITIONS[marker.to]; });
-                var elementReachedCount = playerPositionsElements.filter(function (position) { return position.includes(objective[0]); }).length;
-                span.innerHTML = elementReachedCount.toString();
-                span.dataset.reached = (elementReachedCount >= objective[1]).toString();
+                var checked = 0;
+                switch (objective[0]) {
+                    case 20: //OLD_LADY
+                        checked = scoreSheet.oldLadies.checked;
+                        break;
+                    case 30: //STUDENT
+                        checked = scoreSheet.students.checkedStudents + scoreSheet.students.checkedInternships;
+                        break;
+                    case 40: //TOURIST
+                        checked = scoreSheet.tourists.checkedTourists.reduce(function (a, b) { return a + b; }, 0);
+                        break;
+                    case 50: //BUSINESSMAN
+                        checked = scoreSheet.businessmen.checkedBusinessmen.reduce(function (a, b) { return a + b; }, 0);
+                        break;
+                    case 41: //MONUMENT_LIGHT
+                        checked = scoreSheet.tourists.checkedMonumentsLight;
+                        break;
+                    case 42: //MONUMENT_DARK
+                        checked = scoreSheet.tourists.checkedMonumentsDark;
+                        break;
+                }
+                span.innerHTML = checked.toString();
+                span.dataset.reached = (checked >= objective[1]).toString();
             });
         }
     };
@@ -1239,6 +1257,7 @@ var GetOnBoard = /** @class */ (function () {
         var playerId = notif.args.playerId;
         this.registeredTablesByPlayerId[playerId].forEach(function (table) { return table.updateScoreSheet(notif.args.scoreSheets, !_this.gamedatas.hiddenScore); });
         this.setNewScore(playerId, notif.args.scoreSheets.current.total);
+        this.setObjectivesCounters(playerId, notif.args.scoreSheets.current);
     };
     GetOnBoard.prototype.notif_placedDeparturePawn = function (notif) {
         this.tableCenter.addDeparturePawn(notif.args.playerId, notif.args.position);
@@ -1250,7 +1269,6 @@ var GetOnBoard = /** @class */ (function () {
         this.gamedatas.players[notif.args.playerId].markers.push(notif.args.marker);
         var player = this.gamedatas.players[notif.args.playerId];
         this.highlightObjectiveLetters(player);
-        this.setObjectivesCounters(player);
         notif.args.zones.forEach(function (zone) { return _this.showZone(playerId, zone, notif.args.position); });
     };
     GetOnBoard.prototype.notif_confirmTurn = function (notif) {
@@ -1268,7 +1286,6 @@ var GetOnBoard = /** @class */ (function () {
         });
         var player = this.gamedatas.players[notif.args.playerId];
         this.highlightObjectiveLetters(player);
-        this.setObjectivesCounters(player);
     };
     GetOnBoard.prototype.notif_playerEliminated = function (notif) {
         var playerId = Number(notif.args.who_quits);
@@ -1286,7 +1303,6 @@ var GetOnBoard = /** @class */ (function () {
         player.personalObjectivePositions = notif.args.personalObjectivePositions;
         this.showPersonalObjective(playerId);
         this.highlightObjectiveLetters(player);
-        this.setObjectivesCounters(player);
     };
     /* This enable to inject translatable styled things to logs or action bar */
     /* @Override */

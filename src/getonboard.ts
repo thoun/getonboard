@@ -83,7 +83,7 @@ class GetOnBoard implements GetOnBoardGame {
         this.createPlayerJumps(gamedatas);
         Object.values(gamedatas.players).forEach(player => {
             this.highlightObjectiveLetters(player);
-            this.setObjectivesCounters(player);
+            this.setObjectivesCounters(Number(player.id), player.scoreSheets.current);
         });
 
         this.placeFirstPlayerToken(gamedatas.firstPlayerTokenPlayerId);
@@ -575,15 +575,37 @@ class GetOnBoard implements GetOnBoardGame {
         }
     }
 
-    private setObjectivesCounters(player: GetOnBoardPlayer) {
-        if (Number(player.id) === this.getPlayerId()) {
+    private setObjectivesCounters(playerId: number, scoreSheet: ScoreSheet) {
+        if (playerId === this.getPlayerId()) {
             [1, 2].forEach(objectiveNumber => {
                 const span = document.getElementById(`common-objective-${objectiveNumber}-counter`);
                 const objective = COMMON_OBJECTIVES[Number(span.dataset.type)];
-                const playerPositionsElements = player.markers.map(marker => this.gamedatas.MAP_POSITIONS[marker.to]);
-                const elementReachedCount = playerPositionsElements.filter(position => position.includes(objective[0])).length;
-                span.innerHTML = elementReachedCount.toString();
-                span.dataset.reached = (elementReachedCount >= objective[1]).toString();
+                let checked = 0;
+
+                switch (objective[0]) {
+                    case 20: //OLD_LADY
+                        checked = scoreSheet.oldLadies.checked;
+                        break;
+                    case 30: //STUDENT
+                        checked = scoreSheet.students.checkedStudents + scoreSheet.students.checkedInternships;
+                        break;
+                    case 40: //TOURIST
+                        checked = scoreSheet.tourists.checkedTourists.reduce((a, b) => a + b, 0);
+                        break;
+                    case 50: //BUSINESSMAN
+                        checked = scoreSheet.businessmen.checkedBusinessmen.reduce((a, b) => a + b, 0);
+                        break;
+
+                        case 41: //MONUMENT_LIGHT
+                        checked = scoreSheet.tourists.checkedMonumentsLight;
+                        break;
+                    case 42: //MONUMENT_DARK
+                        checked = scoreSheet.tourists.checkedMonumentsDark;
+                        break;
+                }
+
+                span.innerHTML = checked.toString();
+                span.dataset.reached = (checked >= objective[1]).toString();
             });
         }
     }
@@ -729,6 +751,7 @@ class GetOnBoard implements GetOnBoardGame {
         const playerId = notif.args.playerId;
         this.registeredTablesByPlayerId[playerId].forEach(table => table.updateScoreSheet(notif.args.scoreSheets, !this.gamedatas.hiddenScore));        
         this.setNewScore(playerId, notif.args.scoreSheets.current.total);
+        this.setObjectivesCounters(playerId, notif.args.scoreSheets.current);
     }
 
     notif_placedDeparturePawn(notif: Notif<NotifPlacedDeparturePawnArgs>) {
@@ -741,7 +764,6 @@ class GetOnBoard implements GetOnBoardGame {
         this.gamedatas.players[notif.args.playerId].markers.push(notif.args.marker);
         const player = this.gamedatas.players[notif.args.playerId];
         this.highlightObjectiveLetters(player);
-        this.setObjectivesCounters(player);
 
         notif.args.zones.forEach(zone => this.showZone(playerId, zone, notif.args.position));
     }
@@ -760,7 +782,6 @@ class GetOnBoard implements GetOnBoardGame {
         });
         const player = this.gamedatas.players[notif.args.playerId];
         this.highlightObjectiveLetters(player);
-        this.setObjectivesCounters(player);
     }
 
     notif_playerEliminated(notif: Notif<any>) {
@@ -782,7 +803,6 @@ class GetOnBoard implements GetOnBoardGame {
 
         this.showPersonalObjective(playerId);
         this.highlightObjectiveLetters(player);
-        this.setObjectivesCounters(player);
     }
     
 
