@@ -77,6 +77,24 @@ $marker-size: 6px;
             }
           }
         }
+
+        // shift for star buildings
+        &#intersection11 {
+          left: 204px !important;
+          top: 12px !important;
+        }
+        &#intersection34 {
+          left: 375px !important;
+          top: 130px !important;
+        }
+        &#intersection84 {
+          left: 376px !important;
+          top: 411px !important;
+        }
+        &#intersection106 {
+          left: 488px !important;
+          top: 524px !important;
+        }
       }
 
       .route {
