@@ -7,12 +7,13 @@ trait ScoreSheetTrait {
     private function checkCompletedCommonObjective(ScoreSheet &$scoreSheet, array $commonObjectives, int $objectiveType, int $checked, int $round) {
         foreach($commonObjectives as $commonObjective) {
             $objectiveDescription = $this->COMMON_OBJECTIVES[$commonObjective->id];
-            if ($scoreSheet->commonObjectives->subTotals[$commonObjective->number - 1] === null &&
+            $objectiveSubtotalIndex = $commonObjective->number - 1;
+            if ($scoreSheet->commonObjectives->subTotals[$objectiveSubtotalIndex] === null &&
                 $objectiveType === $objectiveDescription[0] && 
                 $checked >= $objectiveDescription[1]) {
 
                 // set objective score
-                $scoreSheet->commonObjectives->subTotals[$commonObjective->number - 1] = 
+                $scoreSheet->commonObjectives->subTotals[$objectiveSubtotalIndex] = 
                     $commonObjective->completed && $commonObjective->completedAtRound < $round ? 6 : 10;
 
                 // update totals

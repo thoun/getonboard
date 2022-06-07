@@ -321,7 +321,7 @@ trait UtilTrait {
         ), $playersIds);
 
         foreach ($objectives as $objective) {
-            if ($this->array_some($scoreSheets, fn($scoreSheet) => $scoreSheet->validated->commonObjectives->subTotals[$objective->number - 1] != null)) {
+            if (!$objective->completed && $this->array_some($scoreSheets, fn($scoreSheet) => $scoreSheet->validated->commonObjectives->subTotals[$objective->number - 1] != null)) {
                 $round = $this->getRoundNumber();
                 $this->DbQuery("UPDATE common_objectives SET `completed_at_round` = $round WHERE `id` = $objective->id");
 
