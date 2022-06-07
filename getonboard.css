@@ -144,7 +144,7 @@
   right: 9px;
 }
 #map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter[data-position="106"] {
-  top: -45px;
+  top: -27px;
 }
 #map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter[data-position="133"] {
   top: -22px;
