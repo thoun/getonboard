@@ -1023,6 +1023,7 @@ var GetOnBoard = /** @class */ (function () {
         this.gamedatas.players[playerId].eliminated = 1;
         document.getElementById("overall_player_board_".concat(playerId)).classList.add('eliminated-player');
         dojo.addClass("player-table-".concat(playerId), 'eliminated');
+        this.setNewScore(playerId, 0);
     };
     GetOnBoard.prototype.setNewScore = function (playerId, score) {
         var _this = this;
@@ -1034,7 +1035,7 @@ var GetOnBoard = /** @class */ (function () {
         }
         else {
             if (!isNaN(score)) {
-                (_a = this.scoreCtrl[playerId]) === null || _a === void 0 ? void 0 : _a.toValue(score);
+                (_a = this.scoreCtrl[playerId]) === null || _a === void 0 ? void 0 : _a.toValue(this.gamedatas.players[playerId].eliminated != 0 ? 0 : score);
             }
         }
     };

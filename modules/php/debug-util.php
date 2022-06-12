@@ -88,6 +88,11 @@ trait DebugUtilTrait {
         $this->DbQuery("update `tickets` set card_location='discard' where card_location='deck'");
     }
 
+    function debugTest() {
+        $this->debugStart();
+        $this->DbQuery("update `tickets` set card_location='discard' where card_location='deck' AND card_type <> 3");
+    }
+
     function debug($debugData) {
         if ($this->getBgaEnvironment() != 'studio') { 
             return;

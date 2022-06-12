@@ -482,6 +482,7 @@ class GetOnBoard implements GetOnBoardGame {
         this.gamedatas.players[playerId].eliminated = 1;
         document.getElementById(`overall_player_board_${playerId}`).classList.add('eliminated-player');
         dojo.addClass(`player-table-${playerId}`, 'eliminated');
+        this.setNewScore(playerId, 0);
     }
 
     private setNewScore(playerId: number, score: number) {
@@ -491,7 +492,7 @@ class GetOnBoard implements GetOnBoardGame {
             }, 100);
         } else {
             if (!isNaN(score)) {
-                (this as any).scoreCtrl[playerId]?.toValue(score);
+                (this as any).scoreCtrl[playerId]?.toValue(this.gamedatas.players[playerId].eliminated != 0 ? 0 : score);
             }
         }
     }
