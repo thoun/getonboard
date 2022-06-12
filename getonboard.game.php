@@ -153,7 +153,7 @@ class GetOnBoard extends Table {
             $playerDb['departurePosition'] = $showDeparturePosition ? intval($playerDb['departurePosition']) : null;
             $placedRoutes = $this->getPlacedRoutes($playerId);
             $playerDb['markers'] = $placedRoutes;
-            $playerDb['scoreSheets'] = $this->getScoreSheets($playerId, $placedRoutes, $commonObjectives);
+        $playerDb['scoreSheets'] = $this->getScoreSheets($playerId, $placedRoutes, $commonObjectives, $isEndScore);
 
             if ($playerId === $currentPlayerId || $isEndScore) {
                 $personalObjective = intval($this->getUniqueValueFromDB("SELECT player_personal_objective FROM `player` where `player_id` = $playerId"));
