@@ -125,6 +125,7 @@ interface GetOnBoardGame extends Game {
     placeDeparturePawn(position: number): void;
     placeRoute(from: number, to: number): void;
     isVisibleScoring(): boolean;
+    getTooltip(element: number): string;
 }
 
 interface EnteringPlaceDeparturePawnArgs {
@@ -184,5 +185,3 @@ interface NotifRevealPersonalObjectiveArgs {
     personalObjectiveLetters: number[];
     personalObjectivePositions: number[];
 }
-
-self::notifyAllPlayers('revealPersonalObjective', clienttranslate('${player_name} personal objective was ${objectiveLetters}'), [

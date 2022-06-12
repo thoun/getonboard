@@ -447,7 +447,7 @@ class GetOnBoard implements GetOnBoardGame {
         }
     }
 
-    private getTooltip(element: number) {
+    public getTooltip(element: number) {
         switch (element) {
             case 0: return '[GreenLight] : ' + _("If your route ends at an intersection with a [GreenLight], you place an additional marker.");
             case 1: return _("<strong>Number:</strong> Possible starting point. You choose between 2 numbers at the beginning of the game to place your Departure Pawn.");

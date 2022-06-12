@@ -174,9 +174,15 @@ class TableCenter {
         </div>
         `, `common-objective-slot-${objective.number}`);
 
+        const commonObjectiveInfos = COMMON_OBJECTIVES[objective.id];
+
+        (this.game as any).addTooltipHtml(`common-objective-slot-${objective.number}`, `${this.game.getTooltip(90)}<br><br>${
+            _("To complete this objective, you need to check ${number} ${element}").replace('${number}', `<strong>${commonObjectiveInfos[1]}</strong>`).replace('${element}', `<div class="map-icon" data-element="${commonObjectiveInfos[0]}"></div>`)
+        }`);
+
         if (isPlayer) { // objective progress counter only if player is not a spectator
             dojo.place(`
-            <div class="common-objective-counter"><span id="common-objective-${objective.number}-counter" data-type="${objective.id}">0</span>/${COMMON_OBJECTIVES[objective.id][1]}</div>
+            <div class="common-objective-counter"><span id="common-objective-${objective.number}-counter" data-type="${objective.id}">0</span>/${commonObjectiveInfos[1]}</div>
             `, `common-objective-slot-${objective.number}`);
         }
     }

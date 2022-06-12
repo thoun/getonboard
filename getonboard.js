@@ -594,8 +594,10 @@ var TableCenter = /** @class */ (function () {
     };
     TableCenter.prototype.placeCommonObjective = function (objective, isPlayer) {
         dojo.place("<div id=\"common-objective-".concat(objective.id, "\" class=\"common-objective card-inner\" data-side=\"").concat(objective.completed ? '1' : '0', "\">\n            <div class=\"card-side front\"></div>\n            <div class=\"card-side back\"></div>\n        </div>\n        "), "common-objective-slot-".concat(objective.number));
+        var commonObjectiveInfos = COMMON_OBJECTIVES[objective.id];
+        this.game.addTooltipHtml("common-objective-slot-".concat(objective.number), "".concat(this.game.getTooltip(90), "<br><br>").concat(_("To complete this objective, you need to check ${number} ${element}").replace('${number}', "<strong>".concat(commonObjectiveInfos[1], "</strong>")).replace('${element}', "<div class=\"map-icon\" data-element=\"".concat(commonObjectiveInfos[0], "\"></div>"))));
         if (isPlayer) { // objective progress counter only if player is not a spectator
-            dojo.place("\n            <div class=\"common-objective-counter\"><span id=\"common-objective-".concat(objective.number, "-counter\" data-type=\"").concat(objective.id, "\">0</span>/").concat(COMMON_OBJECTIVES[objective.id][1], "</div>\n            "), "common-objective-slot-".concat(objective.number));
+            dojo.place("\n            <div class=\"common-objective-counter\"><span id=\"common-objective-".concat(objective.number, "-counter\" data-type=\"").concat(objective.id, "\">0</span>/").concat(commonObjectiveInfos[1], "</div>\n            "), "common-objective-slot-".concat(objective.number));
         }
     };
     TableCenter.prototype.setRound = function (validatedTickets, currentTicket, initialization) {
