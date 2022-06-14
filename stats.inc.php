@@ -47,49 +47,95 @@
     
 */
 
-$stats_type = array(
+$commonStats = [
+    "turnsNumber" => [
+        "id" => 11,
+        "name" => totranslate("Number of turns"),
+        "type" => "int" 
+    ],
+    "markersPlaced" => [
+        "id" => 12,
+        "name" => totranslate("Markers placed"),
+        "type" => "int"
+    ],
+    "greenLightsUsed" => [
+        "id" => 13,
+        "name" => totranslate("Green lights used"),
+        "type" => "int"
+    ],
+    "turnZoneUsed" => [
+        "id" => 14,
+        "name" => totranslate("Turn zone checks"),
+        "type" => "int"
+    ],
+    "trafficJamUsed" => [
+        "id" => 15,
+        "name" => totranslate("Traffic jam checks"),
+        "type" => "int"
+    ],
+    "commonObjectivesFirst" => [
+        "id" => 16,
+        "name" => totranslate("Common objectives (realized with 10 points)"),
+        "type" => "int"
+    ],
+    "commonObjectivesSecond" => [
+        "id" => 17,
+        "name" => totranslate("Common objectives (realized with 6 points)"),
+        "type" => "int"
+    ],
+    "personalObjectives" => [
+        "id" => 18,
+        "name" => totranslate("Personal objective realized"),
+        "type" => "int"
+    ],
+];
+
+$stats_type = [
 
     // Statistics global to table
-    "table" => array(
-
-        "turns_number" => array("id"=> 10,
-                    "name" => totranslate("Number of turns"),
-                    "type" => "int" ),
-
-/*
-        Examples:
-
-
-        "table_teststat1" => array(   "id"=> 10,
-                                "name" => totranslate("table test stat 1"), 
-                                "type" => "int" ),
-                                
-        "table_teststat2" => array(   "id"=> 11,
-                                "name" => totranslate("table test stat 2"), 
-                                "type" => "float" )
-*/  
-    ),
+    "table" => $commonStats,
     
     // Statistics existing for each player
-    "player" => array(
-
-        "turns_number" => array("id"=> 10,
-                    "name" => totranslate("Number of turns"),
-                    "type" => "int" ),
-    
-/*
-        Examples:    
-        
-        
-        "player_teststat1" => array(   "id"=> 10,
-                                "name" => totranslate("player test stat 1"), 
-                                "type" => "int" ),
-                                
-        "player_teststat2" => array(   "id"=> 11,
-                                "name" => totranslate("player test stat 2"), 
-                                "type" => "float" )
-
-*/    
-    )
-
-);
+    "player" => $commonStats + [        
+        "finalScoreOldLadies" => [
+            "id" => 19,
+            "name" => totranslate("Final score for Old ladies"),
+            "type" => "int"
+        ],
+        "finalScoreStudents" => [
+            "id" => 20,
+            "name" => totranslate("Final score for Students"),
+            "type" => "int"
+        ],
+        "finalScoreTourists" => [
+            "id" => 21,
+            "name" => totranslate("Final score for Tourists"),
+            "type" => "int"
+        ],
+        "finalScoreBusinessmen" => [
+            "id" => 22,
+            "name" => totranslate("Final score for Businessmen"),
+            "type" => "int"
+        ],
+        "averagePointsByCheckedOldLadies" => [
+            "id" => 23,
+            "name" => totranslate("Average points by checked Old ladies"),
+            "type" => "float"
+        ],
+        "averagePointsByCheckedStudents" => [
+            "id" => 24,
+            "name" => totranslate("Average points by checked Students"),
+            "type" => "float"
+        ],
+        "averagePointsByCheckedTourists" => [
+            "id" => 25,
+            "name" => totranslate("Average points by checked Tourists"),
+            "type" => "float"
+        ],
+        "averagePointsByCheckedBusinessmen" => [
+            "id" => 26,
+            "name" => totranslate("Average points by checked Businessmen"),
+            "type" => "float"
+        ],
+    ]
+];

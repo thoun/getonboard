@@ -106,9 +106,17 @@ class GetOnBoard extends Table {
         self::setGameStateInitialValue(ELIMINATE_PLAYER, 0);
         
         // Init game statistics
-        // (note: statistics used in this file must be defined in your stats.inc.php file)
-        //self::initStat( 'table', 'table_teststat1', 0 );    // Init a table statistics
-        //self::initStat( 'player', 'player_teststat1', 0 );  // Init a player statistics (for all players)
+        foreach(['table', 'player'] as $statType) {
+            $this->initStat($statType, 'turnsNumber', 0);
+            $this->initStat($statType, 'markersPlaced', 0);
+            $this->initStat($statType, 'greenLightsUsed', 0);
+            $this->initStat($statType, 'turnZoneUsed', 0);
+            $this->initStat($statType, 'trafficJamUsed', 0);
+            $this->initStat($statType, 'commonObjectivesFirst', 0);
+            $this->initStat($statType, 'commonObjectivesSecond', 0);
+            $this->initStat($statType, 'personalObjectives', 0);
+        }
+        
 
         $this->setupCommonObjectives();
         $this->setupTickets(count($players));

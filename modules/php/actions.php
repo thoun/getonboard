@@ -153,6 +153,25 @@ trait ActionTrait {
             'markers' => array_map(fn($route) => PlacedRoute::forNotif($route->from, $route->to, true), $unvalidatedRoutes),
         ]);
         
+        $markersPlaced = count($unvalidatedRoutesIds);
+        $this->incStat($markersPlaced, 'markersPlaced');
+        $this->incStat($markersPlaced, 'markersPlaced', $playerId);
+        $greenLightsUsed = $markersPlaced - count($this->getPlayerTurnShape($playerId));
+        if ($greenLightsUsed > 0) {
+            $this->incStat($greenLightsUsed, 'greenLightsUsed');
+            $this->incStat($greenLightsUsed, 'greenLightsUsed', $playerId);
+        }
+        $turnZoneUsed = count(array_filter($unvalidatedRoutes, fn($route) => $route->useTurnZone));
+        if ($turnZoneUsed > 0) {
+            $this->incStat($turnZoneUsed, 'turnZoneUsed');
+            $this->incStat($turnZoneUsed, 'turnZoneUsed', $playerId);
+        }
+        $trafficJamUsed = array_reduce(array_map(fn($route) => $route->trafficJam, $unvalidatedRoutes), fn($a, $b) => $a + $b, 0);
+        if ($trafficJamUsed > 0) {
+            $this->incStat($trafficJamUsed, 'trafficJamUsed');
+            $this->incStat($trafficJamUsed, 'trafficJamUsed', $playerId);
+        }
+        
         $scoreSheets = $this->notifUpdateScoreSheet($playerId);
         $score = $scoreSheets->validated->total;
         $this->DbQuery("UPDATE player SET `player_score` = $score WHERE `player_id` = $playerId");

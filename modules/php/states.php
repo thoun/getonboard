@@ -66,6 +66,9 @@ trait StateTrait {
 
         $this->giveExtraTime($playerId);
 
+        $this->incStat(1, 'turnsNumber');
+        $this->incStat(1, 'turnsNumber', $playerId);
+
         $this->activeNextPlayer();
         $playerId = intval($this->getActivePlayerId());
 
@@ -118,6 +121,40 @@ trait StateTrait {
         $this->gamestate->nextState($startNewRound ? 'newRound' : 'endScore');
     }
 
+    function computeStats(int $playerId) {
+        $scoreSheets = $this->getScoreSheets($playerId, $this->getPlacedRoutes($playerId), $this->getCommonObjectives(), true);
+        $scoreSheet = $scoreSheets->validated;
+        
+        $this->setStat(count(array_filter($scoreSheet->commonObjectives->subTotals, fn($subTotal) => $subTotal == 10)), 'commonObjectivesFirst', $playerId);
+        $this->setStat(count(array_filter($scoreSheet->commonObjectives->subTotals, fn($subTotal) => $subTotal == 6)), 'commonObjectivesSecond', $playerId);
+        $this->setStat($scoreSheet->personalObjective->total > 0 ? 1 : 0, 'commonObjectivesSecond', $playerId);
+        $this->setStat($scoreSheet->oldLadies->total, 'finalScoreOldLadies', $playerId);
+        $this->setStat($scoreSheet->students->total, 'finalScoreStudents', $playerId);
+        $this->setStat($scoreSheet->tourists->total, 'finalScoreTourists', $playerId);
+        $this->setStat($scoreSheet->businessmen->total, 'finalScoreBusinessmen', $playerId);
+        if ($scoreSheet->oldLadies->checked > 0) {
+            $this->setStat((float)$scoreSheet->oldLadies->total / (float)$scoreSheet->oldLadies->checked, 'averagePointsByCheckedOldLadies', $playerId);
+        }
+        $checkedStudents = $scoreSheet->students->checkedStudents + $scoreSheet->students->checkedInternships;
+        if ($checkedStudents > 0) {
+            $this->setStat((float)$scoreSheet->students->total / (float)$checkedStudents, 'averagePointsByCheckedStudents', $playerId);
+        }
+        $checkedTourists = 0;
+        foreach ($scoreSheet->tourists->checkedTourists as $checkedTourist) {
+            $checkedTourists += $checkedTourist;
+        }
+        if ($checkedTourists > 0) {
+            $this->setStat((float)$scoreSheet->tourists->total / (float)$checkedTourists, 'averagePointsByCheckedTourists', $playerId);
+        }
+        $checkedBusinessmen = 0;
+        foreach ($scoreSheet->businessmen->checkedBusinessmen as $checkedBusinessman) {
+            $checkedBusinessmen += $checkedBusinessman;
+        }
+        if ($checkedBusinessmen > 0) {
+            $this->setStat((float)$scoreSheet->businessmen->total / (float)$checkedBusinessmen, 'averagePointsByCheckedBusinessmen', $playerId);
+        }
+    }
+
     function stEndScore() {
         $playersIds = $this->getPlayersIds();
         $map = $this->getMap();
@@ -139,6 +176,8 @@ trait StateTrait {
                 'personalObjectiveLetters' => $personalObjectiveLetters,
                 'personalObjectivePositions' => $this->getPersonalObjectivePositions($personalObjective, $map),
             ]);
+
+            $this->computeStats($playerId);
         }
 
         $this->gamestate->nextState('endGame');
