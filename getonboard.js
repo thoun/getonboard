@@ -843,6 +843,7 @@ var GetOnBoard = /** @class */ (function () {
             div.style.transform = "scale(".concat(zoom, ")");
             div.style.margin = "0 ".concat(ZOOM_LEVELS_MARGIN[newIndex], "% ").concat((1 - zoom) * -100, "% 0");
         }
+        document.getElementById('map').classList.toggle('hd', zoom > 1);
         document.getElementById('zoom-wrapper').style.height = "".concat(div.getBoundingClientRect().height, "px");
     };
     GetOnBoard.prototype.zoomIn = function () {

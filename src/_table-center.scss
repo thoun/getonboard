@@ -5,9 +5,10 @@ $marker-size: 6px;
   width: 740px;
   height: 740px;
   position: relative;
+  background-size: contain;
 
   &[data-size="small"] {
-    background: url('img/map-small.jpg');
+    background-image: url('img/map-small-no-grid.jpg');
     
     #map-elements {
       transform: rotate(45deg) translate(-10px, 20px);
@@ -137,7 +138,11 @@ $marker-size: 6px;
     
   }
   &[data-size="big"] {
-    background: url('img/map-big.jpg');
+    background-image: url('img/map-big-no-grid.jpg');
+
+    &.hd {
+      background-image: url('img/hd/map-big-no-grid.jpg'), url('img/map-big-no-grid.jpg');
+    }
     
     #map-elements {
       .route {
@@ -405,7 +410,7 @@ $marker-size: 6px;
     }
     
     .card-side {
-      background: url('img/common-objectives.png');
+      background-image: url('img/common-objectives.png');
       background-size: auto 200%;
     
       &.front {
@@ -449,11 +454,28 @@ $marker-size: 6px;
     }
     
     .card-side {
-      background: url('img/tickets.png');
+      background-image: url('img/tickets.png');
       background-size: auto 100%;
     
       &.front {
         background-position-x: 0%;
+      }
+    }
+  }
+}
+
+.hd {
+  .common-objective-slot {
+    .common-objective {
+      .card-side {
+        background-image: url('img/hd/common-objectives.png'), url('img/common-objectives.png');
+      }
+    }
+  }
+  .ticket-slot {
+    .ticket {
+      .card-side {
+        background-image: url('img/hd/tickets.png'), url('img/tickets.png');
       }
     }
   }
@@ -493,23 +515,30 @@ $marker-size: 6px;
 html[data-no-building="true"] {
   #map {
     &[data-size="small"] {
-      background: url('img/map-small-no-building.jpg');
-      
+      background-image: url('img/map-small-no-building.jpg');
     }
     &[data-size="big"] {
-      background: url('img/map-big-no-building.jpg');
+      background-image: url('img/map-big-no-building.jpg');
+
+      &.hd {
+        background-image: url('img/hd/map-big-no-building.jpg'), url('img/map-big-no-building.jpg');
+      }
     }
   }
 }
 
-html[data-no-grid="true"] {
+html[data-no-grid="false"] {
   #map {
     &[data-size="small"] {
-      background: url('img/map-small-no-grid.jpg');
+      background-image: url('img/map-small.jpg');
       
     }
     &[data-size="big"] {
-      background: url('img/map-big-no-grid.jpg');
+      background-image: url('img/map-big.jpg');
+
+      &.hd {
+        background-image: url('img/hd/map-big.jpg'), url('img/map-big.jpg');
+      }
     }
   }
 }
@@ -517,11 +546,15 @@ html[data-no-grid="true"] {
 html[data-no-grid="true"][data-no-building="true"] {
   #map {
     &[data-size="small"] {
-      background: url('img/map-small-no-grid-no-building.jpg');
+      background-image: url('img/map-small-no-grid-no-building.jpg');
       
     }
     &[data-size="big"] {
-      background: url('img/map-big-no-grid-no-building.jpg');
+      background-image: url('img/map-big-no-grid-no-building.jpg');
+
+      &.hd {
+        background-image: url('img/hd/map-big-no-grid-no-building.jpg'), url('img/map-big-no-grid-no-building.jpg');
+      }
     }
   }
 }

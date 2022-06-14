@@ -257,6 +257,8 @@ class GetOnBoard implements GetOnBoardGame {
             div.style.transform = `scale(${zoom})`;
             div.style.margin = `0 ${ZOOM_LEVELS_MARGIN[newIndex]}% ${(1-zoom)*-100}% 0`;
         }
+        
+        document.getElementById('map').classList.toggle('hd', zoom > 1);
 
         document.getElementById('zoom-wrapper').style.height = `${div.getBoundingClientRect().height}px`;
     }

@@ -112,9 +112,10 @@
   width: 740px;
   height: 740px;
   position: relative;
+  background-size: contain;
 }
 #map[data-size=small] {
-  background: url("img/map-small.jpg");
+  background-image: url("img/map-small-no-grid.jpg");
 }
 #map[data-size=small] #map-elements {
   transform: rotate(45deg) translate(-10px, 20px);
@@ -221,7 +222,10 @@
   left: 110px;
 }
 #map[data-size=big] {
-  background: url("img/map-big.jpg");
+  background-image: url("img/map-big-no-grid.jpg");
+}
+#map[data-size=big].hd {
+  background-image: url("img/hd/map-big-no-grid.jpg"), url("img/map-big-no-grid.jpg");
 }
 #map[data-size=big] #map-elements .route[data-direction="0"] .marker {
   width: 6px;
@@ -451,7 +455,7 @@
   background-position-x: 100%;
 }
 .common-objective-slot .common-objective .card-side {
-  background: url("img/common-objectives.png");
+  background-image: url("img/common-objectives.png");
   background-size: auto 200%;
 }
 .common-objective-slot .common-objective .card-side.front {
@@ -518,11 +522,18 @@
   background-position-x: 100%;
 }
 .ticket-slot .ticket .card-side {
-  background: url("img/tickets.png");
+  background-image: url("img/tickets.png");
   background-size: auto 100%;
 }
 .ticket-slot .ticket .card-side.front {
   background-position-x: 0%;
+}
+
+.hd .common-objective-slot .common-objective .card-side {
+  background-image: url("img/hd/common-objectives.png"), url("img/common-objectives.png");
+}
+.hd .ticket-slot .ticket .card-side {
+  background-image: url("img/hd/tickets.png"), url("img/tickets.png");
 }
 
 .card-inner {
@@ -553,24 +564,33 @@
 }
 
 html[data-no-building=true] #map[data-size=small] {
-  background: url("img/map-small-no-building.jpg");
+  background-image: url("img/map-small-no-building.jpg");
 }
 html[data-no-building=true] #map[data-size=big] {
-  background: url("img/map-big-no-building.jpg");
+  background-image: url("img/map-big-no-building.jpg");
+}
+html[data-no-building=true] #map[data-size=big].hd {
+  background-image: url("img/hd/map-big-no-building.jpg"), url("img/map-big-no-building.jpg");
 }
 
-html[data-no-grid=true] #map[data-size=small] {
-  background: url("img/map-small-no-grid.jpg");
+html[data-no-grid=false] #map[data-size=small] {
+  background-image: url("img/map-small.jpg");
 }
-html[data-no-grid=true] #map[data-size=big] {
-  background: url("img/map-big-no-grid.jpg");
+html[data-no-grid=false] #map[data-size=big] {
+  background-image: url("img/map-big.jpg");
+}
+html[data-no-grid=false] #map[data-size=big].hd {
+  background-image: url("img/hd/map-big.jpg"), url("img/map-big.jpg");
 }
 
 html[data-no-grid=true][data-no-building=true] #map[data-size=small] {
-  background: url("img/map-small-no-grid-no-building.jpg");
+  background-image: url("img/map-small-no-grid-no-building.jpg");
 }
 html[data-no-grid=true][data-no-building=true] #map[data-size=big] {
-  background: url("img/map-big-no-grid-no-building.jpg");
+  background-image: url("img/map-big-no-grid-no-building.jpg");
+}
+html[data-no-grid=true][data-no-building=true] #map[data-size=big].hd {
+  background-image: url("img/hd/map-big-no-grid-no-building.jpg"), url("img/map-big-no-grid-no-building.jpg");
 }
 
 /*#player-tables {
