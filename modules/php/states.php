@@ -127,7 +127,7 @@ trait StateTrait {
         
         $this->setStat(count(array_filter($scoreSheet->commonObjectives->subTotals, fn($subTotal) => $subTotal == 10)), 'commonObjectivesFirst', $playerId);
         $this->setStat(count(array_filter($scoreSheet->commonObjectives->subTotals, fn($subTotal) => $subTotal == 6)), 'commonObjectivesSecond', $playerId);
-        $this->setStat($scoreSheet->personalObjective->total > 0 ? 1 : 0, 'commonObjectivesSecond', $playerId);
+        $this->setStat($scoreSheet->personalObjective->total > 0 ? 1 : 0, 'personalObjectives', $playerId);
         $this->setStat($scoreSheet->oldLadies->total, 'finalScoreOldLadies', $playerId);
         $this->setStat($scoreSheet->students->total, 'finalScoreStudents', $playerId);
         $this->setStat($scoreSheet->tourists->total, 'finalScoreTourists', $playerId);
