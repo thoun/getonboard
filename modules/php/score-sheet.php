@@ -210,8 +210,10 @@ trait ScoreSheetTrait {
 
                         // students
                         case STUDENT:
-                            $scoreSheet->students->checkedStudents++;
-                            $this->updateStudentTotal($scoreSheet, $commonObjectives, $round);
+                            if ($scoreSheet->students->checkedStudents < 6) {
+                                $scoreSheet->students->checkedStudents++;
+                                $this->updateStudentTotal($scoreSheet, $commonObjectives, $round);
+                            }
                             break;
                         case INTERNSHIP:
                             $scoreSheet->students->checkedInterships++;
