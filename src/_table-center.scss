@@ -11,6 +11,10 @@ $marker-size: 6px;
 
   &[data-size="small"] {
     background-image: url('img/map-small-no-grid.jpg');
+
+    &.hd {
+      background-image: url('img/hd/map-small-no-grid.jpg'), url('img/map-small-no-grid.jpg');
+    }
     
     #map-elements {
       transform: rotate(45deg) translate(-10px, 20px);
@@ -25,26 +29,28 @@ $marker-size: 6px;
             right: 8px;
 
             &[data-position="16"] {
-              top: -23px;
+              top: -21px;
             }
             &[data-position="32"] {
-              top: -22px;
+              top: -21px;
+              right: 7px;
             }
             &[data-position="45"] {
-              top: -22px;
+              top: -21px;
             }
             &[data-position="63"] {
-              top: -19px;
-            }
-            &[data-position="101"] {
-              top: -22px;
+              top: -20px;
               right: 9px;
             }
+            &[data-position="101"] {
+              top: -21px;
+            }
             &[data-position="106"] {
-              top: -27px;
+              top: -18px;
+              right: 9px;
             }
             &[data-position="133"] {
-              top: -22px;
+              top: -21px;
               right: 9px;
             }
           }
@@ -58,25 +64,30 @@ $marker-size: 6px;
             &[data-position="12"] {
               top: -27px;
             }
+            &[data-position="25"] {
+              top: -26px;
+            }
             &[data-position="41"] {
               top: -25px;
             }
             &[data-position="54"] {
               top: -26px;
+              right: 7px;
             }
             &[data-position="81"] {
-              top: -27px;
-              right: 9px;
+              top: -26px;
+              right: 7px;
             }
             &[data-position="85"] {
               top: -24px;
-              right: 2px;
+              right: 4px;
             }
             &[data-position="92"] {
-              top: -27px;
+              top: -25px;
+              right: 7px;
             }
             &[data-position="112"] {
-              top: -26px;
+              top: -25px;
             }
           }
         }
@@ -90,9 +101,13 @@ $marker-size: 6px;
           left: 375px !important;
           top: 130px !important;
         }
+        &#intersection76 {
+          left: 497px !important;
+          top: 361px !important;
+        }
         &#intersection84 {
-          left: 376px !important;
-          top: 411px !important;
+          left: 374px !important;
+          top: 409px !important;
         }
         &#intersection106 {
           left: 488px !important;
@@ -518,6 +533,10 @@ html[data-no-building="true"] {
   #map {
     &[data-size="small"] {
       background-image: url('img/map-small-no-building.jpg');
+
+      &.hd {
+        background-image: url('img/hd/map-small-no-building.jpg'), url('img/map-small-no-building.jpg');
+      }
     }
     &[data-size="big"] {
       background-image: url('img/map-big-no-building.jpg');
@@ -533,6 +552,10 @@ html[data-no-grid="false"] {
   #map {
     &[data-size="small"] {
       background-image: url('img/map-small.jpg');
+
+      &.hd {
+        background-image: url('img/hd/map-small.jpg'), url('img/map-small.jpg');
+      }
       
     }
     &[data-size="big"] {
@@ -549,6 +572,10 @@ html[data-no-grid="true"][data-no-building="true"] {
   #map {
     &[data-size="small"] {
       background-image: url('img/map-small-no-grid-no-building.jpg');
+
+      &.hd {
+        background-image: url('img/hd/map-small-no-grid-no-building.jpg'), url('img/map-small-no-grid-no-building.jpg');
+      }
       
     }
     &[data-size="big"] {

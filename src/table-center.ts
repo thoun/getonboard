@@ -72,8 +72,8 @@ class TableCenter {
         gamedatas.commonObjectives.forEach(commonObjective => this.placeCommonObjective(commonObjective, !!currentPlayer));
 
         // personal objective
-        //Object.keys(gamedatas.MAP_POSITIONS).filter(key => gamedatas.MAP_POSITIONS[key].some(element => element >= 97 && element <= 122)).forEach(position =>
-        currentPlayer?.personalObjectivePositions.forEach(position => 
+        Object.keys(gamedatas.MAP_POSITIONS).filter(key => gamedatas.MAP_POSITIONS[key].some(element => element >= 97 && element <= 122)).forEach(position =>
+        //currentPlayer?.personalObjectivePositions.forEach(position => 
             dojo.place(`<div class="objective-letter" data-position="${position}"></div>`, `intersection${position}`)
         );
 

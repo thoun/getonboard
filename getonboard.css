@@ -119,6 +119,9 @@
 #map[data-size=small] {
   background-image: url("img/map-small-no-grid.jpg");
 }
+#map[data-size=small].hd {
+  background-image: url("img/hd/map-small-no-grid.jpg"), url("img/map-small-no-grid.jpg");
+}
 #map[data-size=small] #map-elements {
   transform: rotate(45deg) translate(-10px, 20px);
   clip-path: polygon(30% 0%, 75% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
@@ -131,26 +134,28 @@
   right: 8px;
 }
 #map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter[data-position="16"] {
-  top: -23px;
+  top: -21px;
 }
 #map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter[data-position="32"] {
-  top: -22px;
+  top: -21px;
+  right: 7px;
 }
 #map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter[data-position="45"] {
-  top: -22px;
+  top: -21px;
 }
 #map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter[data-position="63"] {
-  top: -19px;
-}
-#map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter[data-position="101"] {
-  top: -22px;
+  top: -20px;
   right: 9px;
 }
+#map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter[data-position="101"] {
+  top: -21px;
+}
 #map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter[data-position="106"] {
-  top: -27px;
+  top: -18px;
+  right: 9px;
 }
 #map[data-size=small] #map-elements .intersection:not(.green-light) .objective-letter[data-position="133"] {
-  top: -22px;
+  top: -21px;
   right: 9px;
 }
 #map[data-size=small] #map-elements .intersection.green-light .objective-letter {
@@ -160,25 +165,30 @@
 #map[data-size=small] #map-elements .intersection.green-light .objective-letter[data-position="12"] {
   top: -27px;
 }
+#map[data-size=small] #map-elements .intersection.green-light .objective-letter[data-position="25"] {
+  top: -26px;
+}
 #map[data-size=small] #map-elements .intersection.green-light .objective-letter[data-position="41"] {
   top: -25px;
 }
 #map[data-size=small] #map-elements .intersection.green-light .objective-letter[data-position="54"] {
   top: -26px;
+  right: 7px;
 }
 #map[data-size=small] #map-elements .intersection.green-light .objective-letter[data-position="81"] {
-  top: -27px;
-  right: 9px;
+  top: -26px;
+  right: 7px;
 }
 #map[data-size=small] #map-elements .intersection.green-light .objective-letter[data-position="85"] {
   top: -24px;
-  right: 2px;
+  right: 4px;
 }
 #map[data-size=small] #map-elements .intersection.green-light .objective-letter[data-position="92"] {
-  top: -27px;
+  top: -25px;
+  right: 7px;
 }
 #map[data-size=small] #map-elements .intersection.green-light .objective-letter[data-position="112"] {
-  top: -26px;
+  top: -25px;
 }
 #map[data-size=small] #map-elements .intersection#intersection11 {
   left: 204px !important;
@@ -188,9 +198,13 @@
   left: 375px !important;
   top: 130px !important;
 }
+#map[data-size=small] #map-elements .intersection#intersection76 {
+  left: 497px !important;
+  top: 361px !important;
+}
 #map[data-size=small] #map-elements .intersection#intersection84 {
-  left: 376px !important;
-  top: 411px !important;
+  left: 374px !important;
+  top: 409px !important;
 }
 #map[data-size=small] #map-elements .intersection#intersection106 {
   left: 488px !important;
@@ -568,6 +582,9 @@
 html[data-no-building=true] #map[data-size=small] {
   background-image: url("img/map-small-no-building.jpg");
 }
+html[data-no-building=true] #map[data-size=small].hd {
+  background-image: url("img/hd/map-small-no-building.jpg"), url("img/map-small-no-building.jpg");
+}
 html[data-no-building=true] #map[data-size=big] {
   background-image: url("img/map-big-no-building.jpg");
 }
@@ -578,6 +595,9 @@ html[data-no-building=true] #map[data-size=big].hd {
 html[data-no-grid=false] #map[data-size=small] {
   background-image: url("img/map-small.jpg");
 }
+html[data-no-grid=false] #map[data-size=small].hd {
+  background-image: url("img/hd/map-small.jpg"), url("img/map-small.jpg");
+}
 html[data-no-grid=false] #map[data-size=big] {
   background-image: url("img/map-big.jpg");
 }
@@ -587,6 +607,9 @@ html[data-no-grid=false] #map[data-size=big].hd {
 
 html[data-no-grid=true][data-no-building=true] #map[data-size=small] {
   background-image: url("img/map-small-no-grid-no-building.jpg");
+}
+html[data-no-grid=true][data-no-building=true] #map[data-size=small].hd {
+  background-image: url("img/hd/map-small-no-grid-no-building.jpg"), url("img/map-small-no-grid-no-building.jpg");
 }
 html[data-no-grid=true][data-no-building=true] #map[data-size=big] {
   background-image: url("img/map-big-no-grid-no-building.jpg");

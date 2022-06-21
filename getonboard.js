@@ -507,8 +507,8 @@ var TableCenter = /** @class */ (function () {
         // common objectives
         gamedatas.commonObjectives.forEach(function (commonObjective) { return _this.placeCommonObjective(commonObjective, !!currentPlayer); });
         // personal objective
-        //Object.keys(gamedatas.MAP_POSITIONS).filter(key => gamedatas.MAP_POSITIONS[key].some(element => element >= 97 && element <= 122)).forEach(position =>
-        currentPlayer === null || currentPlayer === void 0 ? void 0 : currentPlayer.personalObjectivePositions.forEach(function (position) {
+        Object.keys(gamedatas.MAP_POSITIONS).filter(function (key) { return gamedatas.MAP_POSITIONS[key].some(function (element) { return element >= 97 && element <= 122; }); }).forEach(function (position) {
+            //currentPlayer?.personalObjectivePositions.forEach(position => 
             return dojo.place("<div class=\"objective-letter\" data-position=\"".concat(position, "\"></div>"), "intersection".concat(position));
         });
         // tickets
