@@ -1154,7 +1154,7 @@ var GetOnBoard = /** @class */ (function () {
         if (!this.checkAction('placeRoute')) {
             return;
         }
-        var eliminationWarning = route.isElimination && args.possibleRoutes.some(function (r) { return !r.isElimination; });
+        var eliminationWarning = route.isElimination /* && args.possibleRoutes.some(r => !r.isElimination)*/;
         if (eliminationWarning) {
             this.confirmationDialog(_('Are you sure you want to place that marker? You will be eliminated!'), function () {
                 _this.takeAction('placeRoute', {

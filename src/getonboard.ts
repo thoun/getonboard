@@ -635,7 +635,7 @@ class GetOnBoard implements GetOnBoardGame {
             return;
         }
 
-        const eliminationWarning = route.isElimination && args.possibleRoutes.some(r => !r.isElimination);
+        const eliminationWarning = route.isElimination /* && args.possibleRoutes.some(r => !r.isElimination)*/;
 
         if (eliminationWarning) {
             (this as any).confirmationDialog(_('Are you sure you want to place that marker? You will be eliminated!'), () => {
