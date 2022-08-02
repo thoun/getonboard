@@ -687,6 +687,9 @@ var GetOnBoard = /** @class */ (function () {
         log("Starting game setup");
         this.gamedatas = gamedatas;
         log('gamedatas', gamedatas);
+        if (Number(gamedatas.gamestate.id) >= 90) { // score or end. before createPlayerTables so full score is written if game has ended even if hide score is on
+            this.onEnteringShowScore();
+        }
         this.createPlayerPanels(gamedatas);
         this.tableCenter = new TableCenter(this, gamedatas);
         this.createPlayerTables(gamedatas);
@@ -706,9 +709,6 @@ var GetOnBoard = /** @class */ (function () {
         document.getElementById('zoom-in').addEventListener('click', function () { return _this.zoomIn(); });
         if (this.zoom !== 1) {
             this.setZoom(this.zoom);
-        }
-        if (Number(gamedatas.gamestate.id) >= 90) { // score or end
-            this.onEnteringShowScore();
         }
         this.addTooltips();
         log("Ending game setup");

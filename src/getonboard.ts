@@ -77,6 +77,11 @@ class GetOnBoard implements GetOnBoardGame {
         this.gamedatas = gamedatas;
 
         log('gamedatas', gamedatas);
+
+        if (Number(gamedatas.gamestate.id) >= 90) { // score or end. before createPlayerTables so full score is written if game has ended even if hide score is on
+            this.onEnteringShowScore();
+        }
+
         this.createPlayerPanels(gamedatas); 
         this.tableCenter = new TableCenter(this, gamedatas);
         this.createPlayerTables(gamedatas);
@@ -99,10 +104,6 @@ class GetOnBoard implements GetOnBoardGame {
         document.getElementById('zoom-in').addEventListener('click', () => this.zoomIn());
         if (this.zoom !== 1) {
             this.setZoom(this.zoom);
-        }
-
-        if (Number(gamedatas.gamestate.id) >= 90) { // score or end
-            this.onEnteringShowScore();
         }
 
         this.addTooltips();
