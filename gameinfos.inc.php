@@ -87,7 +87,7 @@ $gameinfos = [
 'language_dependency' => false,
 
 // Complexity of the game, from 0 (extremely simple) to 5 (extremely complex)
-'complexity' => 1,    
+'complexity' => 2,    
 
 // Luck of the game, from 0 (absolutely no luck in this game) to 5 (totally luck driven)
 'luck' => 2,    
@@ -96,7 +96,7 @@ $gameinfos = [
 'strategy' => 3,    
 
 // Diplomacy of the game, from 0 (no interaction in this game) to 5 (totally based on interaction and discussion between players)
-'diplomacy' => 2,    
+'diplomacy' => 1,    
 
 // Colors attributed to players
 'player_colors' => [ "72c3d5", "f8d03f", "a476a5", "78232f", "166938" ], // dark blue in the ART file : 0a2a3b
