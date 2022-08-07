@@ -48,10 +48,28 @@ trait StateTrait {
         $this->gamestate->nextState('start');
     }
 
+    function getRemainingPlayers() {
+        return intval($this->getUniqueValueFromDB( "SELECT count(*) FROM player WHERE player_eliminated = 0"));
+    }
+
     function checkPlayerToEliminate() {
         $eliminatedPlayer = intval($this->getGameStateValue(ELIMINATE_PLAYER));
-        if ($eliminatedPlayer === 0 || $eliminatedPlayer === intval($this->getActivePlayerId())) {
+        if ($eliminatedPlayer === 0) {
             return;
+        }
+
+        if ($eliminatedPlayer === intval($this->getActivePlayerId())) {
+            if ($this->getRemainingPlayers() == 1) {
+                // if last player, we make a notification same as elimination
+                // but we don't really eliminate him as the framework don't like it and game will end anyway
+                $this->notifyAllPlayers('playerEliminated', '', [
+                    'who_quits' => $eliminatedPlayer,
+                    'player_name' => $this->getPlayerName($eliminatedPlayer),
+                ]);
+                $this->DbQuery("UPDATE player SET `player_eliminated` = 1 WHERE `player_id` = $eliminatedPlayer");
+            } else {
+                return;
+            }
         }
 
         $this->DbQuery("UPDATE player SET `player_score` = 0 WHERE `player_id` = $eliminatedPlayer");
@@ -63,6 +81,10 @@ trait StateTrait {
         $playerId = $this->getActivePlayerId();
 
         $this->checkPlayerToEliminate();
+        if ($this->getRemainingPlayers() == 0) {
+            $this->gamestate->jumpToState(ST_END_SCORE);
+            return;
+        }
 
         $this->giveExtraTime($playerId);
 
@@ -83,6 +105,10 @@ trait StateTrait {
         }
 
         $this->checkPlayerToEliminate();
+        if ($this->getRemainingPlayers() == 0) {
+            $this->gamestate->jumpToState(ST_END_SCORE);
+            return;
+        }
 
         $endOfRound = $playerId == intval($this->getGameStateValue(FIRST_PLAYER));
 

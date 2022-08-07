@@ -1028,15 +1028,20 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.setNewScore = function (playerId, score) {
         var _this = this;
-        var _a;
-        if (this.gamedatas.hiddenScore) {
-            setTimeout(function () {
-                Object.keys(_this.gamedatas.players).filter(function (pId) { return _this.gamedatas.players[pId].eliminated == 0; }).forEach(function (pId) { return document.getElementById("player_score_".concat(pId)).innerHTML = '-'; });
-            }, 100);
+        var _a, _b;
+        if (this.gamedatas.players[playerId].eliminated) {
+            (_a = this.scoreCtrl[playerId]) === null || _a === void 0 ? void 0 : _a.setValue(0);
         }
         else {
-            if (!isNaN(score)) {
-                (_a = this.scoreCtrl[playerId]) === null || _a === void 0 ? void 0 : _a.toValue(this.gamedatas.players[playerId].eliminated != 0 ? 0 : score);
+            if (this.gamedatas.hiddenScore) {
+                setTimeout(function () {
+                    Object.keys(_this.gamedatas.players).filter(function (pId) { return _this.gamedatas.players[pId].eliminated == 0; }).forEach(function (pId) { return document.getElementById("player_score_".concat(pId)).innerHTML = '-'; });
+                }, 100);
+            }
+            else {
+                if (!isNaN(score)) {
+                    (_b = this.scoreCtrl[playerId]) === null || _b === void 0 ? void 0 : _b.toValue(this.gamedatas.players[playerId].eliminated != 0 ? 0 : score);
+                }
             }
         }
     };
@@ -1242,6 +1247,7 @@ var GetOnBoard = /** @class */ (function () {
             ['removeMarkers', 1],
             ['revealPersonalObjective', 1],
             ['updateScoreSheet', 1],
+            ['playerEliminated', 1],
         ];
         notifs.forEach(function (notif) {
             dojo.subscribe(notif[0], _this, "notif_".concat(notif[0]));

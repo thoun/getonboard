@@ -489,13 +489,17 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     private setNewScore(playerId: number, score: number) {
-        if (this.gamedatas.hiddenScore) {
-            setTimeout(() => {
-                Object.keys(this.gamedatas.players).filter(pId => this.gamedatas.players[pId].eliminated == 0).forEach(pId => document.getElementById(`player_score_${pId}`).innerHTML = '-')
-            }, 100);
+        if (this.gamedatas.players[playerId].eliminated) {
+            (this as any).scoreCtrl[playerId]?.setValue(0);
         } else {
-            if (!isNaN(score)) {
-                (this as any).scoreCtrl[playerId]?.toValue(this.gamedatas.players[playerId].eliminated != 0 ? 0 : score);
+            if (this.gamedatas.hiddenScore) {
+                setTimeout(() => {
+                    Object.keys(this.gamedatas.players).filter(pId => this.gamedatas.players[pId].eliminated == 0).forEach(pId => document.getElementById(`player_score_${pId}`).innerHTML = '-')
+                }, 100);
+            } else {
+                if (!isNaN(score)) {
+                    (this as any).scoreCtrl[playerId]?.toValue(this.gamedatas.players[playerId].eliminated != 0 ? 0 : score);
+                }
             }
         }
     }
@@ -733,6 +737,7 @@ class GetOnBoard implements GetOnBoardGame {
             ['removeMarkers', 1],
             ['revealPersonalObjective', 1],
             ['updateScoreSheet', 1],
+            ['playerEliminated', 1],
         ];
     
         notifs.forEach((notif) => {
