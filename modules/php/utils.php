@@ -234,7 +234,14 @@ trait UtilTrait {
             }
         }
 
-        return array_map(fn($destination) => $this->createPossibleRoute($position, $destination, $allPlacedRoutes, $playerPlacedRoutes, $unvalidatedRoutes, $turnShape, $busyRoutes), $possibleDestinations);
+        $possibleRoutes = array_map(fn($destination) => $this->createPossibleRoute($position, $destination, $allPlacedRoutes, $playerPlacedRoutes, $unvalidatedRoutes, $turnShape, $busyRoutes), $possibleDestinations);
+
+        $usedTurnZone = count(array_filter($playerPlacedRoutes, fn($placedRoute) => $placedRoute->useTurnZone));
+        if ($usedTurnZone >= 5) {
+            $possibleRoutes = array_values(array_filter($possibleRoutes, fn($possibleRoute) => !$possibleRoute->useTurnZone));
+        }
+
+        return $possibleRoutes;
     }
 
     function getRoundNumber() {

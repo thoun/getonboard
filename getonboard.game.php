@@ -141,7 +141,7 @@ class GetOnBoard extends Table {
         _ when a player refreshes the game page (F5)
     */
     protected function getAllDatas() {
-        $result = array();
+        $result = [];
     
         $currentPlayerId = intval(self::getCurrentPlayerId());    // !! We must only return informations visible by this player !!
     
