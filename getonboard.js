@@ -631,6 +631,7 @@ var ANIMATION_MS = 500;
 var ZOOM_LEVELS = [0.5, 0.625, 0.75, 0.875, 1, 1.25, 1.5];
 var ZOOM_LEVELS_MARGIN = [-100, -60, -33, -14, 0, 20, 33.34];
 var LOCAL_STORAGE_ZOOM_KEY = 'GetOnBoard-zoom';
+var LOCAL_STORAGE_JUMP_KEY = 'GetOnBoard-jump-to-folded';
 function formatTextIcons(rawText) {
     if (!rawText) {
         return '';
@@ -655,6 +656,7 @@ var GetOnBoard = /** @class */ (function () {
         if (zoomStr) {
             this.zoom = Number(zoomStr);
         }
+        document.getElementById('jump-controls').classList.toggle('folded', localStorage.getItem(LOCAL_STORAGE_JUMP_KEY) == 'true');
     }
     /*
         setup:
@@ -967,7 +969,9 @@ var GetOnBoard = /** @class */ (function () {
         jumpDiv.style.marginTop = "-".concat(Math.round(jumpDiv.getBoundingClientRect().height / 2), "px");
     };
     GetOnBoard.prototype.jumpToggle = function () {
-        document.getElementById("jump-controls").classList.toggle('folded');
+        var jumpControls = document.getElementById('jump-controls');
+        jumpControls.classList.toggle('folded');
+        localStorage.setItem(LOCAL_STORAGE_JUMP_KEY, jumpControls.classList.contains('folded').toString());
     };
     GetOnBoard.prototype.jumpToPlayer = function (playerId) {
         var elementId = playerId === 0 ? "map" : "player-table-".concat(playerId);

@@ -10,6 +10,7 @@ const ANIMATION_MS = 500;
 const ZOOM_LEVELS = [0.5, 0.625, 0.75, 0.875, 1, 1.25, 1.5];
 const ZOOM_LEVELS_MARGIN = [-100, -60, -33, -14, 0, 20, 33.34];
 const LOCAL_STORAGE_ZOOM_KEY = 'GetOnBoard-zoom';
+const LOCAL_STORAGE_JUMP_KEY = 'GetOnBoard-jump-to-folded';
 
 function formatTextIcons(rawText: string) {
     if (!rawText) {
@@ -42,6 +43,7 @@ class GetOnBoard implements GetOnBoardGame {
         if (zoomStr) {
             this.zoom = Number(zoomStr);
         }
+        document.getElementById('jump-controls').classList.toggle('folded', localStorage.getItem(LOCAL_STORAGE_JUMP_KEY) == 'true');
     }
     
     /*
@@ -422,7 +424,9 @@ class GetOnBoard implements GetOnBoardGame {
     }
     
     private jumpToggle(): void {
-        document.getElementById(`jump-controls`).classList.toggle('folded');
+        const jumpControls = document.getElementById('jump-controls');
+        jumpControls.classList.toggle('folded');
+        localStorage.setItem(LOCAL_STORAGE_JUMP_KEY, jumpControls.classList.contains('folded').toString());
     }
     
     private jumpToPlayer(playerId: number): void {
