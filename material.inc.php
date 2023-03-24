@@ -21,7 +21,7 @@
 
 $this->MAP_POSITIONS = [
   'small' => [
-    11 => [SCHOOL],
+    11 => [CINEMA],
     12 => [GREEN_LIGHT, ord('a')],
     13 => [STUDENT],
     14 => [MONUMENT_LIGHT],
@@ -50,11 +50,11 @@ $this->MAP_POSITIONS = [
     46 => [TOURIST],
     
     51 => [STUDENT],
-    52 => [SCHOOL],
+    52 => [CINEMA],
     53 => [TOURIST],
     54 => [GREEN_LIGHT, ord('g')],
     55 => [TOURIST],
-    56 => [SCHOOL],
+    56 => [CINEMA],
     
     61 => [GREEN_LIGHT, 3],
     62 => [OLD_LADY],
@@ -88,7 +88,7 @@ $this->MAP_POSITIONS = [
     
     101 => [OFFICE, ord('l')],
     102 => [BUSINESSMAN],
-    103 => [SCHOOL],
+    103 => [CINEMA],
     104 => [OLD_LADY],
     105 => [TOURIST],
     106 => [OFFICE, ord('m')],
@@ -102,7 +102,7 @@ $this->MAP_POSITIONS = [
     
     122 => [MONUMENT_LIGHT],
     123 => [OLD_LADY],
-    124 => [SCHOOL],
+    124 => [CINEMA],
     125 => [MONUMENT_DARK],
     
     133 => [OFFICE, ord('o')],
@@ -115,7 +115,7 @@ $this->MAP_POSITIONS = [
     13 => [TOURIST],
     14 => [OLD_LADY],
     15 => [GREEN_LIGHT, 7],
-    17 => [SCHOOL],
+    17 => [CINEMA],
     18 => [OLD_LADY, BUSINESSMAN],
     19 => [MONUMENT_LIGHT],
 
@@ -142,14 +142,14 @@ $this->MAP_POSITIONS = [
     43 => [BUSINESSMAN],
     44 => [STUDENT],
     45 => [OFFICE, ord('g')],
-    46 => [SCHOOL],
+    46 => [CINEMA],
     47 => [GREEN_LIGHT, ord('l')],
     48 => [MONUMENT_DARK],
     49 => [TOURIST],
 
     51 => [GREEN_LIGHT, 1],
     52 => [TOURIST],
-    53 => [SCHOOL],
+    53 => [CINEMA],
     54 => [MONUMENT_LIGHT],
     55 => [OLD_LADY],
     56 => [TOURIST],
@@ -184,11 +184,11 @@ $this->MAP_POSITIONS = [
     85 => [MONUMENT_DARK],
     86 => [OLD_LADY],
     87 => [BUSINESSMAN],
-    88 => [SCHOOL],
+    88 => [CINEMA],
     89 => [GREEN_LIGHT, 12],
 
     91 => [GREEN_LIGHT, ord('b')],
-    92 => [SCHOOL],
+    92 => [CINEMA],
     93 => [MONUMENT_DARK],
     94 => [TOURIST],
     95 => [GREEN_LIGHT, ord('i')],

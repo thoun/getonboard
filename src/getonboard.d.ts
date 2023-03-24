@@ -30,7 +30,7 @@ interface SimpleZoneScoreSheet {
 
 interface StudentsScoreSheet {
     checkedStudents: number;
-    checkedSchools: number;
+    checkedCinemas: number;
 
     total: number;
 }

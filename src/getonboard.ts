@@ -19,7 +19,7 @@ function formatTextIcons(rawText: string) {
         .replace(/\[GreenLight\]/ig, '<div class="map-icon" data-element="0"></div>')
         .replace(/\[OldLady\]/ig, '<div class="map-icon" data-element="20"></div>')
         .replace(/\[Student\]/ig, '<div class="map-icon" data-element="30"></div>')
-        .replace(/\[School\]/ig, '<div class="map-icon" data-element="32"></div>')
+        .replace(/\[Cinema\]/ig, '<div class="map-icon" data-element="32"></div>')
         .replace(/\[Tourist\]/ig, '<div class="map-icon" data-element="40"></div>')
         .replace(/\[MonumentLight\]/ig, '<div class="map-icon" data-element="41"></div>')
         .replace(/\[MonumentDark\]/ig, '<div class="map-icon" data-element="42"></div>')
@@ -451,8 +451,8 @@ class GetOnBoard implements GetOnBoardGame {
             case 0: return '[GreenLight] : ' + _("If your route ends at an intersection with a [GreenLight], you place an additional marker.");
             case 1: return _("<strong>Number:</strong> Possible starting point. You choose between 2 numbers at the beginning of the game to place your Departure Pawn.");
             case 20: return '[OldLady] : ' + _("When a marker reaches [OldLady], check a box on the [OldLady] zone. Add the number next to each checked box at game end.");
-            case 30: return '[Student] : ' + _("When a marker reaches [Student], check a box on the [Student] zone. Multiply [Student] with [School] at game end.");
-            case 32: return '[School] : ' + _("When a marker reaches [School], check a box on the [School] zone. Multiply [Student] with [School] at game end.") + `<br><i>${_("If the [School] is marked with a Star, write the number of [Student] you have checked when a marker reaches it.")}</i>`;
+            case 30: return '[Student] : ' + _("When a marker reaches [Student], check a box on the [Student] zone. Multiply [Student] with [Cinema] at game end.");
+            case 32: return '[Cinema] : ' + _("When a marker reaches [Cinema], check a box on the [Cinema] zone. Multiply [Student] with [Cinema] at game end.") + `<br><i>${_("If the [Cinema] is marked with a Star, write the number of [Student] you have checked when a marker reaches it.")}</i>`;
             case 40: return '[Tourist] : ' + _("When a marker reaches [Tourist], check a box on the first available row on the [Tourist] zone. You will score when you drop off the [Tourist] to [MonumentLight]/[MonumentDark]. If the current row is full and you didn't reach [MonumentLight]/[MonumentDark], nothing happens.");
             case 41: return '[MonumentLight][MonumentDark] : ' +  _("When a marker reaches [MonumentLight]/[MonumentDark], write the score on the column of the [Tourist] at the end of the current row. If the current row is empty, nothing happens.") + `<br><i>${_("If [MonumentLight]/[MonumentDark] is marked with a Star, write the number of [Tourist] you have checked When a marker reaches it.")}</i>`;
             case 50: return '[Businessman] : ' + _("When a marker reaches [Businessman], check a box on the first available row on the [Businessman] zone. You will score when you drop off the [Businessman] to [Office]. If the current row is full and you didn't reach [Office], nothing happens.");

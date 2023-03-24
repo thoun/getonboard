@@ -11,7 +11,7 @@ class PlayerTableStudentsBlock extends PlayerTableBlock {
         }
         for(let i=1; i<=4; i++) {
             html += `
-                    <div id="player-table-${playerId}-schools-checkmark${i}" class="schools checkmark" data-number="${i}"></div>`;
+                    <div id="player-table-${playerId}-cinemas-checkmark${i}" class="cinemas checkmark" data-number="${i}"></div>`;
         }
         html += `
                     <div id="player-table-${playerId}-students-total" class="total"></div>
@@ -30,7 +30,7 @@ class PlayerTableStudentsBlock extends PlayerTableBlock {
             this.setContentAndValidation(`students-checkmark${i}`, current.checkedStudents >= i ? '✔' : '', current.checkedStudents >= i && validated.checkedStudents < i);
         }
         for(let i=1; i<=4; i++) {
-            this.setContentAndValidation(`schools-checkmark${i}`, current.checkedSchools >= i ? '✔' : '', current.checkedSchools >= i && validated.checkedSchools < i);
+            this.setContentAndValidation(`cinemas-checkmark${i}`, current.checkedCinemas >= i ? '✔' : '', current.checkedCinemas >= i && validated.checkedCinemas < i);
         }
         
         if (visibleScoring) {

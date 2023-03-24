@@ -447,7 +447,7 @@ var PlayerTableStudentsBlock = /** @class */ (function (_super) {
             html += "\n                    <div id=\"player-table-".concat(playerId, "-students-checkmark").concat(i, "\" class=\"students checkmark\" data-number=\"").concat(i, "\"></div>");
         }
         for (var i = 1; i <= 4; i++) {
-            html += "\n                    <div id=\"player-table-".concat(playerId, "-schools-checkmark").concat(i, "\" class=\"schools checkmark\" data-number=\"").concat(i, "\"></div>");
+            html += "\n                    <div id=\"player-table-".concat(playerId, "-cinemas-checkmark").concat(i, "\" class=\"cinemas checkmark\" data-number=\"").concat(i, "\"></div>");
         }
         html += "\n                    <div id=\"player-table-".concat(playerId, "-students-total\" class=\"total\"></div>\n                </div>\n        ");
         dojo.place(html, "player-table-".concat(playerId, "-main"));
@@ -461,7 +461,7 @@ var PlayerTableStudentsBlock = /** @class */ (function (_super) {
             this.setContentAndValidation("students-checkmark".concat(i), current.checkedStudents >= i ? '✔' : '', current.checkedStudents >= i && validated.checkedStudents < i);
         }
         for (var i = 1; i <= 4; i++) {
-            this.setContentAndValidation("schools-checkmark".concat(i), current.checkedSchools >= i ? '✔' : '', current.checkedSchools >= i && validated.checkedSchools < i);
+            this.setContentAndValidation("cinemas-checkmark".concat(i), current.checkedCinemas >= i ? '✔' : '', current.checkedCinemas >= i && validated.checkedCinemas < i);
         }
         if (visibleScoring) {
             this.setContentAndValidation("students-total", current.total, current.total !== validated.total);
@@ -897,7 +897,7 @@ function formatTextIcons(rawText) {
         .replace(/\[GreenLight\]/ig, '<div class="map-icon" data-element="0"></div>')
         .replace(/\[OldLady\]/ig, '<div class="map-icon" data-element="20"></div>')
         .replace(/\[Student\]/ig, '<div class="map-icon" data-element="30"></div>')
-        .replace(/\[School\]/ig, '<div class="map-icon" data-element="32"></div>')
+        .replace(/\[Cinema\]/ig, '<div class="map-icon" data-element="32"></div>')
         .replace(/\[Tourist\]/ig, '<div class="map-icon" data-element="40"></div>')
         .replace(/\[MonumentLight\]/ig, '<div class="map-icon" data-element="41"></div>')
         .replace(/\[MonumentDark\]/ig, '<div class="map-icon" data-element="42"></div>')
@@ -1252,8 +1252,8 @@ var GetOnBoard = /** @class */ (function () {
             case 0: return '[GreenLight] : ' + _("If your route ends at an intersection with a [GreenLight], you place an additional marker.");
             case 1: return _("<strong>Number:</strong> Possible starting point. You choose between 2 numbers at the beginning of the game to place your Departure Pawn.");
             case 20: return '[OldLady] : ' + _("When a marker reaches [OldLady], check a box on the [OldLady] zone. Add the number next to each checked box at game end.");
-            case 30: return '[Student] : ' + _("When a marker reaches [Student], check a box on the [Student] zone. Multiply [Student] with [School] at game end.");
-            case 32: return '[School] : ' + _("When a marker reaches [School], check a box on the [School] zone. Multiply [Student] with [School] at game end.") + "<br><i>".concat(_("If the [School] is marked with a Star, write the number of [Student] you have checked when a marker reaches it."), "</i>");
+            case 30: return '[Student] : ' + _("When a marker reaches [Student], check a box on the [Student] zone. Multiply [Student] with [Cinema] at game end.");
+            case 32: return '[Cinema] : ' + _("When a marker reaches [Cinema], check a box on the [Cinema] zone. Multiply [Student] with [Cinema] at game end.") + "<br><i>".concat(_("If the [Cinema] is marked with a Star, write the number of [Student] you have checked when a marker reaches it."), "</i>");
             case 40: return '[Tourist] : ' + _("When a marker reaches [Tourist], check a box on the first available row on the [Tourist] zone. You will score when you drop off the [Tourist] to [MonumentLight]/[MonumentDark]. If the current row is full and you didn't reach [MonumentLight]/[MonumentDark], nothing happens.");
             case 41: return '[MonumentLight][MonumentDark] : ' + _("When a marker reaches [MonumentLight]/[MonumentDark], write the score on the column of the [Tourist] at the end of the current row. If the current row is empty, nothing happens.") + "<br><i>".concat(_("If [MonumentLight]/[MonumentDark] is marked with a Star, write the number of [Tourist] you have checked When a marker reaches it."), "</i>");
             case 50: return '[Businessman] : ' + _("When a marker reaches [Businessman], check a box on the first available row on the [Businessman] zone. You will score when you drop off the [Businessman] to [Office]. If the current row is full and you didn't reach [Office], nothing happens.");
