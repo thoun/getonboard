@@ -1,12 +1,12 @@
 {
-  "name": "getonboard",
+  "name": "getonboardparisrome",
   "version": "1.0.0",
   "description": "",
-  "main": "getonboard.js",
+  "main": "getonboardparisrome.js",
   "scripts": {
     "build:ts": "rollup -c",
     "watch:ts": "rollup -c -w",
-    "build:scss": "sass --no-source-map src/scss/getonboard.scss getonboard.css"
+    "build:scss": "sass --no-source-map src/scss/getonboard.scss getonboardparisrome.css"
   },
   "author": "",
   "license": "ISC",

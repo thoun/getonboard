@@ -16,7 +16,7 @@
   *
   */
 
-namespace Bga\Games\GetOnBoard;
+namespace Bga\Games\GetOnBoardParisRome;
 
 use Bga\GameFramework\Components\Deck;
 use Bga\GameFramework\Table;

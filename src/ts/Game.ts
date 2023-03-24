@@ -103,7 +103,7 @@ export class Game {
         this.tableCenter = new TableCenter(this, gamedatas);
         this.createPlayerTables(gamedatas);
         const entries = [
-            new BgaJumpTo.Entry(gamedatas.map === 'big' ? 'London' : 'New-York', 'map', {
+            new BgaJumpTo.Entry(gamedatas.map === 'big' ? 'Paris' : 'Roma', 'map', {
                 color: '#000000',
                 backgroundImage: `url('${this.bga.images.getImgUrl(gamedatas.map === 'big' ? 'map-big.jpg' : 'map-small.jpg')}')`,
                 backgroundSize: 'cover',
