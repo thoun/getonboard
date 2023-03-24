@@ -12,10 +12,6 @@ class PlayerTableTouristsBlock extends PlayerTableBlock {
             html += `
                     <div id="player-table-${playerId}-tourists-dark-checkmark${i}" class="monument dark checkmark" data-number="${i}"></div>`;
         }
-        html += `
-                    <div id="player-table-${playerId}-tourists-specialLight" class="special" data-style="Light"></div>
-                    <div id="player-table-${playerId}-tourists-specialDark" class="special" data-style="Dark"></div>
-                    <div id="player-table-${playerId}-tourists-specialMax" class="special"></div>`;
         for(let row=1; row<=3; row++) {
             for(let i=1; i<=4; i++) {
                 html += `
@@ -43,12 +39,6 @@ class PlayerTableTouristsBlock extends PlayerTableBlock {
         }
         for(let i=1; i<=3; i++) {
             this.setContentAndValidation(`tourists-dark-checkmark${i}`, current.checkedMonumentsDark >= i ? '✔' : '', current.checkedMonumentsDark >= i && validated.checkedMonumentsDark < i);
-        }
-
-        this.setContentAndValidation(`tourists-specialLight`, current.specialMonumentLight, current.specialMonumentLight !== validated.specialMonumentLight);
-        this.setContentAndValidation(`tourists-specialDark`, current.specialMonumentDark, current.specialMonumentDark !== validated.specialMonumentDark);
-        if (visibleScoring) {
-            this.setContentAndValidation(`tourists-specialMax`, current.specialMonumentMax, current.specialMonumentMax !== validated.specialMonumentMax);
         }
         
         for(let row=1; row<=3; row++) {

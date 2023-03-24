@@ -161,7 +161,7 @@ trait StateTrait {
         if ($scoreSheet->oldLadies->checked > 0) {
             $this->setStat((float)$scoreSheet->oldLadies->total / (float)$scoreSheet->oldLadies->checked, 'averagePointsByCheckedOldLadies', $playerId);
         }
-        $checkedStudents = $scoreSheet->students->checkedStudents + $scoreSheet->students->checkedInternships;
+        $checkedStudents = $scoreSheet->students->checkedStudents;
         if ($checkedStudents > 0) {
             $this->setStat((float)$scoreSheet->students->total / (float)$checkedStudents, 'averagePointsByCheckedStudents', $playerId);
         }
