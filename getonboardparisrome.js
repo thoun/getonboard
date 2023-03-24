@@ -744,7 +744,7 @@ var TableCenter = /** @class */ (function () {
             }
             var departure = elements.find(function (element) { return element >= 1 && element <= 12; });
             var coordinates = _this.getCoordinatesFromPosition(position);
-            var html = "<div id=\"intersection".concat(position, "\" class=\"intersection ").concat(elements.some(function (element) { return element == 0; }) ? 'green-light' : '');
+            var html = "<div id=\"intersection".concat(position, "\" class=\"intersection ").concat(elements.some(function (element) { return element == 0; }) ? 'station' : '');
             if (departure > 0) {
                 html += " departure\" data-departure=".concat(departure);
             }
@@ -894,7 +894,7 @@ function formatTextIcons(rawText) {
         return '';
     }
     return rawText
-        .replace(/\[GreenLight\]/ig, '<div class="map-icon" data-element="0"></div>')
+        .replace(/\[Station\]/ig, '<div class="map-icon" data-element="0"></div>')
         .replace(/\[OldLady\]/ig, '<div class="map-icon" data-element="20"></div>')
         .replace(/\[Student\]/ig, '<div class="map-icon" data-element="30"></div>')
         .replace(/\[Cinema\]/ig, '<div class="map-icon" data-element="32"></div>')
@@ -1250,7 +1250,7 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.getTooltip = function (element) {
         switch (element) {
-            case 0: return '[GreenLight] : ' + _("If your route ends at an intersection with a [GreenLight], you place an additional marker.");
+            case 0: return '[Station] : ' + _("If your route ends at an intersection with a [Station], you place an additional marker.");
             case 1: return _("<strong>Number:</strong> Possible starting point. You choose between 2 numbers at the beginning of the game to place your Departure Pawn.");
             case 20: return '[OldLady] : ' + _("When a marker reaches [OldLady], check a box on the [OldLady] zone. Add the number next to each checked box at game end.");
             case 30: return '[Student] : ' + _("When a marker reaches [Student], check a box on the [Student] zone. Multiply [Student] with [Cinema] at game end.");

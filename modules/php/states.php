@@ -41,7 +41,11 @@ trait StateTrait {
         $this->tickets->moveAllCardsInLocation(null, 'deck');
         $this->tickets->shuffle('deck');
 
-        $this->tickets->pickCardForLocation('deck', 'turn');
+        $ticket = $this->getCardsFromDb($this->tickets->pickCardForLocation('deck', 'turn'));
+
+        if (in_array(count($this->getPlayersIds()), [2, 3])) {
+            $this->setGameStateValue(CONNECTION_COLOR, $ticket->type % 2 == 0 ? 1 : 2);
+        }
 
         $this->notifCurrentRound();
 

@@ -156,10 +156,10 @@ trait ActionTrait {
         $markersPlaced = count($unvalidatedRoutesIds);
         $this->incStat($markersPlaced, 'markersPlaced');
         $this->incStat($markersPlaced, 'markersPlaced', $playerId);
-        $greenLightsUsed = $markersPlaced - count($this->getPlayerTurnShape($playerId));
-        if ($greenLightsUsed > 0) {
-            $this->incStat($greenLightsUsed, 'greenLightsUsed');
-            $this->incStat($greenLightsUsed, 'greenLightsUsed', $playerId);
+        $stationsUsed = $markersPlaced - count($this->getPlayerTurnShape($playerId));
+        if ($stationsUsed > 0) {
+            $this->incStat($stationsUsed, 'stationsUsed');
+            $this->incStat($stationsUsed, 'stationsUsed', $playerId);
         }
         $turnZoneUsed = count(array_filter($unvalidatedRoutes, fn($route) => $route->useTurnZone));
         if ($turnZoneUsed > 0) {

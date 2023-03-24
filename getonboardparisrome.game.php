@@ -47,6 +47,7 @@ class GetOnBoardParisRome extends Table {
         self::initGameStateLabels([
             FIRST_PLAYER => 10,
             ELIMINATE_PLAYER => 11,
+            CONNECTION_COLOR => 12,
 
             SCORING_OPTION => 100,
         ]);   
@@ -104,12 +105,13 @@ class GetOnBoardParisRome extends Table {
         // Init global values with their initial values
         self::setGameStateInitialValue(FIRST_PLAYER, intval(array_keys($players)[0]));
         self::setGameStateInitialValue(ELIMINATE_PLAYER, 0);
+        self::setGameStateInitialValue(CONNECTION_COLOR, 0);
         
         // Init game statistics
         foreach(['table', 'player'] as $statType) {
             $this->initStat($statType, 'turnsNumber', 0);
             $this->initStat($statType, 'markersPlaced', 0);
-            $this->initStat($statType, 'greenLightsUsed', 0);
+            $this->initStat($statType, 'stationsUsed', 0);
             $this->initStat($statType, 'turnZoneUsed', 0);
             $this->initStat($statType, 'trafficJamUsed', 0);
             $this->initStat($statType, 'commonObjectivesFirst', 0);
@@ -161,7 +163,7 @@ class GetOnBoardParisRome extends Table {
             $playerDb['departurePosition'] = $showDeparturePosition ? intval($playerDb['departurePosition']) : null;
             $placedRoutes = $this->getPlacedRoutes($playerId);
             $playerDb['markers'] = $placedRoutes;
-        $playerDb['scoreSheets'] = $this->getScoreSheets($playerId, $placedRoutes, $commonObjectives, $isEndScore);
+            $playerDb['scoreSheets'] = $this->getScoreSheets($playerId, $placedRoutes, $commonObjectives, $isEndScore);
 
             if ($playerId === $currentPlayerId || $isEndScore) {
                 $personalObjective = intval($this->getUniqueValueFromDB("SELECT player_personal_objective FROM `player` where `player_id` = $playerId"));

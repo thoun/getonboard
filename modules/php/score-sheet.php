@@ -33,6 +33,14 @@ trait ScoreSheetTrait {
         return $total;
     }
 
+    function addStationToScoreSheetAndUpdateTotal(ScoreSheet &$scoreSheet, bool $useStation) {
+        $scoreSheet->stations->encircled++;
+        if ($useStation) {
+            $scoreSheet->stations->checked++;
+        }
+        $scoreSheet->stations->total = 2 * ($scoreSheet->stations->encircled - $scoreSheet->stations->checked);
+    }
+
     function addOldLadyToScoreSheetAndUpdateTotal(ScoreSheet &$scoreSheet, array $commonObjectives, int $round) {
         $scoreSheet->oldLadies->checked++;
         $scoreSheet->oldLadies->total = $this->getTotalForSimpleZone($scoreSheet->oldLadies->checked, $this->OLD_LADIES_POINTS);
@@ -95,7 +103,7 @@ trait ScoreSheetTrait {
         $this->checkCompletedCommonObjective($scoreSheet, $commonObjectives, TOURIST, $totalCheckedTourists, $round);
     }
     
-    function addLoverToScoreSheet(ScoreSheet &$scoreSheet, array $commonObjectives, int $round) {
+    function addLoverToScoreSheet(ScoreSheet &$scoreSheet, bool $dark, array $commonObjectives, int $round) {
         $rowIndex = count($scoreSheet->lovers->subTotals);
         if ($rowIndex >= 3) {
             return;
@@ -151,7 +159,7 @@ trait ScoreSheetTrait {
         $scoreSheet->trafficJam->total = $this->getTotalForSimpleZone($scoreSheet->trafficJam->checked, $this->TRAFFIC_JAM_POINTS);
     }
 
-    function getScoreSheet(array $placedRoutes, array $mapPositions, array $personalObjectives, array $commonObjectives, bool $endScoring = false) {
+    function getScoreSheet(int $connectionColor, array $placedRoutes, array $mapPositions, array $personalObjectives, array $commonObjectives, bool $endScoring = false) {
         $scoreSheet = new ScoreSheet();
 
         $visitedLetters = [];
@@ -161,14 +169,19 @@ trait ScoreSheetTrait {
             $round = $placedRoute->round;
 
             foreach ($mapPosition as $element) {
-                if ($element > 90 && $scoreSheet->personalObjective->total != 10) {
+                if ($element > 90 && $scoreSheet->personalObjective->total < 10) {
                     $visitedLetters[] = $element;
 
-                    if ($endScoring && $this->array_every($personalObjectives, fn($letter) => in_array($letter, $visitedLetters))) {
-                        $scoreSheet->personalObjective->total = 10;
+                    if ($endScoring) {
+                        $visitedLettersCount = count(array_filter($personalObjectives, fn($letter) => in_array($letter, $visitedLetters)));
+                        $scoreSheet->personalObjective->total = $this->PERSONAL_OBJECTIVE_POINTS[$visitedLettersCount];
                     }
                 } else {
                     switch ($element) {
+                        // stations
+                        case STATION:
+                            $this->addStationToScoreSheetAndUpdateTotal($scoreSheet, $placedRoute->useStation);
+                            break;
                         // old ladies
                         case OLD_LADY:
                             $this->addOldLadyToScoreSheetAndUpdateTotal($scoreSheet, $commonObjectives, $round);
@@ -201,7 +214,8 @@ trait ScoreSheetTrait {
 
                         // lovers
                         case LOVER_LIGHT:
-                            $this->addLoverToScoreSheet($scoreSheet, $commonObjectives, $round);
+                        case LOVER_DARK:
+                            $this->addLoverToScoreSheet($scoreSheet, $element == LOVER_DARK, $commonObjectives, $round);
                             break;
                         case RESTAURANT:
                             $this->addRestaurantToScoreSheet($scoreSheet, $commonObjectives, $round);
@@ -237,6 +251,7 @@ trait ScoreSheetTrait {
     }
 
     function getScoreSheets(int $playerId, array $placedRoutes, array $commonObjectives, bool $endScoring = false) {
+        $connectionColor = intval($this->getGameStateValue(CONNECTION_COLOR));
 
         $mapPositions = $this->MAP_POSITIONS[$this->getMap()];
 
@@ -244,10 +259,10 @@ trait ScoreSheetTrait {
 
         $validatedPlacedRoutes = array_values(array_filter($placedRoutes, fn($placedRoute) => $placedRoute->validated));
 
-        $validatedScoreSheet = $this->getScoreSheet($validatedPlacedRoutes, $mapPositions, $personalObjective, $commonObjectives, $endScoring);
+        $validatedScoreSheet = $this->getScoreSheet($connectionColor, $validatedPlacedRoutes, $mapPositions, $personalObjective, $commonObjectives, $endScoring);
         $currentScoreSheet = count($validatedPlacedRoutes) === count($placedRoutes) ? 
             $validatedScoreSheet : 
-            $this->getScoreSheet($placedRoutes, $mapPositions, $personalObjective, $commonObjectives, $endScoring);
+            $this->getScoreSheet($connectionColor, $placedRoutes, $mapPositions, $personalObjective, $commonObjectives, $endScoring);
 
         return new ScoreSheets(
             $validatedScoreSheet,

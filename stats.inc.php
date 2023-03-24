@@ -58,9 +58,9 @@ $commonStats = [
         "name" => totranslate("Markers placed"),
         "type" => "int"
     ],
-    "greenLightsUsed" => [
+    "stationsUsed" => [
         "id" => 13,
-        "name" => totranslate("Green lights used"),
+        "name" => totranslate("Stations used"),
         "type" => "int"
     ],
     "turnZoneUsed" => [
