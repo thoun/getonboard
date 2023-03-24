@@ -446,13 +446,10 @@ var PlayerTableStudentsBlock = /** @class */ (function (_super) {
         for (var i = 1; i <= 6; i++) {
             html += "\n                    <div id=\"player-table-".concat(playerId, "-students-checkmark").concat(i, "\" class=\"students checkmark\" data-number=\"").concat(i, "\"></div>");
         }
-        for (var i = 1; i <= 3; i++) {
-            html += "\n                    <div id=\"player-table-".concat(playerId, "-internships-checkmark").concat(i, "\" class=\"internships checkmark\" data-number=\"").concat(i, "\"></div>");
-        }
         for (var i = 1; i <= 4; i++) {
             html += "\n                    <div id=\"player-table-".concat(playerId, "-schools-checkmark").concat(i, "\" class=\"schools checkmark\" data-number=\"").concat(i, "\"></div>");
         }
-        html += "\n                    <div id=\"player-table-".concat(playerId, "-students-special\" class=\"special\"></div>\n                    <div id=\"player-table-").concat(playerId, "-students-subtotal\" class=\"subtotal\"></div>\n                    <div id=\"player-table-").concat(playerId, "-students-total\" class=\"total\"></div>\n                </div>\n        ");
+        html += "\n                    <div id=\"player-table-".concat(playerId, "-students-total\" class=\"total\"></div>\n                </div>\n        ");
         dojo.place(html, "player-table-".concat(playerId, "-main"));
         _this.updateScoreSheet(scoreSheets, visibleScoring);
         return _this;
@@ -463,15 +460,10 @@ var PlayerTableStudentsBlock = /** @class */ (function (_super) {
         for (var i = 1; i <= 6; i++) {
             this.setContentAndValidation("students-checkmark".concat(i), current.checkedStudents >= i ? '✔' : '', current.checkedStudents >= i && validated.checkedStudents < i);
         }
-        for (var i = 1; i <= 3; i++) {
-            this.setContentAndValidation("internships-checkmark".concat(i), current.checkedInternships >= i ? '✔' : '', current.checkedInternships >= i && validated.checkedInternships < i);
-        }
         for (var i = 1; i <= 4; i++) {
             this.setContentAndValidation("schools-checkmark".concat(i), current.checkedSchools >= i ? '✔' : '', current.checkedSchools >= i && validated.checkedSchools < i);
         }
-        this.setContentAndValidation("students-special", current.specialSchool, current.specialSchool !== validated.specialSchool);
         if (visibleScoring) {
-            this.setContentAndValidation("students-subtotal", current.subTotal, current.subTotal !== validated.subTotal);
             this.setContentAndValidation("students-total", current.total, current.total !== validated.total);
         }
     };
@@ -488,7 +480,6 @@ var PlayerTableTouristsBlock = /** @class */ (function (_super) {
         for (var i = 1; i <= 3; i++) {
             html += "\n                    <div id=\"player-table-".concat(playerId, "-tourists-dark-checkmark").concat(i, "\" class=\"monument dark checkmark\" data-number=\"").concat(i, "\"></div>");
         }
-        html += "\n                    <div id=\"player-table-".concat(playerId, "-tourists-specialLight\" class=\"special\" data-style=\"Light\"></div>\n                    <div id=\"player-table-").concat(playerId, "-tourists-specialDark\" class=\"special\" data-style=\"Dark\"></div>\n                    <div id=\"player-table-").concat(playerId, "-tourists-specialMax\" class=\"special\"></div>");
         for (var row = 1; row <= 3; row++) {
             for (var i = 1; i <= 4; i++) {
                 html += "\n                        <div id=\"player-table-".concat(playerId, "-tourists-checkmark").concat(row, "-").concat(i, "\" class=\"tourists checkmark\" data-row=\"").concat(row, "\" data-number=\"").concat(i, "\"></div>");
@@ -508,11 +499,6 @@ var PlayerTableTouristsBlock = /** @class */ (function (_super) {
         for (var i = 1; i <= 3; i++) {
             this.setContentAndValidation("tourists-dark-checkmark".concat(i), current.checkedMonumentsDark >= i ? '✔' : '', current.checkedMonumentsDark >= i && validated.checkedMonumentsDark < i);
         }
-        this.setContentAndValidation("tourists-specialLight", current.specialMonumentLight, current.specialMonumentLight !== validated.specialMonumentLight);
-        this.setContentAndValidation("tourists-specialDark", current.specialMonumentDark, current.specialMonumentDark !== validated.specialMonumentDark);
-        if (visibleScoring) {
-            this.setContentAndValidation("tourists-specialMax", current.specialMonumentMax, current.specialMonumentMax !== validated.specialMonumentMax);
-        }
         for (var row = 1; row <= 3; row++) {
             for (var i = 1; i <= 4; i++) {
                 this.setContentAndValidation("tourists-checkmark".concat(row, "-").concat(i), current.checkedTourists[row - 1] >= i ? '✔' : (current.subTotals[row - 1] ? '⎯⎯' : ''), current.checkedTourists[row - 1] >= i && validated.checkedTourists[row - 1] < i);
@@ -529,7 +515,7 @@ var PlayerTableBusinessmenBlock = /** @class */ (function (_super) {
     __extends(PlayerTableBusinessmenBlock, _super);
     function PlayerTableBusinessmenBlock(playerId, scoreSheets, visibleScoring) {
         var _this = _super.call(this, playerId) || this;
-        var html = "\n        <div id=\"businessmen-block-".concat(playerId, "\" data-tooltip=\"[50,51]\" class=\"businessmen block\" data-zone=\"5\">\n                    <div id=\"player-table-").concat(playerId, "-businessmen-special\" class=\"special\"></div>");
+        var html = "\n        <div id=\"businessmen-block-".concat(playerId, "\" data-tooltip=\"[50,51]\" class=\"businessmen block\" data-zone=\"5\">");
         for (var row = 1; row <= 3; row++) {
             for (var i = 1; i <= 3; i++) {
                 html += "\n                        <div id=\"player-table-".concat(playerId, "-businessmen-checkmark").concat(row, "-").concat(i, "\" class=\"checkmark\" data-row=\"").concat(row, "\" data-number=\"").concat(i, "\"></div>");
@@ -543,7 +529,6 @@ var PlayerTableBusinessmenBlock = /** @class */ (function (_super) {
     PlayerTableBusinessmenBlock.prototype.updateScoreSheet = function (scoreSheets, visibleScoring) {
         var current = scoreSheets.current.businessmen;
         var validated = scoreSheets.validated.businessmen;
-        this.setContentAndValidation("businessmen-special", current.specialOffice, current.specialOffice !== validated.specialOffice);
         for (var row = 1; row <= 3; row++) {
             for (var i = 1; i <= 3; i++) {
                 this.setContentAndValidation("businessmen-checkmark".concat(row, "-").concat(i), current.checkedBusinessmen[row - 1] >= i ? '✔' : (current.subTotals[row - 1] ? '⎯⎯' : ''), current.checkedBusinessmen[row - 1] >= i && validated.checkedBusinessmen[row - 1] < i);
@@ -1391,7 +1376,7 @@ var GetOnBoard = /** @class */ (function () {
                         checked = scoreSheet.oldLadies.checked;
                         break;
                     case 30: //STUDENT
-                        checked = scoreSheet.students.checkedStudents + scoreSheet.students.checkedInternships;
+                        checked = scoreSheet.students.checkedStudents;
                         break;
                     case 40: //TOURIST
                         checked = scoreSheet.tourists.checkedTourists.reduce(function (a, b) { return a + b; }, 0);

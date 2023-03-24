@@ -36,15 +36,6 @@
     }
   }
 
-  .checkmark.internships {
-    @for $i from 0 through 2 {
-      &[data-number="#{$i+1}"] {
-        top: 133px;
-        left: #{28 + $i * 30}px;
-      }
-    }
-  }
-
   .checkmark.schools {
     @for $i from 0 through 3 {
       &[data-number="#{$i+1}"] {
@@ -52,14 +43,6 @@
         left: #{141 + ($i % 2) * 31}px;
       }
     }
-  }
-
-  .special {
-    top: 29px;
-  }
-
-  .subtotal {
-    top: 93px;
   }
 }
 
@@ -99,25 +82,6 @@
     }
   }
 
-  .special {
-    top: 31px;
-    right: 7px;
-
-    &[data-style] {
-      right: 35px;
-      width: 18px;
-      height: 16px;
-      margin-right: 3px;
-      margin-top: -6px;
-    }
-    &[data-style="Light"] {
-      top: 28px;
-    }
-    &[data-style="Dark"] {
-      top: 45px;
-    }
-  }
-
   .subtotal {
     &[data-number="1"] {
       top: 75px;
@@ -136,11 +100,6 @@
   left: 423px;
   width: 244px;
   height: 252px;
-
-  .special {
-    top: 31px;
-    right: 7px;
-  }
 
   .checkmark {
     @for $row from 0 through 2 {
