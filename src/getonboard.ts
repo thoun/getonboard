@@ -399,7 +399,7 @@ class GetOnBoard implements GetOnBoardGame {
             ⇔
         </div>
         <div id="jump-0" class="jump-link">
-            <div class="eye"></div> ${gamedatas.map === 'big' ? 'London' : 'New-York'}
+            <div class="eye"></div> ${gamedatas.map === 'big' ? 'Paris' : 'Roma'}
         </div>`, `jump-controls`);
         document.getElementById(`jump-toggle`).addEventListener('click', () => this.jumpToggle());
         document.getElementById(`jump-0`).addEventListener('click', () => this.jumpToPlayer(0));
@@ -680,7 +680,7 @@ class GetOnBoard implements GetOnBoardGame {
     public takeAction(action: string, data?: any) {
         data = data || {};
         data.lock = true;
-        (this as any).ajaxcall(`/getonboard/getonboard/${action}.html`, data, this, () => {});
+        (this as any).ajaxcall(`/getonboardparisrome/getonboardparisrome/${action}.html`, data, this, () => {});
     }
 
     private startActionTimer(buttonId: string, time: number) {

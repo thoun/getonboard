@@ -1224,7 +1224,7 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.createPlayerJumps = function (gamedatas) {
         var _this = this;
-        dojo.place("\n        <div id=\"jump-toggle\" class=\"jump-link toggle\">\n            \u21D4\n        </div>\n        <div id=\"jump-0\" class=\"jump-link\">\n            <div class=\"eye\"></div> ".concat(gamedatas.map === 'big' ? 'London' : 'New-York', "\n        </div>"), "jump-controls");
+        dojo.place("\n        <div id=\"jump-toggle\" class=\"jump-link toggle\">\n            \u21D4\n        </div>\n        <div id=\"jump-0\" class=\"jump-link\">\n            <div class=\"eye\"></div> ".concat(gamedatas.map === 'big' ? 'Paris' : 'Roma', "\n        </div>"), "jump-controls");
         document.getElementById("jump-toggle").addEventListener('click', function () { return _this.jumpToggle(); });
         document.getElementById("jump-0").addEventListener('click', function () { return _this.jumpToPlayer(0); });
         var orderedPlayers = this.getOrderedPlayers(gamedatas);
@@ -1467,7 +1467,7 @@ var GetOnBoard = /** @class */ (function () {
     GetOnBoard.prototype.takeAction = function (action, data) {
         data = data || {};
         data.lock = true;
-        this.ajaxcall("/getonboard/getonboard/".concat(action, ".html"), data, this, function () { });
+        this.ajaxcall("/getonboardparisrome/getonboardparisrome/".concat(action, ".html"), data, this, function () { });
     };
     GetOnBoard.prototype.startActionTimer = function (buttonId, time) {
         var _a;
@@ -1616,5 +1616,5 @@ define([
     "ebg/counter",
     "ebg/stock"
 ], function (dojo, declare) {
-    return declare("bgagame.getonboard", ebg.core.gamegui, new GetOnBoard());
+    return declare("bgagame.getonboardparisrome", ebg.core.gamegui, new GetOnBoard());
 });

@@ -1,11 +1,11 @@
 {
-  "name": "getonboard",
+  "name": "getonboardparisrome",
   "version": "1.0.0",
   "description": "",
-  "main": "getonboard.js",
+  "main": "getonboardparisrome.js",
   "scripts": {
     "build:ts": "tsc",
-    "build:scss": "sass --no-source-map src/getonboard.scss getonboard.css"
+    "build:scss": "sass --no-source-map src/getonboard.scss getonboardparisrome.css"
   },
   "author": "",
   "license": "ISC",

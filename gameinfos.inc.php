@@ -13,7 +13,7 @@
 $gameinfos = [
 
 // Name of the game in English (will serve as the basis for translation) 
-'game_name' => "Get on Board: New York & London",                
+'game_name' => "Get on Board: Paris & Roma",
 
 // Game publisher (use empty string if there is no publisher)
 'publisher' => 'Iello',                     
@@ -25,7 +25,7 @@ $gameinfos = [
 'publisher_bgg_id' => 8923,
 
 // Board game geek ID of the game
-'bgg_id' => 347013,
+'bgg_id' => 380105,
 
 // Players configuration that can be played (ex: 2 to 4 players)
 'players' => [ 2, 3, 4, 5 ],    

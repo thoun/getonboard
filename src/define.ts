@@ -5,5 +5,5 @@ define([
     "ebg/stock"
 ],
 function (dojo, declare) {
-    return declare("bgagame.getonboard", ebg.core.gamegui, new GetOnBoard());
+    return declare("bgagame.getonboardparisrome", ebg.core.gamegui, new GetOnBoard());
 });

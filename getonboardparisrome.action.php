@@ -21,7 +21,7 @@
  *
  */
 
-class action_getonboard extends APP_GameAction
+class action_getonboardparisrome extends APP_GameAction
 { 
     // Constructor: please do not modify
    	public function __default() {
@@ -29,7 +29,7 @@ class action_getonboard extends APP_GameAction
             $this->view = "common_notifwindow";
   	        $this->viewArgs['table'] = self::getArg( "table", AT_posint, true );
   	    } else {
-            $this->view = "getonboard_getonboard";
+            $this->view = "getonboardparisrome_getonboardparisrome";
             self::trace( "Complete reinitialization of board game" );
         }
   	}
