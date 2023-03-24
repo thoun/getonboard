@@ -225,9 +225,9 @@ trait UtilTrait {
         ));
 
         if (count($unvalidatedRoutes) >= count($turnShape)) {
-            $isGreenLight = in_array(GREEN_LIGHT, $this->MAP_POSITIONS[$mapSize][$position]);
+            $isStation = in_array(STATION, $this->MAP_POSITIONS[$mapSize][$position]);
 
-            if ($isGreenLight) {
+            if ($isStation) {
                 $turnShape = [...$turnShape, 0, 0, 0, 0, 0];
             } else {
                 return [];

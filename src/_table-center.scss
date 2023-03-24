@@ -19,7 +19,7 @@ $marker-size: 6px;
     #map-elements {
       .intersection {
 
-        &:not(.green-light) {
+        &:not(.station) {
           .objective-letter {
             top: -19px;
             right: 8px;
@@ -52,7 +52,7 @@ $marker-size: 6px;
           }
         }        
 
-        &.green-light {
+        &.station {
           .objective-letter {
             top: -28px;
             right: 8px;
@@ -173,7 +173,7 @@ $marker-size: 6px;
         }
       }
 
-      .intersection:not(.green-light) {
+      .intersection:not(.station) {
         .objective-letter {
           top: -13px;
           right: -14px;
@@ -241,14 +241,14 @@ $marker-size: 6px;
         }
       }
 
-      &.green-light {
+      &.station {
         .objective-letter {
           top: -16px;
           right: -8px;
         }
       }
 
-      &:not(.green-light) {
+      &:not(.station) {
         .objective-letter {
           top: -9px;
           right: -14px;
