@@ -42,7 +42,7 @@ trait ScoreSheetTrait {
 
     function updateStudentTotal(ScoreSheet &$scoreSheet, array $commonObjectives, int $round) {
         $checked = $scoreSheet->students->checkedStudents;
-        $scoreSheet->students->total = $checked * $scoreSheet->students->checkedSchools;
+        $scoreSheet->students->total = $checked * $scoreSheet->students->checkedCinemas;
         
         $this->checkCompletedCommonObjective($scoreSheet, $commonObjectives, STUDENT, $checked, $round);
     }
@@ -181,9 +181,9 @@ trait ScoreSheetTrait {
                                 $this->updateStudentTotal($scoreSheet, $commonObjectives, $round);
                             }
                             break;
-                        case SCHOOL:
-                            if ($scoreSheet->students->checkedSchools < 4) {
-                                $scoreSheet->students->checkedSchools++;
+                        case CINEMA:
+                            if ($scoreSheet->students->checkedCinemas < 4) {
+                                $scoreSheet->students->checkedCinemas++;
                                 $this->updateStudentTotal($scoreSheet, $commonObjectives, $round);
                             }
                             break;
