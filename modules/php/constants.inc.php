@@ -41,7 +41,7 @@ define('GREEN_LIGHT', 0);
 define('OLD_LADY', 20);
 
 define('STUDENT', 30);
-define('SCHOOL', 32);
+define('CINEMA', 32);
 
 define('TOURIST', 40);
 define('MONUMENT_LIGHT', 41);

@@ -36,7 +36,7 @@
     }
   }
 
-  .checkmark.schools {
+  .checkmark.cinemas {
     @for $i from 0 through 3 {
       &[data-number="#{$i+1}"] {
         top: #{79 + floor($i / 2) * 31}px;
