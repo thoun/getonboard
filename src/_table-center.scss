@@ -52,73 +52,30 @@ $marker-size: 6px;
     
     #map-elements {
       .intersection {
-        background: #FF000066;
 
         &:not(.station) {
           .objective-letter {
-            top: -19px;
-            right: 8px;
+            top: -15px;
+            right: -13px;
 
-            &[data-position="16"] {
-              top: -21px;
-            }
-            &[data-position="32"] {
-              top: -21px;
-              right: 7px;
-            }
             &[data-position="45"] {
-              top: -21px;
+              top: -14px;
+              right: -14px;
             }
-            &[data-position="63"] {
-              top: -20px;
-              right: 9px;
-            }
-            &[data-position="101"] {
-              top: -21px;
-            }
-            &[data-position="106"] {
-              top: -18px;
-              right: 9px;
-            }
-            &[data-position="133"] {
-              top: -21px;
-              right: 9px;
+            &[data-position="72"], &[data-position="76"], &[data-position="78"] {
+              top: -14px;
+              right: -17px;
             }
           }
         }        
 
         &.station {
           .objective-letter {
-            top: -28px;
-            right: 8px;
+            top: -15px;
+            right: -20px;
 
-            &[data-position="12"] {
-              top: -27px;
-            }
-            &[data-position="25"] {
-              top: -26px;
-            }
-            &[data-position="41"] {
-              top: -25px;
-            }
-            &[data-position="54"] {
-              top: -26px;
-              right: 7px;
-            }
-            &[data-position="81"] {
-              top: -26px;
-              right: 7px;
-            }
-            &[data-position="85"] {
-              top: -24px;
-              right: 4px;
-            }
-            &[data-position="92"] {
-              top: -25px;
-              right: 7px;
-            }
-            &[data-position="112"] {
-              top: -25px;
+            &[data-position="74"] {
+              right: -23px;
             }
           }
         }
@@ -126,15 +83,15 @@ $marker-size: 6px;
 
       .route {
         &[data-direction="0"] {
+          .marker {
+            width: $marker-size;
+          }
+        }
+        &[data-direction="1"] {
           flex-direction: column;
 
           .marker {
             height: $marker-size;
-          }
-        }
-        &[data-direction="1"] {
-          .marker {
-            width: $marker-size;
           }
         }
       }
@@ -186,13 +143,38 @@ $marker-size: 6px;
         }
       }
 
+      .intersection.station {
+        .objective-letter {
+          top: -17px;
+          right: -21px;
+
+          &[data-position="66"], &[data-position="68"], &[data-position="88"] {
+            top: -15px;
+          }
+          &[data-position="102"] {
+            right: -22px;
+          }
+        }
+      }
+
       .intersection:not(.station) {
         .objective-letter {
-          top: -13px;
+          top: -15px;
           right: -14px;
 
-          &[data-position="76"] {
-            top: -9px;
+          &[data-position="73"] {
+            top: -16px;
+            right: -15px;
+          }
+          &[data-position="77"] {
+            right: -15px;
+          }
+          &[data-position="114"] {
+            top: -16px;
+            right: -16px;
+          }
+          &[data-position="118"] {
+            right: -16px;
           }
         }
       }
@@ -234,7 +216,6 @@ $marker-size: 6px;
       width: 32px;
       height: 32px;
       border-radius: 20%;    
-      background: #FF000066;
 
       &.selectable {
         cursor: pointer;
@@ -252,20 +233,6 @@ $marker-size: 6px;
         }
         &[data-reached="false"] {
           box-shadow: 0 0 5px 5px red;
-        }
-      }
-
-      &.station {
-        .objective-letter {
-          top: -16px;
-          right: -8px;
-        }
-      }
-
-      &:not(.station) {
-        .objective-letter {
-          top: -9px;
-          right: -14px;
         }
       }
 

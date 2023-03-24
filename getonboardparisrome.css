@@ -215,78 +215,33 @@
 #map[data-size=small].hd {
   background-image: url("img/hd/map-small-no-grid.jpg"), url("img/map-small-no-grid.jpg");
 }
-#map[data-size=small] #map-elements .intersection {
-  background: #FF000066;
-}
 #map[data-size=small] #map-elements .intersection:not(.station) .objective-letter {
-  top: -19px;
-  right: 8px;
-}
-#map[data-size=small] #map-elements .intersection:not(.station) .objective-letter[data-position="16"] {
-  top: -21px;
-}
-#map[data-size=small] #map-elements .intersection:not(.station) .objective-letter[data-position="32"] {
-  top: -21px;
-  right: 7px;
+  top: -15px;
+  right: -13px;
 }
 #map[data-size=small] #map-elements .intersection:not(.station) .objective-letter[data-position="45"] {
-  top: -21px;
+  top: -14px;
+  right: -14px;
 }
-#map[data-size=small] #map-elements .intersection:not(.station) .objective-letter[data-position="63"] {
-  top: -20px;
-  right: 9px;
-}
-#map[data-size=small] #map-elements .intersection:not(.station) .objective-letter[data-position="101"] {
-  top: -21px;
-}
-#map[data-size=small] #map-elements .intersection:not(.station) .objective-letter[data-position="106"] {
-  top: -18px;
-  right: 9px;
-}
-#map[data-size=small] #map-elements .intersection:not(.station) .objective-letter[data-position="133"] {
-  top: -21px;
-  right: 9px;
+#map[data-size=small] #map-elements .intersection:not(.station) .objective-letter[data-position="72"], #map[data-size=small] #map-elements .intersection:not(.station) .objective-letter[data-position="76"], #map[data-size=small] #map-elements .intersection:not(.station) .objective-letter[data-position="78"] {
+  top: -14px;
+  right: -17px;
 }
 #map[data-size=small] #map-elements .intersection.station .objective-letter {
-  top: -28px;
-  right: 8px;
+  top: -15px;
+  right: -20px;
 }
-#map[data-size=small] #map-elements .intersection.station .objective-letter[data-position="12"] {
-  top: -27px;
-}
-#map[data-size=small] #map-elements .intersection.station .objective-letter[data-position="25"] {
-  top: -26px;
-}
-#map[data-size=small] #map-elements .intersection.station .objective-letter[data-position="41"] {
-  top: -25px;
-}
-#map[data-size=small] #map-elements .intersection.station .objective-letter[data-position="54"] {
-  top: -26px;
-  right: 7px;
-}
-#map[data-size=small] #map-elements .intersection.station .objective-letter[data-position="81"] {
-  top: -26px;
-  right: 7px;
-}
-#map[data-size=small] #map-elements .intersection.station .objective-letter[data-position="85"] {
-  top: -24px;
-  right: 4px;
-}
-#map[data-size=small] #map-elements .intersection.station .objective-letter[data-position="92"] {
-  top: -25px;
-  right: 7px;
-}
-#map[data-size=small] #map-elements .intersection.station .objective-letter[data-position="112"] {
-  top: -25px;
-}
-#map[data-size=small] #map-elements .route[data-direction="0"] {
-  flex-direction: column;
+#map[data-size=small] #map-elements .intersection.station .objective-letter[data-position="74"] {
+  right: -23px;
 }
 #map[data-size=small] #map-elements .route[data-direction="0"] .marker {
-  height: 6px;
+  width: 6px;
+}
+#map[data-size=small] #map-elements .route[data-direction="1"] {
+  flex-direction: column;
 }
 #map[data-size=small] #map-elements .route[data-direction="1"] .marker {
-  width: 6px;
+  height: 6px;
 }
 #map[data-size=small] #map-elements .common-objective-slot {
   top: 10px;
@@ -321,12 +276,33 @@
 #map[data-size=big] #map-elements .route[data-direction="1"] .marker {
   height: 6px;
 }
+#map[data-size=big] #map-elements .intersection.station .objective-letter {
+  top: -17px;
+  right: -21px;
+}
+#map[data-size=big] #map-elements .intersection.station .objective-letter[data-position="66"], #map[data-size=big] #map-elements .intersection.station .objective-letter[data-position="68"], #map[data-size=big] #map-elements .intersection.station .objective-letter[data-position="88"] {
+  top: -15px;
+}
+#map[data-size=big] #map-elements .intersection.station .objective-letter[data-position="102"] {
+  right: -22px;
+}
 #map[data-size=big] #map-elements .intersection:not(.station) .objective-letter {
-  top: -13px;
+  top: -15px;
   right: -14px;
 }
-#map[data-size=big] #map-elements .intersection:not(.station) .objective-letter[data-position="76"] {
-  top: -9px;
+#map[data-size=big] #map-elements .intersection:not(.station) .objective-letter[data-position="73"] {
+  top: -16px;
+  right: -15px;
+}
+#map[data-size=big] #map-elements .intersection:not(.station) .objective-letter[data-position="77"] {
+  right: -15px;
+}
+#map[data-size=big] #map-elements .intersection:not(.station) .objective-letter[data-position="114"] {
+  top: -16px;
+  right: -16px;
+}
+#map[data-size=big] #map-elements .intersection:not(.station) .objective-letter[data-position="118"] {
+  right: -16px;
 }
 #map[data-size=big] #map-elements .common-objective-slot {
   top: 12px;
@@ -359,7 +335,6 @@
   width: 32px;
   height: 32px;
   border-radius: 20%;
-  background: #FF000066;
 }
 #map #map-elements .intersection.selectable {
   cursor: pointer;
@@ -376,14 +351,6 @@
 }
 #map #map-elements .intersection .objective-letter[data-reached=false] {
   box-shadow: 0 0 5px 5px red;
-}
-#map #map-elements .intersection.station .objective-letter {
-  top: -16px;
-  right: -8px;
-}
-#map #map-elements .intersection:not(.station) .objective-letter {
-  top: -9px;
-  right: -14px;
 }
 #map #map-elements .intersection.glow {
   background: var(--background);

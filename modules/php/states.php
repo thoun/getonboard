@@ -41,7 +41,7 @@ trait StateTrait {
         $this->tickets->moveAllCardsInLocation(null, 'deck');
         $this->tickets->shuffle('deck');
 
-        $ticket = $this->getCardsFromDb($this->tickets->pickCardForLocation('deck', 'turn'));
+        $ticket = $this->getCardFromDb($this->tickets->pickCardForLocation('deck', 'turn'));
 
         if (in_array(count($this->getPlayersIds()), [2, 3])) {
             $this->setGameStateValue(CONNECTION_COLOR, $ticket->type % 2 == 0 ? 1 : 2);
