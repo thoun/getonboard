@@ -166,19 +166,19 @@ trait UtilTrait {
         return ($route->from === $from && $route->to === $to) || ($route->to === $from && $route->from === $to);
     }
 
-    function isBusyRoute(array $busyRoutes, int $position, int $destination) {
+    function isConnectionRoute(array $connectionRoutes, int $position, int $destination) {
         return 
-            (array_key_exists($position, $busyRoutes) && in_array($destination, $busyRoutes[$position])) ||
-            (array_key_exists($destination, $busyRoutes) && in_array($position, $busyRoutes[$destination]));
+            (array_key_exists($position, $connectionRoutes) && in_array($destination, $connectionRoutes[$position])) ||
+            (array_key_exists($destination, $connectionRoutes) && in_array($position, $connectionRoutes[$destination]));
     }
 
-    function createPossibleRoute(int $position, int $destination, array $allPlacedRoutes, array $playerPlacedRoutes, array $unvalidatedRoutes, array $turnShape, array $busyRoutes) {
+    function createPossibleRoute(int $position, int $destination, array $allPlacedRoutes, array $playerPlacedRoutes, array $unvalidatedRoutes, array $turnShape, array $connectionRoutes) {
         $trafficJam = count(array_filter(
             $allPlacedRoutes, 
             fn($route) => $this->isSameRoute($route, $position, $destination)
         ));
 
-        if ($this->isBusyRoute($busyRoutes, $position, $destination)) {
+        if ($this->isConnectionRoute($connectionRoutes, $position, $destination)) {
             $trafficJam++;
         }
 
@@ -214,7 +214,7 @@ trait UtilTrait {
     }
 
     function getPossibleRoutes(int $playerId, string $mapSize, array $turnShape, int $position, array $allPlacedRoutes) {
-        $busyRoutes = $this->BUSY_ROUTES[$mapSize];
+        $connectionRoutes = $this->CONNECTION_COLORS[$mapSize][intval($this->getGameStateValue(CONNECTION_COLOR))];
 
         $playerPlacedRoutes = array_filter($allPlacedRoutes, fn($placedRoute) => $placedRoute->playerId === $playerId);
         $unvalidatedRoutes = array_filter($playerPlacedRoutes, fn($placedRoute) => !$placedRoute->validated);
@@ -234,7 +234,7 @@ trait UtilTrait {
             }
         }
 
-        $possibleRoutes = array_map(fn($destination) => $this->createPossibleRoute($position, $destination, $allPlacedRoutes, $playerPlacedRoutes, $unvalidatedRoutes, $turnShape, $busyRoutes), $possibleDestinations);
+        $possibleRoutes = array_map(fn($destination) => $this->createPossibleRoute($position, $destination, $allPlacedRoutes, $playerPlacedRoutes, $unvalidatedRoutes, $turnShape, $connectionRoutes), $possibleDestinations);
 
         $usedTurnZone = count(array_filter($playerPlacedRoutes, fn($placedRoute) => $placedRoute->useTurnZone));
         if ($usedTurnZone >= 5) {
