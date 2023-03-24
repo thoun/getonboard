@@ -739,6 +739,9 @@ var TableCenter = /** @class */ (function () {
             if (elements.includes(51)) {
                 tooltipsIds.push(51);
             }
+            if (elements.includes(52)) {
+                tooltipsIds.push(52);
+            }
             if (elements.some(function (element) { return element >= 97 && element <= 122; })) {
                 tooltipsIds.push(97);
             }
@@ -824,17 +827,17 @@ var TableCenter = /** @class */ (function () {
     };
     TableCenter.prototype.getCoordinatesFromNumberAndDigit = function (number, digit) {
         if (this.gamedatas.map === 'big') {
-            var space = 63.2;
+            var space = 64;
             return [
-                38 + space * number,
-                179 + space * digit,
+                33 + space * number,
+                168 + space * digit,
             ];
         }
         else if (this.gamedatas.map === 'small') {
-            var space = 57.4;
+            var space = 64.1;
             return [
-                213 + space * digit,
-                20 + space * number,
+                33 + space * number,
+                172 + space * digit,
             ];
         }
     };
@@ -1257,8 +1260,9 @@ var GetOnBoard = /** @class */ (function () {
             case 32: return '[Cinema] : ' + _("When a marker reaches [Cinema], check a box on the [Cinema] zone. Multiply [Student] with [Cinema] at game end.") + "<br><i>".concat(_("If the [Cinema] is marked with a Star, write the number of [Student] you have checked when a marker reaches it."), "</i>");
             case 40: return '[Tourist] : ' + _("When a marker reaches [Tourist], check a box on the first available row on the [Tourist] zone. You will score when you drop off the [Tourist] to [MonumentLight]/[MonumentDark]. If the current row is full and you didn't reach [MonumentLight]/[MonumentDark], nothing happens.");
             case 41: return '[MonumentLight][MonumentDark] : ' + _("When a marker reaches [MonumentLight]/[MonumentDark], write the score on the column of the [Tourist] at the end of the current row. If the current row is empty, nothing happens.") + "<br><i>".concat(_("If [MonumentLight]/[MonumentDark] is marked with a Star, write the number of [Tourist] you have checked When a marker reaches it."), "</i>");
-            case 50: return '[Lover] : ' + _("When a marker reaches [Lover], check a box on the first available row on the [Lover] zone. You will score when you drop off the [Lover] to [Restaurant]. If the current row is full and you didn't reach [Restaurant], nothing happens.");
-            case 51: return '[Restaurant] : ' + _("When a marker reaches [Restaurant], write the score on the column of the [Lover] at the end of the current row, and check the corresponding symbol ([OldLady], [Tourist] or [Student]) as if you reached it with a marker. If the current row is empty, nothing happens.") + "<br><i>".concat(_("If the [Restaurant] is marked with a Star, write the number of [Lover] you have checked When a marker reaches it."), "</i>");
+            case 50:
+            case 51: return '[LoverLight][LoverDark] : ' + _("When a marker reaches [LoverLight][LoverDark], check a box on the first available row on the [LoverLight][LoverDark] zone. You will score when you drop off the [LoverLight][LoverDark] to [Restaurant]. If the current row is full and you didn't reach [Restaurant], nothing happens.");
+            case 52: return '[Restaurant] : ' + _("When a marker reaches [Restaurant], write the score on the column of the [LoverLight][LoverDark] at the end of the current row, and check the corresponding symbol ([OldLady], [Tourist] or [Student]) as if you reached it with a marker. If the current row is empty, nothing happens.") + "<br><i>".concat(_("If the [Restaurant] is marked with a Star, write the number of [LoverLight][LoverDark] you have checked When a marker reaches it."), "</i>"); // TODO
             case 90: return _("<strong>Common Objective:</strong> Score 10 points when you complete the objective, or 6 points if another player completed it on a previous round.");
             case 91: return _("<strong>Personal Objective:</strong> Score 10 points when your markers link the 3 Letters of your personal objective.");
             case 92: return _("<strong>Turn Zone:</strong> If you choose to change a turn into a straight line or a straight line to a turn, check a box on the Turn Zone. The score here is negative, and you only have 5 of them!");

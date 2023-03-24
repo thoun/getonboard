@@ -52,6 +52,7 @@ $marker-size: 6px;
     
     #map-elements {
       .intersection {
+        background: #FF000066;
 
         &:not(.station) {
           .objective-letter {
@@ -120,28 +121,6 @@ $marker-size: 6px;
               top: -25px;
             }
           }
-        }
-
-        // shift for star buildings
-        &#intersection11 {
-          left: 204px !important;
-          top: 12px !important;
-        }
-        &#intersection34 {
-          left: 375px !important;
-          top: 130px !important;
-        }
-        &#intersection76 {
-          left: 497px !important;
-          top: 361px !important;
-        }
-        &#intersection84 {
-          left: 374px !important;
-          top: 409px !important;
-        }
-        &#intersection106 {
-          left: 488px !important;
-          top: 524px !important;
         }
       }
 
@@ -254,7 +233,8 @@ $marker-size: 6px;
       position: absolute;
       width: 32px;
       height: 32px;
-      border-radius: 20%;
+      border-radius: 20%;    
+      background: #FF000066;
 
       &.selectable {
         cursor: pointer;
