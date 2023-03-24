@@ -1247,12 +1247,13 @@ html[data-no-grid=true][data-no-building=true] #map[data-size=big].hd {
 }
 .player-table .name {
   position: absolute;
-  top: 99px;
-  left: 62px;
-  width: 133px;
+  bottom: 41px;
+  right: 160px;
+  width: 95px;
   height: 32px;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 .player-table [data-unvalidated=true] {
   color: red;
