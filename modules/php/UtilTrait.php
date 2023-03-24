@@ -1,11 +1,11 @@
 <?php
 
-namespace Bga\Games\GetOnBoard;
+namespace Bga\Games\GetOnBoardParisRome;
 
-use Bga\Games\GetOnBoard\Objects\Card;
-use Bga\Games\GetOnBoard\Objects\PlacedRoute;
-use Bga\Games\GetOnBoard\Objects\PossibleRoute;
-use Bga\Games\GetOnBoard\Objects\CommonObjective;
+use Bga\Games\GetOnBoardParisRome\Objects\Card;
+use Bga\Games\GetOnBoardParisRome\Objects\PlacedRoute;
+use Bga\Games\GetOnBoardParisRome\Objects\PossibleRoute;
+use Bga\Games\GetOnBoardParisRome\Objects\CommonObjective;
 
 trait UtilTrait {
 

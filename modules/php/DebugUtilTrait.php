@@ -1,6 +1,6 @@
 <?php
 
-namespace Bga\Games\GetOnBoard;
+namespace Bga\Games\GetOnBoardParisRome;
 
 trait DebugUtilTrait {
 

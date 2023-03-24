@@ -1,6 +1,6 @@
 <?php
 
-namespace Bga\Games\GetOnBoard\Objects;
+namespace Bga\Games\GetOnBoardParisRome\Objects;
 
 class SimpleZoneScoreSheet {
     public int $checked = 0;

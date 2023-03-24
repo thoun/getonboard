@@ -557,7 +557,7 @@ export class Game {
                         checked = scoreSheet.oldLadies.checked;
                         break;
                     case 30: //STUDENT
-                        checked = scoreSheet.students.checkedStudents + scoreSheet.students.checkedInternships;
+                        checked = scoreSheet.students.checkedStudents;
                         break;
                     case 40: //TOURIST
                         checked = scoreSheet.tourists.checkedTourists.reduce((a, b) => a + b, 0);

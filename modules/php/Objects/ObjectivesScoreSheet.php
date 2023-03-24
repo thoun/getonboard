@@ -1,6 +1,6 @@
 <?php
 
-namespace Bga\Games\GetOnBoard\Objects;
+namespace Bga\Games\GetOnBoardParisRome\Objects;
 
 class ObjectivesScoreSheet {
     public array/*int[]*/ $subTotals = [null, null];
