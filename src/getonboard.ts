@@ -375,7 +375,7 @@ class GetOnBoard implements GetOnBoardGame {
             ⇔
         </div>
         <div id="jump-0" class="jump-link">
-            <div class="eye"></div> ${gamedatas.map === 'big' ? 'London' : 'New-York'}
+            <div class="eye"></div> ${gamedatas.map === 'big' ? 'Paris' : 'Roma'}
         </div>`, `jump-controls`);
         document.getElementById(`jump-toggle`).addEventListener('click', () => this.jumpToggle());
         document.getElementById(`jump-0`).addEventListener('click', () => this.jumpToPlayer(0));

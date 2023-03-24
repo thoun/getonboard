@@ -1,5 +1,5 @@
 # What is this project ? 
-This project is an adaptation for BoardGameArena of game Get on Board : New-York & London edited by Iello.
+This project is an adaptation for BoardGameArena of game Get on Board : Paris & Roma edited by Iello.
 You can play here : https://boardgamearena.com
 
 # How to install the auto-build stack

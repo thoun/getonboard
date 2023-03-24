@@ -28,7 +28,7 @@ require_once('modules/php/args.php');
 require_once('modules/php/score-sheet.php');
 require_once('modules/php/debug-util.php');
 
-class GetOnBoard extends Table {
+class GetOnBoardParisRome extends Table {
     use UtilTrait;
     use ActionTrait;
     use StateTrait;
