@@ -31,7 +31,7 @@ trait DebugUtilTrait {
             $from = $positions[$i];
             $to = $positions[$i+1];
             $useTurnZone = 0;
-            $this->DbQuery("INSERT INTO placed_routes(`player_id`, `from`, `to`, `round`, `use_turn_zone`, `traffic_jam`, `validated`) VALUES ($playerId, $from, $to, 0, $useTurnZone, 1, $validated)");
+            $this->DbQuery("INSERT INTO placed_routes(`player_id`, `from`, `to`, `round`, `use_turn_zone`, `connections`, `validated`) VALUES ($playerId, $from, $to, 0, $useTurnZone, 1, $validated)");
         }
     }
 

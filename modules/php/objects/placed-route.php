@@ -8,7 +8,7 @@ class PlacedRoute {
     public int $round;
     public bool $useTurnZone;
     public bool $validated;
-    public int $trafficJam;
+    public int $connections;
     public bool $useStation;
 
     public function __construct($dbCard) {
@@ -19,7 +19,7 @@ class PlacedRoute {
         $this->round = intval($dbCard['round']);
         $this->useTurnZone = boolval($dbCard['use_turn_zone']);
         $this->validated = boolval($dbCard['validated']);
-        $this->trafficJam = intval($dbCard['traffic_jam']);
+        $this->connections = intval($dbCard['connections']);
         $this->useStation = boolval($dbCard['use_station']);
     } 
 
@@ -32,7 +32,7 @@ class PlacedRoute {
             'round' => 0,
             'use_turn_zone' => 0,
             'validated' => $validated,
-            'traffic_jam'=> 0,
+            'connections'=> 0,
             'use_station' => 0,
         ]);
     }
