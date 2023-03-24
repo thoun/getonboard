@@ -113,7 +113,7 @@ class GetOnBoardParisRome extends Table {
             $this->initStat($statType, 'markersPlaced', 0);
             $this->initStat($statType, 'stationsUsed', 0);
             $this->initStat($statType, 'turnZoneUsed', 0);
-            $this->initStat($statType, 'trafficJamUsed', 0);
+            $this->initStat($statType, 'connectionsUsed', 0);
             $this->initStat($statType, 'commonObjectivesFirst', 0);
             $this->initStat($statType, 'commonObjectivesSecond', 0);
             $this->initStat($statType, 'personalObjectives', 0);

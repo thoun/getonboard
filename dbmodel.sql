@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `placed_routes` (
    `to` int(4) UNSIGNED NOT NULL,
    `use_turn_zone` TINYINT(1) UNSIGNED NULL,
    `validated` TINYINT(1)  UNSIGNED NOT NULL DEFAULT 0,
-   `traffic_jam` TINYINT(1)  UNSIGNED NOT NULL DEFAULT 0,
+   `connections` TINYINT(1)  UNSIGNED NOT NULL DEFAULT 0,
    `round` int(2) UNSIGNED NOT NULL,
    `use_station` TINYINT(1)  UNSIGNED NOT NULL DEFAULT 0,
    PRIMARY KEY (`id`)

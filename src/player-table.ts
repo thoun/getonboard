@@ -11,7 +11,7 @@ class PlayerTable {
     private commonObjectives: PlayerTableCommonObjectivesBlock;
     private personalObjective: PlayerTablePersonalObjectiveBlock;
     private turnZones: PlayerTableTurnZonesBlock;
-    private trafficJam: PlayerTableTrafficJamBlock;
+    private connections: PlayerTableConnectionsBlock;
 
     constructor(game: GetOnBoardGame, player: GetOnBoardPlayer, id: string = player.id, insertIn: HTMLElement = document.getElementById('full-table')) {
         this.playerId = id;
@@ -44,7 +44,7 @@ class PlayerTable {
         this.commonObjectives = new PlayerTableCommonObjectivesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.personalObjective = new PlayerTablePersonalObjectiveBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.turnZones = new PlayerTableTurnZonesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
-        this.trafficJam = new PlayerTableTrafficJamBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
+        this.connections = new PlayerTableConnectionsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
 
         this.updateScoreSheet(player.scoreSheets, game.isVisibleScoring());
     }
@@ -67,7 +67,7 @@ class PlayerTable {
         this.commonObjectives.updateScoreSheet(scoreSheets, visibleScoring);
         this.personalObjective.updateScoreSheet(scoreSheets, visibleScoring);
         this.turnZones.updateScoreSheet(scoreSheets, visibleScoring);
-        this.trafficJam.updateScoreSheet(scoreSheets, visibleScoring);
+        this.connections.updateScoreSheet(scoreSheets, visibleScoring);
 
         if (visibleScoring) {
             this.setContentAndValidation(`total-score`, scoreSheets.current.total, scoreSheets.current.total != scoreSheets.validated.total);

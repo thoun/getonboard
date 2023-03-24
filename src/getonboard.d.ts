@@ -11,7 +11,7 @@ interface CommonObjective {
 interface PossibleRoute {
     from: number;
     to: number;
-    trafficJam: number;
+    connections: number;
     useTurnZone: boolean;
     isElimination: boolean;
 }
@@ -64,7 +64,7 @@ interface ScoreSheet {
     commonObjectives: ObjectivesScoreSheet;
     personalObjective: ObjectivesScoreSheet;
     turnZones: SimpleZoneScoreSheet;
-    trafficJam: SimpleZoneScoreSheet;
+    connections: SimpleZoneScoreSheet;
 
     total: number;
 }

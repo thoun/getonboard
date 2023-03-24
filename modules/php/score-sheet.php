@@ -154,9 +154,9 @@ trait ScoreSheetTrait {
         $scoreSheet->turnZones->total = $this->getTotalForSimpleZone($scoreSheet->turnZones->checked, $this->TURN_ZONES_POINTS);
     }
 
-    function addTrafficJamToScoreSheetAndUpdateTotal(ScoreSheet &$scoreSheet, int $trafficJam) {
-        $scoreSheet->trafficJam->checked = min($scoreSheet->trafficJam->checked + $trafficJam, 19);
-        $scoreSheet->trafficJam->total = $this->getTotalForSimpleZone($scoreSheet->trafficJam->checked, $this->CONNECTION_POINTS);
+    function addConnectionsToScoreSheetAndUpdateTotal(ScoreSheet &$scoreSheet, int $connections) {
+        $scoreSheet->connections->checked = min($scoreSheet->connections->checked + $connections, 19);
+        $scoreSheet->connections->total = $this->getTotalForSimpleZone($scoreSheet->connections->checked, $this->CONNECTION_POINTS);
     }
 
     function getScoreSheet(int $connectionColor, array $placedRoutes, array $mapPositions, array $personalObjectives, array $commonObjectives, bool $endScoring = false) {
@@ -227,8 +227,8 @@ trait ScoreSheetTrait {
             if ($placedRoute->useTurnZone) {
                 $this->addTurnZoneToScoreSheetAndUpdateTotal($scoreSheet);
             }
-            if ($placedRoute->trafficJam > 0) {
-                $this->addTrafficJamToScoreSheetAndUpdateTotal($scoreSheet, $placedRoute->trafficJam);
+            if ($placedRoute->connections > 0) {
+                $this->addConnectionsToScoreSheetAndUpdateTotal($scoreSheet, $placedRoute->connections);
             }
         }
 
@@ -245,7 +245,7 @@ trait ScoreSheetTrait {
             ($scoreSheet->commonObjectives->total ?? 0) + 
             ($scoreSheet->personalObjective->total ?? 0) + 
             $scoreSheet->turnZones->total + 
-            $scoreSheet->trafficJam->total;
+            $scoreSheet->connections->total;
 
         return $scoreSheet;
     }
