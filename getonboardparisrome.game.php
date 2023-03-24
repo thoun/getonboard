@@ -27,7 +27,7 @@ require_once('modules/php/args.php');
 require_once('modules/php/score-sheet.php');
 require_once('modules/php/debug-util.php');
 
-class GetOnBoard extends Table {
+class GetOnBoardParisRome extends Table {
     use UtilTrait;
     use ActionTrait;
     use StateTrait;
@@ -57,7 +57,7 @@ class GetOnBoard extends Table {
 	
     protected function getGameName() {
 		// Used for translations and stuff. Please do not modify.
-        return "getonboard";
+        return "getonboardparisrome";
     }	
 
     /*

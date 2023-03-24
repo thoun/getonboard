@@ -13,7 +13,7 @@
 $gameinfos = [
 
 // Name of the game in English (will serve as the basis for translation) 
-'game_name' => "Get on Board: New York & London",
+'game_name' => "Get on Board: Paris & Roma",
 
 // Game designer (or game designers, separated by commas)
 'designer' => 'Saashi',       
@@ -22,7 +22,7 @@ $gameinfos = [
 'artist' => 'Monsieur Z',         
 
 // Year of FIRST publication of this game. Can be negative.
-'year' => 2022,                 
+'year' => 2023,                 
 
 // Game publisher (use empty string if there is no publisher)
 'publisher' => 'Iello',                     
@@ -34,7 +34,7 @@ $gameinfos = [
 'publisher_bgg_id' => 8923,
 
 // Board game geek ID of the game
-'bgg_id' => 347013,
+'bgg_id' => 380105,
 
 
 // Players configuration that can be played (ex: 2 to 4 players)
@@ -131,8 +131,8 @@ $gameinfos = [
 // Each paragraph must be wrapped with totranslate() for translation and should not contain html (plain text without formatting).
 // A good length for this text is between 100 and 150 words (about 6 to 9 lines on a standard display)
 'presentation' => [ // taken from BGG — description from the publisher
-    totranslate("Ah, here’s the bus! Hurry, grab a seat, and get out of the rain! Just like every trip, you're fascinated by all the other passengers on board: tourists, professionals, students... They're all traveling together, though they each have different destinations. This bus line is truly special, but will it be able to transport everyone safe and sound?"),
-    totranslate("In Get on Board: New York & London, you have twelve rounds in which to build the best bus line in town. Each round reveals a new card that shows each player the route shape they must complete. Place your bus accordingly on the central board. Take the passengers where they want to go by connecting them and their destination to your bus line, avoid traffic, and gain as many victory points as possible!"),
+    totranslate("Who will have the best Metro line? Organize your passengers' trips across the most romantic cities in the world! Feel free to double up with other players and create connections that will earn you even more points."),
+    totranslate("Over multiple rounds in Get on Board: Paris & Roma, you reveal a new route card, then plot the ideal route to cross off the best passenger and place spaces. Complete your objectives, and try to get the most points!"),
 ],
 
 // Games categories
