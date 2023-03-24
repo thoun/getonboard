@@ -119,7 +119,7 @@ class GetOnBoardParisRome extends Table {
         foreach(['table', 'player'] as $statType) {
             $this->initStat($statType, 'turnsNumber', 0);
             $this->initStat($statType, 'markersPlaced', 0);
-            $this->initStat($statType, 'greenLightsUsed', 0);
+            $this->initStat($statType, 'stationsUsed', 0);
             $this->initStat($statType, 'turnZoneUsed', 0);
             $this->initStat($statType, 'trafficJamUsed', 0);
             $this->initStat($statType, 'commonObjectivesFirst', 0);

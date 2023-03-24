@@ -9,6 +9,7 @@ class PlacedRoute {
     public bool $useTurnZone;
     public bool $validated;
     public int $trafficJam;
+    public bool $useStation;
 
     public function __construct($dbCard) {
         $this->id = intval($dbCard['id']);
@@ -19,6 +20,7 @@ class PlacedRoute {
         $this->useTurnZone = boolval($dbCard['use_turn_zone']);
         $this->validated = boolval($dbCard['validated']);
         $this->trafficJam = intval($dbCard['traffic_jam']);
+        $this->useStation = boolval($dbCard['use_station']);
     } 
 
     public static function forNotif(int $from, int $to, bool $validated) {
@@ -31,6 +33,7 @@ class PlacedRoute {
             'use_turn_zone' => 0,
             'validated' => $validated,
             'traffic_jam'=> 0,
+            'use_station' => 0,
         ]);
     }
 }

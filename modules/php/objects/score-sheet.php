@@ -6,6 +6,13 @@ class SimpleZoneScoreSheet {
     public int $total = 0;
 }
 
+class StationsScoreSheet {
+    public int $encircled = 0;
+    public int $checked = 0;
+
+    public int $total = 0;
+}
+
 class StudentsScoreSheet {
     public int $checkedStudents = 0;
     public int $checkedCinemas = 0;
@@ -37,6 +44,7 @@ class ObjectivesScoreSheet {
 class ScoreSheet {
     public int $connectionColor = 0;
 
+    public StationsScoreSheet $stations;
     public SimpleZoneScoreSheet $oldLadies;
     public StudentsScoreSheet $students;
     public TouristsScoreSheet $tourists;
@@ -49,6 +57,7 @@ class ScoreSheet {
     public int $total = 0;
 
     public function __construct() {
+        $this->stations = new StationsScoreSheet();
         $this->oldLadies = new SimpleZoneScoreSheet();
         $this->students = new StudentsScoreSheet();
         $this->tourists = new TouristsScoreSheet();

@@ -10,9 +10,9 @@
             "name": "Markers placed",
             "type": "int"
         },
-        "greenLightsUsed": {
+        "stationsUsed": {
             "id": 13,
-            "name": "Green lights used",
+            "name": "Stations used",
             "type": "int"
         },
         "turnZoneUsed": {
@@ -52,9 +52,9 @@
             "name": "Markers placed",
             "type": "int"
         },
-        "greenLightsUsed": {
+        "stationsUsed": {
             "id": 13,
-            "name": "Green lights used",
+            "name": "Stations used",
             "type": "int"
         },
         "turnZoneUsed": {

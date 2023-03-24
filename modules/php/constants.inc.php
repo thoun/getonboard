@@ -26,6 +26,7 @@ define('END_SCORE', 100);
  */
 define('FIRST_PLAYER', 'FIRST_PLAYER');
 define('ELIMINATE_PLAYER', 'ELIMINATE_PLAYER');
+define('CONNECTION_COLOR', 'CONNECTION_COLOR');
 
 /*
  * Game option
@@ -35,7 +36,7 @@ define('SCORING_OPTION', 'SCORING_OPTION');
 /*
  * Map elements
  */
-define('GREEN_LIGHT', 0);
+define('STATION', 0);
 // 1 to 12 : starting point
 
 define('OLD_LADY', 20);

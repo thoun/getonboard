@@ -34,7 +34,7 @@ class TableCenter {
             const departure = elements.find(element => element >= 1 && element <= 12);
             const coordinates = this.getCoordinatesFromPosition(position);
 
-            let html = `<div id="intersection${position}" class="intersection ${elements.some(element => element == 0) ? 'green-light' : ''}`;
+            let html = `<div id="intersection${position}" class="intersection ${elements.some(element => element == 0) ? 'station' : ''}`;
             if (departure > 0) {
                 html += ` departure" data-departure=${departure}`;
             }
