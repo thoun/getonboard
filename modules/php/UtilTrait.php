@@ -139,13 +139,13 @@ trait UtilTrait {
     }
 
     function createPossibleRoute(int $position, int $destination, array $allPlacedRoutes, array $playerPlacedRoutes, array $unvalidatedRoutes, array $turnShape, array $connectionRoutes) {
-        $trafficJam = count(array_filter(
+        $connections = count(array_filter(
             $allPlacedRoutes, 
             fn($route) => $this->isSameRoute($route, $position, $destination)
         ));
 
         if ($this->isConnectionRoute($connectionRoutes, $position, $destination)) {
-            $trafficJam++;
+            $connections++;
         }
 
         $useTurnZone = false;
@@ -164,7 +164,7 @@ trait UtilTrait {
 
         $isElimination = \array_any($playerPlacedRoutes, fn($route) => $route->from === $destination || $route->to === $destination);
 
-        return new PossibleRoute($position, $destination, $trafficJam, $useTurnZone, $isElimination);
+        return new PossibleRoute($position, $destination, $connections, $useTurnZone, $isElimination);
     }
 
     function getPlayerTurnShape(int $playerId) {

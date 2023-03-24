@@ -111,7 +111,7 @@ class Game extends Table {
             $stats->init('markersPlaced', 0);
             $stats->init('stationsUsed', 0);
             $stats->init('turnZoneUsed', 0);
-            $stats->init('trafficJamUsed', 0);
+            $stats->init('connectionsUsed', 0);
             $stats->init('commonObjectivesFirst', 0);
             $stats->init('commonObjectivesSecond', 0);
             $stats->init('personalObjectives', 0);

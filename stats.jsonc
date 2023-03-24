@@ -20,9 +20,9 @@
             "name": "Turn zone checks",
             "type": "int"
         },
-        "trafficJamUsed": {
+        "connectionsUsed": {
             "id": 15,
-            "name": "Traffic jam checks",
+            "name": "Connections checks",
             "type": "int"
         },
         "commonObjectivesFirst": {
@@ -62,9 +62,9 @@
             "name": "Turn zone checks",
             "type": "int"
         },
-        "trafficJamUsed": {
+        "connectionsUsed": {
             "id": 15,
-            "name": "Traffic jam checks",
+            "name": "Connections checks",
             "type": "int"
         },
         "commonObjectivesFirst": {
