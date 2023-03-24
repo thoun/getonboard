@@ -41,19 +41,14 @@ define('GREEN_LIGHT', 0);
 define('OLD_LADY', 20);
 
 define('STUDENT', 30);
-define('INTERNSHIP', 31);
 define('SCHOOL', 32);
-define('SCHOOL_SPECIAL', 35);
 
 define('TOURIST', 40);
 define('MONUMENT_LIGHT', 41);
 define('MONUMENT_DARK', 42);
-define('MONUMENT_LIGHT_SPECIAL', 45);
-define('MONUMENT_DARK_SPECIAL', 46);
 
 define('BUSINESSMAN', 50);
 define('OFFICE', 51);
-define('OFFICE_SPECIAL', 55);
 
 // for tooltips : 90 common objectives, 91 personal objective, 92 turn zone, 93 traffic jam, 94 total score, 95 round number
 

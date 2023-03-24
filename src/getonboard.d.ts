@@ -30,11 +30,8 @@ interface SimpleZoneScoreSheet {
 
 interface StudentsScoreSheet {
     checkedStudents: number;
-    checkedInternships: number;
     checkedSchools: number;
-    specialSchool: number;
 
-    subTotal: number;
     total: number;
 }
 
@@ -42,9 +39,6 @@ interface TouristsScoreSheet {
     checkedTourists: number[];
     checkedMonumentsLight: number;
     checkedMonumentsDark: number; 
-    specialMonumentLight: number;
-    specialMonumentDark: number;
-    specialMonumentMax: number;
 
     subTotals: number[];
     total: number;
@@ -52,7 +46,6 @@ interface TouristsScoreSheet {
 
 interface BusinessmenScoreSheet {
     checkedBusinessmen: number[];
-    specialOffice: number;
 
     subTotals: number[];
     total: number;

@@ -874,18 +874,6 @@ html[data-no-grid=true][data-no-building=true] #map[data-size=big].hd {
   top: 103px;
   left: 88px;
 }
-.player-table .main .block.students .checkmark.internships[data-number="1"] {
-  top: 133px;
-  left: 28px;
-}
-.player-table .main .block.students .checkmark.internships[data-number="2"] {
-  top: 133px;
-  left: 58px;
-}
-.player-table .main .block.students .checkmark.internships[data-number="3"] {
-  top: 133px;
-  left: 88px;
-}
 .player-table .main .block.students .checkmark.schools[data-number="1"] {
   top: 79px;
   left: 141px;
@@ -901,12 +889,6 @@ html[data-no-grid=true][data-no-building=true] #map[data-size=big].hd {
 .player-table .main .block.students .checkmark.schools[data-number="4"] {
   top: 110px;
   left: 172px;
-}
-.player-table .main .block.students .special {
-  top: 29px;
-}
-.player-table .main .block.students .subtotal {
-  top: 93px;
 }
 .player-table .main .block.tourists {
   top: 244px;
@@ -987,23 +969,6 @@ html[data-no-grid=true][data-no-building=true] #map[data-size=big].hd {
   top: 163px;
   left: 153px;
 }
-.player-table .main .block.tourists .special {
-  top: 31px;
-  right: 7px;
-}
-.player-table .main .block.tourists .special[data-style] {
-  right: 35px;
-  width: 18px;
-  height: 16px;
-  margin-right: 3px;
-  margin-top: -6px;
-}
-.player-table .main .block.tourists .special[data-style=Light] {
-  top: 28px;
-}
-.player-table .main .block.tourists .special[data-style=Dark] {
-  top: 45px;
-}
 .player-table .main .block.tourists .subtotal[data-number="1"] {
   top: 75px;
 }
@@ -1018,10 +983,6 @@ html[data-no-grid=true][data-no-building=true] #map[data-size=big].hd {
   left: 423px;
   width: 244px;
   height: 252px;
-}
-.player-table .main .block.businessmen .special {
-  top: 31px;
-  right: 7px;
 }
 .player-table .main .block.businessmen .checkmark[data-row="1"][data-number="1"] {
   top: 75px;
@@ -1211,7 +1172,7 @@ html[data-no-grid=true][data-no-building=true] #map[data-size=big].hd {
   font-size: 22pt;
   margin-top: -8px;
 }
-.player-table .main .block .subtotal, .player-table .main .block .special {
+.player-table .main .block .subtotal {
   position: absolute;
   text-align: center;
   width: 28px;

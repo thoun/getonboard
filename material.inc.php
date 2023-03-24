@@ -21,7 +21,7 @@
 
 $this->MAP_POSITIONS = [
   'small' => [
-    11 => [SCHOOL, SCHOOL_SPECIAL],
+    11 => [SCHOOL],
     12 => [GREEN_LIGHT, ord('a')],
     13 => [STUDENT],
     14 => [MONUMENT_LIGHT],
@@ -38,7 +38,7 @@ $this->MAP_POSITIONS = [
     31 => [STUDENT],
     32 => [OFFICE, ord('d')],
     33 => [OLD_LADY],
-    34 => [MONUMENT_DARK, MONUMENT_DARK_SPECIAL],
+    34 => [MONUMENT_DARK],
     35 => [OLD_LADY],
     36 => [GREEN_LIGHT, 2],
     
@@ -73,7 +73,7 @@ $this->MAP_POSITIONS = [
     81 => [GREEN_LIGHT, ord('i')],
     82 => [OLD_LADY],
     83 => [BUSINESSMAN],
-    84 => [MONUMENT_LIGHT, MONUMENT_LIGHT_SPECIAL],
+    84 => [MONUMENT_LIGHT],
     85 => [GREEN_LIGHT, ord('j')],
     86 => [OLD_LADY],
     87 => [BUSINESSMAN],
@@ -91,7 +91,7 @@ $this->MAP_POSITIONS = [
     103 => [SCHOOL],
     104 => [OLD_LADY],
     105 => [TOURIST],
-    106 => [OFFICE, OFFICE_SPECIAL, ord('m')],
+    106 => [OFFICE, ord('m')],
     107 => [STUDENT],
     
     112 => [GREEN_LIGHT, ord('n')],
@@ -144,13 +144,13 @@ $this->MAP_POSITIONS = [
     45 => [OFFICE, ord('g')],
     46 => [SCHOOL],
     47 => [GREEN_LIGHT, ord('l')],
-    48 => [MONUMENT_DARK, MONUMENT_DARK_SPECIAL],
+    48 => [MONUMENT_DARK],
     49 => [TOURIST],
 
     51 => [GREEN_LIGHT, 1],
     52 => [TOURIST],
     53 => [SCHOOL],
-    54 => [MONUMENT_LIGHT, MONUMENT_LIGHT_SPECIAL],
+    54 => [MONUMENT_LIGHT],
     55 => [OLD_LADY],
     56 => [TOURIST],
     57 => [BUSINESSMAN],
@@ -184,7 +184,7 @@ $this->MAP_POSITIONS = [
     85 => [MONUMENT_DARK],
     86 => [OLD_LADY],
     87 => [BUSINESSMAN],
-    88 => [SCHOOL, SCHOOL_SPECIAL],
+    88 => [SCHOOL],
     89 => [GREEN_LIGHT, 12],
 
     91 => [GREEN_LIGHT, ord('b')],
@@ -199,7 +199,7 @@ $this->MAP_POSITIONS = [
 
     101 => [BUSINESSMAN],
     102 => [TOURIST],
-    103 => [OFFICE, OFFICE_SPECIAL, ord('e')],
+    103 => [OFFICE, ord('e')],
     104 => [GREEN_LIGHT, 6],
     105 => [STUDENT],
     106 => [GREEN_LIGHT, 8],
@@ -478,7 +478,6 @@ $this->SCORE_SHEETS_SHAPES = [
 $this->OLD_LADIES_POINTS = [1, 1, 1, 2, 2, 2, 3, 3];
 $this->TOURISTS_POINTS = [2, 5, 9, 14];
 $this->BUSINESSMEN_POINTS = [2, 4, 6];
-$this->BUSINESSMEN_BONUS = [OLD_LADY, TOURIST, INTERNSHIP];
 $this->TURN_ZONES_POINTS = [-1, -2, -2, -2, -3];
 $this->TRAFFIC_JAM_POINTS = [0, -1, 0, -1, 0, -1,
  -1, -1, -1, -1, -1, -1, -1, 

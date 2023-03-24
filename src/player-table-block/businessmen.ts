@@ -3,8 +3,7 @@ class PlayerTableBusinessmenBlock extends PlayerTableBlock {
         super(playerId);
 
         let html = `
-        <div id="businessmen-block-${playerId}" data-tooltip="[50,51]" class="businessmen block" data-zone="5">
-                    <div id="player-table-${playerId}-businessmen-special" class="special"></div>`;
+        <div id="businessmen-block-${playerId}" data-tooltip="[50,51]" class="businessmen block" data-zone="5">`;
         for(let row=1; row<=3; row++) {
             for(let i=1; i<=3; i++) {
                 html += `
@@ -26,8 +25,6 @@ class PlayerTableBusinessmenBlock extends PlayerTableBlock {
     public updateScoreSheet(scoreSheets: ScoreSheets, visibleScoring: boolean) {
         const current = scoreSheets.current.businessmen;
         const validated = scoreSheets.validated.businessmen;
-
-        this.setContentAndValidation(`businessmen-special`, current.specialOffice, current.specialOffice !== validated.specialOffice);
         
         for(let row=1; row<=3; row++) {
             for(let i=1; i<=3; i++) {
