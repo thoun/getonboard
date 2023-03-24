@@ -159,7 +159,7 @@ trait StateTrait {
         $this->bga->playerStats->set('finalScoreOldLadies', $scoreSheet->oldLadies->total, $playerId);
         $this->bga->playerStats->set('finalScoreStudents', $scoreSheet->students->total, $playerId);
         $this->bga->playerStats->set('finalScoreTourists', $scoreSheet->tourists->total, $playerId);
-        $this->bga->playerStats->set('finalScoreBusinessmen', $scoreSheet->businessmen->total, $playerId);
+        $this->bga->playerStats->set('finalScoreLovers', $scoreSheet->lovers->total, $playerId);
         if ($scoreSheet->oldLadies->checked > 0) {
             $this->bga->playerStats->set('averagePointsByCheckedOldLadies', (float)$scoreSheet->oldLadies->total / (float)$scoreSheet->oldLadies->checked, $playerId);
         }
@@ -174,12 +174,12 @@ trait StateTrait {
         if ($checkedTourists > 0) {
             $this->bga->playerStats->set('averagePointsByCheckedTourists', (float)$scoreSheet->tourists->total / (float)$checkedTourists, $playerId);
         }
-        $checkedBusinessmen = 0;
-        foreach ($scoreSheet->businessmen->checkedBusinessmen as $checkedBusinessman) {
-            $checkedBusinessmen += $checkedBusinessman;
+        $checkedLovers = 0;
+        foreach ($scoreSheet->lovers->checkedLovers as $checkedLover) {
+            $checkedLovers += $checkedLover;
         }
-        if ($checkedBusinessmen > 0) {
-            $this->bga->playerStats->set('averagePointsByCheckedBusinessmen', (float)$scoreSheet->businessmen->total / (float)$checkedBusinessmen, $playerId);
+        if ($checkedLovers > 0) {
+            $this->bga->playerStats->set('averagePointsByCheckedLovers', (float)$scoreSheet->lovers->total / (float)$checkedLovers, $playerId);
         }
     }
 

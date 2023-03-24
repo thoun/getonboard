@@ -14,7 +14,7 @@ export class PlayerTable {
     private oldLadies: PlayerTableOldLadiesBlock;
     private students: PlayerTableStudentsBlock;
     private tourists: PlayerTableTouristsBlock;
-    private businessmen: PlayerTableBusinessmenBlock;
+    private lovers: PlayerTableLoversBlock;
     private commonObjectives: PlayerTableCommonObjectivesBlock;
     private personalObjective: PlayerTablePersonalObjectiveBlock;
     private turnZones: PlayerTableTurnZonesBlock;
@@ -47,7 +47,7 @@ export class PlayerTable {
         this.oldLadies = new PlayerTableOldLadiesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.students = new PlayerTableStudentsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.tourists = new PlayerTableTouristsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
-        this.businessmen = new PlayerTableBusinessmenBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
+        this.lovers = new PlayerTableLoversBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.commonObjectives = new PlayerTableCommonObjectivesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.personalObjective = new PlayerTablePersonalObjectiveBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.turnZones = new PlayerTableTurnZonesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
@@ -70,7 +70,7 @@ export class PlayerTable {
         this.oldLadies.updateScoreSheet(scoreSheets, visibleScoring);
         this.students.updateScoreSheet(scoreSheets, visibleScoring);
         this.tourists.updateScoreSheet(scoreSheets, visibleScoring);
-        this.businessmen.updateScoreSheet(scoreSheets, visibleScoring);
+        this.lovers.updateScoreSheet(scoreSheets, visibleScoring);
         this.commonObjectives.updateScoreSheet(scoreSheets, visibleScoring);
         this.personalObjective.updateScoreSheet(scoreSheets, visibleScoring);
         this.turnZones.updateScoreSheet(scoreSheets, visibleScoring);

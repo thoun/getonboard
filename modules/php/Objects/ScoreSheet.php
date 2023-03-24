@@ -3,10 +3,12 @@
 namespace Bga\Games\GetOnBoardParisRome\Objects;
 
 class ScoreSheet {
+    public int $connectionColor = 0;
+
     public SimpleZoneScoreSheet $oldLadies;
     public StudentsScoreSheet $students;
     public TouristsScoreSheet $tourists;
-    public BusinessmenScoreSheet $businessmen;
+    public LoversScoreSheet $lovers;
     public ObjectivesScoreSheet $commonObjectives;
     public ObjectivesScoreSheet $personalObjective;
     public SimpleZoneScoreSheet $turnZones;
@@ -18,7 +20,7 @@ class ScoreSheet {
         $this->oldLadies = new SimpleZoneScoreSheet();
         $this->students = new StudentsScoreSheet();
         $this->tourists = new TouristsScoreSheet();
-        $this->businessmen = new BusinessmenScoreSheet();
+        $this->lovers = new LoversScoreSheet();
         $this->commonObjectives = new ObjectivesScoreSheet();
         $this->personalObjective = new ObjectivesScoreSheet();
         $this->turnZones = new SimpleZoneScoreSheet();

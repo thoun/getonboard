@@ -44,8 +44,8 @@ interface TouristsScoreSheet {
     total: number;
 }
 
-interface BusinessmenScoreSheet {
-    checkedBusinessmen: number[];
+interface LoversScoreSheet {
+    checkedLovers: number[];
 
     subTotals: number[];
     total: number;
@@ -60,7 +60,7 @@ interface ScoreSheet {
     oldLadies: SimpleZoneScoreSheet;
     students: StudentsScoreSheet;
     tourists: TouristsScoreSheet;
-    businessmen: BusinessmenScoreSheet;
+    lovers: LoversScoreSheet;
     commonObjectives: ObjectivesScoreSheet;
     personalObjective: ObjectivesScoreSheet;
     turnZones: SimpleZoneScoreSheet;
