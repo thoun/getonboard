@@ -109,7 +109,7 @@ class Game extends Table {
         foreach([$this->bga->tableStats, $this->bga->playerStats] as $stats) {
             $stats->init('turnsNumber', 0);
             $stats->init('markersPlaced', 0);
-            $stats->init('greenLightsUsed', 0);
+            $stats->init('stationsUsed', 0);
             $stats->init('turnZoneUsed', 0);
             $stats->init('trafficJamUsed', 0);
             $stats->init('commonObjectivesFirst', 0);

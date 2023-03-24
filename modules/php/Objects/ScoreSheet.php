@@ -5,6 +5,7 @@ namespace Bga\Games\GetOnBoardParisRome\Objects;
 class ScoreSheet {
     public int $connectionColor = 0;
 
+    public StationsScoreSheet $stations;
     public SimpleZoneScoreSheet $oldLadies;
     public StudentsScoreSheet $students;
     public TouristsScoreSheet $tourists;
@@ -17,6 +18,7 @@ class ScoreSheet {
     public int $total = 0;
 
     public function __construct() {
+        $this->stations = new StationsScoreSheet();
         $this->oldLadies = new SimpleZoneScoreSheet();
         $this->students = new StudentsScoreSheet();
         $this->tourists = new TouristsScoreSheet();
