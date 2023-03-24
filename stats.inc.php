@@ -112,9 +112,9 @@ $stats_type = [
             "name" => totranslate("Final score for Tourists"),
             "type" => "int"
         ],
-        "finalScoreBusinessmen" => [
+        "finalScoreLovers" => [
             "id" => 22,
-            "name" => totranslate("Final score for Businessmen"),
+            "name" => totranslate("Final score for Lovers"),
             "type" => "int"
         ],
         "averagePointsByCheckedOldLadies" => [
@@ -132,9 +132,9 @@ $stats_type = [
             "name" => totranslate("Average points by checked Tourists"),
             "type" => "float"
         ],
-        "averagePointsByCheckedBusinessmen" => [
+        "averagePointsByCheckedLovers" => [
             "id" => 26,
-            "name" => totranslate("Average points by checked Businessmen"),
+            "name" => totranslate("Average points by checked Lovers"),
             "type" => "float"
         ],
     ]

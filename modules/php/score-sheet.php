@@ -95,50 +95,50 @@ trait ScoreSheetTrait {
         $this->checkCompletedCommonObjective($scoreSheet, $commonObjectives, TOURIST, $totalCheckedTourists, $round);
     }
     
-    function addBusinessmanToScoreSheet(ScoreSheet &$scoreSheet, array $commonObjectives, int $round) {
-        $rowIndex = count($scoreSheet->businessmen->subTotals);
+    function addLoverToScoreSheet(ScoreSheet &$scoreSheet, array $commonObjectives, int $round) {
+        $rowIndex = count($scoreSheet->lovers->subTotals);
         if ($rowIndex >= 3) {
             return;
         }
-        if ($scoreSheet->businessmen->checkedBusinessmen[$rowIndex] < 3) {
-            $scoreSheet->businessmen->checkedBusinessmen[$rowIndex]++;
-            $this->updateBusinessmenTotal($scoreSheet, $commonObjectives, $round);
+        if ($scoreSheet->lovers->checkedLovers[$rowIndex] < 3) {
+            $scoreSheet->lovers->checkedLovers[$rowIndex]++;
+            $this->updateLoversTotal($scoreSheet, $commonObjectives, $round);
         }
     }
 
-    function addOfficeToScoreSheet(ScoreSheet &$scoreSheet, array $commonObjectives, int $round) {
-        $rowIndex = count($scoreSheet->businessmen->subTotals);
+    function addRestaurantToScoreSheet(ScoreSheet &$scoreSheet, array $commonObjectives, int $round) {
+        $rowIndex = count($scoreSheet->lovers->subTotals);
         if ($rowIndex >= 3) {
             return;
         }
-        if ($scoreSheet->businessmen->checkedBusinessmen[$rowIndex] > 0) {
-            $checked = $scoreSheet->businessmen->checkedBusinessmen[$rowIndex];
-            $scoreSheet->businessmen->subTotals[$rowIndex] = $this->BUSINESSMEN_POINTS[$checked - 1];
+        if ($scoreSheet->lovers->checkedLovers[$rowIndex] > 0) {
+            $checked = $scoreSheet->lovers->checkedLovers[$rowIndex];
+            $scoreSheet->lovers->subTotals[$rowIndex] = $this->LOVERS_POINTS[$checked - 1];
         }
-        $this->updateBusinessmenTotal($scoreSheet, $commonObjectives, $round);
+        $this->updateLoversTotal($scoreSheet, $commonObjectives, $round);
     }
     
-    function updateBusinessmenTotal(ScoreSheet &$scoreSheet, array $commonObjectives, int $round, bool $endScoring = false) {
+    function updateLoversTotal(ScoreSheet &$scoreSheet, array $commonObjectives, int $round, bool $endScoring = false) {
         if ($endScoring) {
-            $rowIndex = count($scoreSheet->businessmen->subTotals);
+            $rowIndex = count($scoreSheet->lovers->subTotals);
             if ($rowIndex < 3) {
-                $checked = $scoreSheet->businessmen->checkedBusinessmen[$rowIndex];
+                $checked = $scoreSheet->lovers->checkedLovers[$rowIndex];
                 if ($checked > 0) {
-                    $scoreSheet->businessmen->subTotals[$rowIndex] = floor($this->BUSINESSMEN_POINTS[$checked - 1] / 2);
+                    $scoreSheet->lovers->subTotals[$rowIndex] = floor($this->LOVERS_POINTS[$checked - 1] / 2);
                 }
             }
         }
 
-        $scoreSheet->businessmen->total = 0;
-        foreach($scoreSheet->businessmen->subTotals as $subTotal) {
-            $scoreSheet->businessmen->total += $subTotal;
+        $scoreSheet->lovers->total = 0;
+        foreach($scoreSheet->lovers->subTotals as $subTotal) {
+            $scoreSheet->lovers->total += $subTotal;
         }   
         
-        $totalCheckedBusinessmen = 0;
-        foreach ($scoreSheet->businessmen->checkedBusinessmen as $checkedBusinessmen) {
-            $totalCheckedBusinessmen += $checkedBusinessmen;
+        $totalCheckedLovers = 0;
+        foreach ($scoreSheet->lovers->checkedLovers as $checkedLovers) {
+            $totalCheckedLovers += $checkedLovers;
         }
-        $this->checkCompletedCommonObjective($scoreSheet, $commonObjectives, BUSINESSMAN, $totalCheckedBusinessmen, $round);
+        $this->checkCompletedCommonObjective($scoreSheet, $commonObjectives, LOVER_LIGHT, $totalCheckedLovers, $round);
     }
 
     function addTurnZoneToScoreSheetAndUpdateTotal(ScoreSheet &$scoreSheet) {
@@ -199,12 +199,12 @@ trait ScoreSheetTrait {
                             $this->addMonumentToScoreSheet($scoreSheet, 'Dark', $commonObjectives, $round);
                             break;
 
-                        // businessmen
-                        case BUSINESSMAN:
-                            $this->addBusinessmanToScoreSheet($scoreSheet, $commonObjectives, $round);
+                        // lovers
+                        case LOVER_LIGHT:
+                            $this->addLoverToScoreSheet($scoreSheet, $commonObjectives, $round);
                             break;
-                        case OFFICE:
-                            $this->addOfficeToScoreSheet($scoreSheet, $commonObjectives, $round);
+                        case RESTAURANT:
+                            $this->addRestaurantToScoreSheet($scoreSheet, $commonObjectives, $round);
                             break;
                     }
                 }
@@ -220,14 +220,14 @@ trait ScoreSheetTrait {
 
         if ($endScoring) {
             $this->updateTouristTotal($scoreSheet, $commonObjectives, 0, true);
-            $this->updateBusinessmenTotal($scoreSheet, $commonObjectives, 0, true);
+            $this->updateLoversTotal($scoreSheet, $commonObjectives, 0, true);
         }
 
         $scoreSheet->total = 
             $scoreSheet->oldLadies->total + 
             $scoreSheet->students->total + 
             $scoreSheet->tourists->total + 
-            $scoreSheet->businessmen->total + 
+            $scoreSheet->lovers->total + 
             ($scoreSheet->commonObjectives->total ?? 0) + 
             ($scoreSheet->personalObjective->total ?? 0) + 
             $scoreSheet->turnZones->total + 
