@@ -22,8 +22,8 @@ class TouristsScoreSheet {
     public int $total = 0;
 }
 
-class BusinessmenScoreSheet {
-    public array/*int[]*/ $checkedBusinessmen = [0, 0, 0];
+class LoversScoreSheet {
+    public array/*int[]*/ $checkedLovers = [0, 0, 0];
 
     public array/*int[]*/ $subTotals = [];
     public int $total = 0;
@@ -35,10 +35,12 @@ class ObjectivesScoreSheet {
 }
 
 class ScoreSheet {
+    public int $connectionColor = 0;
+
     public SimpleZoneScoreSheet $oldLadies;
     public StudentsScoreSheet $students;
     public TouristsScoreSheet $tourists;
-    public BusinessmenScoreSheet $businessmen;
+    public LoversScoreSheet $lovers;
     public ObjectivesScoreSheet $commonObjectives;
     public ObjectivesScoreSheet $personalObjective;
     public SimpleZoneScoreSheet $turnZones;
@@ -50,7 +52,7 @@ class ScoreSheet {
         $this->oldLadies = new SimpleZoneScoreSheet();
         $this->students = new StudentsScoreSheet();
         $this->tourists = new TouristsScoreSheet();
-        $this->businessmen = new BusinessmenScoreSheet();
+        $this->lovers = new LoversScoreSheet();
         $this->commonObjectives = new ObjectivesScoreSheet();
         $this->personalObjective = new ObjectivesScoreSheet();
         $this->turnZones = new SimpleZoneScoreSheet();

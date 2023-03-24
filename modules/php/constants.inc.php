@@ -47,8 +47,9 @@ define('TOURIST', 40);
 define('MONUMENT_LIGHT', 41);
 define('MONUMENT_DARK', 42);
 
-define('BUSINESSMAN', 50);
-define('OFFICE', 51);
+define('LOVER_LIGHT', 50);
+define('LOVER_DARK', 51);
+define('RESTAURANT', 52);
 
 // for tooltips : 90 common objectives, 91 personal objective, 92 turn zone, 93 traffic jam, 94 total score, 95 round number
 

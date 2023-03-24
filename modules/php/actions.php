@@ -68,7 +68,7 @@ trait ActionTrait {
             $zones[] = 7;
         }
 
-        $logElements = array_values(array_filter($mapElements, fn($element) => in_array($element, [0, 20, 30, 32, 40, 41, 42, 50, 51])));
+        $logElements = array_values(array_filter($mapElements, fn($element) => in_array($element, [0, 20, 30, 32, 40, 41, 42, 50, 51, 52])));
         
         self::notifyAllPlayers('placedRoute', clienttranslate('${player_name} places a route marker to ${elements}'), [
             'playerId' => $playerId,

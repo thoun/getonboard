@@ -97,9 +97,9 @@
             "name": "Final score for Tourists",
             "type": "int"
         },
-        "finalScoreBusinessmen": {
+        "finalScoreLovers": {
             "id": 22,
-            "name": "Final score for Businessmen",
+            "name": "Final score for Lovers",
             "type": "int"
         },
         "averagePointsByCheckedOldLadies": {
@@ -117,9 +117,9 @@
             "name": "Average points by checked Tourists",
             "type": "float"
         },
-        "averagePointsByCheckedBusinessmen": {
+        "averagePointsByCheckedLovers": {
             "id": 26,
-            "name": "Average points by checked Businessmen",
+            "name": "Average points by checked Lovers",
             "type": "float"
         }
     }
