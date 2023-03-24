@@ -511,35 +511,35 @@ var PlayerTableTouristsBlock = /** @class */ (function (_super) {
     };
     return PlayerTableTouristsBlock;
 }(PlayerTableBlock));
-var PlayerTableBusinessmenBlock = /** @class */ (function (_super) {
-    __extends(PlayerTableBusinessmenBlock, _super);
-    function PlayerTableBusinessmenBlock(playerId, scoreSheets, visibleScoring) {
+var PlayerTableLoversBlock = /** @class */ (function (_super) {
+    __extends(PlayerTableLoversBlock, _super);
+    function PlayerTableLoversBlock(playerId, scoreSheets, visibleScoring) {
         var _this = _super.call(this, playerId) || this;
-        var html = "\n        <div id=\"businessmen-block-".concat(playerId, "\" data-tooltip=\"[50,51]\" class=\"businessmen block\" data-zone=\"5\">");
+        var html = "\n        <div id=\"lovers-block-".concat(playerId, "\" data-tooltip=\"[50,51]\" class=\"lovers block\" data-zone=\"5\">");
         for (var row = 1; row <= 3; row++) {
             for (var i = 1; i <= 3; i++) {
-                html += "\n                        <div id=\"player-table-".concat(playerId, "-businessmen-checkmark").concat(row, "-").concat(i, "\" class=\"checkmark\" data-row=\"").concat(row, "\" data-number=\"").concat(i, "\"></div>");
+                html += "\n                        <div id=\"player-table-".concat(playerId, "-lovers-checkmark").concat(row, "-").concat(i, "\" class=\"checkmark\" data-row=\"").concat(row, "\" data-number=\"").concat(i, "\"></div>");
             }
         }
-        html += "\n                    <div id=\"player-table-".concat(playerId, "-businessmen-subtotal1\" class=\"subtotal\" data-number=\"1\"></div>\n                    <div id=\"player-table-").concat(playerId, "-businessmen-subtotal2\" class=\"subtotal\" data-number=\"2\"></div>\n                    <div id=\"player-table-").concat(playerId, "-businessmen-subtotal3\" class=\"subtotal\" data-number=\"3\"></div>\n                    <div id=\"player-table-").concat(playerId, "-businessmen-total\" class=\"total\"></div>\n                </div>\n        ");
+        html += "\n                    <div id=\"player-table-".concat(playerId, "-lovers-subtotal1\" class=\"subtotal\" data-number=\"1\"></div>\n                    <div id=\"player-table-").concat(playerId, "-lovers-subtotal2\" class=\"subtotal\" data-number=\"2\"></div>\n                    <div id=\"player-table-").concat(playerId, "-lovers-subtotal3\" class=\"subtotal\" data-number=\"3\"></div>\n                    <div id=\"player-table-").concat(playerId, "-lovers-total\" class=\"total\"></div>\n                </div>\n        ");
         dojo.place(html, "player-table-".concat(playerId, "-main"));
         _this.updateScoreSheet(scoreSheets, visibleScoring);
         return _this;
     }
-    PlayerTableBusinessmenBlock.prototype.updateScoreSheet = function (scoreSheets, visibleScoring) {
-        var current = scoreSheets.current.businessmen;
-        var validated = scoreSheets.validated.businessmen;
+    PlayerTableLoversBlock.prototype.updateScoreSheet = function (scoreSheets, visibleScoring) {
+        var current = scoreSheets.current.lovers;
+        var validated = scoreSheets.validated.lovers;
         for (var row = 1; row <= 3; row++) {
             for (var i = 1; i <= 3; i++) {
-                this.setContentAndValidation("businessmen-checkmark".concat(row, "-").concat(i), current.checkedBusinessmen[row - 1] >= i ? '✔' : (current.subTotals[row - 1] ? '⎯⎯' : ''), current.checkedBusinessmen[row - 1] >= i && validated.checkedBusinessmen[row - 1] < i);
+                this.setContentAndValidation("lovers-checkmark".concat(row, "-").concat(i), current.checkedLovers[row - 1] >= i ? '✔' : (current.subTotals[row - 1] ? '⎯⎯' : ''), current.checkedLovers[row - 1] >= i && validated.checkedLovers[row - 1] < i);
             }
-            this.setContentAndValidation("businessmen-subtotal".concat(row), current.subTotals[row - 1], current.subTotals[row - 1] != validated.subTotals[row - 1]);
+            this.setContentAndValidation("lovers-subtotal".concat(row), current.subTotals[row - 1], current.subTotals[row - 1] != validated.subTotals[row - 1]);
         }
         if (visibleScoring) {
-            this.setContentAndValidation("businessmen-total", current.total, current.total != validated.total);
+            this.setContentAndValidation("lovers-total", current.total, current.total != validated.total);
         }
     };
-    return PlayerTableBusinessmenBlock;
+    return PlayerTableLoversBlock;
 }(PlayerTableBlock));
 var PlayerTableCommonObjectivesBlock = /** @class */ (function (_super) {
     __extends(PlayerTableCommonObjectivesBlock, _super);
@@ -648,7 +648,7 @@ var PlayerTable = /** @class */ (function () {
         this.oldLadies = new PlayerTableOldLadiesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.students = new PlayerTableStudentsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.tourists = new PlayerTableTouristsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
-        this.businessmen = new PlayerTableBusinessmenBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
+        this.lovers = new PlayerTableLoversBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.commonObjectives = new PlayerTableCommonObjectivesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.personalObjective = new PlayerTablePersonalObjectiveBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.turnZones = new PlayerTableTurnZonesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
@@ -667,7 +667,7 @@ var PlayerTable = /** @class */ (function () {
         this.oldLadies.updateScoreSheet(scoreSheets, visibleScoring);
         this.students.updateScoreSheet(scoreSheets, visibleScoring);
         this.tourists.updateScoreSheet(scoreSheets, visibleScoring);
-        this.businessmen.updateScoreSheet(scoreSheets, visibleScoring);
+        this.lovers.updateScoreSheet(scoreSheets, visibleScoring);
         this.commonObjectives.updateScoreSheet(scoreSheets, visibleScoring);
         this.personalObjective.updateScoreSheet(scoreSheets, visibleScoring);
         this.turnZones.updateScoreSheet(scoreSheets, visibleScoring);
@@ -901,8 +901,9 @@ function formatTextIcons(rawText) {
         .replace(/\[Tourist\]/ig, '<div class="map-icon" data-element="40"></div>')
         .replace(/\[MonumentLight\]/ig, '<div class="map-icon" data-element="41"></div>')
         .replace(/\[MonumentDark\]/ig, '<div class="map-icon" data-element="42"></div>')
-        .replace(/\[Businessman\]/ig, '<div class="map-icon" data-element="50"></div>')
-        .replace(/\[Office\]/ig, '<div class="map-icon" data-element="51"></div>');
+        .replace(/\[LoverLight\]/ig, '<div class="map-icon" data-element="50"></div>')
+        .replace(/\[LoverDark\]/ig, '<div class="map-icon" data-element="51"></div>')
+        .replace(/\[Restaurant\]/ig, '<div class="map-icon" data-element="52"></div>');
 }
 var GetOnBoard = /** @class */ (function () {
     function GetOnBoard() {
@@ -1256,8 +1257,8 @@ var GetOnBoard = /** @class */ (function () {
             case 32: return '[Cinema] : ' + _("When a marker reaches [Cinema], check a box on the [Cinema] zone. Multiply [Student] with [Cinema] at game end.") + "<br><i>".concat(_("If the [Cinema] is marked with a Star, write the number of [Student] you have checked when a marker reaches it."), "</i>");
             case 40: return '[Tourist] : ' + _("When a marker reaches [Tourist], check a box on the first available row on the [Tourist] zone. You will score when you drop off the [Tourist] to [MonumentLight]/[MonumentDark]. If the current row is full and you didn't reach [MonumentLight]/[MonumentDark], nothing happens.");
             case 41: return '[MonumentLight][MonumentDark] : ' + _("When a marker reaches [MonumentLight]/[MonumentDark], write the score on the column of the [Tourist] at the end of the current row. If the current row is empty, nothing happens.") + "<br><i>".concat(_("If [MonumentLight]/[MonumentDark] is marked with a Star, write the number of [Tourist] you have checked When a marker reaches it."), "</i>");
-            case 50: return '[Businessman] : ' + _("When a marker reaches [Businessman], check a box on the first available row on the [Businessman] zone. You will score when you drop off the [Businessman] to [Office]. If the current row is full and you didn't reach [Office], nothing happens.");
-            case 51: return '[Office] : ' + _("When a marker reaches [Office], write the score on the column of the [Businessman] at the end of the current row, and check the corresponding symbol ([OldLady], [Tourist] or [Student]) as if you reached it with a marker. If the current row is empty, nothing happens.") + "<br><i>".concat(_("If the [Office] is marked with a Star, write the number of [Businessman] you have checked When a marker reaches it."), "</i>");
+            case 50: return '[Lover] : ' + _("When a marker reaches [Lover], check a box on the first available row on the [Lover] zone. You will score when you drop off the [Lover] to [Restaurant]. If the current row is full and you didn't reach [Restaurant], nothing happens.");
+            case 51: return '[Restaurant] : ' + _("When a marker reaches [Restaurant], write the score on the column of the [Lover] at the end of the current row, and check the corresponding symbol ([OldLady], [Tourist] or [Student]) as if you reached it with a marker. If the current row is empty, nothing happens.") + "<br><i>".concat(_("If the [Restaurant] is marked with a Star, write the number of [Lover] you have checked When a marker reaches it."), "</i>");
             case 90: return _("<strong>Common Objective:</strong> Score 10 points when you complete the objective, or 6 points if another player completed it on a previous round.");
             case 91: return _("<strong>Personal Objective:</strong> Score 10 points when your markers link the 3 Letters of your personal objective.");
             case 92: return _("<strong>Turn Zone:</strong> If you choose to change a turn into a straight line or a straight line to a turn, check a box on the Turn Zone. The score here is negative, and you only have 5 of them!");
@@ -1381,8 +1382,8 @@ var GetOnBoard = /** @class */ (function () {
                     case 40: //TOURIST
                         checked = scoreSheet.tourists.checkedTourists.reduce(function (a, b) { return a + b; }, 0);
                         break;
-                    case 50: //BUSINESSMAN
-                        checked = scoreSheet.businessmen.checkedBusinessmen.reduce(function (a, b) { return a + b; }, 0);
+                    case 50: //LOVER_LIGHT
+                        checked = scoreSheet.lovers.checkedLovers.reduce(function (a, b) { return a + b; }, 0);
                         break;
                     case 41: //MONUMENT_LIGHT
                         checked = scoreSheet.tourists.checkedMonumentsLight;

@@ -23,8 +23,9 @@ function formatTextIcons(rawText: string) {
         .replace(/\[Tourist\]/ig, '<div class="map-icon" data-element="40"></div>')
         .replace(/\[MonumentLight\]/ig, '<div class="map-icon" data-element="41"></div>')
         .replace(/\[MonumentDark\]/ig, '<div class="map-icon" data-element="42"></div>')
-        .replace(/\[Businessman\]/ig, '<div class="map-icon" data-element="50"></div>')
-        .replace(/\[Office\]/ig, '<div class="map-icon" data-element="51"></div>');
+        .replace(/\[LoverLight\]/ig, '<div class="map-icon" data-element="50"></div>')
+        .replace(/\[LoverDark\]/ig, '<div class="map-icon" data-element="51"></div>')
+        .replace(/\[Restaurant\]/ig, '<div class="map-icon" data-element="52"></div>');
 }
 
 class GetOnBoard implements GetOnBoardGame {
@@ -455,8 +456,8 @@ class GetOnBoard implements GetOnBoardGame {
             case 32: return '[Cinema] : ' + _("When a marker reaches [Cinema], check a box on the [Cinema] zone. Multiply [Student] with [Cinema] at game end.") + `<br><i>${_("If the [Cinema] is marked with a Star, write the number of [Student] you have checked when a marker reaches it.")}</i>`;
             case 40: return '[Tourist] : ' + _("When a marker reaches [Tourist], check a box on the first available row on the [Tourist] zone. You will score when you drop off the [Tourist] to [MonumentLight]/[MonumentDark]. If the current row is full and you didn't reach [MonumentLight]/[MonumentDark], nothing happens.");
             case 41: return '[MonumentLight][MonumentDark] : ' +  _("When a marker reaches [MonumentLight]/[MonumentDark], write the score on the column of the [Tourist] at the end of the current row. If the current row is empty, nothing happens.") + `<br><i>${_("If [MonumentLight]/[MonumentDark] is marked with a Star, write the number of [Tourist] you have checked When a marker reaches it.")}</i>`;
-            case 50: return '[Businessman] : ' + _("When a marker reaches [Businessman], check a box on the first available row on the [Businessman] zone. You will score when you drop off the [Businessman] to [Office]. If the current row is full and you didn't reach [Office], nothing happens.");
-            case 51: return '[Office] : ' + _("When a marker reaches [Office], write the score on the column of the [Businessman] at the end of the current row, and check the corresponding symbol ([OldLady], [Tourist] or [Student]) as if you reached it with a marker. If the current row is empty, nothing happens.") + `<br><i>${_("If the [Office] is marked with a Star, write the number of [Businessman] you have checked When a marker reaches it.")}</i>`;
+            case 50: return '[Lover] : ' + _("When a marker reaches [Lover], check a box on the first available row on the [Lover] zone. You will score when you drop off the [Lover] to [Restaurant]. If the current row is full and you didn't reach [Restaurant], nothing happens.");
+            case 51: return '[Restaurant] : ' + _("When a marker reaches [Restaurant], write the score on the column of the [Lover] at the end of the current row, and check the corresponding symbol ([OldLady], [Tourist] or [Student]) as if you reached it with a marker. If the current row is empty, nothing happens.") + `<br><i>${_("If the [Restaurant] is marked with a Star, write the number of [Lover] you have checked When a marker reaches it.")}</i>`;
             case 90: return _("<strong>Common Objective:</strong> Score 10 points when you complete the objective, or 6 points if another player completed it on a previous round.");
             case 91: return _("<strong>Personal Objective:</strong> Score 10 points when your markers link the 3 Letters of your personal objective.");
             case 92: return _("<strong>Turn Zone:</strong> If you choose to change a turn into a straight line or a straight line to a turn, check a box on the Turn Zone. The score here is negative, and you only have 5 of them!");
@@ -596,8 +597,8 @@ class GetOnBoard implements GetOnBoardGame {
                     case 40: //TOURIST
                         checked = scoreSheet.tourists.checkedTourists.reduce((a, b) => a + b, 0);
                         break;
-                    case 50: //BUSINESSMAN
-                        checked = scoreSheet.businessmen.checkedBusinessmen.reduce((a, b) => a + b, 0);
+                    case 50: //LOVER_LIGHT
+                        checked = scoreSheet.lovers.checkedLovers.reduce((a, b) => a + b, 0);
                         break;
 
                         case 41: //MONUMENT_LIGHT

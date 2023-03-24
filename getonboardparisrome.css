@@ -978,55 +978,55 @@ html[data-no-grid=true][data-no-building=true] #map[data-size=big].hd {
 .player-table .main .block.tourists .subtotal[data-number="3"] {
   top: 163px;
 }
-.player-table .main .block.businessmen {
+.player-table .main .block.lovers {
   top: 61px;
   left: 423px;
   width: 244px;
   height: 252px;
 }
-.player-table .main .block.businessmen .checkmark[data-row="1"][data-number="1"] {
+.player-table .main .block.lovers .checkmark[data-row="1"][data-number="1"] {
   top: 75px;
   left: 29px;
 }
-.player-table .main .block.businessmen .checkmark[data-row="1"][data-number="2"] {
+.player-table .main .block.lovers .checkmark[data-row="1"][data-number="2"] {
   top: 75px;
   left: 83px;
 }
-.player-table .main .block.businessmen .checkmark[data-row="1"][data-number="3"] {
+.player-table .main .block.lovers .checkmark[data-row="1"][data-number="3"] {
   top: 75px;
   left: 137px;
 }
-.player-table .main .block.businessmen .checkmark[data-row="2"][data-number="1"] {
+.player-table .main .block.lovers .checkmark[data-row="2"][data-number="1"] {
   top: 119px;
   left: 29px;
 }
-.player-table .main .block.businessmen .checkmark[data-row="2"][data-number="2"] {
+.player-table .main .block.lovers .checkmark[data-row="2"][data-number="2"] {
   top: 119px;
   left: 83px;
 }
-.player-table .main .block.businessmen .checkmark[data-row="2"][data-number="3"] {
+.player-table .main .block.lovers .checkmark[data-row="2"][data-number="3"] {
   top: 119px;
   left: 137px;
 }
-.player-table .main .block.businessmen .checkmark[data-row="3"][data-number="1"] {
+.player-table .main .block.lovers .checkmark[data-row="3"][data-number="1"] {
   top: 163px;
   left: 29px;
 }
-.player-table .main .block.businessmen .checkmark[data-row="3"][data-number="2"] {
+.player-table .main .block.lovers .checkmark[data-row="3"][data-number="2"] {
   top: 163px;
   left: 83px;
 }
-.player-table .main .block.businessmen .checkmark[data-row="3"][data-number="3"] {
+.player-table .main .block.lovers .checkmark[data-row="3"][data-number="3"] {
   top: 163px;
   left: 137px;
 }
-.player-table .main .block.businessmen .subtotal[data-number="1"] {
+.player-table .main .block.lovers .subtotal[data-number="1"] {
   top: 75px;
 }
-.player-table .main .block.businessmen .subtotal[data-number="2"] {
+.player-table .main .block.lovers .subtotal[data-number="2"] {
   top: 119px;
 }
-.player-table .main .block.businessmen .subtotal[data-number="3"] {
+.player-table .main .block.lovers .subtotal[data-number="3"] {
   top: 163px;
 }
 .player-table .main .block.common-objectives {
@@ -1459,6 +1459,9 @@ html, .mode_3d #game_play_area_background {
   background-position: 87.5% 0%;
 }
 .map-icon[data-element="51"] {
+  background-position: 100% 0%;
+}
+.map-icon[data-element="52"] {
   background-position: 100% 0%;
 }
 
