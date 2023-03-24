@@ -29,6 +29,7 @@ class TableCenter {
             if (elements.includes(41) || elements.includes(42)) { tooltipsIds.push(41); }
             if (elements.includes(50)) { tooltipsIds.push(50); }
             if (elements.includes(51)) { tooltipsIds.push(51); }
+            if (elements.includes(52)) { tooltipsIds.push(52); }
             if (elements.some(element => element >= 97 && element <= 122)) { tooltipsIds.push(97); }
 
             const departure = elements.find(element => element >= 1 && element <= 12);
@@ -131,16 +132,16 @@ class TableCenter {
 
     private getCoordinatesFromNumberAndDigit(number: number, digit: number): number[] {
         if (this.gamedatas.map === 'big') {
-            const space = 63.2;
+            const space = 64;
             return [
-                38 + space * number,
-                179 + space * digit,
+                33 + space * number,
+                168 + space * digit,
             ];
         } else if (this.gamedatas.map === 'small') {
-            const space = 57.4;
+            const space = 64.1;
             return [
-                213 + space * digit,
-                20 + space * number,
+                33 + space * number,
+                172 + space * digit,
             ];
         }
     }

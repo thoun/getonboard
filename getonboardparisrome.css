@@ -215,6 +215,9 @@
 #map[data-size=small].hd {
   background-image: url("img/hd/map-small-no-grid.jpg"), url("img/map-small-no-grid.jpg");
 }
+#map[data-size=small] #map-elements .intersection {
+  background: #FF000066;
+}
 #map[data-size=small] #map-elements .intersection:not(.station) .objective-letter {
   top: -19px;
   right: 8px;
@@ -275,26 +278,6 @@
 }
 #map[data-size=small] #map-elements .intersection.station .objective-letter[data-position="112"] {
   top: -25px;
-}
-#map[data-size=small] #map-elements .intersection#intersection11 {
-  left: 204px !important;
-  top: 12px !important;
-}
-#map[data-size=small] #map-elements .intersection#intersection34 {
-  left: 375px !important;
-  top: 130px !important;
-}
-#map[data-size=small] #map-elements .intersection#intersection76 {
-  left: 497px !important;
-  top: 361px !important;
-}
-#map[data-size=small] #map-elements .intersection#intersection84 {
-  left: 374px !important;
-  top: 409px !important;
-}
-#map[data-size=small] #map-elements .intersection#intersection106 {
-  left: 488px !important;
-  top: 524px !important;
 }
 #map[data-size=small] #map-elements .route[data-direction="0"] {
   flex-direction: column;
@@ -376,6 +359,7 @@
   width: 32px;
   height: 32px;
   border-radius: 20%;
+  background: #FF000066;
 }
 #map #map-elements .intersection.selectable {
   cursor: pointer;
