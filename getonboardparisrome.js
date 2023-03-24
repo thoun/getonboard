@@ -605,30 +605,30 @@ var PlayerTableTurnZonesBlock = /** @class */ (function (_super) {
     };
     return PlayerTableTurnZonesBlock;
 }(PlayerTableBlock));
-var PlayerTableTrafficJamBlock = /** @class */ (function (_super) {
-    __extends(PlayerTableTrafficJamBlock, _super);
-    function PlayerTableTrafficJamBlock(playerId, scoreSheets, visibleScoring) {
+var PlayerTableConnectionsBlock = /** @class */ (function (_super) {
+    __extends(PlayerTableConnectionsBlock, _super);
+    function PlayerTableConnectionsBlock(playerId, scoreSheets, visibleScoring) {
         var _this = _super.call(this, playerId) || this;
-        var html = "\n        <div id=\"traffic-jam-block-".concat(playerId, "\" data-tooltip=\"[93]\" class=\"traffic-jam block\" data-zone=\"7\">");
+        var html = "\n        <div id=\"connections-block-".concat(playerId, "\" data-tooltip=\"[93]\" class=\"connections block\" data-zone=\"7\">");
         for (var i = 1; i <= 19; i++) {
-            html += "\n                    <div id=\"player-table-".concat(playerId, "-traffic-jam-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>");
+            html += "\n                    <div id=\"player-table-".concat(playerId, "-connections-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>");
         }
-        html += "\n                    <div id=\"player-table-".concat(playerId, "-traffic-jam-total\" class=\"total\"></div>\n                </div>\n        ");
+        html += "\n                    <div id=\"player-table-".concat(playerId, "-connections-total\" class=\"total\"></div>\n                </div>\n        ");
         dojo.place(html, "player-table-".concat(playerId, "-main"));
         _this.updateScoreSheet(scoreSheets, visibleScoring);
         return _this;
     }
-    PlayerTableTrafficJamBlock.prototype.updateScoreSheet = function (scoreSheets, visibleScoring) {
-        var current = scoreSheets.current.trafficJam;
-        var validated = scoreSheets.validated.trafficJam;
+    PlayerTableConnectionsBlock.prototype.updateScoreSheet = function (scoreSheets, visibleScoring) {
+        var current = scoreSheets.current.connections;
+        var validated = scoreSheets.validated.connections;
         for (var i = 1; i <= 19; i++) {
-            this.setContentAndValidation("traffic-jam-checkmark".concat(i), current.checked >= i ? '✔' : '', current.checked >= i && validated.checked < i);
+            this.setContentAndValidation("connections-checkmark".concat(i), current.checked >= i ? '✔' : '', current.checked >= i && validated.checked < i);
         }
         if (visibleScoring) {
-            this.setContentAndValidation("traffic-jam-total", -current.total, current.total !== validated.total);
+            this.setContentAndValidation("connections-total", -current.total, current.total !== validated.total);
         }
     };
-    return PlayerTableTrafficJamBlock;
+    return PlayerTableConnectionsBlock;
 }(PlayerTableBlock));
 var isDebug = window.location.host == 'studio.boardgamearena.com' || window.location.hash.indexOf('debug') > -1;
 ;
@@ -652,7 +652,7 @@ var PlayerTable = /** @class */ (function () {
         this.commonObjectives = new PlayerTableCommonObjectivesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.personalObjective = new PlayerTablePersonalObjectiveBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.turnZones = new PlayerTableTurnZonesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
-        this.trafficJam = new PlayerTableTrafficJamBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
+        this.connections = new PlayerTableConnectionsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.updateScoreSheet(player.scoreSheets, game.isVisibleScoring());
     }
     PlayerTable.prototype.setRound = function (validatedTickets, currentTicket) {
@@ -671,7 +671,7 @@ var PlayerTable = /** @class */ (function () {
         this.commonObjectives.updateScoreSheet(scoreSheets, visibleScoring);
         this.personalObjective.updateScoreSheet(scoreSheets, visibleScoring);
         this.turnZones.updateScoreSheet(scoreSheets, visibleScoring);
-        this.trafficJam.updateScoreSheet(scoreSheets, visibleScoring);
+        this.connections.updateScoreSheet(scoreSheets, visibleScoring);
         if (visibleScoring) {
             this.setContentAndValidation("total-score", scoreSheets.current.total, scoreSheets.current.total != scoreSheets.validated.total);
         }
@@ -817,8 +817,8 @@ var TableCenter = /** @class */ (function () {
         else if (route.useTurnZone) {
             ghostClass = 'turn-zone';
         }
-        else if (route.trafficJam > 0) {
-            ghostClass = 'traffic-jam';
+        else if (route.connections > 0) {
+            ghostClass = 'connections';
         }
         dojo.place("<div id=\"ghost-marker-".concat(min, "-").concat(max, "\" class=\"ghost marker ").concat(ghostClass, "\"></div>"), "route".concat(min, "-").concat(max));
     };
@@ -1266,7 +1266,7 @@ var GetOnBoard = /** @class */ (function () {
             case 90: return _("<strong>Common Objective:</strong> Score 10 points when you complete the objective, or 6 points if another player completed it on a previous round.");
             case 91: return _("<strong>Personal Objective:</strong> Score 10 points when your markers link the 3 Letters of your personal objective.");
             case 92: return _("<strong>Turn Zone:</strong> If you choose to change a turn into a straight line or a straight line to a turn, check a box on the Turn Zone. The score here is negative, and you only have 5 of them!");
-            case 93: return _("<strong>Traffic Jam:</strong> For each marker already in place when you add a marker on a route, check a Traffic Jam box. If the road is black, check an extra box. The score here is negative!");
+            case 93: return _("<strong>Connections:</strong> For each marker already in place when you add a marker on a route, check a Connection box. If the road is black, check an extra box. The score here is negative!"); // TODO
             case 94: return _("<strong>Total score:</strong> Add sum of all green zone totals, subtract sum of all red zone totals.");
             case 95: return _("<strong>Tickets:</strong> The red check indicates the current round ticket. It defines the shape of the route you have to place. The black checks indicates past rounds.");
             case 97: return _("<strong>Letter:</strong> Used to define your personal objective.");

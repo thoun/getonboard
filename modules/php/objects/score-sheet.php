@@ -52,7 +52,7 @@ class ScoreSheet {
     public ObjectivesScoreSheet $commonObjectives;
     public ObjectivesScoreSheet $personalObjective;
     public SimpleZoneScoreSheet $turnZones;
-    public SimpleZoneScoreSheet $trafficJam;
+    public SimpleZoneScoreSheet $connections;
 
     public int $total = 0;
 
@@ -65,7 +65,7 @@ class ScoreSheet {
         $this->commonObjectives = new ObjectivesScoreSheet();
         $this->personalObjective = new ObjectivesScoreSheet();
         $this->turnZones = new SimpleZoneScoreSheet();
-        $this->trafficJam = new SimpleZoneScoreSheet();
+        $this->connections = new SimpleZoneScoreSheet();
     } 
 }
 

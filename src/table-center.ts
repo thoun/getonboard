@@ -119,8 +119,8 @@ class TableCenter {
             ghostClass = 'elimination';
         } else if (route.useTurnZone) {
             ghostClass = 'turn-zone';
-        } else if (route.trafficJam > 0) {
-            ghostClass = 'traffic-jam';
+        } else if (route.connections > 0) {
+            ghostClass = 'connections';
         }
 
         dojo.place(`<div id="ghost-marker-${min}-${max}" class="ghost marker ${ghostClass}"></div>`, `route${min}-${max}`);

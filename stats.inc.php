@@ -68,9 +68,9 @@ $commonStats = [
         "name" => totranslate("Turn zone checks"),
         "type" => "int"
     ],
-    "trafficJamUsed" => [
+    "connectionsUsed" => [
         "id" => 15,
-        "name" => totranslate("Traffic jam checks"),
+        "name" => totranslate("Connections checks"),
         "type" => "int"
     ],
     "commonObjectivesFirst" => [

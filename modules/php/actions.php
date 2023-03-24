@@ -56,7 +56,7 @@ trait ActionTrait {
 
         $round = $this->getRoundNumber();
         $useTurnZone = $possibleRoute->useTurnZone ? 1 : 0;
-        $this->DbQuery("INSERT INTO placed_routes(`player_id`, `from`, `to`, `round`, `use_turn_zone`, `traffic_jam`) VALUES ($playerId, $from, $to, $round, $useTurnZone, $possibleRoute->trafficJam)");
+        $this->DbQuery("INSERT INTO placed_routes(`player_id`, `from`, `to`, `round`, `use_turn_zone`, `connections`) VALUES ($playerId, $from, $to, $round, $useTurnZone, $possibleRoute->connections)");
 
         $mapElements = $this->MAP_POSITIONS[$this->getMap()][$to];
         $zones = array_map(fn($element) => floor($element / 10), $mapElements);
@@ -64,7 +64,7 @@ trait ActionTrait {
         if ($useTurnZone) {            
             $zones[] = 6;
         }
-        if ($possibleRoute->trafficJam > 0) {            
+        if ($possibleRoute->connections > 0) {            
             $zones[] = 7;
         }
 
@@ -166,10 +166,10 @@ trait ActionTrait {
             $this->incStat($turnZoneUsed, 'turnZoneUsed');
             $this->incStat($turnZoneUsed, 'turnZoneUsed', $playerId);
         }
-        $trafficJamUsed = array_reduce(array_map(fn($route) => $route->trafficJam, $unvalidatedRoutes), fn($a, $b) => $a + $b, 0);
-        if ($trafficJamUsed > 0) {
-            $this->incStat($trafficJamUsed, 'trafficJamUsed');
-            $this->incStat($trafficJamUsed, 'trafficJamUsed', $playerId);
+        $connectionsUsed = array_reduce(array_map(fn($route) => $route->connections, $unvalidatedRoutes), fn($a, $b) => $a + $b, 0);
+        if ($connectionsUsed > 0) {
+            $this->incStat($connectionsUsed, 'connectionsUsed');
+            $this->incStat($connectionsUsed, 'connectionsUsed', $playerId);
         }
         
         $scoreSheets = $this->notifUpdateScoreSheet($playerId);
