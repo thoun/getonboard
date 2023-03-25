@@ -161,6 +161,7 @@ trait ScoreSheetTrait {
 
     function getScoreSheet(int $connectionColor, array $placedRoutes, array $mapPositions, array $personalObjectives, array $commonObjectives, bool $endScoring = false) {
         $scoreSheet = new ScoreSheet();
+        $scoreSheet->connectionColor = $connectionColor;
 
         $visitedLetters = [];
 

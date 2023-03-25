@@ -170,10 +170,10 @@
 }
 
 &.connections {
-  top: 502px;
-  left: 11px;
-  width: 523px;
-  height: 104px;
+  top: 527px;
+  left: 0;
+  width: 417px;
+  height: 96px;
 
   .checkmark {
     width: 12px;
@@ -183,23 +183,26 @@
 
     @for $i from 0 through 5 {
       &[data-number="#{$i+1}"] {
-        top: 12px;
-        left: #{82 + $i*66}px;
+        top: 19px;
+        left: #{189px + $i * 23.5px};
       }
     }
 
-    @for $i from 6 through 12 {
-      &[data-number="#{$i+1}"] {
-        top: 48px;
-        left: #{810 - $i*66}px;
-      }
+    &[data-number="7"] {
+      top: 42px;
+      left: 330px;
     }
 
-    @for $i from 13 through 18 {
+    @for $i from 7 through 18 {
       &[data-number="#{$i+1}"] {
-        top: 83px;
-        left: #{-840 + $i*66}px;
+        top: 67px;
+        left: #{306px - ($i - 7) * 23.5px};
       }
     }
+  }
+
+  .total {
+    bottom: 17px;
+    right: 15px;
   }
 }
