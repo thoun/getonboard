@@ -28,7 +28,7 @@ export class PlayerTableConnectionsBlock extends PlayerTableBlock {
         }
 
         if (visibleScoring) {
-            this.setContentAndValidation(`connections-total`, -current.total, current.total !== validated.total);
+            this.setContentAndValidation(`connections-total`, current.total, current.total !== validated.total);
         }
     }
 
