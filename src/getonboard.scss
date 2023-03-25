@@ -208,42 +208,42 @@ html, .mode_3d #game_play_area_background {
 
   // green light
   &[data-element="0"] {
-    background-position: #{0 * 100% / 8} 0%;
+    background-position: #{0 * 100% / 9} 0%;
   }
   
   // old lady
   &[data-element="20"] {
-    background-position: #{1 * 100% / 8} 0%;
+    background-position: #{1 * 100% / 9} 0%;
   }
   
   // student
   &[data-element="30"] {
-    background-position: #{2 * 100% / 8} 0%;
+    background-position: #{2 * 100% / 9} 0%;
   }
   &[data-element="32"] {
-    background-position: #{3 * 100% / 8} 0%;
+    background-position: #{3 * 100% / 9} 0%;
   }
   
   // tourist
   &[data-element="40"] {
-    background-position: #{4 * 100% / 8} 0%;
+    background-position: #{4 * 100% / 9} 0%;
   }
   &[data-element="41"] {
-    background-position: #{5 * 100% / 8} 0%;
+    background-position: #{5 * 100% / 9} 0%;
   }
   &[data-element="42"] {
-    background-position: #{6 * 100% / 8} 0%;
+    background-position: #{6 * 100% / 9} 0%;
   }
   
   // lover
   &[data-element="50"] {
-    background-position: #{7 * 100% / 8} 0%;
+    background-position: #{7 * 100% / 9} 0%;
   }
   &[data-element="51"] {
-    background-position: #{8 * 100% / 8} 0%;
+    background-position: #{8 * 100% / 9} 0%;
   }
   &[data-element="52"] {
-    background-position: #{8 * 100% / 8} 0%;
+    background-position: #{9 * 100% / 9} 0%;
   }
 }
 

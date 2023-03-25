@@ -50,7 +50,7 @@
 
       @for $i from 0 through 11 {
         &[data-number="#{$i + 1}"] {
-          left: #{75 + ($i % 6) * 100 + floor($i / 6) * 46}px;
+          left: #{31 + ($i % 6) * 109 + floor($i / 6) * 46}px;
         }
       }
     }
@@ -100,10 +100,10 @@
     .score.total {
       position: absolute;
       text-align: center;
-      bottom: 16px;
-      right: 29px;
-      width: 103px;
-      height: 41px;
+      bottom: 22px;
+      right: 35px;
+      width: 79px;
+      height: 38px;
       font-size: 40pt;
       margin-bottom: 15px;
       margin-right: 7px;

@@ -711,40 +711,40 @@ html[data-no-grid=true][data-no-building=true] #map[data-size=big].hd {
   margin-left: -3px;
 }
 .player-table .top .checkmark[data-number="1"] {
-  left: 75px;
+  left: 31px;
 }
 .player-table .top .checkmark[data-number="2"] {
-  left: 175px;
+  left: 140px;
 }
 .player-table .top .checkmark[data-number="3"] {
-  left: 275px;
+  left: 249px;
 }
 .player-table .top .checkmark[data-number="4"] {
-  left: 375px;
+  left: 358px;
 }
 .player-table .top .checkmark[data-number="5"] {
-  left: 475px;
+  left: 467px;
 }
 .player-table .top .checkmark[data-number="6"] {
-  left: 575px;
+  left: 576px;
 }
 .player-table .top .checkmark[data-number="7"] {
-  left: 121px;
+  left: 77px;
 }
 .player-table .top .checkmark[data-number="8"] {
-  left: 221px;
+  left: 186px;
 }
 .player-table .top .checkmark[data-number="9"] {
-  left: 321px;
+  left: 295px;
 }
 .player-table .top .checkmark[data-number="10"] {
-  left: 421px;
+  left: 404px;
 }
 .player-table .top .checkmark[data-number="11"] {
-  left: 521px;
+  left: 513px;
 }
 .player-table .top .checkmark[data-number="12"] {
-  left: 621px;
+  left: 622px;
 }
 .player-table .main {
   position: absolute;
@@ -1028,10 +1028,10 @@ html[data-no-grid=true][data-no-building=true] #map[data-size=big].hd {
   left: 272px;
 }
 .player-table .main .block.connections {
-  top: 502px;
-  left: 11px;
-  width: 523px;
-  height: 104px;
+  top: 527px;
+  left: 0;
+  width: 417px;
+  height: 96px;
 }
 .player-table .main .block.connections .checkmark {
   width: 12px;
@@ -1040,80 +1040,84 @@ html[data-no-grid=true][data-no-building=true] #map[data-size=big].hd {
   margin-top: -13px;
 }
 .player-table .main .block.connections .checkmark[data-number="1"] {
-  top: 12px;
-  left: 82px;
+  top: 19px;
+  left: 189px;
 }
 .player-table .main .block.connections .checkmark[data-number="2"] {
-  top: 12px;
-  left: 148px;
+  top: 19px;
+  left: 212.5px;
 }
 .player-table .main .block.connections .checkmark[data-number="3"] {
-  top: 12px;
-  left: 214px;
+  top: 19px;
+  left: 236px;
 }
 .player-table .main .block.connections .checkmark[data-number="4"] {
-  top: 12px;
-  left: 280px;
+  top: 19px;
+  left: 259.5px;
 }
 .player-table .main .block.connections .checkmark[data-number="5"] {
-  top: 12px;
-  left: 346px;
+  top: 19px;
+  left: 283px;
 }
 .player-table .main .block.connections .checkmark[data-number="6"] {
-  top: 12px;
-  left: 412px;
+  top: 19px;
+  left: 306.5px;
 }
 .player-table .main .block.connections .checkmark[data-number="7"] {
-  top: 48px;
-  left: 414px;
+  top: 42px;
+  left: 330px;
 }
 .player-table .main .block.connections .checkmark[data-number="8"] {
-  top: 48px;
-  left: 348px;
+  top: 67px;
+  left: 306px;
 }
 .player-table .main .block.connections .checkmark[data-number="9"] {
-  top: 48px;
-  left: 282px;
+  top: 67px;
+  left: 282.5px;
 }
 .player-table .main .block.connections .checkmark[data-number="10"] {
-  top: 48px;
-  left: 216px;
+  top: 67px;
+  left: 259px;
 }
 .player-table .main .block.connections .checkmark[data-number="11"] {
-  top: 48px;
-  left: 150px;
+  top: 67px;
+  left: 235.5px;
 }
 .player-table .main .block.connections .checkmark[data-number="12"] {
-  top: 48px;
-  left: 84px;
+  top: 67px;
+  left: 212px;
 }
 .player-table .main .block.connections .checkmark[data-number="13"] {
-  top: 48px;
-  left: 18px;
+  top: 67px;
+  left: 188.5px;
 }
 .player-table .main .block.connections .checkmark[data-number="14"] {
-  top: 83px;
-  left: 18px;
+  top: 67px;
+  left: 165px;
 }
 .player-table .main .block.connections .checkmark[data-number="15"] {
-  top: 83px;
-  left: 84px;
+  top: 67px;
+  left: 141.5px;
 }
 .player-table .main .block.connections .checkmark[data-number="16"] {
-  top: 83px;
-  left: 150px;
+  top: 67px;
+  left: 118px;
 }
 .player-table .main .block.connections .checkmark[data-number="17"] {
-  top: 83px;
-  left: 216px;
+  top: 67px;
+  left: 94.5px;
 }
 .player-table .main .block.connections .checkmark[data-number="18"] {
-  top: 83px;
-  left: 282px;
+  top: 67px;
+  left: 71px;
 }
 .player-table .main .block.connections .checkmark[data-number="19"] {
-  top: 83px;
-  left: 348px;
+  top: 67px;
+  left: 47.5px;
+}
+.player-table .main .block.connections .total {
+  bottom: 17px;
+  right: 15px;
 }
 .player-table .main .block .checkmark {
   position: absolute;
@@ -1142,10 +1146,10 @@ html[data-no-grid=true][data-no-building=true] #map[data-size=big].hd {
 .player-table .main .score.total {
   position: absolute;
   text-align: center;
-  bottom: 16px;
-  right: 29px;
-  width: 103px;
-  height: 41px;
+  bottom: 22px;
+  right: 35px;
+  width: 79px;
+  height: 38px;
   font-size: 40pt;
   margin-bottom: 15px;
   margin-right: 7px;
@@ -1389,28 +1393,28 @@ html, .mode_3d #game_play_area_background {
   background-position: 0% 0%;
 }
 .map-icon[data-element="20"] {
-  background-position: 12.5% 0%;
+  background-position: 11.1111111111% 0%;
 }
 .map-icon[data-element="30"] {
-  background-position: 25% 0%;
+  background-position: 22.2222222222% 0%;
 }
 .map-icon[data-element="32"] {
-  background-position: 37.5% 0%;
+  background-position: 33.3333333333% 0%;
 }
 .map-icon[data-element="40"] {
-  background-position: 50% 0%;
+  background-position: 44.4444444444% 0%;
 }
 .map-icon[data-element="41"] {
-  background-position: 62.5% 0%;
+  background-position: 55.5555555556% 0%;
 }
 .map-icon[data-element="42"] {
-  background-position: 75% 0%;
+  background-position: 66.6666666667% 0%;
 }
 .map-icon[data-element="50"] {
-  background-position: 87.5% 0%;
+  background-position: 77.7777777778% 0%;
 }
 .map-icon[data-element="51"] {
-  background-position: 100% 0%;
+  background-position: 88.8888888889% 0%;
 }
 .map-icon[data-element="52"] {
   background-position: 100% 0%;
