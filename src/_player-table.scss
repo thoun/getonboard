@@ -56,6 +56,17 @@
     }
   }
 
+  .connection-color {
+    position: absolute;
+    top: 494px;
+    left: 23px;
+
+    [data-number="2"] {
+      position: absolute;
+      top: 20px;
+    }
+  }
+
   .main {
     position: absolute;
     top: 77px;
@@ -103,8 +114,8 @@
       bottom: 22px;
       right: 35px;
       width: 79px;
-      height: 38px;
-      font-size: 40pt;
+      height: 30px;
+      font-size: 32pt;
       margin-bottom: 15px;
       margin-right: 7px;
     }
