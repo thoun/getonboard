@@ -746,6 +746,15 @@ html[data-no-grid=true][data-no-building=true] #map[data-size=big].hd {
 .player-table .top .checkmark[data-number="12"] {
   left: 622px;
 }
+.player-table .connection-color {
+  position: absolute;
+  top: 494px;
+  left: 23px;
+}
+.player-table .connection-color [data-number="2"] {
+  position: absolute;
+  top: 20px;
+}
 .player-table .main {
   position: absolute;
   top: 77px;
@@ -802,43 +811,43 @@ html[data-no-grid=true][data-no-building=true] #map[data-size=big].hd {
   height: 188px;
 }
 .player-table .main .block.students .checkmark.students[data-number="1"] {
-  top: 73px;
+  top: 88px;
   left: 28px;
 }
 .player-table .main .block.students .checkmark.students[data-number="2"] {
-  top: 73px;
+  top: 88px;
   left: 58px;
 }
 .player-table .main .block.students .checkmark.students[data-number="3"] {
-  top: 73px;
+  top: 88px;
   left: 88px;
 }
 .player-table .main .block.students .checkmark.students[data-number="4"] {
-  top: 103px;
+  top: 118px;
   left: 28px;
 }
 .player-table .main .block.students .checkmark.students[data-number="5"] {
-  top: 103px;
+  top: 118px;
   left: 58px;
 }
 .player-table .main .block.students .checkmark.students[data-number="6"] {
-  top: 103px;
+  top: 118px;
   left: 88px;
 }
 .player-table .main .block.students .checkmark.cinemas[data-number="1"] {
-  top: 79px;
+  top: 88px;
   left: 141px;
 }
 .player-table .main .block.students .checkmark.cinemas[data-number="2"] {
-  top: 79px;
+  top: 88px;
   left: 172px;
 }
 .player-table .main .block.students .checkmark.cinemas[data-number="3"] {
-  top: 110px;
+  top: 119px;
   left: 141px;
 }
 .player-table .main .block.students .checkmark.cinemas[data-number="4"] {
-  top: 110px;
+  top: 119px;
   left: 172px;
 }
 .player-table .main .block.tourists {
@@ -1149,8 +1158,8 @@ html[data-no-grid=true][data-no-building=true] #map[data-size=big].hd {
   bottom: 22px;
   right: 35px;
   width: 79px;
-  height: 38px;
-  font-size: 40pt;
+  height: 30px;
+  font-size: 32pt;
   margin-bottom: 15px;
   margin-right: 7px;
 }

@@ -625,7 +625,7 @@ var PlayerTableConnectionsBlock = /** @class */ (function (_super) {
             this.setContentAndValidation("connections-checkmark".concat(i), current.checked >= i ? '✔' : '', current.checked >= i && validated.checked < i);
         }
         if (visibleScoring) {
-            this.setContentAndValidation("connections-total", -current.total, current.total !== validated.total);
+            this.setContentAndValidation("connections-total", current.total, current.total !== validated.total);
         }
     };
     return PlayerTableConnectionsBlock;
@@ -641,10 +641,17 @@ var PlayerTable = /** @class */ (function () {
         var eliminated = Number(player.eliminated) > 0;
         var html = "\n        <div id=\"player-table-".concat(this.playerId, "\" class=\"player-table ").concat(eliminated ? 'eliminated' : '', "\" style=\"box-shadow: 0 0 3px 3px #").concat(player.color, ";\">\n            <div id=\"player-table-").concat(this.playerId, "-top\" data-tooltip=\"[95]\" class=\"top\" data-type=\"").concat(player.sheetType, "\">\n            ");
         for (var i = 1; i <= 12; i++) {
-            html += "\n                    <div id=\"player-table-".concat(this.playerId, "-top-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>");
+            html += "<div id=\"player-table-".concat(this.playerId, "-top-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>");
         }
-        html += " \n            </div>\n            <div id=\"player-table-".concat(this.playerId, "-main\" class=\"main\">\n                <div id=\"player-table-").concat(this.playerId, "-total-score\" data-tooltip=\"[94]\" class=\"total score\"></div>\n            </div>\n            <div class=\"name\" style=\"color: #").concat(player.color, ";\">").concat(player.name, "</div>\n            <div id=\"player-table-").concat(this.playerId, "-first-player-wrapper\" class=\"first-player-wrapper\"></div>\n        </div>\n        ");
+        html += " \n            </div>\n            \n            <div id=\"player-table-".concat(this.playerId, "-main\" class=\"main\">\n                <div class=\"connection-color\">");
+        for (var i = 1; i <= 2; i++) {
+            html += "<div id=\"player-table-".concat(this.playerId, "-connection-color-").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>");
+        }
+        html += "\n                </div>\n                <div id=\"player-table-".concat(this.playerId, "-total-score\" data-tooltip=\"[94]\" class=\"total score\"></div>\n            </div>\n            <div class=\"name\" style=\"color: #").concat(player.color, ";\">").concat(player.name, "</div>\n            <div id=\"player-table-").concat(this.playerId, "-first-player-wrapper\" class=\"first-player-wrapper\"></div>\n        </div>\n        ");
         dojo.place(html, insertIn);
+        if (player.scoreSheets.current.connectionColor) {
+            this.setContentAndValidation("connection-color-".concat(player.scoreSheets.current.connectionColor), '✔', false);
+        }
         this.oldLadies = new PlayerTableOldLadiesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.students = new PlayerTableStudentsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.tourists = new PlayerTableTouristsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
