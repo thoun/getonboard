@@ -23,12 +23,18 @@ class PlayerTable {
             <div id="player-table-${this.playerId}-top" data-tooltip="[95]" class="top" data-type="${player.sheetType}">
             `;
         for(let i=1; i<=12; i++) {
-            html += `
-                    <div id="player-table-${this.playerId}-top-checkmark${i}" class="checkmark" data-number="${i}"></div>`;
+            html += `<div id="player-table-${this.playerId}-top-checkmark${i}" class="checkmark" data-number="${i}"></div>`;
         }
         html += ` 
             </div>
+            
             <div id="player-table-${this.playerId}-main" class="main">
+                <div class="connection-color">`;
+        for(let i=1; i<=2; i++) {
+            html += `<div id="player-table-${this.playerId}-connection-color-${i}" class="checkmark" data-number="${i}"></div>`;
+        }  
+        html += `
+                </div>
                 <div id="player-table-${this.playerId}-total-score" data-tooltip="[94]" class="total score"></div>
             </div>
             <div class="name" style="color: #${player.color};">${player.name}</div>
@@ -36,6 +42,10 @@ class PlayerTable {
         </div>
         `;
         dojo.place(html, insertIn);
+
+        if (player.scoreSheets.current.connectionColor) {
+            this.setContentAndValidation(`connection-color-${player.scoreSheets.current.connectionColor}`, '✔', false);
+        }
 
         this.oldLadies = new PlayerTableOldLadiesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.students = new PlayerTableStudentsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());

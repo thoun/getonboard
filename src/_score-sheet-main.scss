@@ -30,7 +30,7 @@
   .checkmark.students {
     @for $i from 0 through 5 {
       &[data-number="#{$i+1}"] {
-        top: #{73 + floor($i / 3) * 30}px;
+        top: #{88 + floor($i / 3) * 30}px;
         left: #{28 + ($i % 3) * 30}px;
       }
     }
@@ -39,7 +39,7 @@
   .checkmark.cinemas {
     @for $i from 0 through 3 {
       &[data-number="#{$i+1}"] {
-        top: #{79 + floor($i / 2) * 31}px;
+        top: #{88 + floor($i / 2) * 31}px;
         left: #{141 + ($i % 2) * 31}px;
       }
     }

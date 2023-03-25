@@ -57,6 +57,8 @@ interface ObjectivesScoreSheet {
 }
 
 interface ScoreSheet {
+    connectionColor: number;
+    
     oldLadies: SimpleZoneScoreSheet;
     students: StudentsScoreSheet;
     tourists: TouristsScoreSheet;
