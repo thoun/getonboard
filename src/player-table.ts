@@ -4,6 +4,7 @@ const log = isDebug ? console.log.bind(window.console) : function () { };
 class PlayerTable {
     public playerId: string;
     
+    private stations: PlayerTableStationsBlock;
     private oldLadies: PlayerTableOldLadiesBlock;
     private students: PlayerTableStudentsBlock;
     private tourists: PlayerTableTouristsBlock;
@@ -47,6 +48,7 @@ class PlayerTable {
             this.setContentAndValidation(`connection-color-${player.scoreSheets.current.connectionColor}`, '✔', false);
         }
 
+        this.stations = new PlayerTableStationsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.oldLadies = new PlayerTableOldLadiesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.students = new PlayerTableStudentsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.tourists = new PlayerTableTouristsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
@@ -73,6 +75,7 @@ class PlayerTable {
         if (scoreSheets.current.connectionColor) {
             this.setContentAndValidation(`connection-color-${scoreSheets.current.connectionColor}`, '✔', false);
         }
+        this.stations.updateScoreSheet(scoreSheets, visibleScoring);
         this.oldLadies.updateScoreSheet(scoreSheets, visibleScoring);
         this.students.updateScoreSheet(scoreSheets, visibleScoring);
         this.tourists.updateScoreSheet(scoreSheets, visibleScoring);
