@@ -103,15 +103,21 @@ trait ScoreSheetTrait {
         $this->checkCompletedCommonObjective($scoreSheet, $commonObjectives, TOURIST, $totalCheckedTourists, $round);
     }
     
-    function addLoverToScoreSheet(ScoreSheet &$scoreSheet, bool $dark, array $commonObjectives, int $round) {
+    function addLoverToScoreSheet(ScoreSheet &$scoreSheet, string $type, array $commonObjectives, int $round) {
         $rowIndex = count($scoreSheet->lovers->subTotals);
         if ($rowIndex >= 3) {
             return;
         }
-        if ($scoreSheet->lovers->checkedLovers[$rowIndex] < 3) {
-            $scoreSheet->lovers->checkedLovers[$rowIndex]++;
+        if ($scoreSheet->lovers->{'checkedLovers'.$type}[$rowIndex] < 2) {
+            $scoreSheet->lovers->{'checkedLovers'.$type}[$rowIndex]++;
             $this->updateLoversTotal($scoreSheet, $commonObjectives, $round);
         }
+    }
+
+    function getLoverPoints(int $light, int $dark) {
+        $couples = min($light, $dark);
+        $singles = max($light, $dark) - $couples;
+        return $couples * 6 + $singles * 2;
     }
 
     function addRestaurantToScoreSheet(ScoreSheet &$scoreSheet, array $commonObjectives, int $round) {
@@ -119,9 +125,8 @@ trait ScoreSheetTrait {
         if ($rowIndex >= 3) {
             return;
         }
-        if ($scoreSheet->lovers->checkedLovers[$rowIndex] > 0) {
-            $checked = $scoreSheet->lovers->checkedLovers[$rowIndex];
-            $scoreSheet->lovers->subTotals[$rowIndex] = $this->LOVERS_POINTS[$checked - 1];
+        if ($scoreSheet->lovers->checkedLoversLight[$rowIndex] > 0 || $scoreSheet->lovers->checkedLoversDark[$rowIndex] > 0) {
+            $scoreSheet->lovers->subTotals[$rowIndex] = $this->getLoverPoints($scoreSheet->lovers->checkedLoversLight[$rowIndex], $scoreSheet->lovers->checkedLoversDark[$rowIndex]);
         }
         $this->updateLoversTotal($scoreSheet, $commonObjectives, $round);
     }
@@ -130,9 +135,8 @@ trait ScoreSheetTrait {
         if ($endScoring) {
             $rowIndex = count($scoreSheet->lovers->subTotals);
             if ($rowIndex < 3) {
-                $checked = $scoreSheet->lovers->checkedLovers[$rowIndex];
-                if ($checked > 0) {
-                    $scoreSheet->lovers->subTotals[$rowIndex] = floor($this->LOVERS_POINTS[$checked - 1] / 2);
+                if ($scoreSheet->lovers->checkedLoversLight[$rowIndex] > 0 || $scoreSheet->lovers->checkedLoversDark[$rowIndex] > 0) {
+                    $scoreSheet->lovers->subTotals[$rowIndex] = floor($this->getLoverPoints($scoreSheet->lovers->checkedLoversLight[$rowIndex], $scoreSheet->lovers->checkedLoversDark[$rowIndex]) / 2);
                 }
             }
         }
@@ -143,7 +147,10 @@ trait ScoreSheetTrait {
         }   
         
         $totalCheckedLovers = 0;
-        foreach ($scoreSheet->lovers->checkedLovers as $checkedLovers) {
+        foreach ($scoreSheet->lovers->checkedLoversLight as $checkedLovers) {
+            $totalCheckedLovers += $checkedLovers;
+        }
+        foreach ($scoreSheet->lovers->checkedLoversDark as $checkedLovers) {
             $totalCheckedLovers += $checkedLovers;
         }
         $this->checkCompletedCommonObjective($scoreSheet, $commonObjectives, LOVER_LIGHT, $totalCheckedLovers, $round);
@@ -216,7 +223,7 @@ trait ScoreSheetTrait {
                         // lovers
                         case LOVER_LIGHT:
                         case LOVER_DARK:
-                            $this->addLoverToScoreSheet($scoreSheet, $element == LOVER_DARK, $commonObjectives, $round);
+                            $this->addLoverToScoreSheet($scoreSheet, $element == LOVER_DARK ? 'Dark' : 'Light', $commonObjectives, $round);
                             break;
                         case RESTAURANT:
                             $this->addRestaurantToScoreSheet($scoreSheet, $commonObjectives, $round);

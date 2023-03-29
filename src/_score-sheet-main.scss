@@ -103,10 +103,22 @@
 
   .checkmark {
     @for $row from 0 through 2 {
-      @for $i from 0 through 2 {
-        &[data-row="#{$row+1}"][data-number="#{$i+1}"] {
-          top: #{75 + $row * 44}px;
-          left: #{29 + $i * 54}px;
+      &[data-row="#{$row+1}"] {
+        top: #{75 + $row * 44}px;
+      }
+    }
+
+    &.light {
+      @for $i from 0 through 1 {
+        &[data-number="#{$i+1}"] {
+          left: #{56 + $i * 93}px;
+        }
+      }
+    }
+    &.dark {
+      @for $i from 0 through 1 {
+        &[data-number="#{$i+1}"] {
+          left: #{18 + $i * 93}px;
         }
       }
     }
