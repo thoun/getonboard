@@ -517,8 +517,8 @@ var PlayerTableLoversBlock = /** @class */ (function (_super) {
         var _this = _super.call(this, playerId) || this;
         var html = "\n        <div id=\"lovers-block-".concat(playerId, "\" data-tooltip=\"[50,51]\" class=\"lovers block\" data-zone=\"5\">");
         for (var row = 1; row <= 3; row++) {
-            for (var i = 1; i <= 3; i++) {
-                html += "\n                        <div id=\"player-table-".concat(playerId, "-lovers-checkmark").concat(row, "-").concat(i, "\" class=\"checkmark\" data-row=\"").concat(row, "\" data-number=\"").concat(i, "\"></div>");
+            for (var i = 1; i <= 2; i++) {
+                html += "\n                    <div id=\"player-table-".concat(playerId, "-lovers-light-checkmark").concat(row, "-").concat(i, "\" class=\"checkmark light\" data-row=\"").concat(row, "\" data-number=\"").concat(i, "\"></div>\n                    <div id=\"player-table-").concat(playerId, "-lovers-dark-checkmark").concat(row, "-").concat(i, "\" class=\"checkmark dark\" data-row=\"").concat(row, "\" data-number=\"").concat(i, "\"></div>");
             }
         }
         html += "\n                    <div id=\"player-table-".concat(playerId, "-lovers-subtotal1\" class=\"subtotal\" data-number=\"1\"></div>\n                    <div id=\"player-table-").concat(playerId, "-lovers-subtotal2\" class=\"subtotal\" data-number=\"2\"></div>\n                    <div id=\"player-table-").concat(playerId, "-lovers-subtotal3\" class=\"subtotal\" data-number=\"3\"></div>\n                    <div id=\"player-table-").concat(playerId, "-lovers-total\" class=\"total\"></div>\n                </div>\n        ");
@@ -530,8 +530,9 @@ var PlayerTableLoversBlock = /** @class */ (function (_super) {
         var current = scoreSheets.current.lovers;
         var validated = scoreSheets.validated.lovers;
         for (var row = 1; row <= 3; row++) {
-            for (var i = 1; i <= 3; i++) {
-                this.setContentAndValidation("lovers-checkmark".concat(row, "-").concat(i), current.checkedLovers[row - 1] >= i ? '✔' : (current.subTotals[row - 1] ? '⎯⎯' : ''), current.checkedLovers[row - 1] >= i && validated.checkedLovers[row - 1] < i);
+            for (var i = 1; i <= 2; i++) {
+                this.setContentAndValidation("lovers-light-checkmark".concat(row, "-").concat(i), current.checkedLoversLight[row - 1] >= i ? '✔' : (current.subTotals[row - 1] ? '⎯⎯' : ''), current.checkedLoversLight[row - 1] >= i && validated.checkedLoversLight[row - 1] < i);
+                this.setContentAndValidation("lovers-dark-checkmark".concat(row, "-").concat(i), current.checkedLoversDark[row - 1] >= i ? '✔' : (current.subTotals[row - 1] ? '⎯⎯' : ''), current.checkedLoversDark[row - 1] >= i && validated.checkedLoversDark[row - 1] < i);
             }
             this.setContentAndValidation("lovers-subtotal".concat(row), current.subTotals[row - 1], current.subTotals[row - 1] != validated.subTotals[row - 1]);
         }

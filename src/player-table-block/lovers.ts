@@ -5,9 +5,10 @@ class PlayerTableLoversBlock extends PlayerTableBlock {
         let html = `
         <div id="lovers-block-${playerId}" data-tooltip="[50,51]" class="lovers block" data-zone="5">`;
         for(let row=1; row<=3; row++) {
-            for(let i=1; i<=3; i++) {
+            for(let i=1; i<=2; i++) {
                 html += `
-                        <div id="player-table-${playerId}-lovers-checkmark${row}-${i}" class="checkmark" data-row="${row}" data-number="${i}"></div>`;
+                    <div id="player-table-${playerId}-lovers-light-checkmark${row}-${i}" class="checkmark light" data-row="${row}" data-number="${i}"></div>
+                    <div id="player-table-${playerId}-lovers-dark-checkmark${row}-${i}" class="checkmark dark" data-row="${row}" data-number="${i}"></div>`;
             }
         }
         html += `
@@ -27,8 +28,9 @@ class PlayerTableLoversBlock extends PlayerTableBlock {
         const validated = scoreSheets.validated.lovers;
         
         for(let row=1; row<=3; row++) {
-            for(let i=1; i<=3; i++) {
-                this.setContentAndValidation(`lovers-checkmark${row}-${i}`, current.checkedLovers[row-1] >= i ? '✔' : (current.subTotals[row-1] ? '⎯⎯' : ''), current.checkedLovers[row-1] >= i && validated.checkedLovers[row-1] < i);
+            for(let i=1; i<=2; i++) {
+                this.setContentAndValidation(`lovers-light-checkmark${row}-${i}`, current.checkedLoversLight[row-1] >= i ? '✔' : (current.subTotals[row-1] ? '⎯⎯' : ''), current.checkedLoversLight[row-1] >= i && validated.checkedLoversLight[row-1] < i);
+                this.setContentAndValidation(`lovers-dark-checkmark${row}-${i}`, current.checkedLoversDark[row-1] >= i ? '✔' : (current.subTotals[row-1] ? '⎯⎯' : ''), current.checkedLoversDark[row-1] >= i && validated.checkedLoversDark[row-1] < i);
             }
 
             this.setContentAndValidation(`lovers-subtotal${row}`, current.subTotals[row-1], current.subTotals[row-1] != validated.subTotals[row-1]);

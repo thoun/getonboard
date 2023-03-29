@@ -500,7 +500,6 @@ $this->SCORE_SHEETS_SHAPES = [
 
 $this->OLD_LADIES_POINTS = [1, 1, 1, 2, 2, 2, 3, 3];
 $this->TOURISTS_POINTS = [2, 5, 9, 14];
-$this->LOVERS_POINTS = [2, 4, 6];
 $this->PERSONAL_OBJECTIVE_POINTS = [0, 2, 5, 10];
 $this->TURN_ZONES_POINTS = [-1, -2, -2, -2, -3];
 $this->CONNECTION_POINTS = [0, 1, 0, 1, 0, 1,

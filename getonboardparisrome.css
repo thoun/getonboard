@@ -909,41 +909,26 @@ html[data-no-grid=true][data-no-building=true] #map[data-size=big].hd {
   width: 244px;
   height: 252px;
 }
-.player-table .main .block.lovers .checkmark[data-row="1"][data-number="1"] {
+.player-table .main .block.lovers .checkmark[data-row="1"] {
   top: 75px;
-  left: 29px;
 }
-.player-table .main .block.lovers .checkmark[data-row="1"][data-number="2"] {
-  top: 75px;
-  left: 83px;
-}
-.player-table .main .block.lovers .checkmark[data-row="1"][data-number="3"] {
-  top: 75px;
-  left: 137px;
-}
-.player-table .main .block.lovers .checkmark[data-row="2"][data-number="1"] {
+.player-table .main .block.lovers .checkmark[data-row="2"] {
   top: 119px;
-  left: 29px;
 }
-.player-table .main .block.lovers .checkmark[data-row="2"][data-number="2"] {
-  top: 119px;
-  left: 83px;
-}
-.player-table .main .block.lovers .checkmark[data-row="2"][data-number="3"] {
-  top: 119px;
-  left: 137px;
-}
-.player-table .main .block.lovers .checkmark[data-row="3"][data-number="1"] {
+.player-table .main .block.lovers .checkmark[data-row="3"] {
   top: 163px;
-  left: 29px;
 }
-.player-table .main .block.lovers .checkmark[data-row="3"][data-number="2"] {
-  top: 163px;
-  left: 83px;
+.player-table .main .block.lovers .checkmark.light[data-number="1"] {
+  left: 56px;
 }
-.player-table .main .block.lovers .checkmark[data-row="3"][data-number="3"] {
-  top: 163px;
-  left: 137px;
+.player-table .main .block.lovers .checkmark.light[data-number="2"] {
+  left: 149px;
+}
+.player-table .main .block.lovers .checkmark.dark[data-number="1"] {
+  left: 18px;
+}
+.player-table .main .block.lovers .checkmark.dark[data-number="2"] {
+  left: 111px;
 }
 .player-table .main .block.lovers .subtotal[data-number="1"] {
   top: 75px;
