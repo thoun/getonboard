@@ -13,33 +13,14 @@ $marker-size: 6px;
   position: relative;
   background-size: contain;
 
-  .position-indicator {
-    position: absolute;
-    width: 0px;
-    height: 0px;
-    border-style: solid;
-    border-width: 20px 20px 0 20px;
-    border-color: var(--position-indicator-color) transparent transparent transparent;
-    transition: left 0.5s, top 0.5s, border-color 0.5s;
+  .ticket-slot {
+    top: 13px;
 
-    &.top {
-      left: var(--position-indicator-left);
-      top: -8px;
+    &#ticket-slot-1 {
+      left: 145px;
     }
-    &.bottom {
-      transform: rotate(180deg);
-      left: var(--position-indicator-left);
-      bottom: -8px;
-    }
-    &.left {
-      transform: rotate(270deg);
-      left: -18px;
-      top: var(--position-indicator-top);
-    }
-    &.right {
-      transform: rotate(90deg);
-      right: -18px;
-      top: var(--position-indicator-top);
+    &#ticket-slot-2 {
+      left: 241px;
     }
   }
 
@@ -104,17 +85,6 @@ $marker-size: 6px;
         }
         &#common-objective-slot-2 {
           left: 525px;
-        }
-      }
-
-      .ticket-slot {
-        top: 16px;
-
-        &#ticket-slot-1 {
-          left: 146px;
-        }
-        &#ticket-slot-2 {
-          left: 241px;
         }
       }
     }
@@ -187,17 +157,6 @@ $marker-size: 6px;
         }
         &#common-objective-slot-2 {
           left: 472px;
-        }
-      }
-
-      .ticket-slot {
-        top: 16px;
-
-        &#ticket-slot-1 {
-          left: 146px;
-        }
-        &#ticket-slot-2 {
-          left: 241px;
         }
       }
     }
@@ -432,6 +391,10 @@ $marker-size: 6px;
       color: rgb(148, 0, 0);
     }
   }
+}
+
+.ticket.card-inner .card-side {
+  box-shadow: none;
 }
 
 .ticket-slot {
