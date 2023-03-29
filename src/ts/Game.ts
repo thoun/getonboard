@@ -564,7 +564,7 @@ export class Game {
                         checked = scoreSheet.tourists.checkedTourists.reduce((a, b) => a + b, 0);
                         break;
                     case 50: //LOVER_LIGHT
-                        checked = scoreSheet.lovers.checkedLovers.reduce((a, b) => a + b, 0);
+                        checked = scoreSheet.lovers.checkedLoversLight.reduce((a, b) => a + b, 0) + scoreSheet.lovers.checkedLoversDark.reduce((a, b) => a + b, 0);
                         break;
 
                         case 41: //MONUMENT_LIGHT
