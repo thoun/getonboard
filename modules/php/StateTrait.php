@@ -179,7 +179,10 @@ trait StateTrait {
             $this->bga->playerStats->set('averagePointsByCheckedTourists', (float)$scoreSheet->tourists->total / (float)$checkedTourists, $playerId);
         }
         $checkedLovers = 0;
-        foreach ($scoreSheet->lovers->checkedLovers as $checkedLover) {
+        foreach ($scoreSheet->lovers->checkedLoversLight as $checkedLover) {
+            $checkedLovers += $checkedLover;
+        }
+        foreach ($scoreSheet->lovers->checkedLoversDark as $checkedLover) {
             $checkedLovers += $checkedLover;
         }
         if ($checkedLovers > 0) {
