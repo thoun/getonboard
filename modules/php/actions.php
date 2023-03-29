@@ -41,13 +41,14 @@ trait ActionTrait {
         
         $playerId = intval(self::getActivePlayerId());
 
+        $args = $this->argPlaceRoute();
+
         $allPlacedRoutes = $this->getPlacedRoutes();
         $playerPlacedRoutes = array_filter($allPlacedRoutes, fn($placedRoute) => $placedRoute->playerId === $playerId);
         $currentPosition = $this->getCurrentPosition($playerId, $playerPlacedRoutes);
         $from = $currentPosition == $routeFrom ? $routeFrom : $routeTo;
         $to = $currentPosition == $routeFrom ? $routeTo : $routeFrom;
-        $turnShape = $this->getPlayerTurnShape($playerId);
-        $possibleRoutes = $this->getPossibleRoutes($playerId, $this->getMap(), $turnShape, $currentPosition, $allPlacedRoutes);
+        $possibleRoutes = $args['possibleRoutes'];
         $possibleRoute = $this->array_find($possibleRoutes, fn($route) => $this->isSameRoute($route, $from, $to));
 
         if ($possibleRoute == null) {
@@ -56,16 +57,20 @@ trait ActionTrait {
 
         $round = $this->getRoundNumber();
         $useTurnZone = $possibleRoute->useTurnZone ? 1 : 0;
-        $this->DbQuery("INSERT INTO placed_routes(`player_id`, `from`, `to`, `round`, `use_turn_zone`, `connections`) VALUES ($playerId, $from, $to, $round, $useTurnZone, $possibleRoute->connections)");
+        $useStation = $possibleRoute->useStation ? 1 : 0;
+        $this->DbQuery("INSERT INTO placed_routes(`player_id`, `from`, `to`, `round`, `use_turn_zone`, `connections`, `use_station`) VALUES ($playerId, $from, $to, $round, $useTurnZone, $possibleRoute->connections, $useStation)");
 
         $mapElements = $this->MAP_POSITIONS[$this->getMap()][$to];
         $zones = array_map(fn($element) => floor($element / 10), $mapElements);
         $zones = array_unique(array_filter($zones, fn($zone) => $zone >=2 && $zone <= 5));
-        if ($useTurnZone) {            
+        if ($useTurnZone) {
             $zones[] = 6;
         }
-        if ($possibleRoute->connections > 0) {            
+        if ($possibleRoute->connections > 0) {
             $zones[] = 7;
+        }
+        if ($useStation && !in_array(0, $zones)) {
+            $zones[] = 0;
         }
 
         $logElements = array_values(array_filter($mapElements, fn($element) => in_array($element, [0, 20, 30, 32, 40, 41, 42, 50, 51, 52])));

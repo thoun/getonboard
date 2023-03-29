@@ -413,6 +413,34 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var PlayerTableStationsBlock = /** @class */ (function (_super) {
+    __extends(PlayerTableStationsBlock, _super);
+    function PlayerTableStationsBlock(playerId, scoreSheets, visibleScoring) {
+        var _this = _super.call(this, playerId) || this;
+        var html = "\n        <div id=\"stations-block-".concat(playerId, "\" data-tooltip=\"[0]\" class=\"stations block\" data-zone=\"0\">");
+        for (var i = 1; i <= 8; i++) {
+            html += "\n                <div id=\"player-table-".concat(playerId, "-stations-circles").concat(i, "\" class=\"circle\" data-number=\"").concat(i, "\"></div>\n                <div id=\"player-table-").concat(playerId, "-stations-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>\n            ");
+        }
+        html += "        \n                    <div id=\"player-table-".concat(playerId, "-stations-total\" class=\"total\"></div>\n                </div>\n        ");
+        dojo.place(html, "player-table-".concat(playerId, "-main"));
+        _this.updateScoreSheet(scoreSheets, visibleScoring);
+        return _this;
+    }
+    PlayerTableStationsBlock.prototype.updateScoreSheet = function (scoreSheets, visibleScoring) {
+        var current = scoreSheets.current.stations;
+        var validated = scoreSheets.validated.stations;
+        for (var i = 1; i <= 6; i++) {
+            var div = document.getElementById("player-table-".concat(this.playerId, "-stations-circles").concat(i));
+            div.dataset.encircled = (current.encircled >= i).toString();
+            div.dataset.unvalidated = (current.encircled >= i && validated.encircled < i).toString();
+            this.setContentAndValidation("stations-checkmark".concat(i), current.checked >= i ? '✗' : '', current.checked >= i && validated.checked < i);
+        }
+        if (visibleScoring) {
+            this.setContentAndValidation("stations-total", current.total, current.total !== validated.total);
+        }
+    };
+    return PlayerTableStationsBlock;
+}(PlayerTableBlock));
 var PlayerTableOldLadiesBlock = /** @class */ (function (_super) {
     __extends(PlayerTableOldLadiesBlock, _super);
     function PlayerTableOldLadiesBlock(playerId, scoreSheets, visibleScoring) {
@@ -653,6 +681,7 @@ var PlayerTable = /** @class */ (function () {
         if (player.scoreSheets.current.connectionColor) {
             this.setContentAndValidation("connection-color-".concat(player.scoreSheets.current.connectionColor), '✔', false);
         }
+        this.stations = new PlayerTableStationsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.oldLadies = new PlayerTableOldLadiesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.students = new PlayerTableStudentsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.tourists = new PlayerTableTouristsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
@@ -675,6 +704,7 @@ var PlayerTable = /** @class */ (function () {
         if (scoreSheets.current.connectionColor) {
             this.setContentAndValidation("connection-color-".concat(scoreSheets.current.connectionColor), '✔', false);
         }
+        this.stations.updateScoreSheet(scoreSheets, visibleScoring);
         this.oldLadies.updateScoreSheet(scoreSheets, visibleScoring);
         this.students.updateScoreSheet(scoreSheets, visibleScoring);
         this.tourists.updateScoreSheet(scoreSheets, visibleScoring);
@@ -1007,7 +1037,7 @@ var GetOnBoard = /** @class */ (function () {
     GetOnBoard.prototype.onEnteringPlaceRoute = function (args) {
         var _this = this;
         if (args.canConfirm) {
-            this.setGamestateDescription('Confirm');
+            this.setGamestateDescription(args.possibleRoutes.length ? 'UseStation' : 'Confirm');
         }
         var activePlayerColor = this.getPlayerColor(this.getActivePlayerId());
         var currentPositionIntersection = document.getElementById("intersection".concat(args.currentPosition));
@@ -1051,6 +1081,9 @@ var GetOnBoard = /** @class */ (function () {
         this.gamedatas.hiddenScore = false;
     };
     GetOnBoard.prototype.onLeavingState = function (stateName) {
+        if (this.actionTimerId) {
+            window.clearInterval(this.actionTimerId);
+        }
         log('Leaving state: ' + stateName);
         switch (stateName) {
             case 'placeDeparturePawn':
@@ -1079,6 +1112,9 @@ var GetOnBoard = /** @class */ (function () {
     //
     GetOnBoard.prototype.onUpdateActionButtons = function (stateName, args) {
         var _this = this;
+        if (this.actionTimerId) {
+            window.clearInterval(this.actionTimerId);
+        }
         if (this.isCurrentPlayerActive()) {
             switch (stateName) {
                 case 'placeDeparturePawn':
@@ -1090,10 +1126,12 @@ var GetOnBoard = /** @class */ (function () {
                     });
                     break;
                 case 'placeRoute':
-                    this.addActionButton("confirmTurn_button", _("Confirm turn"), function () { return _this.confirmTurn(); });
+                    this.addActionButton("confirmTurn_button", _("Confirm turn") + (args.canConfirm && args.possibleRoutes.length ? " (".concat(formatTextIcons(_("Don't use [station]")), ")") : ''), function () { return _this.confirmTurn(); });
                     var placeRouteArgs = args;
                     if (placeRouteArgs.canConfirm) {
-                        this.startActionTimer("confirmTurn_button", 8);
+                        if (!placeRouteArgs.possibleRoutes.length) {
+                            this.startActionTimer("confirmTurn_button", 8);
+                        }
                     }
                     else {
                         dojo.addClass("confirmTurn_button", "disabled");
@@ -1465,29 +1503,29 @@ var GetOnBoard = /** @class */ (function () {
         this.ajaxcall("/getonboardparisrome/getonboardparisrome/".concat(action, ".html"), data, this, function () { });
     };
     GetOnBoard.prototype.startActionTimer = function (buttonId, time) {
+        var _this = this;
         var _a;
         if (Number((_a = this.prefs[202]) === null || _a === void 0 ? void 0 : _a.value) === 2) {
             return;
         }
         var button = document.getElementById(buttonId);
-        var actionTimerId = null;
         var _actionTimerLabel = button.innerHTML;
         var _actionTimerSeconds = time;
         var actionTimerFunction = function () {
             var button = document.getElementById(buttonId);
             if (button == null || button.classList.contains('disabled')) {
-                window.clearInterval(actionTimerId);
+                window.clearInterval(_this.actionTimerId);
             }
             else if (_actionTimerSeconds-- > 1) {
                 button.innerHTML = _actionTimerLabel + ' (' + _actionTimerSeconds + ')';
             }
             else {
-                window.clearInterval(actionTimerId);
+                window.clearInterval(_this.actionTimerId);
                 button.click();
             }
         };
         actionTimerFunction();
-        actionTimerId = window.setInterval(function () { return actionTimerFunction(); }, 1000);
+        this.actionTimerId = window.setInterval(function () { return actionTimerFunction(); }, 1000);
     };
     ///////////////////////////////////////////////////
     //// Reaction to cometD notifications

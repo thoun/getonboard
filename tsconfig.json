@@ -14,6 +14,7 @@
         "src/getonboard.d.ts",
         "src/slide-utils.ts",
         "src/player-table-block/block.ts",
+        "src/player-table-block/stations.ts",
         "src/player-table-block/old-ladies.ts",
         "src/player-table-block/students.ts",
         "src/player-table-block/tourists.ts",

@@ -33,11 +33,13 @@ trait ScoreSheetTrait {
         return $total;
     }
 
-    function addStationToScoreSheetAndUpdateTotal(ScoreSheet &$scoreSheet, bool $useStation) {
+    function addStationToScoreSheetAndUpdateTotal(ScoreSheet &$scoreSheet) {
         $scoreSheet->stations->encircled++;
-        if ($useStation) {
-            $scoreSheet->stations->checked++;
-        }
+        $scoreSheet->stations->total = 2 * ($scoreSheet->stations->encircled - $scoreSheet->stations->checked);
+    }
+
+    function addUsedStationToScoreSheetAndUpdateTotal(ScoreSheet &$scoreSheet) {
+        $scoreSheet->stations->checked++;
         $scoreSheet->stations->total = 2 * ($scoreSheet->stations->encircled - $scoreSheet->stations->checked);
     }
 
@@ -188,7 +190,7 @@ trait ScoreSheetTrait {
                     switch ($element) {
                         // stations
                         case STATION:
-                            $this->addStationToScoreSheetAndUpdateTotal($scoreSheet, $placedRoute->useStation);
+                            $this->addStationToScoreSheetAndUpdateTotal($scoreSheet);
                             break;
                         // old ladies
                         case OLD_LADY:
@@ -237,6 +239,9 @@ trait ScoreSheetTrait {
             }
             if ($placedRoute->connections > 0) {
                 $this->addConnectionsToScoreSheetAndUpdateTotal($scoreSheet, $placedRoute->connections);
+            }
+            if ($placedRoute->useStation) {
+                $this->addUsedStationToScoreSheetAndUpdateTotal($scoreSheet);
             }
         }
 

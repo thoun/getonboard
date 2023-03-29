@@ -1,3 +1,49 @@
+&.stations {
+  top: 0px;
+  left: 17px;
+  width: 301px;
+  height: 46px;
+
+  .circle {
+    position: absolute;
+    top: 4px;
+    border: 2px solid transparent;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+
+    @for $i from 1 through 8 {
+      &[data-number="#{$i}"] {
+        left: #{8 + ($i - 1)*35}px;
+      }
+    }
+
+    &[data-encircled="true"] {
+      border-color: black;
+
+      &[data-unvalidated="true"] {
+        border-color: red;
+      }
+    }
+  }
+
+  .checkmark {
+    top: 7px;
+    font-weight: bold;
+
+    @for $i from 1 through 8 {
+      &[data-number="#{$i}"] {
+        left: #{12 + ($i - 1)*35}px;
+      }
+    }
+  }
+
+  .total {
+    top: 23px;
+    font-size: 22pt;
+  }
+}
+
 &.old-ladies {
   top: 60px;
   left: 20px;
