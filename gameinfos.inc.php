@@ -77,7 +77,7 @@ $gameinfos = [
 'language_dependency' => false,  
 
 // Colors attributed to players
-'player_colors' => [ "72c3d5", "f8d03f", "a476a5", "78232f", "166938" ], // dark blue in the ART file : 0a2a3b
+'player_colors' => [ "6CACE4", "FFD100", "FF808B", "658D1B", "041E42" ],
 
 // Favorite colors support : if set to "true", support attribution of favorite colors based on player's preferences (see reattributeColorsBasedOnPreferences PHP method)
 // NB: this parameter is used only to flag games supporting this feature; you must use (or not use) reattributeColorsBasedOnPreferences PHP method to actually enable or disable the feature.
