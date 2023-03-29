@@ -121,15 +121,13 @@
   background-size: auto 100%;
   transform-origin: center center;
   border-radius: 10px;
-}
-.player-board .personal-objective-wrapper .personal-objective.expanded.big {
   width: 120px;
   height: 84px;
+}
+.player-board .personal-objective-wrapper .personal-objective.expanded.big {
   background-image: url("img/personal-objectives-big.png");
 }
 .player-board .personal-objective-wrapper .personal-objective.expanded.small {
-  width: 84px;
-  height: 120px;
   background-image: url("img/personal-objectives-small.png");
 }
 .player-board .personal-objective-wrapper .personal-objective.expanded[data-type="1"] {
