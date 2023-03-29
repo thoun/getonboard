@@ -114,6 +114,15 @@
   position: relative;
   background-size: contain;
 }
+#map .ticket-slot {
+  top: 13px;
+}
+#map .ticket-slot#ticket-slot-1 {
+  left: 145px;
+}
+#map .ticket-slot#ticket-slot-2 {
+  left: 241px;
+}
 #map[data-size=small] {
   background-image: url("img/map-small-no-grid.jpg");
 }
@@ -156,15 +165,6 @@
 }
 #map[data-size=small] #map-elements .common-objective-slot#common-objective-slot-2 {
   left: 525px;
-}
-#map[data-size=small] #map-elements .ticket-slot {
-  top: 16px;
-}
-#map[data-size=small] #map-elements .ticket-slot#ticket-slot-1 {
-  left: 146px;
-}
-#map[data-size=small] #map-elements .ticket-slot#ticket-slot-2 {
-  left: 241px;
 }
 #map[data-size=big] {
   background-image: url("img/map-big-no-grid.jpg");
@@ -217,15 +217,6 @@
 }
 #map[data-size=big] #map-elements .common-objective-slot#common-objective-slot-2 {
   left: 472px;
-}
-#map[data-size=big] #map-elements .ticket-slot {
-  top: 16px;
-}
-#map[data-size=big] #map-elements .ticket-slot#ticket-slot-1 {
-  left: 146px;
-}
-#map[data-size=big] #map-elements .ticket-slot#ticket-slot-2 {
-  left: 241px;
 }
 #map #map-elements {
   width: 740px;
@@ -434,6 +425,10 @@
 }
 .common-objective-slot .common-objective-counter [data-reached=false] {
   color: #940000;
+}
+
+.ticket.card-inner .card-side {
+  box-shadow: none;
 }
 
 .ticket-slot {
@@ -1280,7 +1275,7 @@ html, .mode_3d #game_play_area_background {
   background-size: auto 100%;
   border-radius: 4px;
   transform-origin: center;
-  transform: rotate(90deg);
+  transform: rotate(-90deg);
   vertical-align: middle;
   margin: -10px 10px;
 }
