@@ -28,6 +28,13 @@ interface SimpleZoneScoreSheet {
     total: number;
 }
 
+interface StationsScoreSheet {
+    encircled: number;
+    checked: number;
+
+    total: number;
+}
+
 interface StudentsScoreSheet {
     checkedStudents: number;
     checkedCinemas: number;
@@ -60,6 +67,7 @@ interface ObjectivesScoreSheet {
 interface ScoreSheet {
     connectionColor: number;
     
+    stations: StationsScoreSheet;
     oldLadies: SimpleZoneScoreSheet;
     students: StudentsScoreSheet;
     tourists: TouristsScoreSheet;

@@ -9,6 +9,7 @@ class PossibleRoute {
         public int $connections,
         public bool $useTurnZone,
         public bool $isElimination,
+        public bool $useStation,
     ) {
     }
 }

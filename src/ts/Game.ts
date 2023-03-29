@@ -37,6 +37,7 @@ export class Game {
     private playersTables: PlayerTable[] = [];
     private registeredTablesByPlayerId: PlayerTable[][] = [];
     private roundNumberCounter: Counter;
+    private actionTimerId: number | null = null;
 
     public bga: Bga<GetOnBoardPlayer, GetOnBoardGamedatas>;
 
@@ -165,8 +166,8 @@ export class Game {
     private onEnteringPlaceRoute(args: EnteringPlaceRouteArgs) {
         if (args.canConfirm) {
             this.bga.statusBar.setTitle(this.bga.players.isCurrentPlayerActive()
-                ? _('${you} must confirm placed marker(s)')
-                : _('${actplayer} must confirm placed marker(s)'), args);
+                ? (args.possibleRoutes.length ? _('${you} can place a route with remaining circled stations') : _('${you} must confirm placed marker(s)'))
+                : (args.possibleRoutes.length ? _('${actplayer} can place a route with remaining circled stations') : _('${actplayer} must confirm placed marker(s)')), args);
         }
 
         const activePlayerColor = this.getPlayerColor(this.bga.players.getActivePlayerId());
