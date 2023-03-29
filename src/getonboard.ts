@@ -30,6 +30,7 @@ class GetOnBoard implements GetOnBoardGame {
     private playersTables: PlayerTable[] = [];
     private registeredTablesByPlayerId: PlayerTable[][] = [];
     private roundNumberCounter: Counter;
+    private actionTimerId: number | null = null;
 
     public bga: Bga;
 
@@ -137,7 +138,7 @@ class GetOnBoard implements GetOnBoardGame {
     
     private onEnteringPlaceRoute(args: EnteringPlaceRouteArgs) {
         if (args.canConfirm) {
-            this.setGamestateDescription('Confirm');
+            this.setGamestateDescription(args.possibleRoutes.length ? 'UseStation' : 'Confirm');
         }
 
         const activePlayerColor = this.getPlayerColor((this as any).getActivePlayerId());
@@ -185,6 +186,10 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     public onLeavingState(stateName: string) {
+        if (this.actionTimerId) {
+            window.clearInterval(this.actionTimerId);
+        }
+
         log( 'Leaving state: '+stateName );
 
         switch (stateName) {
@@ -218,6 +223,10 @@ class GetOnBoard implements GetOnBoardGame {
     //                        action status bar (ie: the HTML links in the status bar).
     //
     public onUpdateActionButtons(stateName: string, args: any) {
+        if (this.actionTimerId) {
+            window.clearInterval(this.actionTimerId);
+        }
+        
         if ((this as any).isCurrentPlayerActive()) {
             switch (stateName) {
                 case 'placeDeparturePawn':
@@ -230,10 +239,12 @@ class GetOnBoard implements GetOnBoardGame {
                     });
                     break;
                 case 'placeRoute':
-                    (this as any).addActionButton(`confirmTurn_button`, _("Confirm turn"), () => this.confirmTurn());
+                    (this as any).addActionButton(`confirmTurn_button`, _("Confirm turn") + (args.canConfirm && args.possibleRoutes.length ? ` (${formatTextIcons(_("Don't use [station]"))})` : ''), () => this.confirmTurn());
                     const placeRouteArgs = args as EnteringPlaceRouteArgs;
                     if (placeRouteArgs.canConfirm) {
-                        this.startActionTimer(`confirmTurn_button`, 8);
+                        if (!placeRouteArgs.possibleRoutes.length) {
+                            this.startActionTimer(`confirmTurn_button`, 8);
+                        }
                     } else {
                         dojo.addClass(`confirmTurn_button`, `disabled`);
                     }
@@ -666,22 +677,21 @@ class GetOnBoard implements GetOnBoardGame {
 
         const button = document.getElementById(buttonId);
  
-        let actionTimerId = null;
         const _actionTimerLabel = button.innerHTML;
         let _actionTimerSeconds = time;
         const actionTimerFunction = () => {
           const button = document.getElementById(buttonId);
           if (button == null || button.classList.contains('disabled')) {
-            window.clearInterval(actionTimerId);
+            window.clearInterval(this.actionTimerId);
           } else if (_actionTimerSeconds-- > 1) {
             button.innerHTML = _actionTimerLabel + ' (' + _actionTimerSeconds + ')';
           } else {
-            window.clearInterval(actionTimerId);
+            window.clearInterval(this.actionTimerId);
             button.click();
           }
         };
         actionTimerFunction();
-        actionTimerId = window.setInterval(() => actionTimerFunction(), 1000);
+        this.actionTimerId = window.setInterval(() => actionTimerFunction(), 1000);
     }
 
     ///////////////////////////////////////////////////

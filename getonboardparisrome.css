@@ -732,6 +732,82 @@ html[data-no-grid=true][data-no-building=true] #map[data-size=big].hd {
 .player-table .main .block {
   position: absolute;
 }
+.player-table .main .block.stations {
+  top: 0px;
+  left: 17px;
+  width: 301px;
+  height: 46px;
+}
+.player-table .main .block.stations .circle {
+  position: absolute;
+  top: 4px;
+  border: 2px solid transparent;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+.player-table .main .block.stations .circle[data-number="1"] {
+  left: 8px;
+}
+.player-table .main .block.stations .circle[data-number="2"] {
+  left: 43px;
+}
+.player-table .main .block.stations .circle[data-number="3"] {
+  left: 78px;
+}
+.player-table .main .block.stations .circle[data-number="4"] {
+  left: 113px;
+}
+.player-table .main .block.stations .circle[data-number="5"] {
+  left: 148px;
+}
+.player-table .main .block.stations .circle[data-number="6"] {
+  left: 183px;
+}
+.player-table .main .block.stations .circle[data-number="7"] {
+  left: 218px;
+}
+.player-table .main .block.stations .circle[data-number="8"] {
+  left: 253px;
+}
+.player-table .main .block.stations .circle[data-encircled=true] {
+  border-color: black;
+}
+.player-table .main .block.stations .circle[data-encircled=true][data-unvalidated=true] {
+  border-color: red;
+}
+.player-table .main .block.stations .checkmark {
+  top: 7px;
+  font-weight: bold;
+}
+.player-table .main .block.stations .checkmark[data-number="1"] {
+  left: 12px;
+}
+.player-table .main .block.stations .checkmark[data-number="2"] {
+  left: 47px;
+}
+.player-table .main .block.stations .checkmark[data-number="3"] {
+  left: 82px;
+}
+.player-table .main .block.stations .checkmark[data-number="4"] {
+  left: 117px;
+}
+.player-table .main .block.stations .checkmark[data-number="5"] {
+  left: 152px;
+}
+.player-table .main .block.stations .checkmark[data-number="6"] {
+  left: 187px;
+}
+.player-table .main .block.stations .checkmark[data-number="7"] {
+  left: 222px;
+}
+.player-table .main .block.stations .checkmark[data-number="8"] {
+  left: 257px;
+}
+.player-table .main .block.stations .total {
+  top: 23px;
+  font-size: 22pt;
+}
 .player-table .main .block.old-ladies {
   top: 60px;
   left: 20px;

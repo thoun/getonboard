@@ -172,7 +172,7 @@ trait UtilTrait {
             (array_key_exists($destination, $connectionRoutes) && in_array($position, $connectionRoutes[$destination]));
     }
 
-    function createPossibleRoute(int $position, int $destination, array $allPlacedRoutes, array $playerPlacedRoutes, array $unvalidatedRoutes, array $turnShape, array $connectionRoutes) {
+    function createPossibleRoute(int $position, int $destination, array $allPlacedRoutes, array $playerPlacedRoutes, array $unvalidatedRoutes, array $turnShape, array $connectionRoutes, bool $useStation) {
         $connections = count(array_filter(
             $allPlacedRoutes, 
             fn($route) => $this->isSameRoute($route, $position, $destination)
@@ -198,7 +198,7 @@ trait UtilTrait {
 
         $isElimination = $this->array_some($playerPlacedRoutes, fn($route) => $route->from === $destination || $route->to === $destination);
 
-        return new PossibleRoute($position, $destination, $connections, $useTurnZone, $isElimination);
+        return new PossibleRoute($position, $destination, $connections, $useTurnZone, $isElimination, $useStation);
     }
 
     function getPlayerTurnShape(int $playerId) {
@@ -225,16 +225,10 @@ trait UtilTrait {
         ));
 
         if (count($unvalidatedRoutes) >= count($turnShape)) {
-            $isStation = in_array(STATION, $this->MAP_POSITIONS[$mapSize][$position]);
-
-            if ($isStation) {
-                $turnShape = [...$turnShape, 0, 0, 0, 0, 0];
-            } else {
-                return [];
-            }
+            return [];
         }
 
-        $possibleRoutes = array_map(fn($destination) => $this->createPossibleRoute($position, $destination, $allPlacedRoutes, $playerPlacedRoutes, $unvalidatedRoutes, $turnShape, $connectionRoutes), $possibleDestinations);
+        $possibleRoutes = array_map(fn($destination) => $this->createPossibleRoute($position, $destination, $allPlacedRoutes, $playerPlacedRoutes, $unvalidatedRoutes, $turnShape, $connectionRoutes, false), $possibleDestinations);
 
         $usedTurnZone = count(array_filter($playerPlacedRoutes, fn($placedRoute) => $placedRoute->useTurnZone));
         if ($usedTurnZone >= 5) {
