@@ -472,19 +472,19 @@ $this->COMMON_OBJECTIVES = [
 
 $this->PERSONAL_OBJECTIVES = [
   'small' => [
-    1 => [ord('a'), ord('f'), ord('k')],
-    2 => [ord('b'), ord('g'), ord('l')],
-    3 => [ord('c'), ord('h'), ord('o')],
-    4 => [ord('d'), ord('i'), ord('m')],
-    5 => [ord('e'), ord('j'), ord('n')],
+    1 => [ord('a'), ord('i'), ord('k')],
+    2 => [ord('b'), ord('g'), ord('m')],
+    3 => [ord('c'), ord('f'), ord('n')],
+    4 => [ord('d'), ord('j'), ord('l')],
+    5 => [ord('e'), ord('h'), ord('o')],
   ],
 
   'big' => [
-    1 => [ord('a'), ord('g'), ord('m')],
-    2 => [ord('b'), ord('j'), ord('k')],
-    3 => [ord('c'), ord('i'), ord('l')],
-    4 => [ord('d'), ord('f'), ord('o')],
-    5 => [ord('e'), ord('h'), ord('n')],
+    1 => [ord('a'), ord('f'), ord('n')],
+    2 => [ord('b'), ord('i'), ord('l')],
+    3 => [ord('c'), ord('j'), ord('m')],
+    4 => [ord('d'), ord('g'), ord('o')],
+    5 => [ord('e'), ord('h'), ord('k')],
   ],
 ];
 
