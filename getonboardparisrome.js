@@ -672,6 +672,9 @@ var PlayerTable = /** @class */ (function () {
         }
     };
     PlayerTable.prototype.updateScoreSheet = function (scoreSheets, visibleScoring) {
+        if (scoreSheets.current.connectionColor) {
+            this.setContentAndValidation("connection-color-".concat(scoreSheets.current.connectionColor), '✔', false);
+        }
         this.oldLadies.updateScoreSheet(scoreSheets, visibleScoring);
         this.students.updateScoreSheet(scoreSheets, visibleScoring);
         this.tourists.updateScoreSheet(scoreSheets, visibleScoring);
@@ -1389,7 +1392,7 @@ var GetOnBoard = /** @class */ (function () {
                         checked = scoreSheet.tourists.checkedTourists.reduce(function (a, b) { return a + b; }, 0);
                         break;
                     case 50: //LOVER_LIGHT
-                        checked = scoreSheet.lovers.checkedLovers.reduce(function (a, b) { return a + b; }, 0);
+                        checked = scoreSheet.lovers.checkedLoversLight.reduce(function (a, b) { return a + b; }, 0) + scoreSheet.lovers.checkedLoversDark.reduce(function (a, b) { return a + b; }, 0);
                         break;
                     case 41: //MONUMENT_LIGHT
                         checked = scoreSheet.tourists.checkedMonumentsLight;
