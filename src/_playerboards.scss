@@ -72,15 +72,13 @@
         background-size: auto 100%;
         transform-origin: center center;
         border-radius: 10px;
+        width: 120px;
+        height: 84px;
   
         &.big {
-          width: 120px;
-          height: 84px;
           background-image: url('img/personal-objectives-big.png');
         }
         &.small {
-          width: 84px;
-          height: 120px;
           background-image: url('img/personal-objectives-small.png');
         }
   
