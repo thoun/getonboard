@@ -45,7 +45,8 @@ interface TouristsScoreSheet {
 }
 
 interface LoversScoreSheet {
-    checkedLovers: number[];
+    checkedLoversLight: number[];
+    checkedLoversDark: number[];
 
     subTotals: number[];
     total: number;
