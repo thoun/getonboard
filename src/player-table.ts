@@ -70,6 +70,9 @@ class PlayerTable {
     }
 
     public updateScoreSheet(scoreSheets: ScoreSheets, visibleScoring: boolean) {
+        if (scoreSheets.current.connectionColor) {
+            this.setContentAndValidation(`connection-color-${scoreSheets.current.connectionColor}`, '✔', false);
+        }
         this.oldLadies.updateScoreSheet(scoreSheets, visibleScoring);
         this.students.updateScoreSheet(scoreSheets, visibleScoring);
         this.tourists.updateScoreSheet(scoreSheets, visibleScoring);
