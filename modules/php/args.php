@@ -64,7 +64,10 @@ trait ArgsTrait {
         if ($canConfirm) {
             $scoreSheets = $this->getScoreSheets($playerId, $this->getPlacedRoutes($playerId), $this->getCommonObjectives(), false);
             if ($scoreSheets->current->stations->encircled > $scoreSheets->current->stations->checked) {
-                $possibleRoutes = $this->getBonusPossibleRoutes($mapSize, $currentPosition, $allPlacedRoutes, $playerPlacedRoutes);
+                $unvalidatedRoutes = array_filter($playerPlacedRoutes, fn($placedRoute) => !$placedRoute->validated);
+                if (!$this->array_some($unvalidatedRoutes, fn($unvalidatedRoute) => $unvalidatedRoute->useStation)) {
+                    $possibleRoutes = $this->getBonusPossibleRoutes($mapSize, $currentPosition, $allPlacedRoutes, $playerPlacedRoutes);
+                }
             }
         }
     

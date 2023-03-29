@@ -175,7 +175,7 @@ class TableCenter {
         const commonObjectiveInfos = COMMON_OBJECTIVES[objective.id];
 
         (this.game as any).addTooltipHtml(`common-objective-slot-${objective.number}`, `${this.game.getTooltip(90)}<br><br>${
-            _("To complete this objective, you need to check ${number} ${element}").replace('${number}', `<strong>${commonObjectiveInfos[1]}</strong>`).replace('${element}', `<div class="map-icon" data-element="${commonObjectiveInfos[0]}"></div>`)
+            _("To complete this objective, you need to check ${number} ${element}").replace('${number}', `<strong>${commonObjectiveInfos[1]}</strong>`).replace('${element}', commonObjectiveInfos[0] == 50 ? `<div class="map-icon" data-element="50"></div>/<div class="map-icon" data-element="51"></div>` : `<div class="map-icon" data-element="${commonObjectiveInfos[0]}"></div>`)
         }`);
 
         if (isPlayer) { // objective progress counter only if player is not a spectator
