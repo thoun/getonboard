@@ -862,13 +862,7 @@ var TableCenter = /** @class */ (function () {
         return this.getCoordinatesFromNumberAndDigit((fromNumber + toNumber) / 2, (fromDigit + toDigit) / 2);
     };
     TableCenter.prototype.getSide = function (position) {
-        if (this.gamedatas.map === 'big') {
-            return this.getCoordinatesFromPosition(position)[0] > 370 ? 'right' : 'left';
-        }
-        else if (this.gamedatas.map === 'small') {
-            // TODO handle angle
-            return this.getCoordinatesFromPosition(position)[0] > 370 ? 'right' : 'left';
-        }
+        return this.getCoordinatesFromPosition(position)[0] > 370 ? 'right' : 'left';
     };
     TableCenter.prototype.placeCommonObjective = function (objective, isPlayer) {
         dojo.place("<div id=\"common-objective-".concat(objective.id, "\" class=\"common-objective card-inner\" data-side=\"").concat(objective.completed ? '1' : '0', "\">\n            <div class=\"card-side front\"></div>\n            <div class=\"card-side back\"></div>\n        </div>\n        "), "common-objective-slot-".concat(objective.number));
@@ -1261,20 +1255,20 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.getTooltip = function (element) {
         switch (element) {
-            case 0: return '[Station] : ' + _("If your route ends at an intersection with a [Station], you place an additional marker.");
+            case 0: return '[Station] : ' + _("If your route ends at an intersection with a [Station], add a circle on your Metro zone. At the end of each round, you can cross off a single circled [Station] to place 1 extra marker to make your route longer (in any direction).");
             case 1: return _("<strong>Number:</strong> Possible starting point. You choose between 2 numbers at the beginning of the game to place your Departure Pawn.");
             case 20: return '[OldLady] : ' + _("When a marker reaches [OldLady], check a box on the [OldLady] zone. Add the number next to each checked box at game end.");
             case 30: return '[Student] : ' + _("When a marker reaches [Student], check a box on the [Student] zone. Multiply [Student] with [Cinema] at game end.");
-            case 32: return '[Cinema] : ' + _("When a marker reaches [Cinema], check a box on the [Cinema] zone. Multiply [Student] with [Cinema] at game end.") + "<br><i>".concat(_("If the [Cinema] is marked with a Star, write the number of [Student] you have checked when a marker reaches it."), "</i>");
+            case 32: return '[Cinema] : ' + _("When a marker reaches [Cinema], check a box on the [Cinema] zone. Multiply [Student] with [Cinema] at game end.");
             case 40: return '[Tourist] : ' + _("When a marker reaches [Tourist], check a box on the first available row on the [Tourist] zone. You will score when you drop off the [Tourist] to [MonumentLight]/[MonumentDark]. If the current row is full and you didn't reach [MonumentLight]/[MonumentDark], nothing happens.");
-            case 41: return '[MonumentLight][MonumentDark] : ' + _("When a marker reaches [MonumentLight]/[MonumentDark], write the score on the column of the [Tourist] at the end of the current row. If the current row is empty, nothing happens.") + "<br><i>".concat(_("If [MonumentLight]/[MonumentDark] is marked with a Star, write the number of [Tourist] you have checked When a marker reaches it."), "</i>");
+            case 41: return '[MonumentLight][MonumentDark] : ' + _("When a marker reaches [MonumentLight]/[MonumentDark], write the score on the column of the [Tourist] at the end of the current row. If the current row is empty, nothing happens.");
             case 50:
             case 51: return '[LoverLight][LoverDark] : ' + _("When a marker reaches [LoverLight][LoverDark], check a box on the first available row on the [LoverLight][LoverDark] zone. You will score when you drop off the [LoverLight][LoverDark] to [Restaurant]. If the current row is full and you didn't reach [Restaurant], nothing happens.");
-            case 52: return '[Restaurant] : ' + _("When a marker reaches [Restaurant], write the score on the column of the [LoverLight][LoverDark] at the end of the current row, and check the corresponding symbol ([OldLady], [Tourist] or [Student]) as if you reached it with a marker. If the current row is empty, nothing happens.") + "<br><i>".concat(_("If the [Restaurant] is marked with a Star, write the number of [LoverLight][LoverDark] you have checked When a marker reaches it."), "</i>"); // TODO
+            case 52: return '[Restaurant] : ' + _("When a marker reaches [Restaurant], write the score (6 points for each couple dark/light, 2 points for each single) at the end of the current row. If the current row is empty, nothing happens.");
             case 90: return _("<strong>Common Objective:</strong> Score 10 points when you complete the objective, or 6 points if another player completed it on a previous round.");
             case 91: return _("<strong>Personal Objective:</strong> Score 10 points when your markers link the 3 Letters of your personal objective.");
             case 92: return _("<strong>Turn Zone:</strong> If you choose to change a turn into a straight line or a straight line to a turn, check a box on the Turn Zone. The score here is negative, and you only have 5 of them!");
-            case 93: return _("<strong>Connections:</strong> For each marker already in place when you add a marker on a route, check a Connection box. If the road is black, check an extra box. The score here is negative!"); // TODO
+            case 93: return _("<strong>Connections:</strong> For each marker already in place when you add a marker on a route, check a Connection box. If the road is the same as the checked connection color, check an extra box.");
             case 94: return _("<strong>Total score:</strong> Add sum of all green zone totals, subtract sum of all red zone totals.");
             case 95: return _("<strong>Tickets:</strong> The red check indicates the current round ticket. It defines the shape of the route you have to place. The black checks indicates past rounds.");
             case 97: return _("<strong>Letter:</strong> Used to define your personal objective.");
