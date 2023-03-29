@@ -1019,23 +1019,35 @@ html[data-no-grid=true][data-no-building=true] #map[data-size=big].hd {
 .player-table .main .block.common-objectives {
   top: 315px;
   left: 423px;
-  width: 111px;
-  height: 181px;
+  width: 246px;
+  height: 92px;
 }
 .player-table .main .block.common-objectives .subtotal {
-  right: 37px;
+  top: 33px;
 }
 .player-table .main .block.common-objectives .subtotal[data-number="1"] {
-  top: 64px;
+  left: 61px;
 }
 .player-table .main .block.common-objectives .subtotal[data-number="2"] {
-  top: 109px;
+  left: 116px;
 }
 .player-table .main .block.personal-objective {
-  top: 315px;
-  left: 556px;
-  width: 111px;
-  height: 181px;
+  top: 407px;
+  left: 423px;
+  width: 246px;
+  height: 92px;
+}
+.player-table .main .block.personal-objective .checkmark {
+  top: 31px;
+}
+.player-table .main .block.personal-objective .checkmark[data-number="1"] {
+  left: 85px;
+}
+.player-table .main .block.personal-objective .checkmark[data-number="2"] {
+  left: 126px;
+}
+.player-table .main .block.personal-objective .checkmark[data-number="3"] {
+  left: 167px;
 }
 .player-table .main .block.turn-zones {
   top: 4px;

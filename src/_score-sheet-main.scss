@@ -186,26 +186,36 @@
 &.common-objectives {
   top: 315px;
   left: 423px;
-  width: 111px;
-  height: 181px;
+  width: 246px;
+  height: 92px;
 
   .subtotal {
-    right: 37px;
+    top: 33px;
 
     &[data-number="1"] {
-      top: 64px;
+      left: 61px;
     }
     &[data-number="2"] {
-      top: 109px;
+      left: 116px;
     }
   }
 }
 
 &.personal-objective {
-  top: 315px;
-  left: 556px;
-  width: 111px;
-  height: 181px;
+  top: 407px;
+  left: 423px;
+  width: 246px;
+  height: 92px;
+
+  .checkmark {
+    top: 31px;
+
+    @for $i from 1 through 3 {
+      &[data-number="#{$i}"] {
+        left: #{85 + ($i - 1)*41}px;
+      }
+    }
+  }
 }
 
 &.turn-zones {

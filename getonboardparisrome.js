@@ -543,7 +543,7 @@ var PlayerTableLoversBlock = /** @class */ (function (_super) {
     __extends(PlayerTableLoversBlock, _super);
     function PlayerTableLoversBlock(playerId, scoreSheets, visibleScoring) {
         var _this = _super.call(this, playerId) || this;
-        var html = "\n        <div id=\"lovers-block-".concat(playerId, "\" data-tooltip=\"[50,51]\" class=\"lovers block\" data-zone=\"5\">");
+        var html = "\n        <div id=\"lovers-block-".concat(playerId, "\" data-tooltip=\"[50,52]\" class=\"lovers block\" data-zone=\"5\">");
         for (var row = 1; row <= 3; row++) {
             for (var i = 1; i <= 2; i++) {
                 html += "\n                    <div id=\"player-table-".concat(playerId, "-lovers-light-checkmark").concat(row, "-").concat(i, "\" class=\"checkmark light\" data-row=\"").concat(row, "\" data-number=\"").concat(i, "\"></div>\n                    <div id=\"player-table-").concat(playerId, "-lovers-dark-checkmark").concat(row, "-").concat(i, "\" class=\"checkmark dark\" data-row=\"").concat(row, "\" data-number=\"").concat(i, "\"></div>");
@@ -591,11 +591,16 @@ var PlayerTableCommonObjectivesBlock = /** @class */ (function (_super) {
     };
     return PlayerTableCommonObjectivesBlock;
 }(PlayerTableBlock));
+var PERSONAL_OBJECTIVE_POINTS = [0, 2, 5, 10];
 var PlayerTablePersonalObjectiveBlock = /** @class */ (function (_super) {
     __extends(PlayerTablePersonalObjectiveBlock, _super);
     function PlayerTablePersonalObjectiveBlock(playerId, scoreSheets, visibleScoring) {
         var _this = _super.call(this, playerId) || this;
-        var html = "\n        <div id=\"personal-objective-block-".concat(playerId, "\" data-tooltip=\"[91]\" class=\"personal-objective block\">\n            <div id=\"player-table-").concat(playerId, "-personal-objective-total\" class=\"total\"></div>\n        </div>\n        ");
+        var html = "\n        <div id=\"personal-objective-block-".concat(playerId, "\" data-tooltip=\"[91]\" class=\"personal-objective block\">");
+        for (var i = 1; i <= 3; i++) {
+            html += "\n                <div id=\"player-table-".concat(playerId, "-personal-objective-checkmark").concat(i, "\" class=\"checkmark\" data-number=\"").concat(i, "\"></div>\n            ");
+        }
+        html += " \n            <div id=\"player-table-".concat(playerId, "-personal-objective-total\" class=\"total\"></div>\n        </div>\n        ");
         dojo.place(html, "player-table-".concat(playerId, "-main"));
         _this.updateScoreSheet(scoreSheets, visibleScoring);
         return _this;
@@ -604,6 +609,9 @@ var PlayerTablePersonalObjectiveBlock = /** @class */ (function (_super) {
         var current = scoreSheets.current.personalObjective;
         var validated = scoreSheets.validated.personalObjective;
         if (visibleScoring) {
+            for (var i = 1; i <= 3; i++) {
+                this.setContentAndValidation("personal-objective-checkmark".concat(i), current.total >= PERSONAL_OBJECTIVE_POINTS[i] ? '✔' : '', current.total >= PERSONAL_OBJECTIVE_POINTS[i] && validated.total < PERSONAL_OBJECTIVE_POINTS[i]);
+            }
             this.setContentAndValidation("personal-objective-total", current.total, current.total != validated.total);
         }
     };

@@ -3,7 +3,7 @@ class PlayerTableLoversBlock extends PlayerTableBlock {
         super(playerId);
 
         let html = `
-        <div id="lovers-block-${playerId}" data-tooltip="[50,51]" class="lovers block" data-zone="5">`;
+        <div id="lovers-block-${playerId}" data-tooltip="[50,52]" class="lovers block" data-zone="5">`;
         for(let row=1; row<=3; row++) {
             for(let i=1; i<=2; i++) {
                 html += `
