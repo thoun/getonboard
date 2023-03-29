@@ -162,12 +162,7 @@ class TableCenter {
     }
 
     public getSide(position: number): 'left' | 'right' {
-        if (this.gamedatas.map === 'big') {
-            return this.getCoordinatesFromPosition(position)[0] > 370 ? 'right' : 'left';
-        } else if (this.gamedatas.map === 'small') {
-            // TODO handle angle
-            return this.getCoordinatesFromPosition(position)[0] > 370 ? 'right' : 'left';
-        }
+        return this.getCoordinatesFromPosition(position)[0] > 370 ? 'right' : 'left';
     }
 
     private placeCommonObjective(objective: CommonObjective, isPlayer: boolean) {
