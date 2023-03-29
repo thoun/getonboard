@@ -34,13 +34,17 @@ trait ScoreSheetTrait {
     }
 
     function addStationToScoreSheetAndUpdateTotal(ScoreSheet &$scoreSheet) {
-        $scoreSheet->stations->encircled++;
-        $scoreSheet->stations->total = 2 * ($scoreSheet->stations->encircled - $scoreSheet->stations->checked);
+        if ($scoreSheet->stations->encircled < 6) {
+            $scoreSheet->stations->encircled++;
+            $scoreSheet->stations->total = 2 * ($scoreSheet->stations->encircled - $scoreSheet->stations->checked);
+        }
     }
 
     function addUsedStationToScoreSheetAndUpdateTotal(ScoreSheet &$scoreSheet) {
-        $scoreSheet->stations->checked++;
-        $scoreSheet->stations->total = 2 * ($scoreSheet->stations->encircled - $scoreSheet->stations->checked);
+        if ($scoreSheet->stations->checked < 6) {
+            $scoreSheet->stations->checked++;
+            $scoreSheet->stations->total = 2 * ($scoreSheet->stations->encircled - $scoreSheet->stations->checked);
+        }
     }
 
     function addOldLadyToScoreSheetAndUpdateTotal(ScoreSheet &$scoreSheet, array $commonObjectives, int $round) {
@@ -188,10 +192,6 @@ trait ScoreSheetTrait {
                     }
                 } else {
                     switch ($element) {
-                        // stations
-                        case STATION:
-                            $this->addStationToScoreSheetAndUpdateTotal($scoreSheet);
-                            break;
                         // old ladies
                         case OLD_LADY:
                             $this->addOldLadyToScoreSheetAndUpdateTotal($scoreSheet, $commonObjectives, $round);
@@ -239,6 +239,10 @@ trait ScoreSheetTrait {
             }
             if ($placedRoute->connections > 0) {
                 $this->addConnectionsToScoreSheetAndUpdateTotal($scoreSheet, $placedRoute->connections);
+            }
+            // stations
+            if ($placedRoute->giveStation) {
+                $this->addStationToScoreSheetAndUpdateTotal($scoreSheet);
             }
             if ($placedRoute->useStation) {
                 $this->addUsedStationToScoreSheetAndUpdateTotal($scoreSheet);
