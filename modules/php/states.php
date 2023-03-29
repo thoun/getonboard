@@ -43,8 +43,12 @@ trait StateTrait {
 
         $ticket = $this->getCardFromDb($this->tickets->pickCardForLocation('deck', 'turn'));
 
-        if (in_array(count($this->getPlayersIds()), [2, 3])) {
+        $playersIds = $this->getPlayersIds();
+        if (in_array(count($playersIds), [2, 3])) {
             $this->setGameStateValue(CONNECTION_COLOR, $ticket->type % 2 == 0 ? 1 : 2);
+            foreach ($playersIds as $playerId) {
+                $this->notifUpdateScoreSheet($playerId); // update for the connection color
+            }
         }
 
         $this->notifCurrentRound();
