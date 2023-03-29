@@ -179,33 +179,14 @@
   position: relative;
   background-size: contain;
 }
-#map .position-indicator {
-  position: absolute;
-  width: 0px;
-  height: 0px;
-  border-style: solid;
-  border-width: 20px 20px 0 20px;
-  border-color: var(--position-indicator-color) transparent transparent transparent;
-  transition: left 0.5s, top 0.5s, border-color 0.5s;
+#map .ticket-slot {
+  top: 13px;
 }
-#map .position-indicator.top {
-  left: var(--position-indicator-left);
-  top: -8px;
+#map .ticket-slot#ticket-slot-1 {
+  left: 145px;
 }
-#map .position-indicator.bottom {
-  transform: rotate(180deg);
-  left: var(--position-indicator-left);
-  bottom: -8px;
-}
-#map .position-indicator.left {
-  transform: rotate(270deg);
-  left: -18px;
-  top: var(--position-indicator-top);
-}
-#map .position-indicator.right {
-  transform: rotate(90deg);
-  right: -18px;
-  top: var(--position-indicator-top);
+#map .ticket-slot#ticket-slot-2 {
+  left: 241px;
 }
 #map[data-size=small] {
   background-image: url("img/map-small-no-grid.jpg");
@@ -249,15 +230,6 @@
 }
 #map[data-size=small] #map-elements .common-objective-slot#common-objective-slot-2 {
   left: 525px;
-}
-#map[data-size=small] #map-elements .ticket-slot {
-  top: 16px;
-}
-#map[data-size=small] #map-elements .ticket-slot#ticket-slot-1 {
-  left: 146px;
-}
-#map[data-size=small] #map-elements .ticket-slot#ticket-slot-2 {
-  left: 241px;
 }
 #map[data-size=big] {
   background-image: url("img/map-big-no-grid.jpg");
@@ -310,15 +282,6 @@
 }
 #map[data-size=big] #map-elements .common-objective-slot#common-objective-slot-2 {
   left: 472px;
-}
-#map[data-size=big] #map-elements .ticket-slot {
-  top: 16px;
-}
-#map[data-size=big] #map-elements .ticket-slot#ticket-slot-1 {
-  left: 146px;
-}
-#map[data-size=big] #map-elements .ticket-slot#ticket-slot-2 {
-  left: 241px;
 }
 #map #map-elements {
   width: 740px;
@@ -527,6 +490,10 @@
 }
 .common-objective-slot .common-objective-counter [data-reached=false] {
   color: rgb(148, 0, 0);
+}
+
+.ticket.card-inner .card-side {
+  box-shadow: none;
 }
 
 .ticket-slot {
@@ -1346,7 +1313,7 @@ html, .mode_3d #game_play_area_background {
   background-size: auto 100%;
   border-radius: 4px;
   transform-origin: center;
-  transform: rotate(90deg);
+  transform: rotate(-90deg);
   vertical-align: middle;
   margin: -10px 10px;
 }
