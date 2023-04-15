@@ -27,7 +27,7 @@ trait ActionTrait {
 
         $this->DbQuery("UPDATE player SET `player_departure_position` = $position WHERE `player_id` = $playerId");
         
-        self::notifyAllPlayers('log', clienttranslate('${player_name} has chose the position for its departure pawn'), [
+        self::notifyAllPlayers('log', clienttranslate('${player_name} has chosen the position for its departure pawn'), [
             'playerId' => $playerId,
             'player_name' => $this->getPlayerName($playerId),
         ]);
