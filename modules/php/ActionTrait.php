@@ -29,7 +29,7 @@ trait ActionTrait {
 
         $this->DbQuery("UPDATE player SET `player_departure_position` = $position WHERE `player_id` = $currentPlayerId");
         
-        $this->bga->notify->all('log', clienttranslate('${player_name} has chose the position for its departure pawn'), [
+        $this->bga->notify->all('log', clienttranslate('${player_name} has chosen the position for its departure pawn'), [
             'playerId' => (string) $currentPlayerId,
             'player_name' => $this->getPlayerName($currentPlayerId),
         ]);
