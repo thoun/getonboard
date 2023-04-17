@@ -34,7 +34,7 @@ trait ArgsTrait {
     }
 
     function getBonusPossibleRoutes(string $mapSize, int $position, array $allPlacedRoutes, array $playerPlacedRoutes) {
-        $connectionRoutes = $this->CONNECTION_COLORS[$mapSize][intval($this->getGameStateValue(CONNECTION_COLOR))];
+        $connectionRoutes = $mapSize == 'small' ? $this->CONNECTION_COLORS[$mapSize][intval($this->getGameStateValue(CONNECTION_COLOR))] : [];
 
         $possibleDestinations = array_values(array_filter(
             $this->getDestinations($mapSize, $position), 

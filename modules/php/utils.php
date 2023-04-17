@@ -214,7 +214,7 @@ trait UtilTrait {
     }
 
     function getPossibleRoutes(int $playerId, string $mapSize, array $turnShape, int $position, array $allPlacedRoutes) {
-        $connectionRoutes = $this->CONNECTION_COLORS[$mapSize][intval($this->getGameStateValue(CONNECTION_COLOR))];
+        $connectionRoutes = $mapSize == 'small' ? $this->CONNECTION_COLORS[$mapSize][intval($this->getGameStateValue(CONNECTION_COLOR))] : [];
 
         $playerPlacedRoutes = array_filter($allPlacedRoutes, fn($placedRoute) => $placedRoute->playerId === $playerId);
         $unvalidatedRoutes = array_filter($playerPlacedRoutes, fn($placedRoute) => !$placedRoute->validated);

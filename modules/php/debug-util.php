@@ -99,11 +99,7 @@ trait DebugUtilTrait {
         } 
 
 		// These are the id's from the BGAtable I need to debug.
-		$ids = [
-            92432695,
-            87587865,
-            88804802
-		];
+		$ids = array_map(fn($dbPlayer) => intval($dbPlayer['player_id']), array_values($this->getCollectionFromDb('select player_id from player order by player_no')));
 
 		// Id of the first player in BGA Studio
 		$sid = 2343492;
@@ -116,6 +112,8 @@ trait DebugUtilTrait {
 
 			// 'other' game specific tables. example:
 			// tables specific to your schema that use player_ids
+
+			$this->DbQuery("UPDATE tickets SET card_location_arg=$sid WHERE card_location_arg = $id" );
 			$this->DbQuery("UPDATE placed_routes SET player_id=$sid WHERE player_id = $id" );
 			
 			++$sid;
