@@ -112,6 +112,8 @@ trait DebugUtilTrait {
 
 			// 'other' game specific tables. example:
 			// tables specific to your schema that use player_ids
+
+			$this->DbQuery("UPDATE tickets SET card_location_arg=$sid WHERE card_location_arg = $id" );
 			$this->DbQuery("UPDATE placed_routes SET player_id=$sid WHERE player_id = $id" );
 			
 			++$sid;

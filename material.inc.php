@@ -457,8 +457,6 @@ $this->CONNECTION_COLORS = [
       104 => [114],
     ],
   ],
- 
-  'big' => [1 => [], 2 => []],
  ];
 
 $this->COMMON_OBJECTIVES = [
