@@ -460,7 +460,7 @@ class GetOnBoard implements GetOnBoardGame {
 
     public getTooltip(element: number) {
         switch (element) {
-            case 0: return '[Station] : ' + _("If your route ends at an intersection with a [Station], add a circle on your Metro zone. At the end of each round, you can cross off a single circled [Station] to place 1 extra marker to make your route longer (in any direction).");
+            case 0: return '[Station] : ' + _("If your route ends at an intersection with a [Station], add a circle on your Metro zone. At the end of each round, you can cross off a single circled [Station] to place 1 extra marker to make your route longer (in any direction). Each [Station] circled that you have not crossed off will give you 2 points at the end of the game.");
             case 1: return _("<strong>Number:</strong> Possible starting point. You choose between 2 numbers at the beginning of the game to place your Departure Pawn.");
             case 20: return '[OldLady] : ' + _("When a marker reaches [OldLady], check a box on the [OldLady] zone. Add the number next to each checked box at game end.");
             case 30: return '[Student] : ' + _("When a marker reaches [Student], check a box on the [Student] zone. Multiply [Student] with [Cinema] at game end.");
