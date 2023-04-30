@@ -550,6 +550,7 @@ var TableCenter = /** @class */ (function () {
         });
         // tickets
         this.setRound(gamedatas.validatedTickets, gamedatas.currentTicket, true);
+        ['top', 'bottom', 'left', 'right'].forEach(function (side) { return dojo.place("<div class=\"position-indicator ".concat(side, "\"></div>"), 'map'); });
     }
     TableCenter.prototype.addDeparturePawn = function (playerId, position) {
         dojo.place("<div id=\"departure-pawn-".concat(playerId, "\" class=\"departure-pawn\"></div>"), "intersection".concat(position));
@@ -776,10 +777,15 @@ var GetOnBoard = /** @class */ (function () {
         if (args.canConfirm) {
             this.setGamestateDescription(args.possibleRoutes.length ? 'UseStation' : 'Confirm');
         }
+        var activePlayerColor = this.getPlayerColor(this.getActivePlayerId());
         var currentPositionIntersection = document.getElementById("intersection".concat(args.currentPosition));
         currentPositionIntersection.classList.add('glow');
-        currentPositionIntersection.style.setProperty('--background-lighter', "#".concat(this.getPlayerColor(this.getActivePlayerId()), "66"));
-        currentPositionIntersection.style.setProperty('--background-darker', "#".concat(this.getPlayerColor(this.getActivePlayerId()), "CC"));
+        currentPositionIntersection.style.setProperty('--background-lighter', "#".concat(activePlayerColor, "66"));
+        currentPositionIntersection.style.setProperty('--background-darker', "#".concat(activePlayerColor, "CC"));
+        var map = document.getElementById('map');
+        map.style.setProperty('--position-indicator-left', currentPositionIntersection.style.left);
+        map.style.setProperty('--position-indicator-top', currentPositionIntersection.style.top);
+        map.style.setProperty('--position-indicator-color', "#".concat(activePlayerColor));
         if (this.isCurrentPlayerActive()) {
             args.possibleRoutes.forEach(function (route) { return _this.tableCenter.addGhostMarker(route); });
         }

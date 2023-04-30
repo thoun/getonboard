@@ -146,10 +146,17 @@ class GetOnBoard implements GetOnBoardGame {
             this.setGamestateDescription(args.possibleRoutes.length ? 'UseStation' : 'Confirm');
         }
 
+        const activePlayerColor = this.getPlayerColor((this as any).getActivePlayerId());
+
         const currentPositionIntersection = document.getElementById(`intersection${args.currentPosition}`);
         currentPositionIntersection.classList.add('glow');
-        currentPositionIntersection.style.setProperty('--background-lighter', `#${this.getPlayerColor((this as any).getActivePlayerId())}66`);
-        currentPositionIntersection.style.setProperty('--background-darker', `#${this.getPlayerColor((this as any).getActivePlayerId())}CC`);
+        currentPositionIntersection.style.setProperty('--background-lighter', `#${activePlayerColor}66`);
+        currentPositionIntersection.style.setProperty('--background-darker', `#${activePlayerColor}CC`);
+
+        const map = document.getElementById('map');
+        map.style.setProperty('--position-indicator-left', currentPositionIntersection.style.left);
+        map.style.setProperty('--position-indicator-top', currentPositionIntersection.style.top);
+        map.style.setProperty('--position-indicator-color', `#${activePlayerColor}`);
 
         if ((this as any).isCurrentPlayerActive()) {
             args.possibleRoutes.forEach(route => this.tableCenter.addGhostMarker(route));
