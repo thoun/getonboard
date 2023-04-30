@@ -154,30 +154,8 @@ class GetOnBoard implements GetOnBoardGame {
         currentPositionIntersection.style.setProperty('--background-darker', `#${activePlayerColor}CC`);
 
         const map = document.getElementById('map');
-        if (this.gamedatas.map == 'small') {
-            const elemBR = currentPositionIntersection.getBoundingClientRect();
-            const mapBR = map.getBoundingClientRect();
-            console.log(currentPositionIntersection.getBoundingClientRect(), map.getBoundingClientRect());
-            const left = (elemBR.left - mapBR.left) / mapBR.width * 740;
-            const top = (elemBR.top - mapBR.top) / mapBR.height * 740;
-            map.style.setProperty('--position-indicator-left', `${left}px`);
-            map.style.setProperty('--position-indicator-top', `${top}px`);
-            /*const left = Number(currentPositionIntersection.style.left.match(/(\d+)/)[0]);
-            const top = Number(currentPositionIntersection.style.top.match(/(\d+)/)[0]);
-            const deltaX = left - 370;
-            const deltaY = top - 370;
-            const angle = Math.atan(deltaY / deltaX);
-            const distanceFromCenter = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-            const newAngle = angle + 0.25 * Math.PI;
-            const newDeltaX = distanceFromCenter * Math.cos(newAngle);
-            const newDeltaY = distanceFromCenter * Math.sin(newAngle);
-            console.log(deltaX, deltaY, distanceFromCenter, angle, '--', newAngle, newDeltaX, newDeltaY);
-            map.style.setProperty('--position-indicator-left', `${370 + newDeltaX}px`);
-            map.style.setProperty('--position-indicator-top', `${370 + newDeltaY}px`);*/
-        } else {
-            map.style.setProperty('--position-indicator-left', currentPositionIntersection.style.left);
-            map.style.setProperty('--position-indicator-top', currentPositionIntersection.style.top);
-        }
+        map.style.setProperty('--position-indicator-left', currentPositionIntersection.style.left);
+        map.style.setProperty('--position-indicator-top', currentPositionIntersection.style.top);
         map.style.setProperty('--position-indicator-color', `#${activePlayerColor}`);
 
         if ((this as any).isCurrentPlayerActive()) {
