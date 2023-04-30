@@ -1053,31 +1053,8 @@ var GetOnBoard = /** @class */ (function () {
         currentPositionIntersection.style.setProperty('--background-lighter', "#".concat(activePlayerColor, "66"));
         currentPositionIntersection.style.setProperty('--background-darker', "#".concat(activePlayerColor, "CC"));
         var map = document.getElementById('map');
-        if (this.gamedatas.map == 'small') {
-            var elemBR = currentPositionIntersection.getBoundingClientRect();
-            var mapBR = map.getBoundingClientRect();
-            console.log(currentPositionIntersection.getBoundingClientRect(), map.getBoundingClientRect());
-            var left = (elemBR.left - mapBR.left) / mapBR.width * 740;
-            var top_1 = (elemBR.top - mapBR.top) / mapBR.height * 740;
-            map.style.setProperty('--position-indicator-left', "".concat(left, "px"));
-            map.style.setProperty('--position-indicator-top', "".concat(top_1, "px"));
-            /*const left = Number(currentPositionIntersection.style.left.match(/(\d+)/)[0]);
-            const top = Number(currentPositionIntersection.style.top.match(/(\d+)/)[0]);
-            const deltaX = left - 370;
-            const deltaY = top - 370;
-            const angle = Math.atan(deltaY / deltaX);
-            const distanceFromCenter = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-            const newAngle = angle + 0.25 * Math.PI;
-            const newDeltaX = distanceFromCenter * Math.cos(newAngle);
-            const newDeltaY = distanceFromCenter * Math.sin(newAngle);
-            console.log(deltaX, deltaY, distanceFromCenter, angle, '--', newAngle, newDeltaX, newDeltaY);
-            map.style.setProperty('--position-indicator-left', `${370 + newDeltaX}px`);
-            map.style.setProperty('--position-indicator-top', `${370 + newDeltaY}px`);*/
-        }
-        else {
-            map.style.setProperty('--position-indicator-left', currentPositionIntersection.style.left);
-            map.style.setProperty('--position-indicator-top', currentPositionIntersection.style.top);
-        }
+        map.style.setProperty('--position-indicator-left', currentPositionIntersection.style.left);
+        map.style.setProperty('--position-indicator-top', currentPositionIntersection.style.top);
         map.style.setProperty('--position-indicator-color', "#".concat(activePlayerColor));
         if (this.isCurrentPlayerActive()) {
             args.possibleRoutes.forEach(function (route) { return _this.tableCenter.addGhostMarker(route); });
