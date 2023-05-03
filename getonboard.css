@@ -108,6 +108,9 @@
 }
 
 #map {
+  --position-indicator-color: black;
+  --position-indicator-left: -10000px;
+  --position-indicator-top: -10000px;
   box-shadow: 1px 1px 2px 2px #00000099;
   width: 740px;
   height: 740px;
@@ -115,6 +118,34 @@
   min-height: 740px;
   position: relative;
   background-size: contain;
+}
+#map .position-indicator {
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 20px 20px 0 20px;
+  border-color: var(--position-indicator-color) transparent transparent transparent;
+  transition: left 0.5s, top 0.5s, border-color 0.5s;
+}
+#map .position-indicator.top {
+  left: var(--position-indicator-left);
+  top: -8px;
+}
+#map .position-indicator.bottom {
+  transform: rotate(180deg);
+  left: var(--position-indicator-left);
+  bottom: -8px;
+}
+#map .position-indicator.left {
+  transform: rotate(270deg);
+  left: -18px;
+  top: var(--position-indicator-top);
+}
+#map .position-indicator.right {
+  transform: rotate(90deg);
+  right: -18px;
+  top: var(--position-indicator-top);
 }
 #map[data-size=small] {
   background-image: url("img/map-small-no-grid.jpg");

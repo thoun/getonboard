@@ -79,6 +79,8 @@ class TableCenter {
 
         // tickets
         this.setRound(gamedatas.validatedTickets, gamedatas.currentTicket, true);
+
+        ['top', 'bottom', 'left', 'right'].forEach(side => dojo.place(`<div class="position-indicator ${side}"></div>`, 'map'));
     }
 
     public addDeparturePawn(playerId: number, position: number) {

@@ -21,7 +21,7 @@ trait DebugUtilTrait {
         //$this->debugSetStart(2343493, 23);
         //$this->gamestate->jumpToState(ST_START_GAME);
 
-        $this->debugSetCommonObjective(1, 3);
+        //$this->debugSetCommonObjective(1, 3);
         //$this->DbQuery("UPDATE common_objectives SET `completed_at_round` = 1");
         //$this->debugSetCommonObjective(2, 5);
     }
