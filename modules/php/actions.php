@@ -59,9 +59,8 @@ trait ActionTrait {
         $mapElements = $this->MAP_POSITIONS[$map][$to];
         $round = $this->getRoundNumber();
         $useTurnZone = $possibleRoute->useTurnZone ? 1 : 0;
-        $giveStation = count($args['shape']) == $args['step'] && $this->array_some($mapElements, fn($element) => $element === 0)  ? 1 : 0;
         $useStation = $possibleRoute->useStation ? 1 : 0;
-        $this->DbQuery("INSERT INTO placed_routes(`player_id`, `from`, `to`, `round`, `use_turn_zone`, `connections`, `give_station`, `use_station`) VALUES ($playerId, $from, $to, $round, $useTurnZone, $possibleRoute->connections, $giveStation, $useStation)");
+        $this->DbQuery("INSERT INTO placed_routes(`player_id`, `from`, `to`, `round`, `use_turn_zone`, `connections`, `use_station`) VALUES ($playerId, $from, $to, $round, $useTurnZone, $possibleRoute->connections, $useStation)");
 
         $zones = array_map(fn($element) => floor($element / 10), $mapElements);
         $zones = array_unique(array_filter($zones, fn($zone) => $zone >=2 && $zone <= 5));
