@@ -610,29 +610,29 @@
   transform: rotateY(180deg);
 }
 
-html[data-no-building=true] #map[data-size=small] {
+html[data-no-grid=false][data-no-building=true] #map[data-size=small] {
   background-image: url("img/map-small-no-building.jpg");
 }
-html[data-no-building=true] #map[data-size=small].hd {
+html[data-no-grid=false][data-no-building=true] #map[data-size=small].hd {
   background-image: url("img/hd/map-small-no-building.jpg"), url("img/map-small-no-building.jpg");
 }
-html[data-no-building=true] #map[data-size=big] {
+html[data-no-grid=false][data-no-building=true] #map[data-size=big] {
   background-image: url("img/map-big-no-building.jpg");
 }
-html[data-no-building=true] #map[data-size=big].hd {
+html[data-no-grid=false][data-no-building=true] #map[data-size=big].hd {
   background-image: url("img/hd/map-big-no-building.jpg"), url("img/map-big-no-building.jpg");
 }
 
-html[data-no-grid=false] #map[data-size=small] {
+html[data-no-grid=false][data-no-building=false] #map[data-size=small] {
   background-image: url("img/map-small.jpg");
 }
-html[data-no-grid=false] #map[data-size=small].hd {
+html[data-no-grid=false][data-no-building=false] #map[data-size=small].hd {
   background-image: url("img/hd/map-small.jpg"), url("img/map-small.jpg");
 }
-html[data-no-grid=false] #map[data-size=big] {
+html[data-no-grid=false][data-no-building=false] #map[data-size=big] {
   background-image: url("img/map-big.jpg");
 }
-html[data-no-grid=false] #map[data-size=big].hd {
+html[data-no-grid=false][data-no-building=false] #map[data-size=big].hd {
   background-image: url("img/hd/map-big.jpg"), url("img/map-big.jpg");
 }
 

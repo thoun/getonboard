@@ -563,7 +563,7 @@ $marker-size: 6px;
   }
 }
 
-html[data-no-building="true"] {
+html[data-no-grid="false"][data-no-building="true"] {
   #map {
     &[data-size="small"] {
       background-image: url('img/map-small-no-building.jpg');
@@ -582,7 +582,7 @@ html[data-no-building="true"] {
   }
 }
 
-html[data-no-grid="false"] {
+html[data-no-grid="false"][data-no-building="false"] {
   #map {
     &[data-size="small"] {
       background-image: url('img/map-small.jpg');
