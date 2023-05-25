@@ -165,12 +165,10 @@ class GetOnBoardParisRome extends Table {
             $playerDb['markers'] = $placedRoutes;
             $playerDb['scoreSheets'] = $this->getScoreSheets($playerId, $placedRoutes, $commonObjectives, $isEndScore);
 
-            if ($playerId === $currentPlayerId || $isEndScore) {
-                $personalObjective = intval($this->getUniqueValueFromDB("SELECT player_personal_objective FROM `player` where `player_id` = $playerId"));
-                $playerDb['personalObjective'] = $personalObjective;
-                $playerDb['personalObjectiveLetters'] = $personalObjective == 0 ? null : array_map(fn($code) => chr($code), $this->getPersonalObjectiveLetters($playerId));
-                $playerDb['personalObjectivePositions'] = $personalObjective == 0 ? null : $this->getPersonalObjectivePositions($personalObjective, $map);
-            }
+            $personalObjective = intval($this->getUniqueValueFromDB("SELECT player_personal_objective FROM `player` where `player_id` = $playerId"));
+            $playerDb['personalObjective'] = $personalObjective;
+            $playerDb['personalObjectiveLetters'] = $personalObjective == 0 ? null : array_map(fn($code) => chr($code), $this->getPersonalObjectiveLetters($playerId));
+            $playerDb['personalObjectivePositions'] = $personalObjective == 0 ? null : $this->getPersonalObjectivePositions($personalObjective, $map);
         }
   
         $result['roundNumber'] = $this->getRoundNumber();
