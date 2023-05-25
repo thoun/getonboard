@@ -559,7 +559,7 @@ class GetOnBoard implements GetOnBoardGame {
                 const reached = this.positionReached(lettersPosition, player.markers).toString();
                 const mapLetter = document.querySelector(`.objective-letter[data-position="${lettersPosition}"]`) as HTMLDivElement;
                 const panelLetter = document.querySelector(`.letter[data-player-id="${player.id}"][data-position="${lettersPosition}"]`) as HTMLDivElement;
-                if (mapLetter) {
+                if (mapLetter && Number(player.id) == this.getPlayerId()) {
                     mapLetter.dataset.reached = reached;
                 }
                 if (panelLetter) {

@@ -1389,7 +1389,7 @@ var GetOnBoard = /** @class */ (function () {
                 var reached = _this.positionReached(lettersPosition, player.markers).toString();
                 var mapLetter = document.querySelector(".objective-letter[data-position=\"".concat(lettersPosition, "\"]"));
                 var panelLetter = document.querySelector(".letter[data-player-id=\"".concat(player.id, "\"][data-position=\"").concat(lettersPosition, "\"]"));
-                if (mapLetter) {
+                if (mapLetter && Number(player.id) == _this.getPlayerId()) {
                     mapLetter.dataset.reached = reached;
                 }
                 if (panelLetter) {
