@@ -257,6 +257,7 @@ trait ScoreSheetTrait {
         }
 
         $scoreSheet->total = 
+            $scoreSheet->stations->total +
             $scoreSheet->oldLadies->total + 
             $scoreSheet->students->total + 
             $scoreSheet->tourists->total + 
