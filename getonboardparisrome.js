@@ -955,6 +955,7 @@ var GetOnBoard = /** @class */ (function () {
     function GetOnBoard() {
         this.playersTables = [];
         this.registeredTablesByPlayerId = [];
+        this.actionTimerId = null;
         document.getElementById('jump-controls').classList.toggle('folded', localStorage.getItem(LOCAL_STORAGE_JUMP_KEY) == 'true');
     }
     /*
