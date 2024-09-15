@@ -13,16 +13,7 @@
 $gameinfos = [
 
 // Name of the game in English (will serve as the basis for translation) 
-'game_name' => "Get on Board: New York & London",
-
-// Game designer (or game designers, separated by commas)
-'designer' => 'Saashi',       
-
-// Game artist (or game artists, separated by commas)
-'artist' => 'Monsieur Z',         
-
-// Year of FIRST publication of this game. Can be negative.
-'year' => 2022,                 
+'game_name' => "Get on Board: New York & London",                
 
 // Game publisher (use empty string if there is no publisher)
 'publisher' => 'Iello',                     
@@ -35,7 +26,6 @@ $gameinfos = [
 
 // Board game geek ID of the game
 'bgg_id' => 347013,
-
 
 // Players configuration that can be played (ex: 2 to 4 players)
 'players' => [ 2, 3, 4, 5 ],    
@@ -84,19 +74,7 @@ $gameinfos = [
 // Language dependency. If false or not set, there is no language dependency. If true, all players at the table must speak the same language.
 // If an array of shortcode languages such as array( 1 => 'en', 2 => 'fr', 3 => 'it' ) then all players at the table must speak the same language, and this language must be one of the listed languages.
 // NB: the default will be the first language in this list spoken by the player, so you should list them by popularity/preference.
-'language_dependency' => false,
-
-// Complexity of the game, from 0 (extremely simple) to 5 (extremely complex)
-'complexity' => 2,    
-
-// Luck of the game, from 0 (absolutely no luck in this game) to 5 (totally luck driven)
-'luck' => 2,    
-
-// Strategy of the game, from 0 (no strategy can be setup) to 5 (totally based on strategy)
-'strategy' => 3,    
-
-// Diplomacy of the game, from 0 (no interaction in this game) to 5 (totally based on interaction and discussion between players)
-'diplomacy' => 1,    
+'language_dependency' => false,  
 
 // Colors attributed to players
 'player_colors' => [ "72c3d5", "f8d03f", "a476a5", "78232f", "166938" ], // dark blue in the ART file : 0a2a3b
@@ -118,40 +96,6 @@ $gameinfos = [
     //  maximum possible value: 740 (ie: your game interface should fit with a 740px width (correspond to a 1024px screen)
     //  minimum possible value: 320 (the lowest value you specify, the better the display is on mobile)
     'min' => 745,
-
-    // Maximum width
-    //  default: null (ie: no limit, the game interface is as big as the player's screen allows it).
-    //  maximum possible value: unlimited
-    //  minimum possible value: 740
-    'max' => null
 ],
 
-// Game presentation
-// Short game presentation text that will appear on the game description page, structured as an array of paragraphs.
-// Each paragraph must be wrapped with totranslate() for translation and should not contain html (plain text without formatting).
-// A good length for this text is between 100 and 150 words (about 6 to 9 lines on a standard display)
-'presentation' => [ // taken from BGG — description from the publisher
-    totranslate("Ah, here’s the bus! Hurry, grab a seat, and get out of the rain! Just like every trip, you're fascinated by all the other passengers on board: tourists, professionals, students... They're all traveling together, though they each have different destinations. This bus line is truly special, but will it be able to transport everyone safe and sound?"),
-    totranslate("In Get on Board: New York & London, you have twelve rounds in which to build the best bus line in town. Each round reveals a new card that shows each player the route shape they must complete. Place your bus accordingly on the central board. Take the passengers where they want to go by connecting them and their destination to your bus line, avoid traffic, and gain as many victory points as possible!"),
-],
-
-// Games categories
-//  You can attribute a maximum of FIVE "tags" for your game.
-//  Each tag has a specific ID (ex: 22 for the category "Prototype", 101 for the tag "Science-fiction theme game")
-//  Please see the "Game meta information" entry in the BGA Studio documentation for a full list of available tags:
-//  http://en.doc.boardgamearena.com/Game_meta-information:_gameinfos.inc.php
-//  IMPORTANT: this list should be ORDERED, with the most important tag first.
-//  IMPORTANT: it is mandatory that the FIRST tag is 1, 2, 3 and 4 (= game category)
-'tags' => [ 2, 11, 106 ],
-
-
-//////// BGA SANDBOX ONLY PARAMETERS (DO NOT MODIFY)
-
-// simple : A plays, B plays, C plays, A plays, B plays, ...
-// circuit : A plays and choose the next player C, C plays and choose the next player D, ...
-// complex : A+B+C plays and says that the next player is A+B
-'is_sandbox' => false,
-'turnControl' => 'simple'
-
-////////
 ];
