@@ -1,3 +1,5 @@
+@import '../node_modules/bga-zoom/bga-zoom';
+
 @import 'playerboards';
 @import 'table-center';
 @import 'player-table';
@@ -25,115 +27,81 @@ html, .mode_3d #game_play_area_background {
   src: url(https://fonts.gstatic.com/s/indieflower/v16/m8JVjfNVeKWVnh3QMuKkFcZVaUuH.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+#jump-controls {
+  position: fixed;
+  top: 50vh;
+  z-index: 5;
 
-#zoom-wrapper {
-  position: relative;
-
-  #zoom-controls {
-    position: absolute;
-    top: 0;
-    right: 0;
-
-    button {
-      width: 40px;
-      height: 40px;
-      background: url('img/zoom.svg');
-      background-size: auto 220%;
-
-      &:not(.disabled) {
-        cursor: pointer;
-      }
-
-      &.disabled {
-        cursor: not-allowed;
-        opacity: 0.5;
-      }
-    }
-
-    #zoom-in {
-      background-position: 6% 94%;
-    }
-    #zoom-out {
-      background-position: 82% 94%;
+  &.folded {
+    .jump-link:not(.toggle) {
+      display: none;
     }
   }
 
-  #jump-controls {
-    position: fixed;
-    top: 50vh;
-    z-index: 5;
-
-    &.folded {
-      .jump-link:not(.toggle) {
-        display: none;
-      }
+  .jump-link {
+    position: relative;
+    border-width: 2px;
+    border-style: solid;
+    border-right-width: 0;
+    margin: 10px 0;
+    width: fit-content;
+    cursor: pointer;
+    height: 22px;
+    padding: 2px 5px;
+    background: white;
+    
+    &::before {
+      width: 0;
+      height: 0;
+      border-top: 15px solid transparent;
+      border-bottom: 15px solid transparent;
+      border-left-width: 15px;
+      border-left-style: solid;
+      content: "";
+      position: absolute;
+      right: -15px;
+      top: -2px;
+    }
+    
+    &::after {
+      width: 0;
+      height: 0;
+      border-top: 13px solid transparent;
+      border-bottom: 13px solid transparent;
+      border-left: 13px solid white;
+      content: "";
+      position: absolute;
+      right: -13px;
+      top: 0px;
     }
 
-    .jump-link {
-      position: relative;
-      border-width: 2px;
-      border-style: solid;
-      border-right-width: 0;
-      margin: 10px 0;
-      width: fit-content;
-      cursor: pointer;
-      height: 22px;
-      padding: 2px 5px;
-      background: white;
-      
-      &::before {
-        width: 0;
-        height: 0;
-        border-top: 15px solid transparent;
-        border-bottom: 15px solid transparent;
-        border-left-width: 15px;
-        border-left-style: solid;
-        content: "";
-        position: absolute;
-        right: -15px;
-        top: -2px;
-      }
-      
-      &::after {
-        width: 0;
-        height: 0;
-        border-top: 13px solid transparent;
-        border-bottom: 13px solid transparent;
-        border-left: 13px solid white;
-        content: "";
-        position: absolute;
-        right: -13px;
-        top: 0px;
-      }
-
-      .eye {
-        width: 20px;
-        height: 20px;
-        mask: url('img/eye.svg') no-repeat center / contain;
-        -webkit-mask: url('img/eye.svg') no-repeat center / contain;
-        background: black;
-        background-size: 100% 100%;
-        background-repeat: no-repeat;
-        background-position: center;
-        display: inline-block;
-        vertical-align: middle;
-      }
-    }
-
-    &#jump-0 {
-      border-color: black;
+    .eye {
+      width: 20px;
+      height: 20px;
+      mask: url('img/eye.svg') no-repeat center / contain;
+      -webkit-mask: url('img/eye.svg') no-repeat center / contain;
+      background: black;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+      display: inline-block;
+      vertical-align: middle;
     }
   }
 
-  #full-table {
-    transform-origin: left top;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
+  &#jump-0 {
+    border-color: black;
   }
+}
+
+#full-table {
+  transform-origin: left top;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .first-player-token {

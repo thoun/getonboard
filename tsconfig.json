@@ -10,6 +10,7 @@
     "files": [
         "src/framework.d.ts",
         "src/counter.d.ts",
+        "node_modules/bga-zoom/src/zoom-manager.ts",
         "src/getonboard.d.ts",
         "src/slide-utils.ts",
         "src/player-table-block/block.ts",

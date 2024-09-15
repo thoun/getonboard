@@ -8,7 +8,6 @@ declare const g_gamethemeurl;
 const ANIMATION_MS = 500;
 
 const ZOOM_LEVELS = [0.5, 0.625, 0.75, 0.875, 1, 1.25, 1.5];
-const ZOOM_LEVELS_MARGIN = [-100, -60, -33, -14, 0, 20, 33.34];
 const LOCAL_STORAGE_ZOOM_KEY = 'GetOnBoard-zoom';
 const LOCAL_STORAGE_JUMP_KEY = 'GetOnBoard-jump-to-folded';
 
@@ -29,7 +28,7 @@ function formatTextIcons(rawText: string) {
 }
 
 class GetOnBoard implements GetOnBoardGame {
-    public zoom: number = 1;
+    private zoomManager: ZoomManager;
 
     private gamedatas: GetOnBoardGamedatas;
     //private healthCounters: Counter[] = [];
@@ -39,10 +38,6 @@ class GetOnBoard implements GetOnBoardGame {
     private roundNumberCounter: Counter;
 
     constructor() {
-        const zoomStr = localStorage.getItem(LOCAL_STORAGE_ZOOM_KEY);
-        if (zoomStr) {
-            this.zoom = Number(zoomStr);
-        }
         document.getElementById('jump-controls').classList.toggle('folded', localStorage.getItem(LOCAL_STORAGE_JUMP_KEY) == 'true');
     }
     
@@ -99,14 +94,19 @@ class GetOnBoard implements GetOnBoardGame {
         this.roundNumberCounter.create(`round-number-counter`);
         this.roundNumberCounter.setValue(gamedatas.roundNumber);
 
+        this.zoomManager = new ZoomManager({
+            element: document.getElementById('full-table'),
+            smooth: false,
+            zoomControls: {
+                color: 'black',
+            },
+            zoomLevels: ZOOM_LEVELS,
+            localStorageZoomKey: LOCAL_STORAGE_ZOOM_KEY,
+            onZoomChange: (zoom) => document.getElementById('map').classList.toggle('hd', zoom > 1)
+        });
+
         this.setupNotifications();
         this.setupPreferences();
-
-        document.getElementById('zoom-out').addEventListener('click', () => this.zoomOut());
-        document.getElementById('zoom-in').addEventListener('click', () => this.zoomIn());
-        if (this.zoom !== 1) {
-            this.setZoom(this.zoom);
-        }
 
         this.addTooltips();
 
@@ -274,43 +274,6 @@ class GetOnBoard implements GetOnBoardGame {
         return this.gamedatas.players[playerId].color;
     }
 
-    private setZoom(zoom: number = 1) {
-        this.zoom = zoom;
-        localStorage.setItem(LOCAL_STORAGE_ZOOM_KEY, ''+this.zoom);
-        const newIndex = ZOOM_LEVELS.indexOf(this.zoom);
-        dojo.toggleClass('zoom-in', 'disabled', newIndex === ZOOM_LEVELS.length - 1);
-        dojo.toggleClass('zoom-out', 'disabled', newIndex === 0);
-
-        const div = document.getElementById('full-table');
-        if (zoom === 1) {
-            div.style.transform = '';
-            div.style.margin = '';
-        } else {
-            div.style.transform = `scale(${zoom})`;
-            div.style.margin = `0 ${ZOOM_LEVELS_MARGIN[newIndex]}% ${(1-zoom)*-100}% 0`;
-        }
-        
-        document.getElementById('map').classList.toggle('hd', zoom > 1);
-
-        document.getElementById('zoom-wrapper').style.height = `${div.getBoundingClientRect().height}px`;
-    }
-
-    public zoomIn() {
-        if (this.zoom === ZOOM_LEVELS[ZOOM_LEVELS.length - 1]) {
-            return;
-        }
-        const newIndex = ZOOM_LEVELS.indexOf(this.zoom) + 1;
-        this.setZoom(ZOOM_LEVELS[newIndex]);
-    }
-
-    public zoomOut() {
-        if (this.zoom === ZOOM_LEVELS[0]) {
-            return;
-        }
-        const newIndex = ZOOM_LEVELS.indexOf(this.zoom) - 1;
-        this.setZoom(ZOOM_LEVELS[newIndex]);
-    }
-
     private setupPreferences() {
         // Extract the ID and value from the UI control
         const onchange = (e) => {
@@ -475,7 +438,7 @@ class GetOnBoard implements GetOnBoardGame {
 
         const firstPlayerTableToken = document.getElementById('firstPlayerTableToken');
         if (firstPlayerTableToken) {
-            slideToObjectAndAttach(this, firstPlayerTableToken, `player-table-${playerId}-first-player-wrapper`, this.zoom);
+            slideToObjectAndAttach(this, firstPlayerTableToken, `player-table-${playerId}-first-player-wrapper`, this.zoomManager.zoom);
         } else {
             dojo.place('<div id="firstPlayerTableToken" class="first-player-token"></div>', `player-table-${playerId}-first-player-wrapper`);
 
@@ -582,7 +545,7 @@ class GetOnBoard implements GetOnBoardGame {
         const deltaX = originBR.left - pipBR.left - 8;
         const deltaY = originBR.top - pipBR.top - 8;
 
-        pipDiv.style.transform = `translate(${deltaX/this.zoom}px, ${deltaY/this.zoom}px)`;
+        pipDiv.style.transform = `translate(${deltaX/this.zoomManager.zoom}px, ${deltaY/this.zoomManager.zoom}px)`;
         if (!this.isElementIntoViewport(playerTableZoneDiv)) {
             pipDiv.classList.add('animated');
             setTimeout(() => pipDiv.style.transform = '', 0);
