@@ -19,44 +19,6 @@ class PlayerTableBlock {
     }
 }
 
-class PlayerTableBusinessmenBlock extends PlayerTableBlock {
-    constructor(playerId, scoreSheets, visibleScoring) {
-        super(playerId);
-        let html = `
-        <div id="businessmen-block-${playerId}" data-tooltip="[50,51]" class="businessmen block" data-zone="5">
-                    <div id="player-table-${playerId}-businessmen-special" class="special"></div>`;
-        for (let row = 1; row <= 3; row++) {
-            for (let i = 1; i <= 3; i++) {
-                html += `
-                        <div id="player-table-${playerId}-businessmen-checkmark${row}-${i}" class="checkmark" data-row="${row}" data-number="${i}"></div>`;
-            }
-        }
-        html += `
-                    <div id="player-table-${playerId}-businessmen-subtotal1" class="subtotal" data-number="1"></div>
-                    <div id="player-table-${playerId}-businessmen-subtotal2" class="subtotal" data-number="2"></div>
-                    <div id="player-table-${playerId}-businessmen-subtotal3" class="subtotal" data-number="3"></div>
-                    <div id="player-table-${playerId}-businessmen-total" class="total"></div>
-                </div>
-        `;
-        document.getElementById(`player-table-${playerId}-main`).insertAdjacentHTML('beforeend', html);
-        this.updateScoreSheet(scoreSheets, visibleScoring);
-    }
-    updateScoreSheet(scoreSheets, visibleScoring) {
-        const current = scoreSheets.current.businessmen;
-        const validated = scoreSheets.validated.businessmen;
-        this.setContentAndValidation(`businessmen-special`, current.specialOffice, current.specialOffice !== validated.specialOffice);
-        for (let row = 1; row <= 3; row++) {
-            for (let i = 1; i <= 3; i++) {
-                this.setContentAndValidation(`businessmen-checkmark${row}-${i}`, current.checkedBusinessmen[row - 1] >= i ? '✔' : (current.subTotals[row - 1] ? '⎯⎯' : ''), current.checkedBusinessmen[row - 1] >= i && validated.checkedBusinessmen[row - 1] < i);
-            }
-            this.setContentAndValidation(`businessmen-subtotal${row}`, current.subTotals[row - 1], current.subTotals[row - 1] != validated.subTotals[row - 1]);
-        }
-        if (visibleScoring) {
-            this.setContentAndValidation(`businessmen-total`, current.total, current.total != validated.total);
-        }
-    }
-}
-
 class PlayerTableCommonObjectivesBlock extends PlayerTableBlock {
     constructor(playerId, scoreSheets, visibleScoring) {
         super(playerId);
@@ -78,6 +40,72 @@ class PlayerTableCommonObjectivesBlock extends PlayerTableBlock {
         }
         if (visibleScoring) {
             this.setContentAndValidation(`common-objectives-total`, current.total, current.total != validated.total);
+        }
+    }
+}
+
+class PlayerTableConnectionsBlock extends PlayerTableBlock {
+    constructor(playerId, scoreSheets, visibleScoring) {
+        super(playerId);
+        let html = `
+        <div id="connections-block-${playerId}" data-tooltip="[93]" class="connections block" data-zone="7">`;
+        for (let i = 1; i <= 19; i++) {
+            html += `
+                    <div id="player-table-${playerId}-connections-checkmark${i}" class="checkmark" data-number="${i}"></div>`;
+        }
+        html += `
+                    <div id="player-table-${playerId}-connections-total" class="total"></div>
+                </div>
+        `;
+        document.getElementById(`player-table-${playerId}-main`).insertAdjacentHTML('beforeend', html);
+        this.updateScoreSheet(scoreSheets, visibleScoring);
+    }
+    updateScoreSheet(scoreSheets, visibleScoring) {
+        const current = scoreSheets.current.connections;
+        const validated = scoreSheets.validated.connections;
+        for (let i = 1; i <= 19; i++) {
+            this.setContentAndValidation(`connections-checkmark${i}`, current.checked >= i ? '✔' : '', current.checked >= i && validated.checked < i);
+        }
+        if (visibleScoring) {
+            this.setContentAndValidation(`connections-total`, current.total, current.total !== validated.total);
+        }
+    }
+}
+
+class PlayerTableLoversBlock extends PlayerTableBlock {
+    constructor(playerId, scoreSheets, visibleScoring) {
+        super(playerId);
+        let html = `
+        <div id="lovers-block-${playerId}" data-tooltip="[50,52]" class="lovers block" data-zone="5">`;
+        for (let row = 1; row <= 3; row++) {
+            for (let i = 1; i <= 2; i++) {
+                html += `
+                    <div id="player-table-${playerId}-lovers-light-checkmark${row}-${i}" class="checkmark light" data-row="${row}" data-number="${i}"></div>
+                    <div id="player-table-${playerId}-lovers-dark-checkmark${row}-${i}" class="checkmark dark" data-row="${row}" data-number="${i}"></div>`;
+            }
+        }
+        html += `
+                    <div id="player-table-${playerId}-lovers-subtotal1" class="subtotal" data-number="1"></div>
+                    <div id="player-table-${playerId}-lovers-subtotal2" class="subtotal" data-number="2"></div>
+                    <div id="player-table-${playerId}-lovers-subtotal3" class="subtotal" data-number="3"></div>
+                    <div id="player-table-${playerId}-lovers-total" class="total"></div>
+                </div>
+        `;
+        document.getElementById(`player-table-${playerId}-main`).insertAdjacentHTML('beforeend', html);
+        this.updateScoreSheet(scoreSheets, visibleScoring);
+    }
+    updateScoreSheet(scoreSheets, visibleScoring) {
+        const current = scoreSheets.current.lovers;
+        const validated = scoreSheets.validated.lovers;
+        for (let row = 1; row <= 3; row++) {
+            for (let i = 1; i <= 2; i++) {
+                this.setContentAndValidation(`lovers-light-checkmark${row}-${i}`, current.checkedLoversLight[row - 1] >= i ? '✔' : (current.subTotals[row - 1] ? '⎯⎯' : ''), current.checkedLoversLight[row - 1] >= i && validated.checkedLoversLight[row - 1] < i);
+                this.setContentAndValidation(`lovers-dark-checkmark${row}-${i}`, current.checkedLoversDark[row - 1] >= i ? '✔' : (current.subTotals[row - 1] ? '⎯⎯' : ''), current.checkedLoversDark[row - 1] >= i && validated.checkedLoversDark[row - 1] < i);
+            }
+            this.setContentAndValidation(`lovers-subtotal${row}`, current.subTotals[row - 1], current.subTotals[row - 1] != validated.subTotals[row - 1]);
+        }
+        if (visibleScoring) {
+            this.setContentAndValidation(`lovers-total`, current.total, current.total != validated.total);
         }
     }
 }
@@ -111,11 +139,18 @@ class PlayerTableOldLadiesBlock extends PlayerTableBlock {
     }
 }
 
+const PERSONAL_OBJECTIVE_POINTS = [0, 2, 5, 10];
 class PlayerTablePersonalObjectiveBlock extends PlayerTableBlock {
     constructor(playerId, scoreSheets, visibleScoring) {
         super(playerId);
         let html = `
-        <div id="personal-objective-block-${playerId}" data-tooltip="[91]" class="personal-objective block">
+        <div id="personal-objective-block-${playerId}" data-tooltip="[91]" class="personal-objective block">`;
+        for (let i = 1; i <= 3; i++) {
+            html += `
+                <div id="player-table-${playerId}-personal-objective-checkmark${i}" class="checkmark" data-number="${i}"></div>
+            `;
+        }
+        html += ` 
             <div id="player-table-${playerId}-personal-objective-total" class="total"></div>
         </div>
         `;
@@ -126,7 +161,43 @@ class PlayerTablePersonalObjectiveBlock extends PlayerTableBlock {
         const current = scoreSheets.current.personalObjective;
         const validated = scoreSheets.validated.personalObjective;
         if (visibleScoring) {
+            for (let i = 1; i <= 3; i++) {
+                this.setContentAndValidation(`personal-objective-checkmark${i}`, current.total >= PERSONAL_OBJECTIVE_POINTS[i] ? '✔' : '', current.total >= PERSONAL_OBJECTIVE_POINTS[i] && validated.total < PERSONAL_OBJECTIVE_POINTS[i]);
+            }
             this.setContentAndValidation(`personal-objective-total`, current.total, current.total != validated.total);
+        }
+    }
+}
+
+class PlayerTableStationsBlock extends PlayerTableBlock {
+    constructor(playerId, scoreSheets, visibleScoring) {
+        super(playerId);
+        let html = `
+        <div id="stations-block-${playerId}" data-tooltip="[0]" class="stations block" data-zone="0">`;
+        for (let i = 1; i <= 8; i++) {
+            html += `
+                <div id="player-table-${playerId}-stations-circles${i}" class="circle" data-number="${i}"></div>
+                <div id="player-table-${playerId}-stations-checkmark${i}" class="checkmark" data-number="${i}"></div>
+            `;
+        }
+        html += `        
+                    <div id="player-table-${playerId}-stations-total" class="total"></div>
+                </div>
+        `;
+        document.getElementById(`player-table-${playerId}-main`).insertAdjacentHTML('beforeend', html);
+        this.updateScoreSheet(scoreSheets, visibleScoring);
+    }
+    updateScoreSheet(scoreSheets, visibleScoring) {
+        const current = scoreSheets.current.stations;
+        const validated = scoreSheets.validated.stations;
+        for (let i = 1; i <= 6; i++) {
+            const div = document.getElementById(`player-table-${this.playerId}-stations-circles${i}`);
+            div.dataset.encircled = (current.encircled >= i).toString();
+            div.dataset.unvalidated = (current.encircled >= i && validated.encircled < i).toString();
+            this.setContentAndValidation(`stations-checkmark${i}`, current.checked >= i ? '✗' : '', current.checked >= i && validated.checked < i);
+        }
+        if (visibleScoring) {
+            this.setContentAndValidation(`stations-total`, current.total, current.total !== validated.total);
         }
     }
 }
@@ -141,17 +212,11 @@ class PlayerTableStudentsBlock extends PlayerTableBlock {
             html += `
                     <div id="player-table-${playerId}-students-checkmark${i}" class="students checkmark" data-number="${i}"></div>`;
         }
-        for (let i = 1; i <= 3; i++) {
-            html += `
-                    <div id="player-table-${playerId}-internships-checkmark${i}" class="internships checkmark" data-number="${i}"></div>`;
-        }
         for (let i = 1; i <= 4; i++) {
             html += `
-                    <div id="player-table-${playerId}-schools-checkmark${i}" class="schools checkmark" data-number="${i}"></div>`;
+                    <div id="player-table-${playerId}-cinemas-checkmark${i}" class="cinemas checkmark" data-number="${i}"></div>`;
         }
         html += `
-                    <div id="player-table-${playerId}-students-special" class="special"></div>
-                    <div id="player-table-${playerId}-students-subtotal" class="subtotal"></div>
                     <div id="player-table-${playerId}-students-total" class="total"></div>
                 </div>
         `;
@@ -164,15 +229,10 @@ class PlayerTableStudentsBlock extends PlayerTableBlock {
         for (let i = 1; i <= 6; i++) {
             this.setContentAndValidation(`students-checkmark${i}`, current.checkedStudents >= i ? '✔' : '', current.checkedStudents >= i && validated.checkedStudents < i);
         }
-        for (let i = 1; i <= 3; i++) {
-            this.setContentAndValidation(`internships-checkmark${i}`, current.checkedInternships >= i ? '✔' : '', current.checkedInternships >= i && validated.checkedInternships < i);
-        }
         for (let i = 1; i <= 4; i++) {
-            this.setContentAndValidation(`schools-checkmark${i}`, current.checkedSchools >= i ? '✔' : '', current.checkedSchools >= i && validated.checkedSchools < i);
+            this.setContentAndValidation(`cinemas-checkmark${i}`, current.checkedCinemas >= i ? '✔' : '', current.checkedCinemas >= i && validated.checkedCinemas < i);
         }
-        this.setContentAndValidation(`students-special`, current.specialSchool, current.specialSchool !== validated.specialSchool);
         if (visibleScoring) {
-            this.setContentAndValidation(`students-subtotal`, current.subTotal, current.subTotal !== validated.subTotal);
             this.setContentAndValidation(`students-total`, current.total, current.total !== validated.total);
         }
     }
@@ -191,10 +251,6 @@ class PlayerTableTouristsBlock extends PlayerTableBlock {
             html += `
                     <div id="player-table-${playerId}-tourists-dark-checkmark${i}" class="monument dark checkmark" data-number="${i}"></div>`;
         }
-        html += `
-                    <div id="player-table-${playerId}-tourists-specialLight" class="special" data-style="Light"></div>
-                    <div id="player-table-${playerId}-tourists-specialDark" class="special" data-style="Dark"></div>
-                    <div id="player-table-${playerId}-tourists-specialMax" class="special"></div>`;
         for (let row = 1; row <= 3; row++) {
             for (let i = 1; i <= 4; i++) {
                 html += `
@@ -220,11 +276,6 @@ class PlayerTableTouristsBlock extends PlayerTableBlock {
         for (let i = 1; i <= 3; i++) {
             this.setContentAndValidation(`tourists-dark-checkmark${i}`, current.checkedMonumentsDark >= i ? '✔' : '', current.checkedMonumentsDark >= i && validated.checkedMonumentsDark < i);
         }
-        this.setContentAndValidation(`tourists-specialLight`, current.specialMonumentLight, current.specialMonumentLight !== validated.specialMonumentLight);
-        this.setContentAndValidation(`tourists-specialDark`, current.specialMonumentDark, current.specialMonumentDark !== validated.specialMonumentDark);
-        if (visibleScoring) {
-            this.setContentAndValidation(`tourists-specialMax`, current.specialMonumentMax, current.specialMonumentMax !== validated.specialMonumentMax);
-        }
         for (let row = 1; row <= 3; row++) {
             for (let i = 1; i <= 4; i++) {
                 this.setContentAndValidation(`tourists-checkmark${row}-${i}`, current.checkedTourists[row - 1] >= i ? '✔' : (current.subTotals[row - 1] ? '⎯⎯' : ''), current.checkedTourists[row - 1] >= i && validated.checkedTourists[row - 1] < i);
@@ -233,34 +284,6 @@ class PlayerTableTouristsBlock extends PlayerTableBlock {
         }
         if (visibleScoring) {
             this.setContentAndValidation(`tourists-total`, current.total, current.total != validated.total);
-        }
-    }
-}
-
-class PlayerTableTrafficJamBlock extends PlayerTableBlock {
-    constructor(playerId, scoreSheets, visibleScoring) {
-        super(playerId);
-        let html = `
-        <div id="traffic-jam-block-${playerId}" data-tooltip="[93]" class="traffic-jam block" data-zone="7">`;
-        for (let i = 1; i <= 19; i++) {
-            html += `
-                    <div id="player-table-${playerId}-traffic-jam-checkmark${i}" class="checkmark" data-number="${i}"></div>`;
-        }
-        html += `
-                    <div id="player-table-${playerId}-traffic-jam-total" class="total"></div>
-                </div>
-        `;
-        document.getElementById(`player-table-${playerId}-main`).insertAdjacentHTML('beforeend', html);
-        this.updateScoreSheet(scoreSheets, visibleScoring);
-    }
-    updateScoreSheet(scoreSheets, visibleScoring) {
-        const current = scoreSheets.current.trafficJam;
-        const validated = scoreSheets.validated.trafficJam;
-        for (let i = 1; i <= 19; i++) {
-            this.setContentAndValidation(`traffic-jam-checkmark${i}`, current.checked >= i ? '✔' : '', current.checked >= i && validated.checked < i);
-        }
-        if (visibleScoring) {
-            this.setContentAndValidation(`traffic-jam-total`, -current.total, current.total !== validated.total);
         }
     }
 }
@@ -302,12 +325,18 @@ class PlayerTable {
             <div id="player-table-${this.playerId}-top" data-tooltip="[95]" class="top" data-type="${player.sheetType}">
             `;
         for (let i = 1; i <= 12; i++) {
-            html += `
-                    <div id="player-table-${this.playerId}-top-checkmark${i}" class="checkmark" data-number="${i}"></div>`;
+            html += `<div id="player-table-${this.playerId}-top-checkmark${i}" class="checkmark" data-number="${i}"></div>`;
         }
         html += ` 
             </div>
+            
             <div id="player-table-${this.playerId}-main" class="main">
+                <div class="connection-color">`;
+        for (let i = 1; i <= 2; i++) {
+            html += `<div id="player-table-${this.playerId}-connection-color-${i}" class="checkmark" data-number="${i}"></div>`;
+        }
+        html += `
+                </div>
                 <div id="player-table-${this.playerId}-total-score" data-tooltip="[94]" class="total score"></div>
             </div>
             <div class="name" style="color: #${player.color};">${player.name}</div>
@@ -315,14 +344,18 @@ class PlayerTable {
         </div>
         `;
         insertIn.insertAdjacentHTML('beforeend', html);
+        if (player.scoreSheets.current.connectionColor) {
+            this.setContentAndValidation(`connection-color-${player.scoreSheets.current.connectionColor}`, '✔', false);
+        }
+        this.stations = new PlayerTableStationsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.oldLadies = new PlayerTableOldLadiesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.students = new PlayerTableStudentsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.tourists = new PlayerTableTouristsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
-        this.businessmen = new PlayerTableBusinessmenBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
+        this.lovers = new PlayerTableLoversBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.commonObjectives = new PlayerTableCommonObjectivesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.personalObjective = new PlayerTablePersonalObjectiveBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.turnZones = new PlayerTableTurnZonesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
-        this.trafficJam = new PlayerTableTrafficJamBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
+        this.connections = new PlayerTableConnectionsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.updateScoreSheet(player.scoreSheets, game.isVisibleScoring());
     }
     setRound(validatedTickets, currentTicket) {
@@ -334,14 +367,18 @@ class PlayerTable {
         }
     }
     updateScoreSheet(scoreSheets, visibleScoring) {
+        if (scoreSheets.current.connectionColor) {
+            this.setContentAndValidation(`connection-color-${scoreSheets.current.connectionColor}`, '✔', false);
+        }
+        this.stations.updateScoreSheet(scoreSheets, visibleScoring);
         this.oldLadies.updateScoreSheet(scoreSheets, visibleScoring);
         this.students.updateScoreSheet(scoreSheets, visibleScoring);
         this.tourists.updateScoreSheet(scoreSheets, visibleScoring);
-        this.businessmen.updateScoreSheet(scoreSheets, visibleScoring);
+        this.lovers.updateScoreSheet(scoreSheets, visibleScoring);
         this.commonObjectives.updateScoreSheet(scoreSheets, visibleScoring);
         this.personalObjective.updateScoreSheet(scoreSheets, visibleScoring);
         this.turnZones.updateScoreSheet(scoreSheets, visibleScoring);
-        this.trafficJam.updateScoreSheet(scoreSheets, visibleScoring);
+        this.connections.updateScoreSheet(scoreSheets, visibleScoring);
         if (visibleScoring) {
             this.setContentAndValidation(`total-score`, scoreSheets.current.total, scoreSheets.current.total != scoreSheets.validated.total);
         }
@@ -509,12 +546,15 @@ class TableCenter {
             if (elements.includes(51)) {
                 tooltipsIds.push(51);
             }
+            if (elements.includes(52)) {
+                tooltipsIds.push(52);
+            }
             if (elements.some(element => element >= 97 && element <= 122)) {
                 tooltipsIds.push(97);
             }
             const departure = elements.find(element => element >= 1 && element <= 12);
             const coordinates = this.getCoordinatesFromPosition(position);
-            let html = `<div id="intersection${position}" class="intersection ${elements.some(element => element == 0) ? 'green-light' : ''}`;
+            let html = `<div id="intersection${position}" class="intersection ${elements.some(element => element == 0) ? 'station' : ''}`;
             if (departure > 0) {
                 html += ` departure" data-departure=${departure}`;
             }
@@ -582,8 +622,8 @@ class TableCenter {
         else if (route.useTurnZone) {
             ghostClass = 'turn-zone';
         }
-        else if (route.trafficJam > 0) {
-            ghostClass = 'traffic-jam';
+        else if (route.connections > 0) {
+            ghostClass = 'connections';
         }
         document.getElementById(`route${min}-${max}`).insertAdjacentHTML('beforeend', `<div id="ghost-marker-${min}-${max}" class="ghost marker ${ghostClass}"></div>`);
     }
@@ -592,17 +632,17 @@ class TableCenter {
     }
     getCoordinatesFromNumberAndDigit(number, digit) {
         if (this.gamedatas.map === 'big') {
-            const space = 63.2;
+            const space = 64;
             return [
-                38 + space * number,
-                179 + space * digit,
+                33 + space * number,
+                168 + space * digit,
             ];
         }
         else if (this.gamedatas.map === 'small') {
-            const space = 57.4;
+            const space = 64.1;
             return [
-                213 + space * digit,
-                20 + space * number,
+                33 + space * number,
+                172 + space * digit,
             ];
         }
     }
@@ -619,13 +659,7 @@ class TableCenter {
         return this.getCoordinatesFromNumberAndDigit((fromNumber + toNumber) / 2, (fromDigit + toDigit) / 2);
     }
     getSide(position) {
-        if (this.gamedatas.map === 'big') {
-            return this.getCoordinatesFromPosition(position)[0] > 370 ? 'right' : 'left';
-        }
-        else if (this.gamedatas.map === 'small') {
-            // TODO handle angle
-            return this.getCoordinatesFromPosition(position)[0] > 370 ? 'right' : 'left';
-        }
+        return this.getCoordinatesFromPosition(position)[0] > 370 ? 'right' : 'left';
     }
     placeCommonObjective(objective, isPlayer) {
         document.getElementById(`common-objective-slot-${objective.number}`).insertAdjacentHTML('beforeend', `<div id="common-objective-${objective.id}" class="common-objective card-inner" data-side="${objective.completed ? '1' : '0'}">
@@ -634,7 +668,7 @@ class TableCenter {
         </div>
         `);
         const commonObjectiveInfos = COMMON_OBJECTIVES[objective.id];
-        this.game.bga.gameui.addTooltipHtml(`common-objective-slot-${objective.number}`, `${this.game.getTooltip(90)}<br><br>${_("To complete this objective, you need to check ${number} ${element}").replace('${number}', `<strong>${commonObjectiveInfos[1]}</strong>`).replace('${element}', `<div class="map-icon" data-element="${commonObjectiveInfos[0]}"></div>`)}`);
+        this.game.bga.gameui.addTooltipHtml(`common-objective-slot-${objective.number}`, `${this.game.getTooltip(90)}<br><br>${_("To complete this objective, you need to check ${number} ${element}").replace('${number}', `<strong>${commonObjectiveInfos[1]}</strong>`).replace('${element}', commonObjectiveInfos[0] == 50 ? `<div class="map-icon" data-element="50"></div>/<div class="map-icon" data-element="51"></div>` : `<div class="map-icon" data-element="${commonObjectiveInfos[0]}"></div>`)}`);
         if (isPlayer) { // objective progress counter only if player is not a spectator
             document.getElementById(`common-objective-slot-${objective.number}`).insertAdjacentHTML('beforeend', `
             <div class="common-objective-counter"><span id="common-objective-${objective.number}-counter" data-type="${objective.id}">0</span>/${commonObjectiveInfos[1]}</div>
@@ -671,20 +705,22 @@ function formatTextIcons(rawText) {
         return '';
     }
     return rawText
-        .replace(/\[GreenLight\]/ig, '<div class="map-icon" data-element="0"></div>')
+        .replace(/\[Station\]/ig, '<div class="map-icon" data-element="0"></div>')
         .replace(/\[OldLady\]/ig, '<div class="map-icon" data-element="20"></div>')
         .replace(/\[Student\]/ig, '<div class="map-icon" data-element="30"></div>')
-        .replace(/\[School\]/ig, '<div class="map-icon" data-element="32"></div>')
+        .replace(/\[Cinema\]/ig, '<div class="map-icon" data-element="32"></div>')
         .replace(/\[Tourist\]/ig, '<div class="map-icon" data-element="40"></div>')
         .replace(/\[MonumentLight\]/ig, '<div class="map-icon" data-element="41"></div>')
         .replace(/\[MonumentDark\]/ig, '<div class="map-icon" data-element="42"></div>')
-        .replace(/\[Businessman\]/ig, '<div class="map-icon" data-element="50"></div>')
-        .replace(/\[Office\]/ig, '<div class="map-icon" data-element="51"></div>');
+        .replace(/\[LoverLight\]/ig, '<div class="map-icon" data-element="50"></div>')
+        .replace(/\[LoverDark\]/ig, '<div class="map-icon" data-element="51"></div>')
+        .replace(/\[Restaurant\]/ig, '<div class="map-icon" data-element="52"></div>');
 }
 class Game {
     constructor(bga) {
         this.playersTables = [];
         this.registeredTablesByPlayerId = [];
+        this.actionTimerId = null;
         this.bga = bga;
     }
     /*
@@ -741,7 +777,7 @@ class Game {
         this.tableCenter = new TableCenter(this, gamedatas);
         this.createPlayerTables(gamedatas);
         const entries = [
-            new BgaJumpTo.Entry(gamedatas.map === 'big' ? 'London' : 'New-York', 'map', {
+            new BgaJumpTo.Entry(gamedatas.map === 'big' ? 'Paris' : 'Roma', 'map', {
                 color: '#000000',
                 backgroundImage: `url('${this.bga.images.getImgUrl(gamedatas.map === 'big' ? 'map-big.jpg' : 'map-small.jpg')}')`,
                 backgroundSize: 'cover',
@@ -793,8 +829,8 @@ class Game {
     onEnteringPlaceRoute(args) {
         if (args.canConfirm) {
             this.bga.statusBar.setTitle(this.bga.players.isCurrentPlayerActive()
-                ? _('${you} must confirm placed marker(s)')
-                : _('${actplayer} must confirm placed marker(s)'), args);
+                ? (args.possibleRoutes.length ? _('${you} can place a route with remaining circled stations') : _('${you} must confirm placed marker(s)'))
+                : (args.possibleRoutes.length ? _('${actplayer} can place a route with remaining circled stations') : _('${actplayer} must confirm placed marker(s)')), args);
         }
         const activePlayerColor = this.getPlayerColor(this.bga.players.getActivePlayerId());
         const currentPositionIntersection = document.getElementById(`intersection${args.currentPosition}`);
@@ -802,31 +838,8 @@ class Game {
         currentPositionIntersection.style.setProperty('--background-lighter', `#${activePlayerColor}66`);
         currentPositionIntersection.style.setProperty('--background-darker', `#${activePlayerColor}CC`);
         const map = document.getElementById('map');
-        if (this.gamedatas.map == 'small') {
-            const elemBR = currentPositionIntersection.getBoundingClientRect();
-            const mapBR = map.getBoundingClientRect();
-            console.log(currentPositionIntersection.getBoundingClientRect(), map.getBoundingClientRect());
-            const left = (elemBR.left - mapBR.left) / mapBR.width * 740;
-            const top = (elemBR.top - mapBR.top) / mapBR.height * 740;
-            map.style.setProperty('--position-indicator-left', `${left}px`);
-            map.style.setProperty('--position-indicator-top', `${top}px`);
-            /*const left = Number(currentPositionIntersection.style.left.match(/(\d+)/)[0]);
-            const top = Number(currentPositionIntersection.style.top.match(/(\d+)/)[0]);
-            const deltaX = left - 370;
-            const deltaY = top - 370;
-            const angle = Math.atan(deltaY / deltaX);
-            const distanceFromCenter = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-            const newAngle = angle + 0.25 * Math.PI;
-            const newDeltaX = distanceFromCenter * Math.cos(newAngle);
-            const newDeltaY = distanceFromCenter * Math.sin(newAngle);
-            console.log(deltaX, deltaY, distanceFromCenter, angle, '--', newAngle, newDeltaX, newDeltaY);
-            map.style.setProperty('--position-indicator-left', `${370 + newDeltaX}px`);
-            map.style.setProperty('--position-indicator-top', `${370 + newDeltaY}px`);*/
-        }
-        else {
-            map.style.setProperty('--position-indicator-left', currentPositionIntersection.style.left);
-            map.style.setProperty('--position-indicator-top', currentPositionIntersection.style.top);
-        }
+        map.style.setProperty('--position-indicator-left', currentPositionIntersection.style.left);
+        map.style.setProperty('--position-indicator-top', currentPositionIntersection.style.top);
         map.style.setProperty('--position-indicator-color', `#${activePlayerColor}`);
         if (this.bga.players.isCurrentPlayerActive()) {
             args.possibleRoutes.forEach(route => this.tableCenter.addGhostMarker(route));
@@ -999,19 +1012,20 @@ class Game {
     }
     getTooltip(element) {
         switch (element) {
-            case 0: return '[GreenLight] : ' + _("If your route ends at an intersection with a [GreenLight], you place an additional marker.");
+            case 0: return '[Station] : ' + _("If your route ends at an intersection with a [Station], add a circle on your Metro zone. At the end of each round, you can cross off a single circled [Station] to place 1 extra marker to make your route longer (in any direction). Each [Station] circled that you have not crossed off will give you 2 points at the end of the game.");
             case 1: return _("<strong>Number:</strong> Possible starting point. You choose between 2 numbers at the beginning of the game to place your Departure Pawn.");
             case 20: return '[OldLady] : ' + _("When a marker reaches [OldLady], check a box on the [OldLady] zone. Add the number next to each checked box at game end.");
-            case 30: return '[Student] : ' + _("When a marker reaches [Student], check a box on the [Student] zone. Multiply [Student] with [School] at game end.");
-            case 32: return '[School] : ' + _("When a marker reaches [School], check a box on the [School] zone. Multiply [Student] with [School] at game end.") + `<br><i>${_("If the [School] is marked with a Star, write the number of [Student] you have checked when a marker reaches it.")}</i>`;
+            case 30: return '[Student] : ' + _("When a marker reaches [Student], check a box on the [Student] zone. Multiply [Student] with [Cinema] at game end.");
+            case 32: return '[Cinema] : ' + _("When a marker reaches [Cinema], check a box on the [Cinema] zone. Multiply [Student] with [Cinema] at game end.");
             case 40: return '[Tourist] : ' + _("When a marker reaches [Tourist], check a box on the first available row on the [Tourist] zone. You will score when you drop off the [Tourist] to [MonumentLight]/[MonumentDark]. If the current row is full and you didn't reach [MonumentLight]/[MonumentDark], nothing happens.");
-            case 41: return '[MonumentLight][MonumentDark] : ' + _("When a marker reaches [MonumentLight]/[MonumentDark], write the score on the column of the [Tourist] at the end of the current row. If the current row is empty, nothing happens.") + `<br><i>${_("If [MonumentLight]/[MonumentDark] is marked with a Star, write the number of [Tourist] you have checked When a marker reaches it.")}</i>`;
-            case 50: return '[Businessman] : ' + _("When a marker reaches [Businessman], check a box on the first available row on the [Businessman] zone. You will score when you drop off the [Businessman] to [Office]. If the current row is full and you didn't reach [Office], nothing happens.");
-            case 51: return '[Office] : ' + _("When a marker reaches [Office], write the score on the column of the [Businessman] at the end of the current row, and check the corresponding symbol ([OldLady], [Tourist] or [Student]) as if you reached it with a marker. If the current row is empty, nothing happens.") + `<br><i>${_("If the [Office] is marked with a Star, write the number of [Businessman] you have checked When a marker reaches it.")}</i>`;
+            case 41: return '[MonumentLight][MonumentDark] : ' + _("When a marker reaches [MonumentLight]/[MonumentDark], write the score on the column of the [Tourist] at the end of the current row. If the current row is empty, nothing happens.");
+            case 50:
+            case 51: return '[LoverLight][LoverDark] : ' + _("When a marker reaches [LoverLight][LoverDark], check a box on the first available row on the [LoverLight][LoverDark] zone. You will score when you drop off the [LoverLight][LoverDark] to [Restaurant]. If the current row is full and you didn't reach [Restaurant], nothing happens.");
+            case 52: return '[Restaurant] : ' + _("When a marker reaches [Restaurant], write the score (6 points for each couple dark/light, 2 points for each single) at the end of the current row. If the current row is empty, nothing happens.");
             case 90: return _("<strong>Common Objective:</strong> Score 10 points when you complete the objective, or 6 points if another player completed it on a previous round.");
-            case 91: return _("<strong>Personal Objective:</strong> Score 10 points when your markers link the 3 Letters of your personal objective.");
+            case 91: return _("<strong>Personal Objective:</strong> Score 2/5/10 points when your markers link the 1/2/3 Letters of your personal objective.");
             case 92: return _("<strong>Turn Zone:</strong> If you choose to change a turn into a straight line or a straight line to a turn, check a box on the Turn Zone. The score here is negative, and you only have 5 of them!");
-            case 93: return _("<strong>Traffic Jam:</strong> For each marker already in place when you add a marker on a route, check a Traffic Jam box. If the road is black, check an extra box. The score here is negative!");
+            case 93: return _("<strong>Connections:</strong> For each marker already in place when you add a marker on a route, check a Connection box. If the road is the same as the checked connection color, check an extra box.");
             case 94: return _("<strong>Total score:</strong> Add sum of all green zone totals, subtract sum of all red zone totals.");
             case 95: return _("<strong>Tickets:</strong> The red check indicates the current round ticket. It defines the shape of the route you have to place. The black checks indicates past rounds.");
             case 97: return _("<strong>Letter:</strong> Used to define your personal objective.");
@@ -1100,7 +1114,7 @@ class Game {
                 const reached = this.positionReached(lettersPosition, player.markers).toString();
                 const mapLetter = document.querySelector(`.objective-letter[data-position="${lettersPosition}"]`);
                 const panelLetter = document.querySelector(`.letter[data-player-id="${player.id}"][data-position="${lettersPosition}"]`);
-                if (mapLetter) {
+                if (mapLetter && Number(player.id) == this.getPlayerId()) {
                     mapLetter.dataset.reached = reached;
                 }
                 if (panelLetter) {
@@ -1120,13 +1134,13 @@ class Game {
                         checked = scoreSheet.oldLadies.checked;
                         break;
                     case 30: //STUDENT
-                        checked = scoreSheet.students.checkedStudents + scoreSheet.students.checkedInternships;
+                        checked = scoreSheet.students.checkedStudents;
                         break;
                     case 40: //TOURIST
                         checked = scoreSheet.tourists.checkedTourists.reduce((a, b) => a + b, 0);
                         break;
-                    case 50: //BUSINESSMAN
-                        checked = scoreSheet.businessmen.checkedBusinessmen.reduce((a, b) => a + b, 0);
+                    case 50: //LOVER_LIGHT
+                        checked = scoreSheet.lovers.checkedLoversLight.reduce((a, b) => a + b, 0) + scoreSheet.lovers.checkedLoversDark.reduce((a, b) => a + b, 0);
                         break;
                     case 41: //MONUMENT_LIGHT
                         checked = scoreSheet.tourists.checkedMonumentsLight;

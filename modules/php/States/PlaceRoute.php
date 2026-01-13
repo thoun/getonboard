@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Bga\Games\GetOnBoard\States;
+namespace Bga\Games\GetOnBoardParisRome\States;
 
 use Bga\GameFramework\Actions\Types\IntParam;
 use Bga\GameFramework\StateType;
 use Bga\GameFramework\States\GameState;
 use Bga\GameFramework\States\PossibleAction;
 use Bga\GameFramework\UserException;
-use Bga\Games\GetOnBoard\Game;
-use Bga\Games\GetOnBoard\Objects\PlacedRoute;
+use Bga\Games\GetOnBoardParisRome\Game;
+use Bga\Games\GetOnBoardParisRome\Objects\PlacedRoute;
 
 class PlaceRoute extends GameState
 {
@@ -30,11 +30,14 @@ class PlaceRoute extends GameState
     }
 
     public function getArgs(int $activePlayerId): array {
+        $playerId = $activePlayerId;
+
+        $mapSize = $this->game->getMap();
         $allPlacedRoutes = $this->game->getPlacedRoutes();
-        $playerPlacedRoutes = array_filter($allPlacedRoutes, fn($placedRoute) => $placedRoute->playerId === $activePlayerId);
-        $currentPosition = $this->game->getCurrentPosition($activePlayerId, $playerPlacedRoutes);
-        $turnShape = $this->game->getPlayerTurnShape($activePlayerId);
-        $possibleRoutes = $this->game->getPossibleRoutes($activePlayerId, $this->game->getMap(), $turnShape, $currentPosition, $allPlacedRoutes);
+        $playerPlacedRoutes = array_filter($allPlacedRoutes, fn($placedRoute) => $placedRoute->playerId === $playerId);
+        $currentPosition = $this->game->getCurrentPosition($playerId, $playerPlacedRoutes);
+        $turnShape = $this->game->getPlayerTurnShape($playerId);
+        $possibleRoutes = $this->game->getPossibleRoutes($playerId, $mapSize, $turnShape, $currentPosition, $allPlacedRoutes);
         $canConfirm = count($possibleRoutes) === 0;
         $canCancel = count($playerPlacedRoutes) > 0 && !end($playerPlacedRoutes)->validated;
 
@@ -42,6 +45,16 @@ class PlaceRoute extends GameState
         $shapeLength = count($turnShape);
         $stepNumber = $canConfirm ? 0 : min($stepNumber, $shapeLength + 1);
 
+        if ($canConfirm) {
+            $scoreSheets = $this->game->getScoreSheets($playerId, $this->game->getPlacedRoutes($playerId), $this->game->getCommonObjectives(), false);
+            if ($scoreSheets->current->stations->encircled > $scoreSheets->current->stations->checked) {
+                $unvalidatedRoutes = array_filter($playerPlacedRoutes, fn($placedRoute) => !$placedRoute->validated);
+                if (!\array_any($unvalidatedRoutes, fn($unvalidatedRoute) => $unvalidatedRoute->useStation)) {
+                    $possibleRoutes = $this->getBonusPossibleRoutes($mapSize, $currentPosition, $allPlacedRoutes, $playerPlacedRoutes);
+                }
+            }
+        }
+    
         return [
             'currentPosition' => $currentPosition,
             'possibleRoutes' => $possibleRoutes,
@@ -58,35 +71,41 @@ class PlaceRoute extends GameState
         #[IntParam(name: 'to', min: 0)] int $routeTo,
         int $activePlayerId,
     ) {
+        $args = $this->getArgs($activePlayerId);
+
         $allPlacedRoutes = $this->game->getPlacedRoutes();
         $playerPlacedRoutes = array_filter($allPlacedRoutes, fn($placedRoute) => $placedRoute->playerId === $activePlayerId);
         $currentPosition = $this->game->getCurrentPosition($activePlayerId, $playerPlacedRoutes);
         $from = $currentPosition == $routeFrom ? $routeFrom : $routeTo;
         $to = $currentPosition == $routeFrom ? $routeTo : $routeFrom;
-        $turnShape = $this->game->getPlayerTurnShape($activePlayerId);
-        $possibleRoutes = $this->game->getPossibleRoutes($activePlayerId, $this->game->getMap(), $turnShape, $currentPosition, $allPlacedRoutes);
+        $possibleRoutes = $args['possibleRoutes'];
         $possibleRoute = \array_find($possibleRoutes, fn($route) => $this->game->isSameRoute($route, $from, $to));
 
         if ($possibleRoute == null) {
             throw new UserException("Invalid route");
         }
 
+        $map = $this->game->getMap();
+        $mapElements = $this->game->MAP_POSITIONS[$map][$to];
         $round = $this->game->getRoundNumber();
         $useTurnZone = $possibleRoute->useTurnZone ? 1 : 0;
-        $this->game->DbQuery("INSERT INTO placed_routes(`player_id`, `from`, `to`, `round`, `use_turn_zone`, `traffic_jam`) VALUES ($activePlayerId, $from, $to, $round, $useTurnZone, $possibleRoute->trafficJam)");
+        $useStation = $possibleRoute->useStation ? 1 : 0;
+        $this->game->DbQuery("INSERT INTO placed_routes(`player_id`, `from`, `to`, `round`, `use_turn_zone`, `connections`, `use_station`) VALUES ($activePlayerId, $from, $to, $round, $useTurnZone, $possibleRoute->connections, $useStation)");
 
-        $mapElements = $this->game->MAP_POSITIONS[$this->game->getMap()][$to];
         $zones = array_map(fn($element) => floor($element / 10), $mapElements);
         $zones = array_unique(array_filter($zones, fn($zone) => $zone >=2 && $zone <= 5));
         if ($useTurnZone) {
             $zones[] = 6;
         }
-        if ($possibleRoute->trafficJam > 0) {
+        if ($possibleRoute->connections > 0) {
             $zones[] = 7;
         }
+        if ($useStation && !in_array(0, $zones)) {
+            $zones[] = 0;
+        }
 
-        $logElements = array_values(array_filter($mapElements, fn($element) => in_array($element, [0, 20, 30, 32, 40, 41, 42, 50, 51])));
-
+        $logElements = array_values(array_filter($mapElements, fn($element) => in_array($element, [0, 20, 30, 32, 40, 41, 42, 50, 51, 52])));
+        
         $this->game->bga->notify->all('placedRoute', clienttranslate('${player_name} places a route marker to ${elements}'), [
             'playerId' => $activePlayerId,
             'player_name' => $this->game->getPlayerName($activePlayerId),
@@ -162,26 +181,26 @@ class PlaceRoute extends GameState
             'player_name' => $this->game->getPlayerNameById($playerId),
             'markers' => array_map(fn($route) => PlacedRoute::forNotif($route->from, $route->to, true), $unvalidatedRoutes),
         ]);
-
+        
         $markersPlaced = count($unvalidatedRoutesIds);
         $this->game->bga->tableStats->inc('markersPlaced', $markersPlaced);
         $this->game->bga->playerStats->inc('markersPlaced', $markersPlaced, $playerId);
-        $greenLightsUsed = $markersPlaced - count($this->game->getPlayerTurnShape($playerId));
-        if ($greenLightsUsed > 0) {
-            $this->game->bga->tableStats->inc('greenLightsUsed', $greenLightsUsed);
-            $this->game->bga->playerStats->inc('greenLightsUsed', $greenLightsUsed, $playerId);
+        $stationsUsed = $markersPlaced - count($this->game->getPlayerTurnShape($playerId));
+        if ($stationsUsed > 0) {
+            $this->game->bga->tableStats->inc('stationsUsed', $stationsUsed);
+            $this->game->bga->playerStats->inc('stationsUsed', $stationsUsed, $playerId);
         }
         $turnZoneUsed = count(array_filter($unvalidatedRoutes, fn($route) => $route->useTurnZone));
         if ($turnZoneUsed > 0) {
             $this->game->bga->tableStats->inc('turnZoneUsed', $turnZoneUsed);
             $this->game->bga->playerStats->inc('turnZoneUsed', $turnZoneUsed, $playerId);
         }
-        $trafficJamUsed = array_reduce(array_map(fn($route) => $route->trafficJam, $unvalidatedRoutes), fn($a, $b) => $a + $b, 0);
-        if ($trafficJamUsed > 0) {
-            $this->game->bga->tableStats->inc('trafficJamUsed', $trafficJamUsed);
-            $this->game->bga->playerStats->inc('trafficJamUsed', $trafficJamUsed, $playerId);
+        $connectionsUsed = array_reduce(array_map(fn($route) => $route->connections, $unvalidatedRoutes), fn($a, $b) => $a + $b, 0);
+        if ($connectionsUsed > 0) {
+            $this->game->bga->tableStats->inc('connectionsUsed', $connectionsUsed);
+            $this->game->bga->playerStats->inc('connectionsUsed', $connectionsUsed, $playerId);
         }
-
+        
         $scoreSheets = $this->game->notifUpdateScoreSheet($playerId);
         $score = $scoreSheets->validated->total;
         $this->game->bga->playerScore->set($playerId, $score, null);
@@ -210,4 +229,15 @@ class PlaceRoute extends GameState
         return NextPlayer::class;
     }
 
+    private function getBonusPossibleRoutes(string $mapSize, int $position, array $allPlacedRoutes, array $playerPlacedRoutes) {
+        $connectionRoutes = $mapSize == 'small' ? $this->game->CONNECTION_COLORS[$mapSize][intval($this->game->getGameStateValue(CONNECTION_COLOR))] : [];
+
+        $possibleDestinations = array_values(array_filter(
+            $this->game->getDestinations($mapSize, $position), 
+            fn($destination) => !\array_any($playerPlacedRoutes, fn($placedRoute) => $this->game->isSameRoute($placedRoute, $position, $destination))
+        ));
+
+        $possibleRoutes = array_map(fn($destination) => $this->game->createPossibleRoute($position, $destination, $allPlacedRoutes, $playerPlacedRoutes, [], [0, 0, 0, 0], $connectionRoutes, true), $possibleDestinations);
+        return $possibleRoutes;
+    }
 }

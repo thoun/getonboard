@@ -1,11 +1,12 @@
 import { Game } from './Game';
-import { PlayerTableBusinessmenBlock } from './player-table-block/businessmen';
 import { PlayerTableCommonObjectivesBlock } from './player-table-block/common-objectives';
+import { PlayerTableConnectionsBlock } from './player-table-block/connections';
+import { PlayerTableLoversBlock } from './player-table-block/lovers';
 import { PlayerTableOldLadiesBlock } from './player-table-block/old-ladies';
 import { PlayerTablePersonalObjectiveBlock } from './player-table-block/personal-objective';
+import { PlayerTableStationsBlock } from './player-table-block/stations';
 import { PlayerTableStudentsBlock } from './player-table-block/students';
 import { PlayerTableTouristsBlock } from './player-table-block/tourists';
-import { PlayerTableTrafficJamBlock } from './player-table-block/traffic-jam';
 import { PlayerTableTurnZonesBlock } from './player-table-block/turn-zones';
 
 export class PlayerTable {

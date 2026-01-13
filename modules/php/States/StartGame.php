@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Bga\Games\GetOnBoard\States;
+namespace Bga\Games\GetOnBoardParisRome\States;
 
 use Bga\GameFramework\StateType;
 use Bga\GameFramework\States\GameState;
-use Bga\Games\GetOnBoard\Game;
+use Bga\Games\GetOnBoardParisRome\Game;
 
 class StartGame extends GameState
 {
@@ -42,7 +42,15 @@ class StartGame extends GameState
         $this->game->tickets->moveAllCardsInLocation(null, 'deck');
         $this->game->tickets->shuffle('deck');
 
-        $this->game->tickets->pickCardForLocation('deck', 'turn');
+        $ticket = $this->game->getCardFromDb($this->game->tickets->pickCardForLocation('deck', 'turn'));
+
+        $playersIds = $this->game->getPlayersIds();
+        if (in_array(count($playersIds), [2, 3])) {
+            $this->game->setGameStateValue(CONNECTION_COLOR, $ticket->type % 2 == 0 ? 1 : 2);
+            foreach ($playersIds as $playerId) {
+                $this->game->notifUpdateScoreSheet($playerId); // update for the connection color
+            }
+        }
 
         $this->game->notifCurrentRound();
 

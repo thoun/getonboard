@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Bga\Games\GetOnBoard\States;
+namespace Bga\Games\GetOnBoardParisRome\States;
 
 use Bga\GameFramework\Actions\Types\IntParam;
 use Bga\GameFramework\StateType;
@@ -9,7 +9,7 @@ use Bga\GameFramework\States\GameState;
 use Bga\GameFramework\States\PossibleAction;
 use Bga\GameFramework\UserException;
 use Bga\GameFramework\VisibleSystemException;
-use Bga\Games\GetOnBoard\Game;
+use Bga\Games\GetOnBoardParisRome\Game;
 
 class PlaceDeparturePawn extends GameState
 {
@@ -63,7 +63,7 @@ class PlaceDeparturePawn extends GameState
 
         $this->game->DbQuery("UPDATE player SET `player_departure_position` = $position WHERE `player_id` = $currentPlayerId");
 
-        $this->game->bga->notify->all('log', clienttranslate('${player_name} has chose the position for its departure pawn'), [
+        $this->game->bga->notify->all('log', clienttranslate('${player_name} has chosen the position for its departure pawn'), [
             'playerId' => (string) $currentPlayerId,
             'player_name' => $this->game->getPlayerName($currentPlayerId),
         ]);

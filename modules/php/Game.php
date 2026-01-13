@@ -20,7 +20,7 @@ namespace Bga\Games\GetOnBoardParisRome;
 
 use Bga\GameFramework\Components\Deck;
 use Bga\GameFramework\Table;
-use Bga\Games\GetOnBoard\States\PlaceDeparturePawn;
+use Bga\Games\GetOnBoardParisRome\States\PlaceDeparturePawn;
 
 require_once __DIR__ . '/constants.inc.php';
 
@@ -55,6 +55,7 @@ class Game extends Table {
         $this->initGameStateLabels([
             FIRST_PLAYER => 10,
             ELIMINATE_PLAYER => 11,
+            CONNECTION_COLOR => 12,
         ]);   
 
         $this->tickets = $this->bga->deckFactory->createDeck("tickets");
@@ -104,6 +105,7 @@ class Game extends Table {
         // Init global values with their initial values
         $this->setGameStateInitialValue(FIRST_PLAYER, intval(array_keys($players)[0]));
         $this->setGameStateInitialValue(ELIMINATE_PLAYER, 0);
+        $this->setGameStateInitialValue(CONNECTION_COLOR, 0);
         
         // Init game statistics
         foreach([$this->bga->tableStats, $this->bga->playerStats] as $stats) {

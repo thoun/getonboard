@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Bga\Games\GetOnBoard\States;
+namespace Bga\Games\GetOnBoardParisRome\States;
 
 use Bga\GameFramework\StateType;
 use Bga\GameFramework\States\GameState;
-use Bga\Games\GetOnBoard\Game;
+use Bga\Games\GetOnBoardParisRome\Game;
 
 class EndRound extends GameState
 {
