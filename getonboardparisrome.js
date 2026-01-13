@@ -1473,6 +1473,7 @@ var GetOnBoard = /** @class */ (function () {
         this.bga.actions.performAction(action, data, { checkAction: false });
     };
     GetOnBoard.prototype.startActionTimer = function (buttonId, time) {
+        var _this = this;
         if (this.bga.userPreferences.get(202) == 2) {
             return;
         }

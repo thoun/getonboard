@@ -63,6 +63,7 @@ class GetOnBoardParisRome extends Table {
         $this->initGameStateLabels([
             FIRST_PLAYER => 10,
             ELIMINATE_PLAYER => 11,
+            CONNECTION_COLOR => 12,
 
             SCORING_OPTION => 100,
         ]);   
@@ -114,6 +115,7 @@ class GetOnBoardParisRome extends Table {
         // Init global values with their initial values
         $this->setGameStateInitialValue(FIRST_PLAYER, intval(array_keys($players)[0]));
         $this->setGameStateInitialValue(ELIMINATE_PLAYER, 0);
+        $this->setGameStateInitialValue(CONNECTION_COLOR, 0);
         
         // Init game statistics
         foreach(['table', 'player'] as $statType) {

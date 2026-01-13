@@ -7,6 +7,11 @@
   resolved "https://registry.npmjs.org/@parcel/watcher-linux-x64-glibc/-/watcher-linux-x64-glibc-2.5.4.tgz"
   integrity sha512-UYBQvhYmgAv61LNUn24qGQdjtycFBKSK3EXr72DbJqX9aaLbtCOO8+1SkKhD/GNiJ97ExgcHBrukcYhVjrnogA==
 
+"@parcel/watcher-linux-x64-musl@2.5.4":
+  version "2.5.4"
+  resolved "https://registry.npmjs.org/@parcel/watcher-linux-x64-musl/-/watcher-linux-x64-musl-2.5.4.tgz"
+  integrity sha512-YoRWCVgxv8akZrMhdyVi6/TyoeeMkQ0PGGOf2E4omODrvd1wxniXP+DBynKoHryStks7l+fDAMUBRzqNHrVOpg==
+
 "@parcel/watcher@^2.4.1":
   version "2.5.4"
   resolved "https://registry.npmjs.org/@parcel/watcher/-/watcher-2.5.4.tgz"
