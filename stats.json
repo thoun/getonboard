@@ -1,0 +1,126 @@
+{
+    "table": {
+        "turnsNumber": {
+            "id": 11,
+            "name": "Number of turns",
+            "type": "int"
+        },
+        "markersPlaced": {
+            "id": 12,
+            "name": "Markers placed",
+            "type": "int"
+        },
+        "greenLightsUsed": {
+            "id": 13,
+            "name": "Green lights used",
+            "type": "int"
+        },
+        "turnZoneUsed": {
+            "id": 14,
+            "name": "Turn zone checks",
+            "type": "int"
+        },
+        "trafficJamUsed": {
+            "id": 15,
+            "name": "Traffic jam checks",
+            "type": "int"
+        },
+        "commonObjectivesFirst": {
+            "id": 16,
+            "name": "Common objectives (realized with 10 points)",
+            "type": "int"
+        },
+        "commonObjectivesSecond": {
+            "id": 17,
+            "name": "Common objectives (realized with 6 points)",
+            "type": "int"
+        },
+        "personalObjectives": {
+            "id": 18,
+            "name": "Personal objective realized",
+            "type": "int"
+        }
+    },
+    "player": {
+        "turnsNumber": {
+            "id": 11,
+            "name": "Number of turns",
+            "type": "int"
+        },
+        "markersPlaced": {
+            "id": 12,
+            "name": "Markers placed",
+            "type": "int"
+        },
+        "greenLightsUsed": {
+            "id": 13,
+            "name": "Green lights used",
+            "type": "int"
+        },
+        "turnZoneUsed": {
+            "id": 14,
+            "name": "Turn zone checks",
+            "type": "int"
+        },
+        "trafficJamUsed": {
+            "id": 15,
+            "name": "Traffic jam checks",
+            "type": "int"
+        },
+        "commonObjectivesFirst": {
+            "id": 16,
+            "name": "Common objectives (realized with 10 points)",
+            "type": "int"
+        },
+        "commonObjectivesSecond": {
+            "id": 17,
+            "name": "Common objectives (realized with 6 points)",
+            "type": "int"
+        },
+        "personalObjectives": {
+            "id": 18,
+            "name": "Personal objective realized",
+            "type": "int"
+        },
+        "finalScoreOldLadies": {
+            "id": 19,
+            "name": "Final score for Old ladies",
+            "type": "int"
+        },
+        "finalScoreStudents": {
+            "id": 20,
+            "name": "Final score for Students",
+            "type": "int"
+        },
+        "finalScoreTourists": {
+            "id": 21,
+            "name": "Final score for Tourists",
+            "type": "int"
+        },
+        "finalScoreBusinessmen": {
+            "id": 22,
+            "name": "Final score for Businessmen",
+            "type": "int"
+        },
+        "averagePointsByCheckedOldLadies": {
+            "id": 23,
+            "name": "Average points by checked Old ladies",
+            "type": "float"
+        },
+        "averagePointsByCheckedStudents": {
+            "id": 24,
+            "name": "Average points by checked Students",
+            "type": "float"
+        },
+        "averagePointsByCheckedTourists": {
+            "id": 25,
+            "name": "Average points by checked Tourists",
+            "type": "float"
+        },
+        "averagePointsByCheckedBusinessmen": {
+            "id": 26,
+            "name": "Average points by checked Businessmen",
+            "type": "float"
+        }
+    }
+}

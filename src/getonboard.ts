@@ -1,10 +1,3 @@
-declare const define;
-declare const ebg;
-declare const $;
-declare const dojo: Dojo;
-declare const _;
-declare const g_gamethemeurl;
-
 const ANIMATION_MS = 500;
 
 const ZOOM_LEVELS = [0.5, 0.625, 0.75, 0.875, 1, 1.25, 1.5];
@@ -37,6 +30,8 @@ class GetOnBoard implements GetOnBoardGame {
     private registeredTablesByPlayerId: PlayerTable[][] = [];
     private roundNumberCounter: Counter;
 
+    public bga: Bga;
+
     constructor() {
         document.getElementById('jump-controls').classList.toggle('folded', localStorage.getItem(LOCAL_STORAGE_JUMP_KEY) == 'true');
     }
@@ -58,16 +53,16 @@ class GetOnBoard implements GetOnBoardGame {
         const players = Object.values(gamedatas.players);
         // ignore loading of some pictures
         if (players.length > 3) {
-            (this as any).dontPreloadImage(`map-small-no-grid.jpg`);
+            this.bga.images.dontPreloadImage(`map-small-no-grid.jpg`);
         } else {
-            (this as any).dontPreloadImage(`map-big-no-grid.jpg`);
+            this.bga.images.dontPreloadImage(`map-big-no-grid.jpg`);
         }
-        (this as any).dontPreloadImage(`map-small.jpg`);
-        (this as any).dontPreloadImage(`map-big.jpg`);
-        (this as any).dontPreloadImage(`map-small-no-grid-no-building.jpg`);
-        (this as any).dontPreloadImage(`map-big-no-grid-no-building.jpg`);
-        (this as any).dontPreloadImage(`map-small-no-building.jpg`);
-        (this as any).dontPreloadImage(`map-big-no-building.jpg`);
+        this.bga.images.dontPreloadImage(`map-small.jpg`);
+        this.bga.images.dontPreloadImage(`map-big.jpg`);
+        this.bga.images.dontPreloadImage(`map-small-no-grid-no-building.jpg`);
+        this.bga.images.dontPreloadImage(`map-big-no-grid-no-building.jpg`);
+        this.bga.images.dontPreloadImage(`map-small-no-building.jpg`);
+        this.bga.images.dontPreloadImage(`map-big-no-building.jpg`);
 
         log( "Starting game setup" );
         
@@ -275,26 +270,7 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     private setupPreferences() {
-        // Extract the ID and value from the UI control
-        const onchange = (e) => {
-          var match = e.target.id.match(/^preference_control_(\d+)$/);
-          if (!match) {
-            return;
-          }
-          var prefId = +match[1];
-          var prefValue = +e.target.value;
-          (this as any).prefs[prefId].value = prefValue;
-          this.onPreferenceChange(prefId, prefValue);
-        }
-        
-        // Call onPreferenceChange() when any value changes
-        dojo.query(".preference_control").connect("onchange", onchange);
-        
-        // Call onPreferenceChange() now
-        dojo.forEach(
-          dojo.query("#ingame_menu_content .preference_control"),
-          el => onchange({ target: el })
-        );
+        this.bga.userPreferences.onChange = (prefId: number, prefValue: number) => this.onPreferenceChange(prefId, prefValue);
 
         try {
             (document.getElementById('preference_control_203').closest(".preference_choice") as HTMLDivElement).style.display = 'none';
@@ -314,7 +290,7 @@ class GetOnBoard implements GetOnBoardGame {
 
     private expandObjectiveClick() {
         const wrappers = document.querySelectorAll(`.personal-objective-wrapper`);
-        const expanded = (this as any).prefs[203].value == '1';
+        const expanded = this.bga.userPreferences.get(203) == 1;
         wrappers.forEach((wrapper: HTMLDivElement) => wrapper.dataset.expanded = (!expanded).toString());
 
         const select = document.getElementById('preference_control_203') as HTMLSelectElement;
@@ -352,7 +328,7 @@ class GetOnBoard implements GetOnBoardGame {
             }
 
             let html = `
-            <div id="personal-objective-wrapper-${playerId}" class="personal-objective-wrapper" data-expanded="${((this as any).prefs[203]?.value != 2).toString()}"></div>`;
+            <div id="personal-objective-wrapper-${playerId}" class="personal-objective-wrapper" data-expanded="${(this.bga.userPreferences.get(203) != 2).toString()}"></div>`;
             dojo.place(html, `player_board_${player.id}`);
 
             if (player.personalObjective) {
@@ -679,12 +655,11 @@ class GetOnBoard implements GetOnBoardGame {
 
     public takeAction(action: string, data?: any) {
         data = data || {};
-        data.lock = true;
-        (this as any).ajaxcall(`/getonboard/getonboard/${action}.html`, data, this, () => {});
+        this.bga.actions.performAction(action, data, { checkAction: false });
     }
 
     private startActionTimer(buttonId: string, time: number) {
-        if (Number((this as any).prefs[202]?.value) === 2) {
+        if (this.bga.userPreferences.get(202) == 2) {
             return;
         }
 

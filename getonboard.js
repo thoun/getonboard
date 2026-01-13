@@ -942,17 +942,17 @@ var GetOnBoard = /** @class */ (function () {
         var players = Object.values(gamedatas.players);
         // ignore loading of some pictures
         if (players.length > 3) {
-            this.dontPreloadImage("map-small-no-grid.jpg");
+            this.bga.images.dontPreloadImage("map-small-no-grid.jpg");
         }
         else {
-            this.dontPreloadImage("map-big-no-grid.jpg");
+            this.bga.images.dontPreloadImage("map-big-no-grid.jpg");
         }
-        this.dontPreloadImage("map-small.jpg");
-        this.dontPreloadImage("map-big.jpg");
-        this.dontPreloadImage("map-small-no-grid-no-building.jpg");
-        this.dontPreloadImage("map-big-no-grid-no-building.jpg");
-        this.dontPreloadImage("map-small-no-building.jpg");
-        this.dontPreloadImage("map-big-no-building.jpg");
+        this.bga.images.dontPreloadImage("map-small.jpg");
+        this.bga.images.dontPreloadImage("map-big.jpg");
+        this.bga.images.dontPreloadImage("map-small-no-grid-no-building.jpg");
+        this.bga.images.dontPreloadImage("map-big-no-grid-no-building.jpg");
+        this.bga.images.dontPreloadImage("map-small-no-building.jpg");
+        this.bga.images.dontPreloadImage("map-big-no-building.jpg");
         log("Starting game setup");
         this.gamedatas = gamedatas;
         log('gamedatas', gamedatas);
@@ -1131,21 +1131,7 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.setupPreferences = function () {
         var _this = this;
-        // Extract the ID and value from the UI control
-        var onchange = function (e) {
-            var match = e.target.id.match(/^preference_control_(\d+)$/);
-            if (!match) {
-                return;
-            }
-            var prefId = +match[1];
-            var prefValue = +e.target.value;
-            _this.prefs[prefId].value = prefValue;
-            _this.onPreferenceChange(prefId, prefValue);
-        };
-        // Call onPreferenceChange() when any value changes
-        dojo.query(".preference_control").connect("onchange", onchange);
-        // Call onPreferenceChange() now
-        dojo.forEach(dojo.query("#ingame_menu_content .preference_control"), function (el) { return onchange({ target: el }); });
+        this.bga.userPreferences.onChange = function (prefId, prefValue) { return _this.onPreferenceChange(prefId, prefValue); };
         try {
             document.getElementById('preference_control_203').closest(".preference_choice").style.display = 'none';
         }
@@ -1163,7 +1149,7 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.expandObjectiveClick = function () {
         var wrappers = document.querySelectorAll(".personal-objective-wrapper");
-        var expanded = this.prefs[203].value == '1';
+        var expanded = this.bga.userPreferences.get(203) == 1;
         wrappers.forEach(function (wrapper) { return wrapper.dataset.expanded = (!expanded).toString(); });
         var select = document.getElementById('preference_control_203');
         select.value = expanded ? '2' : '1';
@@ -1183,13 +1169,12 @@ var GetOnBoard = /** @class */ (function () {
     GetOnBoard.prototype.createPlayerPanels = function (gamedatas) {
         var _this = this;
         Object.values(gamedatas.players).forEach(function (player) {
-            var _a;
             var playerId = Number(player.id);
             var eliminated = Number(player.eliminated) > 0;
             if (playerId === _this.getPlayerId()) {
                 dojo.place("<div class=\"personal-objective-label\">".concat(_("Your personal objective:"), "</div>"), "player_board_".concat(player.id));
             }
-            var html = "\n            <div id=\"personal-objective-wrapper-".concat(playerId, "\" class=\"personal-objective-wrapper\" data-expanded=\"").concat((((_a = _this.prefs[203]) === null || _a === void 0 ? void 0 : _a.value) != 2).toString(), "\"></div>");
+            var html = "\n            <div id=\"personal-objective-wrapper-".concat(playerId, "\" class=\"personal-objective-wrapper\" data-expanded=\"").concat((_this.bga.userPreferences.get(203) != 2).toString(), "\"></div>");
             dojo.place(html, "player_board_".concat(player.id));
             if (player.personalObjective) {
                 _this.showPersonalObjective(playerId);
@@ -1466,12 +1451,10 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.takeAction = function (action, data) {
         data = data || {};
-        data.lock = true;
-        this.ajaxcall("/getonboard/getonboard/".concat(action, ".html"), data, this, function () { });
+        this.bga.actions.performAction(action, data, { checkAction: false });
     };
     GetOnBoard.prototype.startActionTimer = function (buttonId, time) {
-        var _a;
-        if (Number((_a = this.prefs[202]) === null || _a === void 0 ? void 0 : _a.value) === 2) {
+        if (this.bga.userPreferences.get(202) == 2) {
             return;
         }
         var button = document.getElementById(buttonId);

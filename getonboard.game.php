@@ -16,8 +16,9 @@
   *
   */
 
-
-require_once(APP_GAMEMODULE_PATH.'module/table/table.game.php');
+use Bga\GameFramework\Components\Deck;
+use Bga\GameFramework\Table;
+use Bga\GameFramework\VisibleSystemException;
 
 require_once('modules/php/constants.inc.php');
 require_once('modules/php/utils.php');
@@ -35,6 +36,21 @@ class GetOnBoard extends Table {
     use ScoreSheetTrait;
     use DebugUtilTrait;
 
+    public Deck $tickets;
+
+    public array $MAP_POSITIONS;
+    public array $MAP_ROUTES;
+    public array $BUSY_ROUTES;
+    public array $COMMON_OBJECTIVES;
+    public array $PERSONAL_OBJECTIVES;
+    public array $SCORE_SHEETS_SHAPES;
+    public array $OLD_LADIES_POINTS;
+    public array $TOURISTS_POINTS;
+    public array $BUSINESSMEN_POINTS;
+    public array $BUSINESSMEN_BONUS;
+    public array $TURN_ZONES_POINTS;
+    public array $TRAFFIC_JAM_POINTS;
+
 	function __construct() {
         // Your global variables labels:
         //  Here, you can assign labels to global variables you are using for this game.
@@ -44,21 +60,15 @@ class GetOnBoard extends Table {
         // Note: afterwards, you can get/set the global variables with getGameStateValue/setGameStateInitialValue/setGameStateValue
         parent::__construct();
         
-        self::initGameStateLabels([
+        $this->initGameStateLabels([
             FIRST_PLAYER => 10,
             ELIMINATE_PLAYER => 11,
 
             SCORING_OPTION => 100,
         ]);   
 
-        $this->tickets = self::getNew("module.common.deck");
-        $this->tickets->init("tickets");     
-	}
-	
-    protected function getGameName() {
-		// Used for translations and stuff. Please do not modify.
-        return "getonboard";
-    }	
+        $this->tickets = $this->deckFactory->createDeck("tickets");     
+	}	
 
     /*
         setupNewGame:
@@ -71,7 +81,7 @@ class GetOnBoard extends Table {
         // Set the colors of the players with HTML color code
         // The default below is red/green/blue/orange/brown
         // The number of colors defined here must correspond to the maximum number of players allowed for the gams
-        $gameinfos = self::getGameinfos();
+        $gameinfos = $this->getGameinfos();
         $default_colors = $gameinfos['player_colors'];
 
         $sheetTypes = [1, 2, 3, 4, 5];
@@ -95,15 +105,15 @@ class GetOnBoard extends Table {
             $values[] = "('".$player_id."','$color','".$player['player_canal']."','".addslashes( $player['player_name'] )."','".addslashes( $player['player_avatar'] )."', $sheetType, $personalObjective)";
         }
         $sql .= implode(',', $values);
-        self::DbQuery($sql);
-        self::reattributeColorsBasedOnPreferences($players, $gameinfos['player_colors']);
-        self::reloadPlayersBasicInfos();
+        $this->DbQuery($sql);
+        $this->reattributeColorsBasedOnPreferences($players, $gameinfos['player_colors']);
+        $this->reloadPlayersBasicInfos();
         
         /************ Start the game initialization *****/
 
         // Init global values with their initial values
-        self::setGameStateInitialValue(FIRST_PLAYER, intval(array_keys($players)[0]));
-        self::setGameStateInitialValue(ELIMINATE_PLAYER, 0);
+        $this->setGameStateInitialValue(FIRST_PLAYER, intval(array_keys($players)[0]));
+        $this->setGameStateInitialValue(ELIMINATE_PLAYER, 0);
         
         // Init game statistics
         foreach(['table', 'player'] as $statType) {
@@ -125,10 +135,7 @@ class GetOnBoard extends Table {
         // Activate first player (which is in general a good idea :) )
         $this->activeNextPlayer();
 
-        // TODO TEMP to test
-        //$this->debugSetup();
-
-        /************ End of the game initialization *****/
+        return \ST_MULTIPLAYER_PLACE_DEPARTURE_PAWN;
     }
 
     /*
@@ -140,19 +147,19 @@ class GetOnBoard extends Table {
         _ when the game starts
         _ when a player refreshes the game page (F5)
     */
-    protected function getAllDatas() {
+    protected function getAllDatas(): array {
         $result = [];
     
-        $currentPlayerId = intval(self::getCurrentPlayerId());    // !! We must only return informations visible by this player !!
+        $currentPlayerId = intval($this->getCurrentPlayerId());    // !! We must only return informations visible by this player !!
     
         // Get information about players
         // Note: you can retrieve some extra field you added for "player" table in "dbmodel.sql" if you need it.
         $sql = "SELECT player_id id, player_score score, player_no playerNo, player_sheet_type sheetType, player_departure_position departurePosition FROM player ";
-        $result['players'] = self::getCollectionFromDb($sql);
+        $result['players'] = $this->getCollectionFromDb($sql);
         $map = $this->getMap();
 
-        $showDeparturePosition = intval($this->gamestate->state_id()) >= ST_START_GAME;
-        $isEndScore = intval($this->gamestate->state_id()) >= ST_END_SCORE;
+        $showDeparturePosition = $this->gamestate->getCurrentMainStateId() >= ST_START_GAME;
+        $isEndScore = $this->gamestate->getCurrentMainStateId() >= ST_END_SCORE;
 
         $commonObjectives = $this->getCommonObjectives();
         foreach ($result['players'] as $playerId => &$playerDb) {
@@ -178,7 +185,7 @@ class GetOnBoard extends Table {
         $result['validatedTickets'] = $this->getValidatedTicketsForRound();
         $result['currentTicket'] = $this->getCurrentTicketForRound();
         $result['commonObjectives'] = $this->getCommonObjectives();
-        $result['hiddenScore'] = intval(self::getGameStateValue('SCORING_OPTION')) !== 2;
+        $result['hiddenScore'] = intval($this->getGameStateValue('SCORING_OPTION')) !== 2;
 
         $result['MAP_POSITIONS'] = $this->MAP_POSITIONS[$map];
   
@@ -196,7 +203,7 @@ class GetOnBoard extends Table {
         (see states.inc.php)
     */
     function getGameProgression() {
-        $stateId = intval($this->gamestate->state_id());
+        $stateId = $this->gamestate->getCurrentMainStateId();
         if ($stateId >= ST_END_SCORE) {
             return 100;
         } else if ($stateId <= ST_START_GAME) {
@@ -253,7 +260,7 @@ class GetOnBoard extends Table {
             return;
         }
 
-        throw new feException("Zombie mode not supported at this game state: ".$statename);
+        throw new VisibleSystemException("Zombie mode not supported at this game state: ".$statename);
     }
     
 ///////////////////////////////////////////////////////////////////////////////////:
@@ -282,14 +289,14 @@ class GetOnBoard extends Table {
 //            // ! important ! Use DBPREFIX_<table_name> for all tables
 //
 //            $sql = "ALTER TABLE DBPREFIX_xxxxxxx ....";
-//            self::applyDbUpgradeToAllDB( $sql );
+//            $this->applyDbUpgradeToAllDB( $sql );
 //        }
 //        if( $from_version <= 1405061421 )
 //        {
 //            // ! important ! Use DBPREFIX_<table_name> for all tables
 //
 //            $sql = "CREATE TABLE DBPREFIX_xxxxxxx ....";
-//            self::applyDbUpgradeToAllDB( $sql );
+//            $this->applyDbUpgradeToAllDB( $sql );
 //        }
 //        // Please add your future database scheme changes here
 //

@@ -118,7 +118,7 @@ interface GetOnBoardGamedatas {
     MAP_ROUTES: { [position: number]: number[] };
 }
 
-interface GetOnBoardGame extends Game {
+interface GetOnBoardGame {
     getPlayerId(): number;
     getPlayerColor(playerId: number): string;
 
