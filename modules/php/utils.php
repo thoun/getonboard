@@ -245,7 +245,7 @@ trait UtilTrait {
     }
 
     function getRoundNumber() {
-        $stateId = intval($this->gamestate->state_id());
+        $stateId = $this->gamestate->getCurrentMainStateId();
         if ($stateId < ST_START_GAME) {
             return 0;
         }
@@ -254,7 +254,7 @@ trait UtilTrait {
     }
 
     function getValidatedTicketsForRound() {
-        $stateId = intval($this->gamestate->state_id());
+        $stateId = $this->gamestate->getCurrentMainStateId();
         if ($stateId < ST_START_GAME) {
             return [];
         }
@@ -264,7 +264,7 @@ trait UtilTrait {
     }
 
     function getCurrentTicketForRound() {
-        $stateId = intval($this->gamestate->state_id());
+        $stateId = $this->gamestate->getCurrentMainStateId();
         if ($stateId < ST_START_GAME) {
             return null;
         }

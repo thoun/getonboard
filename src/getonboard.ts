@@ -179,7 +179,7 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     onEnteringShowScore() {
-        Object.keys(this.gamedatas.players).forEach(playerId => (this as any).scoreCtrl[playerId]?.setValue(0));
+        Object.keys(this.gamedatas.players).forEach(playerId => this.bga.playerPanels.getScoreCounter(playerId).setValue(0));
         this.gamedatas.hiddenScore = false;
     }
 
@@ -271,10 +271,7 @@ class GetOnBoard implements GetOnBoardGame {
 
     private setupPreferences() {
         this.bga.userPreferences.onChange = (prefId: number, prefValue: number) => this.onPreferenceChange(prefId, prefValue);
-
-        try {
-            (document.getElementById('preference_control_203').closest(".preference_choice") as HTMLDivElement).style.display = 'none';
-        } catch (e) {}
+        this.bga.userPreferences.toggleVisibility(203, false);
     }
       
     private onPreferenceChange(prefId: number, prefValue: number) {
@@ -293,10 +290,7 @@ class GetOnBoard implements GetOnBoardGame {
         const expanded = this.bga.userPreferences.get(203) == 1;
         wrappers.forEach((wrapper: HTMLDivElement) => wrapper.dataset.expanded = (!expanded).toString());
 
-        const select = document.getElementById('preference_control_203') as HTMLSelectElement;
-        select.value = expanded ? '2' : '1';
-        var event = new Event('change');
-        select.dispatchEvent(event);
+        this.bga.userPreferences.set(203, expanded ? 2 : 1);
     }
 
     private showPersonalObjective(playerId: number) {
@@ -324,12 +318,12 @@ class GetOnBoard implements GetOnBoardGame {
             const eliminated = Number(player.eliminated) > 0;
 
             if (playerId === this.getPlayerId()) {
-                dojo.place(`<div class="personal-objective-label">${_("Your personal objective:")}</div>`, `player_board_${player.id}`);
+                this.bga.playerPanels.getElement(playerId).insertAdjacentHTML('beforeend', `<div class="personal-objective-label">${_("Your personal objective:")}</div>`);
             }
 
             let html = `
             <div id="personal-objective-wrapper-${playerId}" class="personal-objective-wrapper" data-expanded="${(this.bga.userPreferences.get(203) != 2).toString()}"></div>`;
-            dojo.place(html, `player_board_${player.id}`);
+            this.bga.playerPanels.getElement(playerId).insertAdjacentHTML('beforeend', html);
 
             if (player.personalObjective) {
                 this.showPersonalObjective(playerId);
@@ -340,7 +334,7 @@ class GetOnBoard implements GetOnBoardGame {
             }
 
             // first player token
-            dojo.place(`<div id="player_board_${player.id}_firstPlayerWrapper" class="firstPlayerWrapper"></div>`, `player_board_${player.id}`);
+            this.bga.playerPanels.getElement(playerId).insertAdjacentHTML('beforeend', `<div id="player-board-${player.id}-firstPlayerWrapper" class="firstPlayerWrapper"></div>`);
 
 
             this.setNewScore(playerId, Number(player.score));
@@ -405,9 +399,9 @@ class GetOnBoard implements GetOnBoardGame {
     private placeFirstPlayerToken(playerId: number) {
         const firstPlayerBoardToken = document.getElementById('firstPlayerBoardToken');
         if (firstPlayerBoardToken) {
-            slideToObjectAndAttach(this, firstPlayerBoardToken, `player_board_${playerId}_firstPlayerWrapper`);
+            slideToObjectAndAttach(this, firstPlayerBoardToken, `player-board-${playerId}-firstPlayerWrapper`);
         } else {
-            dojo.place('<div id="firstPlayerBoardToken" class="first-player-token"></div>', `player_board_${playerId}_firstPlayerWrapper`);
+            dojo.place('<div id="firstPlayerBoardToken" class="first-player-token"></div>', `player-board-${playerId}-firstPlayerWrapper`);
 
             (this as any).addTooltipHtml('firstPlayerBoardToken', _("Inspector pawn. This player is the first player of the round."));
         }
@@ -462,7 +456,7 @@ class GetOnBoard implements GetOnBoardGame {
 
     private setNewScore(playerId: number, score: number) {
         if (this.gamedatas.players[playerId].eliminated) {
-            (this as any).scoreCtrl[playerId]?.setValue(0);
+            this.bga.playerPanels.getScoreCounter(playerId).setValue(0);
         } else {
             if (this.gamedatas.hiddenScore) {
                 setTimeout(() => {
@@ -470,7 +464,7 @@ class GetOnBoard implements GetOnBoardGame {
                 }, 100);
             } else {
                 if (!isNaN(score)) {
-                    (this as any).scoreCtrl[playerId]?.toValue(this.gamedatas.players[playerId].eliminated != 0 ? 0 : score);
+                    this.bga.playerPanels.getScoreCounter(playerId).toValue(this.gamedatas.players[playerId].eliminated != 0 ? 0 : score);
                 }
             }
         }

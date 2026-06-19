@@ -72,7 +72,7 @@ trait StateTrait {
             }
         }
 
-        $this->DbQuery("UPDATE player SET `player_score` = 0 WHERE `player_id` = $eliminatedPlayer");
+        $this->bga->playerScore->set($eliminatedPlayer, 0, null);
         $this->eliminatePlayer($eliminatedPlayer);
         $this->setGameStateValue(ELIMINATE_PLAYER, 0);
     }
@@ -188,7 +188,7 @@ trait StateTrait {
             if (!$this->isEliminated($playerId)) {
                 $scoreSheets = $this->notifUpdateScoreSheet($playerId, true);
                 $score = $scoreSheets->validated->total;
-                $this->DbQuery("UPDATE player SET `player_score` = $score WHERE `player_id` = $playerId");
+                $this->bga->playerScore->set($playerId, $score, null);
             }
 
             $personalObjective = intval($this->getUniqueValueFromDB("SELECT player_personal_objective FROM `player` where `player_id` = $playerId"));

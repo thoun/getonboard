@@ -1053,7 +1053,7 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.onEnteringShowScore = function () {
         var _this = this;
-        Object.keys(this.gamedatas.players).forEach(function (playerId) { var _a; return (_a = _this.scoreCtrl[playerId]) === null || _a === void 0 ? void 0 : _a.setValue(0); });
+        Object.keys(this.gamedatas.players).forEach(function (playerId) { return _this.bga.playerPanels.getScoreCounter(playerId).setValue(0); });
         this.gamedatas.hiddenScore = false;
     };
     GetOnBoard.prototype.onLeavingState = function (stateName) {
@@ -1132,10 +1132,7 @@ var GetOnBoard = /** @class */ (function () {
     GetOnBoard.prototype.setupPreferences = function () {
         var _this = this;
         this.bga.userPreferences.onChange = function (prefId, prefValue) { return _this.onPreferenceChange(prefId, prefValue); };
-        try {
-            document.getElementById('preference_control_203').closest(".preference_choice").style.display = 'none';
-        }
-        catch (e) { }
+        this.bga.userPreferences.toggleVisibility(203, false);
     };
     GetOnBoard.prototype.onPreferenceChange = function (prefId, prefValue) {
         switch (prefId) {
@@ -1151,10 +1148,7 @@ var GetOnBoard = /** @class */ (function () {
         var wrappers = document.querySelectorAll(".personal-objective-wrapper");
         var expanded = this.bga.userPreferences.get(203) == 1;
         wrappers.forEach(function (wrapper) { return wrapper.dataset.expanded = (!expanded).toString(); });
-        var select = document.getElementById('preference_control_203');
-        select.value = expanded ? '2' : '1';
-        var event = new Event('change');
-        select.dispatchEvent(event);
+        this.bga.userPreferences.set(203, expanded ? 2 : 1);
     };
     GetOnBoard.prototype.showPersonalObjective = function (playerId) {
         var _this = this;
@@ -1172,10 +1166,10 @@ var GetOnBoard = /** @class */ (function () {
             var playerId = Number(player.id);
             var eliminated = Number(player.eliminated) > 0;
             if (playerId === _this.getPlayerId()) {
-                dojo.place("<div class=\"personal-objective-label\">".concat(_("Your personal objective:"), "</div>"), "player_board_".concat(player.id));
+                _this.bga.playerPanels.getElement(playerId).insertAdjacentHTML('beforeend', "<div class=\"personal-objective-label\">".concat(_("Your personal objective:"), "</div>"));
             }
             var html = "\n            <div id=\"personal-objective-wrapper-".concat(playerId, "\" class=\"personal-objective-wrapper\" data-expanded=\"").concat((_this.bga.userPreferences.get(203) != 2).toString(), "\"></div>");
-            dojo.place(html, "player_board_".concat(player.id));
+            _this.bga.playerPanels.getElement(playerId).insertAdjacentHTML('beforeend', html);
             if (player.personalObjective) {
                 _this.showPersonalObjective(playerId);
             }
@@ -1183,7 +1177,7 @@ var GetOnBoard = /** @class */ (function () {
                 setTimeout(function () { return _this.eliminatePlayer(playerId); }, 200);
             }
             // first player token
-            dojo.place("<div id=\"player_board_".concat(player.id, "_firstPlayerWrapper\" class=\"firstPlayerWrapper\"></div>"), "player_board_".concat(player.id));
+            _this.bga.playerPanels.getElement(playerId).insertAdjacentHTML('beforeend', "<div id=\"player-board-".concat(player.id, "-firstPlayerWrapper\" class=\"firstPlayerWrapper\"></div>"));
             _this.setNewScore(playerId, Number(player.score));
         });
     };
@@ -1232,10 +1226,10 @@ var GetOnBoard = /** @class */ (function () {
     GetOnBoard.prototype.placeFirstPlayerToken = function (playerId) {
         var firstPlayerBoardToken = document.getElementById('firstPlayerBoardToken');
         if (firstPlayerBoardToken) {
-            slideToObjectAndAttach(this, firstPlayerBoardToken, "player_board_".concat(playerId, "_firstPlayerWrapper"));
+            slideToObjectAndAttach(this, firstPlayerBoardToken, "player-board-".concat(playerId, "-firstPlayerWrapper"));
         }
         else {
-            dojo.place('<div id="firstPlayerBoardToken" class="first-player-token"></div>', "player_board_".concat(playerId, "_firstPlayerWrapper"));
+            dojo.place('<div id="firstPlayerBoardToken" class="first-player-token"></div>', "player-board-".concat(playerId, "-firstPlayerWrapper"));
             this.addTooltipHtml('firstPlayerBoardToken', _("Inspector pawn. This player is the first player of the round."));
         }
         var firstPlayerTableToken = document.getElementById('firstPlayerTableToken');
@@ -1284,9 +1278,8 @@ var GetOnBoard = /** @class */ (function () {
     };
     GetOnBoard.prototype.setNewScore = function (playerId, score) {
         var _this = this;
-        var _a, _b;
         if (this.gamedatas.players[playerId].eliminated) {
-            (_a = this.scoreCtrl[playerId]) === null || _a === void 0 ? void 0 : _a.setValue(0);
+            this.bga.playerPanels.getScoreCounter(playerId).setValue(0);
         }
         else {
             if (this.gamedatas.hiddenScore) {
@@ -1296,7 +1289,7 @@ var GetOnBoard = /** @class */ (function () {
             }
             else {
                 if (!isNaN(score)) {
-                    (_b = this.scoreCtrl[playerId]) === null || _b === void 0 ? void 0 : _b.toValue(this.gamedatas.players[playerId].eliminated != 0 ? 0 : score);
+                    this.bga.playerPanels.getScoreCounter(playerId).toValue(this.gamedatas.players[playerId].eliminated != 0 ? 0 : score);
                 }
             }
         }

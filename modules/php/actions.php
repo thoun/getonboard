@@ -174,7 +174,7 @@ trait ActionTrait {
         
         $scoreSheets = $this->notifUpdateScoreSheet($playerId);
         $score = $scoreSheets->validated->total;
-        $this->DbQuery("UPDATE player SET `player_score` = $score WHERE `player_id` = $playerId");
+        $this->bga->playerScore->set($playerId, $score, null);
 
         $this->gamestate->nextState('nextPlayer');
     }
