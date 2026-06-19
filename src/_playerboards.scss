@@ -1,8 +1,10 @@
-
+html[data-theme="light"] {
+  .player-board {
+    --game-bga-player-panel-background: white;
+  }
+}
 
 .player-board {
-  background-color: white;
-
   .personal-objective-label {
     text-align: center;
   }
@@ -108,12 +110,6 @@
 
     .personal-objective-wrapper {
       display: none;
-    }
-  }
-
-  &.spectator-mode {
-    * {
-      background: white !important;
     }
   }
 }
