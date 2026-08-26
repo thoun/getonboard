@@ -1,8 +1,15 @@
-const ANIMATION_MS = 500;
+/// <reference path="../../bga-framework.d.ts" />
+/// <reference path="./types.d.ts" />
 
-const ZOOM_LEVELS = [0.5, 0.625, 0.75, 0.875, 1, 1.25, 1.5];
+import { BgaJumpTo, BgaZoom } from './libs';
+import { PlayerTable } from './player-table';
+import { slideToObjectAndAttach } from './slide-utils';
+import { COMMON_OBJECTIVES, TableCenter } from './table-center';
+
+export const ANIMATION_MS = 500;
+
 const LOCAL_STORAGE_ZOOM_KEY = 'GetOnBoard-zoom';
-const LOCAL_STORAGE_JUMP_KEY = 'GetOnBoard-jump-to-folded';
+const LOCAL_STORAGE_JUMP_TO_FOLDED_KEY = 'GetOnBoard-jump-to-folded';
 
 function formatTextIcons(rawText: string) {
     if (!rawText) {
@@ -20,8 +27,8 @@ function formatTextIcons(rawText: string) {
         .replace(/\[Office\]/ig, '<div class="map-icon" data-element="51"></div>');
 }
 
-class GetOnBoard implements GetOnBoardGame {
-    private zoomManager: ZoomManager;
+export class Game {
+    private zoomManager: InstanceType<typeof BgaZoom.Manager>;
 
     private gamedatas: GetOnBoardGamedatas;
     //private healthCounters: Counter[] = [];
@@ -30,10 +37,10 @@ class GetOnBoard implements GetOnBoardGame {
     private registeredTablesByPlayerId: PlayerTable[][] = [];
     private roundNumberCounter: Counter;
 
-    public bga: Bga;
+    public bga: Bga<GetOnBoardPlayer, GetOnBoardGamedatas>;
 
-    constructor() {
-        document.getElementById('jump-controls').classList.toggle('folded', localStorage.getItem(LOCAL_STORAGE_JUMP_KEY) == 'true');
+    constructor(bga: Bga<GetOnBoardPlayer, GetOnBoardGamedatas>) {
+        this.bga = bga;
     }
     
     /*
@@ -64,11 +71,11 @@ class GetOnBoard implements GetOnBoardGame {
         this.bga.images.dontPreloadImage(`map-small-no-building.jpg`);
         this.bga.images.dontPreloadImage(`map-big-no-building.jpg`);
 
-        log( "Starting game setup" );
+        console.log( "Starting game setup" );
         
         this.gamedatas = gamedatas;
 
-        log('gamedatas', gamedatas);
+        console.log('gamedatas', gamedatas);
 
         if (Number(gamedatas.gamestate.id) >= 90) { // score or end. before createPlayerTables so full score is written if game has ended even if hide score is on
             this.onEnteringShowScore();
@@ -77,7 +84,21 @@ class GetOnBoard implements GetOnBoardGame {
         this.createPlayerPanels(gamedatas); 
         this.tableCenter = new TableCenter(this, gamedatas);
         this.createPlayerTables(gamedatas);
-        this.createPlayerJumps(gamedatas);
+        const entries = [
+            new BgaJumpTo.Entry(gamedatas.map === 'big' ? 'London' : 'New-York', 'map', {
+                color: '#000000',
+                backgroundImage: `url('${this.bga.images.getImgUrl(gamedatas.map === 'big' ? 'map-big.jpg' : 'map-small.jpg')}')`,
+                backgroundSize: 'cover',
+            }),
+            ...BgaJumpTo.BgaPlayerEntries(this.bga, {
+                playerOrder: this.getOrderedPlayers(gamedatas).map(player => player.id),
+                entrySettings: (playerId) => ({ id: `bga-jump-to_player-table-${playerId}` }),
+            }),
+        ];
+        new BgaJumpTo.Manager({
+            localStorageFoldedKey: LOCAL_STORAGE_JUMP_TO_FOLDED_KEY,
+            entries,
+        });
         Object.values(gamedatas.players).forEach(player => {
             this.highlightObjectiveLetters(player);
             this.setObjectivesCounters(Number(player.id), player.scoreSheets.current);
@@ -89,13 +110,8 @@ class GetOnBoard implements GetOnBoardGame {
         this.roundNumberCounter.create(`round-number-counter`);
         this.roundNumberCounter.setValue(gamedatas.roundNumber);
 
-        this.zoomManager = new ZoomManager({
+        this.zoomManager = new BgaZoom.Manager({
             element: document.getElementById('full-table'),
-            smooth: false,
-            zoomControls: {
-                color: 'black',
-            },
-            zoomLevels: ZOOM_LEVELS,
             localStorageZoomKey: LOCAL_STORAGE_ZOOM_KEY,
             onZoomChange: (zoom) => document.getElementById('map').classList.toggle('hd', zoom > 1)
         });
@@ -105,7 +121,7 @@ class GetOnBoard implements GetOnBoardGame {
 
         this.addTooltips();
 
-        log( "Ending game setup" );
+        console.log( "Ending game setup" );
     }
 
     ///////////////////////////////////////////////////
@@ -115,7 +131,7 @@ class GetOnBoard implements GetOnBoardGame {
     //                  You can use this method to perform some user interface changes at this moment.
     //
     public onEnteringState(stateName: string, args: any) {
-        log('Entering state: ' + stateName, args.args);
+        console.log('Entering state: ' + stateName, args.args);
 
         switch (stateName) {
             case 'placeRoute':
@@ -131,7 +147,7 @@ class GetOnBoard implements GetOnBoardGame {
         const originalState = this.gamedatas.gamestates[this.gamedatas.gamestate.id];
         this.gamedatas.gamestate.description = `${originalState['description' + property]}`; 
         this.gamedatas.gamestate.descriptionmyturn = `${originalState['descriptionmyturn' + property]}`;
-        (this as any).updatePageTitle();
+        this.bga.gameui.updatePageTitle();
     }
     
     private onEnteringPlaceRoute(args: EnteringPlaceRouteArgs) {
@@ -139,7 +155,7 @@ class GetOnBoard implements GetOnBoardGame {
             this.setGamestateDescription('Confirm');
         }
 
-        const activePlayerColor = this.getPlayerColor((this as any).getActivePlayerId());
+        const activePlayerColor = this.getPlayerColor(this.bga.players.getActivePlayerId());
 
         const currentPositionIntersection = document.getElementById(`intersection${args.currentPosition}`);
         currentPositionIntersection.classList.add('glow');
@@ -173,18 +189,18 @@ class GetOnBoard implements GetOnBoardGame {
         }
         map.style.setProperty('--position-indicator-color', `#${activePlayerColor}`);
 
-        if ((this as any).isCurrentPlayerActive()) {
+        if (this.bga.players.isCurrentPlayerActive()) {
             args.possibleRoutes.forEach(route => this.tableCenter.addGhostMarker(route));
         }
     }
 
     onEnteringShowScore() {
-        Object.keys(this.gamedatas.players).forEach(playerId => this.bga.playerPanels.getScoreCounter(playerId).setValue(0));
+        Object.keys(this.gamedatas.players).forEach(playerId => this.bga.playerPanels.getScoreCounter(Number(playerId)).setValue(0));
         this.gamedatas.hiddenScore = false;
     }
 
     public onLeavingState(stateName: string) {
-        log( 'Leaving state: '+stateName );
+        console.log( 'Leaving state: '+stateName );
 
         switch (stateName) {
             case 'placeDeparturePawn':
@@ -203,7 +219,7 @@ class GetOnBoard implements GetOnBoardGame {
     private onLeavingPlaceRoute() {
         document.querySelectorAll('.intersection.glow').forEach(element => element.classList.remove('glow'));
         
-        if ((this as any).isCurrentPlayerActive()) {
+        if (this.bga.players.isCurrentPlayerActive()) {
             this.tableCenter.removeGhostMarkers();
         }
     }
@@ -217,7 +233,7 @@ class GetOnBoard implements GetOnBoardGame {
     //                        action status bar (ie: the HTML links in the status bar).
     //
     public onUpdateActionButtons(stateName: string, args: any) {
-        if ((this as any).isCurrentPlayerActive()) {
+        if (this.bga.players.isCurrentPlayerActive()) {
             switch (stateName) {
                 case 'placeDeparturePawn':
                     const placeDeparturePawnArgs = args as EnteringPlaceDeparturePawnArgs;
@@ -225,23 +241,23 @@ class GetOnBoard implements GetOnBoardGame {
                         document.getElementById(`intersection${position}`).classList.add('selectable');
                         
                         const ticketDiv = `<div class="ticket" data-ticket="${placeDeparturePawnArgs._private.tickets[index]}"></div>`;
-                        (this as any).addActionButton(`placeDeparturePawn${position}_button`, dojo.string.substitute(_("Start at ${ticket}"), {ticket: ticketDiv}), () => this.placeDeparturePawn(position));
+                        this.bga.gameui.addActionButton(`placeDeparturePawn${position}_button`, dojo.string.substitute(_("Start at ${ticket}"), {ticket: ticketDiv}), () => this.placeDeparturePawn(position));
                     });
                     break;
                 case 'placeRoute':
-                    (this as any).addActionButton(`confirmTurn_button`, _("Confirm turn"), () => this.confirmTurn());
                     const placeRouteArgs = args as EnteringPlaceRouteArgs;
-                    if (placeRouteArgs.canConfirm) {
-                        this.startActionTimer(`confirmTurn_button`, 8);
-                    } else {
-                        dojo.addClass(`confirmTurn_button`, `disabled`);
-                    }
-                    (this as any).addActionButton(`cancelLast_button`, _("Cancel last marker"), () => this.cancelLast(), null, null, 'gray');
-                    (this as any).addActionButton(`resetTurn_button`, _("Reset the whole turn"), () => this.resetTurn(), null, null, 'gray');
-                    if (!placeRouteArgs.canCancel) {
-                        dojo.addClass(`cancelLast_button`, `disabled`);
-                        dojo.addClass(`resetTurn_button`, `disabled`);
-                    }
+                    this.bga.statusBar.addActionButton(_("Confirm turn"), () => this.confirmTurn(), {
+                        disabled: !placeRouteArgs.canConfirm,
+                        autoclick: placeRouteArgs.canConfirm,
+                    });
+                    this.bga.statusBar.addActionButton(_("Cancel last marker"), () => this.cancelLast(), {
+                        color: 'secondary',
+                        disabled: !placeRouteArgs.canCancel,
+                    });
+                    this.bga.statusBar.addActionButton(_("Reset the whole turn"), () => this.resetTurn(), {
+                        color: 'secondary',
+                        disabled: !placeRouteArgs.canCancel,
+                    });
                     break;
             }
 
@@ -262,7 +278,7 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     public getPlayerId(): number {
-        return Number((this as any).player_id);
+        return this.bga.gameui.player_id;
     }
 
     public getPlayerColor(playerId: number): string {
@@ -343,7 +359,7 @@ class GetOnBoard implements GetOnBoardGame {
 
     private getOrderedPlayers(gamedatas: GetOnBoardGamedatas) {
         const players = Object.values(gamedatas.players).sort((a, b) => a.playerNo - b.playerNo);
-        const playerIndex = players.findIndex(player => Number(player.id) === Number((this as any).player_id));
+        const playerIndex = players.findIndex(player => Number(player.id) === this.bga.gameui.player_id);
         const orderedPlayers = playerIndex > 0 ? [...players.slice(playerIndex), ...players.slice(0, playerIndex)] : players;
         return orderedPlayers;
     }
@@ -363,39 +379,6 @@ class GetOnBoard implements GetOnBoardGame {
         this.registeredTablesByPlayerId[playerId] = [table];
     }
 
-    private createPlayerJumps(gamedatas: GetOnBoardGamedatas) {
-        dojo.place(`
-        <div id="jump-toggle" class="jump-link toggle">
-            ⇔
-        </div>
-        <div id="jump-0" class="jump-link">
-            <div class="eye"></div> ${gamedatas.map === 'big' ? 'London' : 'New-York'}
-        </div>`, `jump-controls`);
-        document.getElementById(`jump-toggle`).addEventListener('click', () => this.jumpToggle());
-        document.getElementById(`jump-0`).addEventListener('click', () => this.jumpToPlayer(0));
-        
-        const orderedPlayers = this.getOrderedPlayers(gamedatas);
-
-        orderedPlayers.forEach(player => {
-            dojo.place(`<div id="jump-${player.id}" class="jump-link" style="color: #${player.color}; border-color: #${player.color};"><div class="eye" style="background: #${player.color};"></div> ${player.name}</div>`, `jump-controls`);
-            document.getElementById(`jump-${player.id}`).addEventListener('click', () => this.jumpToPlayer(Number(player.id)));	
-        });
-
-        const jumpDiv = document.getElementById(`jump-controls`);
-        jumpDiv.style.marginTop = `-${Math.round(jumpDiv.getBoundingClientRect().height / 2)}px`;
-    }
-    
-    private jumpToggle(): void {
-        const jumpControls = document.getElementById('jump-controls');
-        jumpControls.classList.toggle('folded');
-        localStorage.setItem(LOCAL_STORAGE_JUMP_KEY, jumpControls.classList.contains('folded').toString());
-    }
-    
-    private jumpToPlayer(playerId: number): void {
-        const elementId = playerId === 0 ? `map` : `player-table-${playerId}`;
-        document.getElementById(elementId).scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
-    }
-
     private placeFirstPlayerToken(playerId: number) {
         const firstPlayerBoardToken = document.getElementById('firstPlayerBoardToken');
         if (firstPlayerBoardToken) {
@@ -403,7 +386,7 @@ class GetOnBoard implements GetOnBoardGame {
         } else {
             dojo.place('<div id="firstPlayerBoardToken" class="first-player-token"></div>', `player-board-${playerId}-firstPlayerWrapper`);
 
-            (this as any).addTooltipHtml('firstPlayerBoardToken', _("Inspector pawn. This player is the first player of the round."));
+            this.bga.gameui.addTooltipHtml('firstPlayerBoardToken', _("Inspector pawn. This player is the first player of the round."));
         }
 
         const firstPlayerTableToken = document.getElementById('firstPlayerTableToken');
@@ -412,7 +395,7 @@ class GetOnBoard implements GetOnBoardGame {
         } else {
             dojo.place('<div id="firstPlayerTableToken" class="first-player-token"></div>', `player-table-${playerId}-first-player-wrapper`);
 
-            (this as any).addTooltipHtml('firstPlayerTableToken', _("Inspector pawn. This player is the first player of the round."));
+            this.bga.gameui.addTooltipHtml('firstPlayerTableToken', _("Inspector pawn. This player is the first player of the round."));
         }
     }
 
@@ -443,7 +426,7 @@ class GetOnBoard implements GetOnBoardGame {
             const tooltipsIds = JSON.parse(element.dataset.tooltip);
             let tooltip = ``;
             tooltipsIds.forEach(id => tooltip += `<div class="tooltip-section">${formatTextIcons(this.getTooltip(id))}</div>`);
-            (this as any).addTooltipHtml(element.id, tooltip);
+            this.bga.gameui.addTooltipHtml(element.id, tooltip);
         });
     }
     
@@ -585,7 +568,7 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     public placeDeparturePawn(position: number) {
-        if(!(this as any).checkAction('placeDeparturePawn')) {
+        if(!this.bga.actions.checkAction('placeDeparturePawn')) {
             return;
         }
 
@@ -602,14 +585,14 @@ class GetOnBoard implements GetOnBoardGame {
             return;
         }
 
-        if(!(this as any).checkAction('placeRoute')) {
+        if(!this.bga.actions.checkAction('placeRoute')) {
             return;
         }
 
         const eliminationWarning = route.isElimination /* && args.possibleRoutes.some(r => !r.isElimination)*/;
 
         if (eliminationWarning) {
-            (this as any).confirmationDialog(_('Are you sure you want to place that marker? You will be eliminated!'), () => {
+            this.bga.gameui.confirmationDialog(_('Are you sure you want to place that marker? You will be eliminated!'), () => {
                 this.takeAction('placeRoute', {
                     from, 
                     to,
@@ -624,7 +607,7 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     public cancelLast() {
-        if(!(this as any).checkAction('cancelLast')) {
+        if(!this.bga.actions.checkAction('cancelLast')) {
             return;
         }
 
@@ -632,7 +615,7 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     public resetTurn() {
-        if(!(this as any).checkAction('resetTurn')) {
+        if(!this.bga.actions.checkAction('resetTurn')) {
             return;
         }
 
@@ -640,7 +623,7 @@ class GetOnBoard implements GetOnBoardGame {
     }
 
     public confirmTurn() {
-        if(!(this as any).checkAction('confirmTurn', true)) {
+        if(!this.bga.actions.checkAction('confirmTurn', true)) {
             return;
         }
 
@@ -650,31 +633,6 @@ class GetOnBoard implements GetOnBoardGame {
     public takeAction(action: string, data?: any) {
         data = data || {};
         this.bga.actions.performAction(action, data, { checkAction: false });
-    }
-
-    private startActionTimer(buttonId: string, time: number) {
-        if (this.bga.userPreferences.get(202) == 2) {
-            return;
-        }
-
-        const button = document.getElementById(buttonId);
- 
-        let actionTimerId = null;
-        const _actionTimerLabel = button.innerHTML;
-        let _actionTimerSeconds = time;
-        const actionTimerFunction = () => {
-          const button = document.getElementById(buttonId);
-          if (button == null || button.classList.contains('disabled')) {
-            window.clearInterval(actionTimerId);
-          } else if (_actionTimerSeconds-- > 1) {
-            button.innerHTML = _actionTimerLabel + ' (' + _actionTimerSeconds + ')';
-          } else {
-            window.clearInterval(actionTimerId);
-            button.click();
-          }
-        };
-        actionTimerFunction();
-        actionTimerId = window.setInterval(() => actionTimerFunction(), 1000);
     }
 
     ///////////////////////////////////////////////////
@@ -707,7 +665,7 @@ class GetOnBoard implements GetOnBoardGame {
     
         notifs.forEach((notif) => {
             dojo.subscribe(notif[0], this, `notif_${notif[0]}`);
-            (this as any).notifqueue.setSynchronous(notif[0], notif[1]);
+            (this.bga.gameui as any).notifqueue.setSynchronous(notif[0], notif[1]);
         });
     }
 
@@ -779,10 +737,7 @@ class GetOnBoard implements GetOnBoardGame {
         this.highlightObjectiveLetters(player);
     }
     
-
-    /* This enable to inject translatable styled things to logs or action bar */
-    /* @Override */
-    public format_string_recursive(log: string, args: any) {
+    public bgaFormatText(log: string, args: any) {
         try {
             if (log && args && !args.processed) {
                 if (args.shape && args.shape[0] != '<') {
@@ -802,6 +757,6 @@ class GetOnBoard implements GetOnBoardGame {
         } catch (e) {
             console.error(log,args,"Exception thrown", e.stack);
         }
-        return (this as any).inherited(arguments);
+        return { log, args };
     }
 }

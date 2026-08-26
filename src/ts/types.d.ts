@@ -118,16 +118,6 @@ interface GetOnBoardGamedatas {
     MAP_ROUTES: { [position: number]: number[] };
 }
 
-interface GetOnBoardGame {
-    getPlayerId(): number;
-    getPlayerColor(playerId: number): string;
-
-    placeDeparturePawn(position: number): void;
-    placeRoute(from: number, to: number): void;
-    isVisibleScoring(): boolean;
-    getTooltip(element: number): string;
-}
-
 interface EnteringPlaceDeparturePawnArgs {
     _private?: {
         tickets: number[];

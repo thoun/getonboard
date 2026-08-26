@@ -1,5 +1,7 @@
+import { slideToObjectTicketSlot2 } from './slide-utils';
+import { Game } from './Game';
 
-const COMMON_OBJECTIVES = [
+export const COMMON_OBJECTIVES = [
     null,
     [20, 5],
     [30, 5],
@@ -9,8 +11,8 @@ const COMMON_OBJECTIVES = [
     [42, 3],
   ];
 
-class TableCenter {
-    constructor(private game: GetOnBoardGame, private gamedatas: GetOnBoardGamedatas) {
+export class TableCenter {
+    constructor(private game: Game, private gamedatas: GetOnBoardGamedatas) {
         const map = document.getElementById('map');
         map.dataset.size = gamedatas.map;
         const mapElements = document.getElementById('map-elements');
@@ -39,7 +41,7 @@ class TableCenter {
                 html += ` departure" data-departure=${departure}`;
             }
             html += `" data-tooltip="${JSON.stringify(tooltipsIds)}" style="left: ${coordinates[0]}px; top: ${coordinates[1]}px;"></div>`;
-            dojo.place(html, mapElements);
+            (dojo as any).place(html, mapElements);
             
             if (departure > 0) {
                 document.getElementById(`intersection${position}`).addEventListener('click', () => this.game.placeDeparturePawn(position));
@@ -55,7 +57,7 @@ class TableCenter {
                 const coordinates = this.getCoordinatesFromPositions(position, destination);
 
                 let html = `<div id="route${position}-${destination}" class="route" style="left: ${coordinates[0]}px; top: ${coordinates[1]}px;" data-direction="${Math.abs(position-destination) <= 1 ? 0 : 1}"></div>`;
-                dojo.place(html, mapElements);
+                (dojo as any).place(html, mapElements);
                 document.getElementById(`route${position}-${destination}`).addEventListener('click', () => this.game.placeRoute(position, destination));
             });
         });
@@ -178,7 +180,7 @@ class TableCenter {
 
         const commonObjectiveInfos = COMMON_OBJECTIVES[objective.id];
 
-        (this.game as any).addTooltipHtml(`common-objective-slot-${objective.number}`, `${this.game.getTooltip(90)}<br><br>${
+        this.game.bga.gameui.addTooltipHtml(`common-objective-slot-${objective.number}`, `${this.game.getTooltip(90)}<br><br>${
             _("To complete this objective, you need to check ${number} ${element}").replace('${number}', `<strong>${commonObjectiveInfos[1]}</strong>`).replace('${element}', `<div class="map-icon" data-element="${commonObjectiveInfos[0]}"></div>`)
         }`);
 
@@ -207,3 +209,4 @@ class TableCenter {
         }
     }
 }
+

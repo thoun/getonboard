@@ -1,4 +1,6 @@
-class PlayerTablePersonalObjectiveBlock extends PlayerTableBlock {
+import { PlayerTableBlock } from './block';
+
+export class PlayerTablePersonalObjectiveBlock extends PlayerTableBlock {
     constructor(playerId: string, scoreSheets: ScoreSheets, visibleScoring: boolean) {
         super(playerId);
 

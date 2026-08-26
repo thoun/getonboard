@@ -1,4 +1,6 @@
-class PlayerTableTouristsBlock extends PlayerTableBlock {
+import { PlayerTableBlock } from './block';
+
+export class PlayerTableTouristsBlock extends PlayerTableBlock {
     constructor(playerId: string, scoreSheets: ScoreSheets, visibleScoring: boolean) {
         super(playerId);
 

@@ -1,30 +1,18 @@
 {
-    "rootDir": ".", 
     "compilerOptions": {
-      "target": "es5",
-      "module": "none",
+      "target": "ES2020",
+      "module": "ES2022",
+      "moduleResolution": "bundler",
       "lib": ["dom", "esnext"],  
       "sourceMap": false,
-      "outFile": "getonboard.js",
+      "rootDir": "src",
       "strict": false
     },
-    "files": [
+    "include": [
         "bga-framework.d.ts",
-        "node_modules/bga-zoom/src/zoom-manager.ts",
-        "src/getonboard.d.ts",
-        "src/slide-utils.ts",
-        "src/player-table-block/block.ts",
-        "src/player-table-block/old-ladies.ts",
-        "src/player-table-block/students.ts",
-        "src/player-table-block/tourists.ts",
-        "src/player-table-block/businessmen.ts",
-        "src/player-table-block/common-objectives.ts",
-        "src/player-table-block/personal-objective.ts",
-        "src/player-table-block/turn-zones.ts",
-        "src/player-table-block/traffic-jam.ts",
-        "src/player-table.ts",
-        "src/table-center.ts",
-        "src/getonboard.ts",
-        "src/define.ts"
-    ]
+        "src/ts/types.d.ts",
+        "src/ts/**/*.d.ts",
+        "src/ts/**/*.ts"
+    ],
+    "exclude": ["src/define.ts"]
 }

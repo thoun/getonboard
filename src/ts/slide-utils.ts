@@ -1,4 +1,6 @@
-function slideToObjectAndAttach(game: GetOnBoardGame, object: HTMLElement, destinationId: string, zoom: number = 1): Promise<boolean> {
+import { Game } from "./Game";
+
+export function slideToObjectAndAttach(game: Game, object: HTMLElement, destinationId: string, zoom: number = 1): Promise<boolean> {
     const destination = document.getElementById(destinationId);
     if (destination.contains(object)) {
         return Promise.resolve(true);
@@ -59,7 +61,7 @@ function slideToObjectAndAttach(game: GetOnBoardGame, object: HTMLElement, desti
         }
     });
 }
-function slideToObjectTicketSlot2(game: GetOnBoardGame, object: HTMLElement, destinationId: string, keepTransform: string): Promise<boolean> {
+export function slideToObjectTicketSlot2(game: Game, object: HTMLElement, destinationId: string, keepTransform: string): Promise<boolean> {
     const destination = document.getElementById(destinationId);
     if (destination.contains(object)) {
         return Promise.resolve(true);

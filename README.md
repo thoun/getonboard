@@ -24,7 +24,7 @@ In VS Code, add extension https://marketplace.visualstudio.com/items?itemName=em
         ]
     }
 ```
-If you use it for another game, replace `getonboard` mentions on package.json `build:scss` script and on tsconfig.json `files` property.
+The TypeScript build creates the ESM client at `modules/js/Game.js`.
 
 ## Auto-upload builded files
 Also add one auto-FTP upload extension (for example https://marketplace.visualstudio.com/items?itemName=lukasz-wronski.ftp-sync) and configure it. The extension will detected modified files in the workspace, including builded ones, and upload them to remote server.
@@ -35,4 +35,3 @@ Make sure ftp-sync.json and node_modules are in .gitignore
 # TODO
 stats
 make 2-3p horizontal
-

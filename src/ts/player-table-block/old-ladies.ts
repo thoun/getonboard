@@ -1,4 +1,6 @@
-class PlayerTableOldLadiesBlock extends PlayerTableBlock {
+import { PlayerTableBlock } from './block';
+
+export class PlayerTableOldLadiesBlock extends PlayerTableBlock {
     constructor(playerId: string, scoreSheets: ScoreSheets, visibleScoring: boolean) {
         super(playerId);
 

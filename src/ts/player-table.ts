@@ -1,7 +1,14 @@
-const isDebug = window.location.host == 'studio.boardgamearena.com' || window.location.hash.indexOf('debug') > -1;;
-const log = isDebug ? console.log.bind(window.console) : function () { };
+import { Game } from './Game';
+import { PlayerTableBusinessmenBlock } from './player-table-block/businessmen';
+import { PlayerTableCommonObjectivesBlock } from './player-table-block/common-objectives';
+import { PlayerTableOldLadiesBlock } from './player-table-block/old-ladies';
+import { PlayerTablePersonalObjectiveBlock } from './player-table-block/personal-objective';
+import { PlayerTableStudentsBlock } from './player-table-block/students';
+import { PlayerTableTouristsBlock } from './player-table-block/tourists';
+import { PlayerTableTrafficJamBlock } from './player-table-block/traffic-jam';
+import { PlayerTableTurnZonesBlock } from './player-table-block/turn-zones';
 
-class PlayerTable {
+export class PlayerTable {
     public playerId: string;
     
     private oldLadies: PlayerTableOldLadiesBlock;
@@ -13,7 +20,7 @@ class PlayerTable {
     private turnZones: PlayerTableTurnZonesBlock;
     private trafficJam: PlayerTableTrafficJamBlock;
 
-    constructor(game: GetOnBoardGame, player: GetOnBoardPlayer, id: string = player.id, insertIn: HTMLElement = document.getElementById('full-table')) {
+    constructor(game: Game, player: GetOnBoardPlayer, id: string = player.id, insertIn: HTMLElement = document.getElementById('full-table')) {
         this.playerId = id;
 
         const eliminated = Number(player.eliminated) > 0;
@@ -35,7 +42,7 @@ class PlayerTable {
             <div id="player-table-${this.playerId}-first-player-wrapper" class="first-player-wrapper"></div>
         </div>
         `;
-        dojo.place(html, insertIn);
+        (dojo as any).place(html, insertIn);
 
         this.oldLadies = new PlayerTableOldLadiesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.students = new PlayerTableStudentsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());

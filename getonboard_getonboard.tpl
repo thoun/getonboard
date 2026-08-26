@@ -13,11 +13,4 @@
         <div id="pips-bottom" class="pips"></div>
     </div>
 </div>
-<div id="zoom-controls">
-    <button id="zoom-out"></button>
-    <button id="zoom-in"></button>
-</div>
-<div id="jump-controls">
-</div>
-
 {OVERALL_GAME_FOOTER}

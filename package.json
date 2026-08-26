@@ -4,16 +4,21 @@
   "description": "",
   "main": "getonboard.js",
   "scripts": {
-    "build:ts": "tsc",
-    "build:scss": "sass --no-source-map src/getonboard.scss getonboard.css"
+    "build:ts": "rollup -c",
+    "watch:ts": "rollup -c -w",
+    "build:scss": "sass --no-source-map src/scss/getonboard.scss getonboard.css"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bga-jump-to": "thoun/bga-jump-to#1.1.0",
     "bga-zoom": "thoun/bga-zoom#1.0.4"
   },
   "devDependencies": {
+    "@rollup/plugin-typescript": "^12.3.0",
+    "rollup": "^4.53.3",
     "sass": "^1.71.0",
+    "tslib": "^2.8.1",
     "typescript": "^5.3.3"
   }
 }

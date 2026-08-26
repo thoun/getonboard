@@ -1,4 +1,4 @@
-abstract class PlayerTableBlock {
+export abstract class PlayerTableBlock {
     constructor(protected playerId: string) {
     }
 
