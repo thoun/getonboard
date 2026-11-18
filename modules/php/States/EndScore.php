@@ -35,7 +35,7 @@ class EndScore extends GameState
             $personalObjectiveLetters = array_map(fn($code) => chr($code), $this->game->getPersonalObjectiveLetters($playerId));
             $this->game->bga->notify->all('revealPersonalObjective', clienttranslate('${player_name} personal objective was ${objectiveLetters}'), [
                 'playerId' => $playerId,
-                'player_name' => $this->game->getPlayerName($playerId),
+                'player_name' => $this->game->getPlayerNameById($playerId),
                 'objectiveLetters' => implode(' ', $personalObjectiveLetters),
                 'personalObjective' => $personalObjective,
                 'personalObjectiveLetters' => $personalObjectiveLetters,

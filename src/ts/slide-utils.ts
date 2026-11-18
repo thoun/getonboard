@@ -26,7 +26,7 @@ export function slideToObjectAndAttach(game: Game, object: HTMLElement, destinat
             destination.appendChild(object);
         }
 
-        if (document.visibilityState === 'hidden' || (game as any).instantaneousMode) {
+        if (!game.bga.gameui.bgaAnimationsActive()) {
             // if tab is not visible, we skip animation (else they could be delayed or cancelled by browser)
             attachToNewParent();
         } else {
@@ -83,7 +83,7 @@ export function slideToObjectTicketSlot2(game: Game, object: HTMLElement, destin
             destination.appendChild(object);
         }
 
-        if (document.visibilityState === 'hidden' || (game as any).instantaneousMode) {
+        if (!game.bga.gameui.bgaAnimationsActive()) {
             // if tab is not visible, we skip animation (else they could be delayed or cancelled by browser)
             attachToNewParent();
         } else {

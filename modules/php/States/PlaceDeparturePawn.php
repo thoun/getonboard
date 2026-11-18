@@ -65,7 +65,7 @@ class PlaceDeparturePawn extends GameState
 
         $this->game->bga->notify->all('log', clienttranslate('${player_name} has chosen the position for its departure pawn'), [
             'playerId' => (string) $currentPlayerId,
-            'player_name' => $this->game->getPlayerName($currentPlayerId),
+            'player_name' => $this->game->getPlayerNameById($currentPlayerId),
         ]);
 
         $this->game->gamestate->setPlayerNonMultiactive($currentPlayerId, StartGame::class);

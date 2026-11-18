@@ -33,7 +33,7 @@ class StartGame extends GameState
 
             $this->game->bga->notify->all('placedDeparturePawn', clienttranslate('${player_name} places departure pawn to number ${number}'), [
                 'playerId' => $playerId,
-                'player_name' => $this->game->getPlayerName($playerId),
+                'player_name' => $this->game->getPlayerNameById($playerId),
                 'position' => $position,
                 'number' => $number,
             ]);

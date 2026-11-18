@@ -33,16 +33,15 @@ class Game extends Table {
 
     public array $MAP_POSITIONS;
     public array $MAP_ROUTES;
-    public array $BUSY_ROUTES;
+    public array $CONNECTION_COLORS;
     public array $COMMON_OBJECTIVES;
     public array $PERSONAL_OBJECTIVES;
     public array $SCORE_SHEETS_SHAPES;
     public array $OLD_LADIES_POINTS;
     public array $TOURISTS_POINTS;
-    public array $BUSINESSMEN_POINTS;
-    public array $BUSINESSMEN_BONUS;
+    public array $PERSONAL_OBJECTIVE_POINTS;
+    public array $CONNECTION_POINTS;
     public array $TURN_ZONES_POINTS;
-    public array $TRAFFIC_JAM_POINTS;
 
 	function __construct() {
         require __DIR__ . '/material.inc.php';
