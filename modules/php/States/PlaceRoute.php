@@ -89,7 +89,7 @@ class PlaceRoute extends GameState
 
         $this->game->bga->notify->all('placedRoute', clienttranslate('${player_name} places a route marker to ${elements}'), [
             'playerId' => $activePlayerId,
-            'player_name' => $this->game->getPlayerName($activePlayerId),
+            'player_name' => $this->game->getPlayerNameById($activePlayerId),
             'marker' => PlacedRoute::forNotif($from, $to, false),
             'zones' => $zones,
             'position' => $to,

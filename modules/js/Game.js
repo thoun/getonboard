@@ -381,7 +381,7 @@ function slideToObjectAndAttach(game, object, destinationId, zoom = 1) {
             object.style.transition = 'unset';
             destination.appendChild(object);
         };
-        if (document.visibilityState === 'hidden' || game.instantaneousMode) {
+        if (!game.bga.gameui.bgaAnimationsActive()) {
             // if tab is not visible, we skip animation (else they could be delayed or cancelled by browser)
             attachToNewParent();
         }
@@ -429,7 +429,7 @@ function slideToObjectTicketSlot2(game, object, destinationId, keepTransform) {
             object.style.transition = 'unset';
             destination.appendChild(object);
         };
-        if (document.visibilityState === 'hidden' || game.instantaneousMode) {
+        if (!game.bga.gameui.bgaAnimationsActive()) {
             // if tab is not visible, we skip animation (else they could be delayed or cancelled by browser)
             attachToNewParent();
         }
@@ -1141,10 +1141,7 @@ class Game {
         }
     }
     placeDeparturePawn(position) {
-        if (!this.bga.actions.checkAction('actPlaceDeparturePawn')) {
-            return;
-        }
-        this.takeAction('actPlaceDeparturePawn', {
+        this.bga.actions.performAction('actPlaceDeparturePawn', {
             position
         });
     }
@@ -1160,40 +1157,30 @@ class Game {
         const eliminationWarning = route.isElimination /* && args.possibleRoutes.some(r => !r.isElimination)*/;
         if (eliminationWarning) {
             this.bga.gameui.confirmationDialog(_('Are you sure you want to place that marker? You will be eliminated!'), () => {
-                this.takeAction('actPlaceRoute', {
+                this.bga.actions.performAction('actPlaceRoute', {
                     from,
                     to,
-                });
+                }, { checkAction: false });
             });
         }
         else {
-            this.takeAction('actPlaceRoute', {
+            this.bga.actions.performAction('actPlaceRoute', {
                 from,
                 to,
-            });
+            }, { checkAction: false });
         }
     }
     cancelLast() {
-        if (!this.bga.actions.checkAction('actCancelLast')) {
-            return;
-        }
-        this.takeAction('actCancelLast');
+        this.bga.actions.performAction('actCancelLast');
     }
     resetTurn() {
-        if (!this.bga.actions.checkAction('actResetTurn')) {
-            return;
-        }
-        this.takeAction('actResetTurn');
+        this.bga.actions.performAction('actResetTurn');
     }
     confirmTurn() {
         if (!this.bga.actions.checkAction('actConfirmTurn', true)) {
             return;
         }
-        this.takeAction('actConfirmTurn');
-    }
-    takeAction(action, data) {
-        data = data || {};
-        this.bga.actions.performAction(action, data, { checkAction: false });
+        this.bga.actions.performAction('actConfirmTurn', {}, { checkAction: false });
     }
     ///////////////////////////////////////////////////
     //// Reaction to cometD notifications

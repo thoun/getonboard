@@ -71,7 +71,7 @@ class NextPlayer extends GameState
                 // but we don't really eliminate him as the framework don't like it and game will end anyway
                 $this->game->bga->notify->all('playerEliminated', '', [
                     'who_quits' => $eliminatedPlayer,
-                    'player_name' => $this->game->getPlayerName($eliminatedPlayer),
+                    'player_name' => $this->game->getPlayerNameById($eliminatedPlayer),
                 ]);
                 $this->game->DbQuery("UPDATE player SET `player_eliminated` = 1 WHERE `player_id` = $eliminatedPlayer");
             } else {

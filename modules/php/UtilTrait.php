@@ -33,10 +33,6 @@ trait UtilTrait {
         return array_keys($this->loadPlayersBasicInfos());
     }
 
-    function getPlayerName(int $playerId) {
-        return self::getUniqueValueFromDB("SELECT player_name FROM player WHERE player_id = $playerId");
-    }
-    
     function isEliminated(int $playerId) {
         return boolval(self::getUniqueValueFromDB("SELECT player_eliminated FROM player WHERE player_id = $playerId"));
     }
@@ -272,7 +268,7 @@ trait UtilTrait {
         
         $this->bga->notify->all('updateScoreSheet', '', [
             'playerId' => $playerId,
-            'player_name' => $this->getPlayerName($playerId),
+            'player_name' => $this->getPlayerNameById($playerId),
             'scoreSheets' => $scoreSheets,
         ]);
 

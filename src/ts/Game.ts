@@ -581,11 +581,7 @@ export class Game {
     }
 
     public placeDeparturePawn(position: number) {
-        if(!this.bga.actions.checkAction('actPlaceDeparturePawn')) {
-            return;
-        }
-
-        this.takeAction('actPlaceDeparturePawn', {
+        this.bga.actions.performAction('actPlaceDeparturePawn', {
             position
         });
     }
@@ -606,33 +602,25 @@ export class Game {
 
         if (eliminationWarning) {
             this.bga.gameui.confirmationDialog(_('Are you sure you want to place that marker? You will be eliminated!'), () => {
-                this.takeAction('actPlaceRoute', {
-                    from, 
+                this.bga.actions.performAction('actPlaceRoute', {
+                    from,
                     to,
-                });
+                }, { checkAction: false });
             });
         } else {
-            this.takeAction('actPlaceRoute', {
-                from, 
+            this.bga.actions.performAction('actPlaceRoute', {
+                from,
                 to,
-            });
+            }, { checkAction: false });
         }
     }
 
     public cancelLast() {
-        if(!this.bga.actions.checkAction('actCancelLast')) {
-            return;
-        }
-
-        this.takeAction('actCancelLast');
+        this.bga.actions.performAction('actCancelLast');
     }
 
     public resetTurn() {
-        if(!this.bga.actions.checkAction('actResetTurn')) {
-            return;
-        }
-
-        this.takeAction('actResetTurn');
+        this.bga.actions.performAction('actResetTurn');
     }
 
     public confirmTurn() {
@@ -640,12 +628,7 @@ export class Game {
             return;
         }
 
-        this.takeAction('actConfirmTurn');
-    }
-
-    public takeAction(action: string, data?: any) {
-        data = data || {};
-        this.bga.actions.performAction(action, data, { checkAction: false });
+        this.bga.actions.performAction('actConfirmTurn', {}, { checkAction: false });
     }
 
     ///////////////////////////////////////////////////
