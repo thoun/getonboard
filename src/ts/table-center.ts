@@ -41,7 +41,7 @@ export class TableCenter {
                 html += ` departure" data-departure=${departure}`;
             }
             html += `" data-tooltip="${JSON.stringify(tooltipsIds)}" style="left: ${coordinates[0]}px; top: ${coordinates[1]}px;"></div>`;
-            (dojo as any).place(html, mapElements);
+            mapElements.insertAdjacentHTML('beforeend', html);
             
             if (departure > 0) {
                 document.getElementById(`intersection${position}`).addEventListener('click', () => this.game.placeDeparturePawn(position));
@@ -57,7 +57,7 @@ export class TableCenter {
                 const coordinates = this.getCoordinatesFromPositions(position, destination);
 
                 let html = `<div id="route${position}-${destination}" class="route" style="left: ${coordinates[0]}px; top: ${coordinates[1]}px;" data-direction="${Math.abs(position-destination) <= 1 ? 0 : 1}"></div>`;
-                (dojo as any).place(html, mapElements);
+                mapElements.insertAdjacentHTML('beforeend', html);
                 document.getElementById(`route${position}-${destination}`).addEventListener('click', () => this.game.placeRoute(position, destination));
             });
         });
@@ -76,24 +76,24 @@ export class TableCenter {
         // personal objective
         Object.keys(gamedatas.MAP_POSITIONS).filter(key => gamedatas.MAP_POSITIONS[key].some(element => element >= 97 && element <= 122)).forEach(position =>
         //currentPlayer?.personalObjectivePositions.forEach(position => 
-            dojo.place(`<div class="objective-letter" data-position="${position}"></div>`, `intersection${position}`)
+            document.getElementById(`intersection${position}`).insertAdjacentHTML('beforeend', `<div class="objective-letter" data-position="${position}"></div>`)
         );
 
         // tickets
         this.setRound(gamedatas.validatedTickets, gamedatas.currentTicket, true);
 
-        ['top', 'bottom', 'left', 'right'].forEach(side => dojo.place(`<div class="position-indicator ${side}"></div>`, 'map'));
+        ['top', 'bottom', 'left', 'right'].forEach(side => document.getElementById('map').insertAdjacentHTML('beforeend', `<div class="position-indicator ${side}"></div>`));
     }
 
     public addDeparturePawn(playerId: number, position: number) {
-        dojo.place(`<div id="departure-pawn-${playerId}" class="departure-pawn"></div>`, `intersection${position}`);
+        document.getElementById(`intersection${position}`).insertAdjacentHTML('beforeend', `<div id="departure-pawn-${playerId}" class="departure-pawn"></div>`);
         document.getElementById(`departure-pawn-${playerId}`).style.setProperty('--background', `#${this.game.getPlayerColor(playerId)}`);
     }
 
     public addMarker(playerId: number, marker: PlacedRoute) {
         const min = Math.min(marker.from, marker.to);
         const max = Math.max(marker.from, marker.to);
-        dojo.place(`<div id="marker-${playerId}-${min}-${max}" class="marker ${marker.validated ? '' : 'unvalidated'}" style="background: #${this.game.getPlayerColor(playerId)};"></div>`, `route${min}-${max}`);
+        document.getElementById(`route${min}-${max}`).insertAdjacentHTML('beforeend', `<div id="marker-${playerId}-${min}-${max}" class="marker ${marker.validated ? '' : 'unvalidated'}" style="background: #${this.game.getPlayerColor(playerId)};"></div>`);
         const ghost = document.getElementById(`ghost-marker-${min}-${max}`);
         ghost?.parentElement?.removeChild(ghost);
     }
@@ -124,7 +124,7 @@ export class TableCenter {
             ghostClass = 'traffic-jam';
         }
 
-        dojo.place(`<div id="ghost-marker-${min}-${max}" class="ghost marker ${ghostClass}"></div>`, `route${min}-${max}`);
+        document.getElementById(`route${min}-${max}`).insertAdjacentHTML('beforeend', `<div id="ghost-marker-${min}-${max}" class="ghost marker ${ghostClass}"></div>`);
     }
 
     public removeGhostMarkers() {
@@ -172,11 +172,11 @@ export class TableCenter {
     }
 
     private placeCommonObjective(objective: CommonObjective, isPlayer: boolean) {
-        dojo.place(`<div id="common-objective-${objective.id}" class="common-objective card-inner" data-side="${objective.completed ? '1' : '0'}">
+        document.getElementById(`common-objective-slot-${objective.number}`).insertAdjacentHTML('beforeend', `<div id="common-objective-${objective.id}" class="common-objective card-inner" data-side="${objective.completed ? '1' : '0'}">
             <div class="card-side front"></div>
             <div class="card-side back"></div>
         </div>
-        `, `common-objective-slot-${objective.number}`);
+        `);
 
         const commonObjectiveInfos = COMMON_OBJECTIVES[objective.id];
 
@@ -185,9 +185,9 @@ export class TableCenter {
         }`);
 
         if (isPlayer) { // objective progress counter only if player is not a spectator
-            dojo.place(`
+            document.getElementById(`common-objective-slot-${objective.number}`).insertAdjacentHTML('beforeend', `
             <div class="common-objective-counter"><span id="common-objective-${objective.number}-counter" data-type="${objective.id}">0</span>/${commonObjectiveInfos[1]}</div>
-            `, `common-objective-slot-${objective.number}`);
+            `);
         }
     }
 
@@ -196,10 +196,10 @@ export class TableCenter {
         if (initialization) {
             for(let i=1; i<=12; i++) {
                 const visible = i <= roundNumber;
-                dojo.place(`<div id="ticket-${i}" class="ticket card-inner" data-side="${visible ? '1' : '0'}" data-ticket="${i === roundNumber ? currentTicket : 0}">
+                document.getElementById(`ticket-slot-${visible ? 2 : 1}`).insertAdjacentHTML('beforeend', `<div id="ticket-${i}" class="ticket card-inner" data-side="${visible ? '1' : '0'}" data-ticket="${i === roundNumber ? currentTicket : 0}">
                     <div class="card-side front"></div>
                     <div class="card-side back"></div>
-                </div>`, `ticket-slot-${visible ? 2 : 1}`);
+                </div>`);
             }
         } else {
             const roundTicketDiv = document.getElementById(`ticket-${roundNumber}`);

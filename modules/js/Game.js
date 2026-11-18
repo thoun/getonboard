@@ -38,7 +38,7 @@ class PlayerTableBusinessmenBlock extends PlayerTableBlock {
                     <div id="player-table-${playerId}-businessmen-total" class="total"></div>
                 </div>
         `;
-        dojo.place(html, `player-table-${playerId}-main`);
+        document.getElementById(`player-table-${playerId}-main`).insertAdjacentHTML('beforeend', html);
         this.updateScoreSheet(scoreSheets, visibleScoring);
     }
     updateScoreSheet(scoreSheets, visibleScoring) {
@@ -67,7 +67,7 @@ class PlayerTableCommonObjectivesBlock extends PlayerTableBlock {
             <div id="player-table-${playerId}-common-objectives-total" class="total"></div>
         </div>
         `;
-        dojo.place(html, `player-table-${playerId}-main`);
+        document.getElementById(`player-table-${playerId}-main`).insertAdjacentHTML('beforeend', html);
         this.updateScoreSheet(scoreSheets, visibleScoring);
     }
     updateScoreSheet(scoreSheets, visibleScoring) {
@@ -96,7 +96,7 @@ class PlayerTableOldLadiesBlock extends PlayerTableBlock {
                     <div id="player-table-${playerId}-old-ladies-total" class="total"></div>
                 </div>
         `;
-        dojo.place(html, `player-table-${playerId}-main`);
+        document.getElementById(`player-table-${playerId}-main`).insertAdjacentHTML('beforeend', html);
         this.updateScoreSheet(scoreSheets, visibleScoring);
     }
     updateScoreSheet(scoreSheets, visibleScoring) {
@@ -119,7 +119,7 @@ class PlayerTablePersonalObjectiveBlock extends PlayerTableBlock {
             <div id="player-table-${playerId}-personal-objective-total" class="total"></div>
         </div>
         `;
-        dojo.place(html, `player-table-${playerId}-main`);
+        document.getElementById(`player-table-${playerId}-main`).insertAdjacentHTML('beforeend', html);
         this.updateScoreSheet(scoreSheets, visibleScoring);
     }
     updateScoreSheet(scoreSheets, visibleScoring) {
@@ -155,7 +155,7 @@ class PlayerTableStudentsBlock extends PlayerTableBlock {
                     <div id="player-table-${playerId}-students-total" class="total"></div>
                 </div>
         `;
-        dojo.place(html, `player-table-${playerId}-main`);
+        document.getElementById(`player-table-${playerId}-main`).insertAdjacentHTML('beforeend', html);
         this.updateScoreSheet(scoreSheets, visibleScoring);
     }
     updateScoreSheet(scoreSheets, visibleScoring) {
@@ -208,7 +208,7 @@ class PlayerTableTouristsBlock extends PlayerTableBlock {
                     <div id="player-table-${playerId}-tourists-total" class="total"></div>
                 </div>
         `;
-        dojo.place(html, `player-table-${playerId}-main`);
+        document.getElementById(`player-table-${playerId}-main`).insertAdjacentHTML('beforeend', html);
         this.updateScoreSheet(scoreSheets, visibleScoring);
     }
     updateScoreSheet(scoreSheets, visibleScoring) {
@@ -250,7 +250,7 @@ class PlayerTableTrafficJamBlock extends PlayerTableBlock {
                     <div id="player-table-${playerId}-traffic-jam-total" class="total"></div>
                 </div>
         `;
-        dojo.place(html, `player-table-${playerId}-main`);
+        document.getElementById(`player-table-${playerId}-main`).insertAdjacentHTML('beforeend', html);
         this.updateScoreSheet(scoreSheets, visibleScoring);
     }
     updateScoreSheet(scoreSheets, visibleScoring) {
@@ -278,7 +278,7 @@ class PlayerTableTurnZonesBlock extends PlayerTableBlock {
                     <div id="player-table-${playerId}-turn-zones-total" class="total"></div>
                 </div>
         `;
-        dojo.place(html, `player-table-${playerId}-main`);
+        document.getElementById(`player-table-${playerId}-main`).insertAdjacentHTML('beforeend', html);
         this.updateScoreSheet(scoreSheets, visibleScoring);
     }
     updateScoreSheet(scoreSheets, visibleScoring) {
@@ -314,7 +314,7 @@ class PlayerTable {
             <div id="player-table-${this.playerId}-first-player-wrapper" class="first-player-wrapper"></div>
         </div>
         `;
-        dojo.place(html, insertIn);
+        insertIn.insertAdjacentHTML('beforeend', html);
         this.oldLadies = new PlayerTableOldLadiesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.students = new PlayerTableStudentsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.tourists = new PlayerTableTouristsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
@@ -519,7 +519,7 @@ class TableCenter {
                 html += ` departure" data-departure=${departure}`;
             }
             html += `" data-tooltip="${JSON.stringify(tooltipsIds)}" style="left: ${coordinates[0]}px; top: ${coordinates[1]}px;"></div>`;
-            dojo.place(html, mapElements);
+            mapElements.insertAdjacentHTML('beforeend', html);
             if (departure > 0) {
                 document.getElementById(`intersection${position}`).addEventListener('click', () => this.game.placeDeparturePawn(position));
             }
@@ -531,7 +531,7 @@ class TableCenter {
             destinations.forEach(destination => {
                 const coordinates = this.getCoordinatesFromPositions(position, destination);
                 let html = `<div id="route${position}-${destination}" class="route" style="left: ${coordinates[0]}px; top: ${coordinates[1]}px;" data-direction="${Math.abs(position - destination) <= 1 ? 0 : 1}"></div>`;
-                dojo.place(html, mapElements);
+                mapElements.insertAdjacentHTML('beforeend', html);
                 document.getElementById(`route${position}-${destination}`).addEventListener('click', () => this.game.placeRoute(position, destination));
             });
         });
@@ -545,19 +545,19 @@ class TableCenter {
         // personal objective
         Object.keys(gamedatas.MAP_POSITIONS).filter(key => gamedatas.MAP_POSITIONS[key].some(element => element >= 97 && element <= 122)).forEach(position => 
         //currentPlayer?.personalObjectivePositions.forEach(position => 
-        dojo.place(`<div class="objective-letter" data-position="${position}"></div>`, `intersection${position}`));
+        document.getElementById(`intersection${position}`).insertAdjacentHTML('beforeend', `<div class="objective-letter" data-position="${position}"></div>`));
         // tickets
         this.setRound(gamedatas.validatedTickets, gamedatas.currentTicket, true);
-        ['top', 'bottom', 'left', 'right'].forEach(side => dojo.place(`<div class="position-indicator ${side}"></div>`, 'map'));
+        ['top', 'bottom', 'left', 'right'].forEach(side => document.getElementById('map').insertAdjacentHTML('beforeend', `<div class="position-indicator ${side}"></div>`));
     }
     addDeparturePawn(playerId, position) {
-        dojo.place(`<div id="departure-pawn-${playerId}" class="departure-pawn"></div>`, `intersection${position}`);
+        document.getElementById(`intersection${position}`).insertAdjacentHTML('beforeend', `<div id="departure-pawn-${playerId}" class="departure-pawn"></div>`);
         document.getElementById(`departure-pawn-${playerId}`).style.setProperty('--background', `#${this.game.getPlayerColor(playerId)}`);
     }
     addMarker(playerId, marker) {
         const min = Math.min(marker.from, marker.to);
         const max = Math.max(marker.from, marker.to);
-        dojo.place(`<div id="marker-${playerId}-${min}-${max}" class="marker ${marker.validated ? '' : 'unvalidated'}" style="background: #${this.game.getPlayerColor(playerId)};"></div>`, `route${min}-${max}`);
+        document.getElementById(`route${min}-${max}`).insertAdjacentHTML('beforeend', `<div id="marker-${playerId}-${min}-${max}" class="marker ${marker.validated ? '' : 'unvalidated'}" style="background: #${this.game.getPlayerColor(playerId)};"></div>`);
         const ghost = document.getElementById(`ghost-marker-${min}-${max}`);
         ghost?.parentElement?.removeChild(ghost);
     }
@@ -585,7 +585,7 @@ class TableCenter {
         else if (route.trafficJam > 0) {
             ghostClass = 'traffic-jam';
         }
-        dojo.place(`<div id="ghost-marker-${min}-${max}" class="ghost marker ${ghostClass}"></div>`, `route${min}-${max}`);
+        document.getElementById(`route${min}-${max}`).insertAdjacentHTML('beforeend', `<div id="ghost-marker-${min}-${max}" class="ghost marker ${ghostClass}"></div>`);
     }
     removeGhostMarkers() {
         Array.from(document.getElementsByClassName('ghost')).forEach(element => element.parentElement?.removeChild(element));
@@ -628,17 +628,17 @@ class TableCenter {
         }
     }
     placeCommonObjective(objective, isPlayer) {
-        dojo.place(`<div id="common-objective-${objective.id}" class="common-objective card-inner" data-side="${objective.completed ? '1' : '0'}">
+        document.getElementById(`common-objective-slot-${objective.number}`).insertAdjacentHTML('beforeend', `<div id="common-objective-${objective.id}" class="common-objective card-inner" data-side="${objective.completed ? '1' : '0'}">
             <div class="card-side front"></div>
             <div class="card-side back"></div>
         </div>
-        `, `common-objective-slot-${objective.number}`);
+        `);
         const commonObjectiveInfos = COMMON_OBJECTIVES[objective.id];
         this.game.bga.gameui.addTooltipHtml(`common-objective-slot-${objective.number}`, `${this.game.getTooltip(90)}<br><br>${_("To complete this objective, you need to check ${number} ${element}").replace('${number}', `<strong>${commonObjectiveInfos[1]}</strong>`).replace('${element}', `<div class="map-icon" data-element="${commonObjectiveInfos[0]}"></div>`)}`);
         if (isPlayer) { // objective progress counter only if player is not a spectator
-            dojo.place(`
+            document.getElementById(`common-objective-slot-${objective.number}`).insertAdjacentHTML('beforeend', `
             <div class="common-objective-counter"><span id="common-objective-${objective.number}-counter" data-type="${objective.id}">0</span>/${commonObjectiveInfos[1]}</div>
-            `, `common-objective-slot-${objective.number}`);
+            `);
         }
     }
     setRound(validatedTickets, currentTicket, initialization = false) {
@@ -646,10 +646,10 @@ class TableCenter {
         if (initialization) {
             for (let i = 1; i <= 12; i++) {
                 const visible = i <= roundNumber;
-                dojo.place(`<div id="ticket-${i}" class="ticket card-inner" data-side="${visible ? '1' : '0'}" data-ticket="${i === roundNumber ? currentTicket : 0}">
+                document.getElementById(`ticket-slot-${visible ? 2 : 1}`).insertAdjacentHTML('beforeend', `<div id="ticket-${i}" class="ticket card-inner" data-side="${visible ? '1' : '0'}" data-ticket="${i === roundNumber ? currentTicket : 0}">
                     <div class="card-side front"></div>
                     <div class="card-side back"></div>
-                </div>`, `ticket-slot-${visible ? 2 : 1}`);
+                </div>`);
             }
         }
         else {
@@ -716,6 +716,23 @@ class Game {
         this.bga.images.dontPreloadImage(`map-big-no-building.jpg`);
         console.log("Starting game setup");
         this.gamedatas = gamedatas;
+        if (!document.getElementById('full-table')) {
+            this.bga.gameArea.getElement().insertAdjacentHTML('beforeend', `
+                <div id="full-table">
+                    <div id="map">
+                        <div id="round-panel"></div>
+                        <div id="map-elements">
+                            ${['ticket', 'common-objective'].map(type => [1, 2].map(number => `
+                                <div id="${type}-slot-${number}" class="${type}-slot"></div>
+                            `).join('')).join('')}
+                        </div>
+                        ${['top', 'bottom'].map(side => `
+                            <div id="pips-${side}" class="pips"></div>
+                        `).join('')}
+                    </div>
+                </div>
+            `);
+        }
         console.log('gamedatas', gamedatas);
         if (Number(gamedatas.gamestate.id) >= 90) { // score or end. before createPlayerTables so full score is written if game has ended even if hide score is on
             this.onEnteringShowScore();
@@ -730,7 +747,7 @@ class Game {
                 backgroundSize: 'cover',
             }),
             ...BgaJumpTo.BgaPlayerEntries(this.bga, {
-                playerOrder: this.getOrderedPlayers(gamedatas).map(player => player.id),
+                playerOrder: this.getOrderedPlayers(gamedatas).map(player => Number(player.id)),
                 entrySettings: (playerId) => ({ id: `bga-jump-to_player-table-${playerId}` }),
             }),
         ];
@@ -773,15 +790,11 @@ class Game {
                 break;
         }
     }
-    setGamestateDescription(property = '') {
-        const originalState = this.gamedatas.gamestates[this.gamedatas.gamestate.id];
-        this.gamedatas.gamestate.description = `${originalState['description' + property]}`;
-        this.gamedatas.gamestate.descriptionmyturn = `${originalState['descriptionmyturn' + property]}`;
-        this.bga.gameui.updatePageTitle();
-    }
     onEnteringPlaceRoute(args) {
         if (args.canConfirm) {
-            this.setGamestateDescription('Confirm');
+            this.bga.statusBar.setTitle(this.bga.players.isCurrentPlayerActive()
+                ? _('${you} must confirm placed marker(s)')
+                : _('${actplayer} must confirm placed marker(s)'), args);
         }
         const activePlayerColor = this.getPlayerColor(this.bga.players.getActivePlayerId());
         const currentPositionIntersection = document.getElementById(`intersection${args.currentPosition}`);
@@ -858,7 +871,7 @@ class Game {
                     placeDeparturePawnArgs._private.positions.forEach((position, index) => {
                         document.getElementById(`intersection${position}`).classList.add('selectable');
                         const ticketDiv = `<div class="ticket" data-ticket="${placeDeparturePawnArgs._private.tickets[index]}"></div>`;
-                        this.bga.gameui.addActionButton(`placeDeparturePawn${position}_button`, dojo.string.substitute(_("Start at ${ticket}"), { ticket: ticketDiv }), () => this.placeDeparturePawn(position));
+                        this.bga.gameui.addActionButton(`placeDeparturePawn${position}_button`, _("Start at ${ticket}").replace(/\$\{ticket\}/g, () => ticketDiv), () => this.placeDeparturePawn(position));
                     });
                     break;
                 case 'placeRoute':
@@ -926,7 +939,7 @@ class Game {
             <div class="personal-objective expanded ${this.gamedatas.map}" data-type="${player.personalObjective}"></div>
             <div id="toggle-objective-expand-${playerId}" class="arrow"></div>
         `;
-        dojo.place(html, `personal-objective-wrapper-${playerId}`);
+        document.getElementById(`personal-objective-wrapper-${playerId}`).insertAdjacentHTML('beforeend', html);
         document.getElementById(`toggle-objective-expand-${playerId}`).addEventListener('click', () => this.expandObjectiveClick());
     }
     createPlayerPanels(gamedatas) {
@@ -972,7 +985,7 @@ class Game {
             slideToObjectAndAttach(this, firstPlayerBoardToken, `player-board-${playerId}-firstPlayerWrapper`);
         }
         else {
-            dojo.place('<div id="firstPlayerBoardToken" class="first-player-token"></div>', `player-board-${playerId}-firstPlayerWrapper`);
+            document.getElementById(`player-board-${playerId}-firstPlayerWrapper`).insertAdjacentHTML('beforeend', '<div id="firstPlayerBoardToken" class="first-player-token"></div>');
             this.bga.gameui.addTooltipHtml('firstPlayerBoardToken', _("Inspector pawn. This player is the first player of the round."));
         }
         const firstPlayerTableToken = document.getElementById('firstPlayerTableToken');
@@ -980,7 +993,7 @@ class Game {
             slideToObjectAndAttach(this, firstPlayerTableToken, `player-table-${playerId}-first-player-wrapper`, this.zoomManager.zoom);
         }
         else {
-            dojo.place('<div id="firstPlayerTableToken" class="first-player-token"></div>', `player-table-${playerId}-first-player-wrapper`);
+            document.getElementById(`player-table-${playerId}-first-player-wrapper`).insertAdjacentHTML('beforeend', '<div id="firstPlayerTableToken" class="first-player-token"></div>');
             this.bga.gameui.addTooltipHtml('firstPlayerTableToken', _("Inspector pawn. This player is the first player of the round."));
         }
     }
@@ -1015,7 +1028,7 @@ class Game {
     eliminatePlayer(playerId) {
         this.gamedatas.players[playerId].eliminated = 1;
         document.getElementById(`overall_player_board_${playerId}`).classList.add('eliminated-player');
-        dojo.addClass(`player-table-${playerId}`, 'eliminated');
+        document.getElementById(`player-table-${playerId}`).classList.add('eliminated');
         this.setNewScore(playerId, 0);
     }
     setNewScore(playerId, score) {
@@ -1057,7 +1070,7 @@ class Game {
         Array.from(document.getElementsByClassName('pips')).forEach(pipDiv => pipDiv.dataset.side = pipSide);
         const playerTableZoneDiv = document.getElementById(`player-table-${playerId}`).querySelector(`[data-zone="${zone}"]`);
         const pipId = `pip-${playerId}-${zone}-${position}`;
-        dojo.place(`<div class="pip" id="${pipId}" style="border-color: #${this.getPlayerColor(playerId)}"></div>`, zone >= 6 ? 'pips-bottom' : 'pips-top');
+        document.getElementById(zone >= 6 ? 'pips-bottom' : 'pips-top').insertAdjacentHTML('beforeend', `<div class="pip" id="${pipId}" style="border-color: #${this.getPlayerColor(playerId)}"></div>`);
         const pipDiv = document.getElementById(`pip-${playerId}-${zone}-${position}`);
         const pipTable = new PlayerTable(this, this.gamedatas.players[playerId], pipId, pipDiv);
         this.registeredTablesByPlayerId[playerId].push(pipTable);
@@ -1128,10 +1141,10 @@ class Game {
         }
     }
     placeDeparturePawn(position) {
-        if (!this.bga.actions.checkAction('placeDeparturePawn')) {
+        if (!this.bga.actions.checkAction('actPlaceDeparturePawn')) {
             return;
         }
-        this.takeAction('placeDeparturePawn', {
+        this.takeAction('actPlaceDeparturePawn', {
             position
         });
     }
@@ -1141,42 +1154,42 @@ class Game {
         if (!route) {
             return;
         }
-        if (!this.bga.actions.checkAction('placeRoute')) {
+        if (!this.bga.actions.checkAction('actPlaceRoute')) {
             return;
         }
         const eliminationWarning = route.isElimination /* && args.possibleRoutes.some(r => !r.isElimination)*/;
         if (eliminationWarning) {
             this.bga.gameui.confirmationDialog(_('Are you sure you want to place that marker? You will be eliminated!'), () => {
-                this.takeAction('placeRoute', {
+                this.takeAction('actPlaceRoute', {
                     from,
                     to,
                 });
             });
         }
         else {
-            this.takeAction('placeRoute', {
+            this.takeAction('actPlaceRoute', {
                 from,
                 to,
             });
         }
     }
     cancelLast() {
-        if (!this.bga.actions.checkAction('cancelLast')) {
+        if (!this.bga.actions.checkAction('actCancelLast')) {
             return;
         }
-        this.takeAction('cancelLast');
+        this.takeAction('actCancelLast');
     }
     resetTurn() {
-        if (!this.bga.actions.checkAction('resetTurn')) {
+        if (!this.bga.actions.checkAction('actResetTurn')) {
             return;
         }
-        this.takeAction('resetTurn');
+        this.takeAction('actResetTurn');
     }
     confirmTurn() {
-        if (!this.bga.actions.checkAction('confirmTurn', true)) {
+        if (!this.bga.actions.checkAction('actConfirmTurn', true)) {
             return;
         }
-        this.takeAction('confirmTurn');
+        this.takeAction('actConfirmTurn');
     }
     takeAction(action, data) {
         data = data || {};
@@ -1208,7 +1221,7 @@ class Game {
             ['playerEliminated', 1],
         ];
         notifs.forEach((notif) => {
-            dojo.subscribe(notif[0], this, `notif_${notif[0]}`);
+            dojo.subscribe(notif[0], (...args) => this[`notif_${notif[0]}`](...args));
             this.bga.gameui.notifqueue.setSynchronous(notif[0], notif[1]);
         });
     }

@@ -1,6 +1,9 @@
 <?php
 
-require_once(__DIR__.'/objects/score-sheet.php');
+namespace Bga\Games\GetOnBoard;
+
+use Bga\Games\GetOnBoard\Objects\ScoreSheet;
+use Bga\Games\GetOnBoard\Objects\ScoreSheets;
 
 trait ScoreSheetTrait {
 
@@ -198,7 +201,7 @@ trait ScoreSheetTrait {
                 if ($element > 90 && $scoreSheet->personalObjective->total != 10) {
                     $visitedLetters[] = $element;
 
-                    if ($endScoring && $this->array_every($personalObjectives, fn($letter) => in_array($letter, $visitedLetters))) {
+                    if ($endScoring && \array_all($personalObjectives, fn($letter) => in_array($letter, $visitedLetters))) {
                         $scoreSheet->personalObjective->total = 10;
                     }
                 } else {

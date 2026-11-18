@@ -1,5 +1,7 @@
 <?php
 
+namespace Bga\Games\GetOnBoard\Objects;
+
 class Card {
     public int $id;
     public string $location;
@@ -13,4 +15,3 @@ class Card {
         $this->type = intval($dbCard['type']);
     } 
 }
-?>

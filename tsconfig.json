@@ -9,7 +9,7 @@
       "strict": false
     },
     "include": [
-        "bga-framework.d.ts",
+        "*.d.ts",
         "src/ts/types.d.ts",
         "src/ts/**/*.d.ts",
         "src/ts/**/*.ts"

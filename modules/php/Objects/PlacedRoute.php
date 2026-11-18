@@ -1,5 +1,7 @@
 <?php
 
+namespace Bga\Games\GetOnBoard\Objects;
+
 class PlacedRoute {
     public int $id;
     public int $playerId;
@@ -34,4 +36,3 @@ class PlacedRoute {
         ]);
     }
 }
-?>

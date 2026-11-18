@@ -1,51 +1,17 @@
 <?php
 
-require_once(__DIR__.'/objects/ticket.php');
-require_once(__DIR__.'/objects/placed-route.php');
-require_once(__DIR__.'/objects/possible-route.php');
-require_once(__DIR__.'/objects/common-objective.php');
+namespace Bga\Games\GetOnBoard;
+
+use Bga\Games\GetOnBoard\Objects\Card;
+use Bga\Games\GetOnBoard\Objects\PlacedRoute;
+use Bga\Games\GetOnBoard\Objects\PossibleRoute;
+use Bga\Games\GetOnBoard\Objects\CommonObjective;
 
 trait UtilTrait {
 
     //////////////////////////////////////////////////////////////////////////////
     //////////// Utility functions
     ////////////
-
-    function array_find(array $array, callable $fn) {
-        foreach ($array as $value) {
-            if($fn($value)) {
-                return $value;
-            }
-        }
-        return null;
-    }
-
-    function array_find_key(array $array, callable $fn) {
-        foreach ($array as $key => $value) {
-            if($fn($value)) {
-                return $key;
-            }
-        }
-        return null;
-    }
-
-    function array_some(array $array, callable $fn) {
-        foreach ($array as $value) {
-            if($fn($value)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    function array_every(array $array, callable $fn) {
-        foreach ($array as $value) {
-            if(!$fn($value)) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     function array_identical(array $a1, array $a2) {
         if (count($a1) != count($a2)) {
@@ -60,7 +26,7 @@ trait UtilTrait {
     }
 
     function getFirstPlayerId() {
-        return intval(self::getGameStateValue(FIRST_PLAYER));
+        return intval($this->getGameStateValue(FIRST_PLAYER));
     }
 
     function getPlayersIds() {
@@ -152,7 +118,7 @@ trait UtilTrait {
             if ($from === $position) {
                 $routes = array_merge($routes, $tos);
             } else {
-                $routeToSpot = $this->array_find($tos, fn($to) => $to == $position);
+                $routeToSpot = \array_find($tos, fn($to) => $to == $position);
                 if ($routeToSpot !== null) {
                     $routes[] = $from;
                 }
@@ -196,7 +162,7 @@ trait UtilTrait {
             }
         }
 
-        $isElimination = $this->array_some($playerPlacedRoutes, fn($route) => $route->from === $destination || $route->to === $destination);
+        $isElimination = \array_any($playerPlacedRoutes, fn($route) => $route->from === $destination || $route->to === $destination);
 
         return new PossibleRoute($position, $destination, $trafficJam, $useTurnZone, $isElimination);
     }
@@ -221,7 +187,7 @@ trait UtilTrait {
 
         $possibleDestinations = array_values(array_filter(
             $this->getDestinations($mapSize, $position), 
-            fn($destination) => !$this->array_some($playerPlacedRoutes, fn($placedRoute) => $this->isSameRoute($placedRoute, $position, $destination))
+            fn($destination) => !\array_any($playerPlacedRoutes, fn($placedRoute) => $this->isSameRoute($placedRoute, $position, $destination))
         ));
 
         if (count($unvalidatedRoutes) >= count($turnShape)) {
@@ -294,7 +260,7 @@ trait UtilTrait {
         
         $message = $currentTicket == null ? '' : clienttranslate('Round ${round}/12 starts!');
 
-        $this->notifyAllPlayers('newRound', $message, [
+        $this->bga->notify->all('newRound', $message, [
             'round' => min(12, count($validatedTickets) + 1),
             'validatedTickets' => $validatedTickets,
             'currentTicket' => $currentTicket,
@@ -304,7 +270,7 @@ trait UtilTrait {
     function notifUpdateScoreSheet(int $playerId, bool $endScoring = false) {
         $scoreSheets = $this->getScoreSheets($playerId, $this->getPlacedRoutes($playerId), $this->getCommonObjectives(), $endScoring);
         
-        $this->notifyAllPlayers('updateScoreSheet', '', [
+        $this->bga->notify->all('updateScoreSheet', '', [
             'playerId' => $playerId,
             'player_name' => $this->getPlayerName($playerId),
             'scoreSheets' => $scoreSheets,
@@ -313,36 +279,10 @@ trait UtilTrait {
         return $scoreSheets;
     }
     
-    function markCompletedCommonObjectives() {
-        $objectives = $this->getCommonObjectives();
-        if (count(array_filter($objectives, fn($objective) => !$objective->completed)) === 0) {
-            return;
-        }
-
-        $playersIds = $this->getPlayersIds();
-        $allPlacedRoutes = $this->getPlacedRoutes();
-        $scoreSheets = array_map(fn($playerId) => $this->getScoreSheets(
-            $playerId, 
-            array_filter($allPlacedRoutes, fn($placedRoute) => $placedRoute->playerId === $playerId), 
-            $objectives
-        ), $playersIds);
-
-        foreach ($objectives as $objective) {
-            if (!$objective->completed && $this->array_some($scoreSheets, fn($scoreSheet) => $scoreSheet->validated->commonObjectives->subTotals[$objective->number - 1] != null)) {
-                $round = $this->getRoundNumber();
-                $this->DbQuery("UPDATE common_objectives SET `completed_at_round` = $round WHERE `id` = $objective->id");
-
-                $this->notifyAllPlayers('flipObjective', clienttranslate('A common objective have been completed'), [
-                    'objective' => $objective,
-                ]);
-            }
-        }
-    }
-
     function getPersonalObjectivePositions(int $personalObjective, string $map) {
         $letters = $this->PERSONAL_OBJECTIVES[$map][$personalObjective];
         return array_map(
-            fn($letter) => $this->array_find_key($this->MAP_POSITIONS[$map], fn($positionElements) => in_array($letter, $positionElements)),
+            fn($letter) => \array_find_key($this->MAP_POSITIONS[$map], fn($positionElements) => in_array($letter, $positionElements)),
             $letters
         );
     }

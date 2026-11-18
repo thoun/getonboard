@@ -42,7 +42,7 @@ export class PlayerTable {
             <div id="player-table-${this.playerId}-first-player-wrapper" class="first-player-wrapper"></div>
         </div>
         `;
-        (dojo as any).place(html, insertIn);
+        insertIn.insertAdjacentHTML('beforeend', html);
 
         this.oldLadies = new PlayerTableOldLadiesBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());
         this.students = new PlayerTableStudentsBlock(this.playerId, player.scoreSheets, game.isVisibleScoring());

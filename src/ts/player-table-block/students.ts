@@ -25,7 +25,7 @@ export class PlayerTableStudentsBlock extends PlayerTableBlock {
                     <div id="player-table-${playerId}-students-total" class="total"></div>
                 </div>
         `;
-        dojo.place(html, `player-table-${playerId}-main`);
+        document.getElementById(`player-table-${playerId}-main`).insertAdjacentHTML('beforeend', html);
 
         this.updateScoreSheet(scoreSheets, visibleScoring);
     }

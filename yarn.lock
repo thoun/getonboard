@@ -73,14 +73,6 @@
   resolved "https://registry.npmjs.org/@types/estree/-/estree-1.0.9.tgz"
   integrity sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==
 
-bga-jump-to@thoun/bga-jump-to#1.1.0:
-  version "1.0.0"
-  resolved "git+ssh://git@github.com/thoun/bga-jump-to.git#4b5ce3de53883ca45d53a79a86321f9e1120ff74"
-
-bga-zoom@thoun/bga-zoom#1.0.4:
-  version "1.0.3"
-  resolved "git+ssh://git@github.com/thoun/bga-zoom.git#8b5fd458c3d9c92da4d66891a5b07b9e894d89f0"
-
 chokidar@^4.0.0:
   version "4.0.3"
   resolved "https://registry.npmjs.org/chokidar/-/chokidar-4.0.3.tgz"

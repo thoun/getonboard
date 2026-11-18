@@ -8,7 +8,7 @@
   * See http://en.boardgamearena.com/#!doc/Studio for more information.
   * -----
   * 
-  * getonboard.game.php
+  * Game.php
   *
   * This is the main file for your game logic.
   *
@@ -16,23 +16,16 @@
   *
   */
 
+namespace Bga\Games\GetOnBoard;
+
 use Bga\GameFramework\Components\Deck;
 use Bga\GameFramework\Table;
-use Bga\GameFramework\VisibleSystemException;
+use Bga\Games\GetOnBoard\States\PlaceDeparturePawn;
 
-require_once('modules/php/constants.inc.php');
-require_once('modules/php/utils.php');
-require_once('modules/php/actions.php');
-require_once('modules/php/states.php');
-require_once('modules/php/args.php');
-require_once('modules/php/score-sheet.php');
-require_once('modules/php/debug-util.php');
+require_once __DIR__ . '/constants.inc.php';
 
-class GetOnBoard extends Table {
+class Game extends Table {
     use UtilTrait;
-    use ActionTrait;
-    use StateTrait;
-    use ArgsTrait;
     use ScoreSheetTrait;
     use DebugUtilTrait;
 
@@ -52,22 +45,19 @@ class GetOnBoard extends Table {
     public array $TRAFFIC_JAM_POINTS;
 
 	function __construct() {
+        require __DIR__ . '/material.inc.php';
         // Your global variables labels:
         //  Here, you can assign labels to global variables you are using for this game.
         //  You can use any number of global variables with IDs between 10 and 99.
-        //  If your game has options (variants), you also have to associate here a label to
-        //  the corresponding ID in gameoptions.inc.php.
         // Note: afterwards, you can get/set the global variables with getGameStateValue/setGameStateInitialValue/setGameStateValue
         parent::__construct();
         
         $this->initGameStateLabels([
             FIRST_PLAYER => 10,
             ELIMINATE_PLAYER => 11,
-
-            SCORING_OPTION => 100,
         ]);   
 
-        $this->tickets = $this->deckFactory->createDeck("tickets");     
+        $this->tickets = $this->bga->deckFactory->createDeck("tickets");
 	}	
 
     /*
@@ -89,7 +79,7 @@ class GetOnBoard extends Table {
  
         // Create players
         // Note: if you added some extra field on "player" table in the database (dbmodel.sql), you can initialize it there.
-        $sql = "INSERT INTO player (player_id, player_color, player_canal, player_name, player_avatar, player_sheet_type, player_personal_objective) VALUES ";
+        $sql = "INSERT INTO player (player_id, player_color, player_name, player_sheet_type, player_personal_objective) VALUES ";
         $values = [];
         foreach($players as $player_id => $player) {
             $color = array_shift($default_colors);
@@ -102,7 +92,7 @@ class GetOnBoard extends Table {
             $personalObjective = array_splice($personalObjectives, $personalObjectiveIndex, 1)[0];
             $personalObjectives = array_values($personalObjectives);
 
-            $values[] = "('".$player_id."','$color','".$player['player_canal']."','".addslashes( $player['player_name'] )."','".addslashes( $player['player_avatar'] )."', $sheetType, $personalObjective)";
+            $values[] = "('".$player_id."','$color','".addslashes( $player['player_name'] )."', $sheetType, $personalObjective)";
         }
         $sql .= implode(',', $values);
         $this->DbQuery($sql);
@@ -116,15 +106,15 @@ class GetOnBoard extends Table {
         $this->setGameStateInitialValue(ELIMINATE_PLAYER, 0);
         
         // Init game statistics
-        foreach(['table', 'player'] as $statType) {
-            $this->initStat($statType, 'turnsNumber', 0);
-            $this->initStat($statType, 'markersPlaced', 0);
-            $this->initStat($statType, 'greenLightsUsed', 0);
-            $this->initStat($statType, 'turnZoneUsed', 0);
-            $this->initStat($statType, 'trafficJamUsed', 0);
-            $this->initStat($statType, 'commonObjectivesFirst', 0);
-            $this->initStat($statType, 'commonObjectivesSecond', 0);
-            $this->initStat($statType, 'personalObjectives', 0);
+        foreach([$this->bga->tableStats, $this->bga->playerStats] as $stats) {
+            $stats->init('turnsNumber', 0);
+            $stats->init('markersPlaced', 0);
+            $stats->init('greenLightsUsed', 0);
+            $stats->init('turnZoneUsed', 0);
+            $stats->init('trafficJamUsed', 0);
+            $stats->init('commonObjectivesFirst', 0);
+            $stats->init('commonObjectivesSecond', 0);
+            $stats->init('personalObjectives', 0);
         }
         
 
@@ -135,7 +125,11 @@ class GetOnBoard extends Table {
         // Activate first player (which is in general a good idea :) )
         $this->activeNextPlayer();
 
-        return \ST_MULTIPLAYER_PLACE_DEPARTURE_PAWN;
+        return PlaceDeparturePawn::class;
+    }
+
+    public function isScoreVisible(): bool {
+        return ($this->bga->tableOptions->get(SCORING_OPTION) ?? 1) === 2;
     }
 
     /*
@@ -185,7 +179,7 @@ class GetOnBoard extends Table {
         $result['validatedTickets'] = $this->getValidatedTicketsForRound();
         $result['currentTicket'] = $this->getCurrentTicketForRound();
         $result['commonObjectives'] = $this->getCommonObjectives();
-        $result['hiddenScore'] = intval($this->getGameStateValue('SCORING_OPTION')) !== 2;
+        $result['hiddenScore'] = !$this->isScoreVisible();
 
         $result['MAP_POSITIONS'] = $this->MAP_POSITIONS[$map];
   
@@ -200,7 +194,7 @@ class GetOnBoard extends Table {
         100 (= the game is finished or almost finished).
     
         This method is called each time we are in a game state with the "updateGameProgression" property set to true 
-        (see states.inc.php)
+        (see the state classes in modules/php/States)
     */
     function getGameProgression() {
         $stateId = $this->gamestate->getCurrentMainStateId();
@@ -213,56 +207,6 @@ class GetOnBoard extends Table {
         }
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////// Zombie
-////////////
-
-    /*
-        zombieTurn:
-        
-        This method is called each time it is the turn of a player who has quit the game (= "zombie" player).
-        You can do whatever you want in order to make sure the turn of this player ends appropriately
-        (ex: pass).
-        
-        Important: your zombie code will be called when the player leaves the game. This action is triggered
-        from the main site and propagated to the gameserver from a server, not from a browser.
-        As a consequence, there is no current player associated to this action. In your zombieTurn function,
-        you must _never_ use getCurrentPlayerId() or getCurrentPlayerName(), otherwise it will fail with a "Not logged" error message. 
-    */
-
-    function zombieTurn($state, $active_player) {
-    	$statename = $state['name'];
-    	
-        if ($state['type'] === "activeplayer") {
-            switch ($statename) {
-                case 'placeRoute':
-                    $placedRoutes = $this->getPlacedRoutes($active_player);
-                    $unvalidatedRoutes = array_values(array_filter($placedRoutes, fn($placedRoute) => !$placedRoute->validated));
-
-                    if (count($unvalidatedRoutes) > 0) {
-                        $this->applyCancel($unvalidatedRoutes, '');
-                    }
-
-                    $this->gamestate->nextState("nextPlayer");
-                	break;
-                default:
-                    $this->gamestate->nextState("nextPlayer");
-                	break;
-            }
-
-            return;
-        }
-
-        if ($state['type'] === "multipleactiveplayer") {
-            // Make sure player is in a non blocking status for role turn
-            $this->gamestate->setPlayerNonMultiactive( $active_player, '' );
-            
-            return;
-        }
-
-        throw new VisibleSystemException("Zombie mode not supported at this game state: ".$statename);
-    }
-    
 ///////////////////////////////////////////////////////////////////////////////////:
 ////////// DB upgrade
 //////////

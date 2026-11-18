@@ -75,6 +75,24 @@ export class Game {
         
         this.gamedatas = gamedatas;
 
+        if (!document.getElementById('full-table')) {
+            this.bga.gameArea.getElement().insertAdjacentHTML('beforeend', `
+                <div id="full-table">
+                    <div id="map">
+                        <div id="round-panel"></div>
+                        <div id="map-elements">
+                            ${['ticket', 'common-objective'].map(type => [1, 2].map(number => `
+                                <div id="${type}-slot-${number}" class="${type}-slot"></div>
+                            `).join('')).join('')}
+                        </div>
+                        ${['top', 'bottom'].map(side => `
+                            <div id="pips-${side}" class="pips"></div>
+                        `).join('')}
+                    </div>
+                </div>
+            `);
+        }
+
         console.log('gamedatas', gamedatas);
 
         if (Number(gamedatas.gamestate.id) >= 90) { // score or end. before createPlayerTables so full score is written if game has ended even if hide score is on
@@ -91,7 +109,7 @@ export class Game {
                 backgroundSize: 'cover',
             }),
             ...BgaJumpTo.BgaPlayerEntries(this.bga, {
-                playerOrder: this.getOrderedPlayers(gamedatas).map(player => player.id),
+                playerOrder: this.getOrderedPlayers(gamedatas).map(player => Number(player.id)),
                 entrySettings: (playerId) => ({ id: `bga-jump-to_player-table-${playerId}` }),
             }),
         ];
@@ -143,16 +161,11 @@ export class Game {
         }
     }
     
-    private setGamestateDescription(property: string = '') {
-        const originalState = this.gamedatas.gamestates[this.gamedatas.gamestate.id];
-        this.gamedatas.gamestate.description = `${originalState['description' + property]}`; 
-        this.gamedatas.gamestate.descriptionmyturn = `${originalState['descriptionmyturn' + property]}`;
-        this.bga.gameui.updatePageTitle();
-    }
-    
     private onEnteringPlaceRoute(args: EnteringPlaceRouteArgs) {
         if (args.canConfirm) {
-            this.setGamestateDescription('Confirm');
+            this.bga.statusBar.setTitle(this.bga.players.isCurrentPlayerActive()
+                ? _('${you} must confirm placed marker(s)')
+                : _('${actplayer} must confirm placed marker(s)'), args);
         }
 
         const activePlayerColor = this.getPlayerColor(this.bga.players.getActivePlayerId());
@@ -241,7 +254,7 @@ export class Game {
                         document.getElementById(`intersection${position}`).classList.add('selectable');
                         
                         const ticketDiv = `<div class="ticket" data-ticket="${placeDeparturePawnArgs._private.tickets[index]}"></div>`;
-                        this.bga.gameui.addActionButton(`placeDeparturePawn${position}_button`, dojo.string.substitute(_("Start at ${ticket}"), {ticket: ticketDiv}), () => this.placeDeparturePawn(position));
+                        this.bga.gameui.addActionButton(`placeDeparturePawn${position}_button`, _("Start at ${ticket}").replace(/\$\{ticket\}/g, () => ticketDiv), () => this.placeDeparturePawn(position));
                     });
                     break;
                 case 'placeRoute':
@@ -322,7 +335,7 @@ export class Game {
             <div class="personal-objective expanded ${ this.gamedatas.map}" data-type="${player.personalObjective}"></div>
             <div id="toggle-objective-expand-${playerId}" class="arrow"></div>
         `;
-        dojo.place(html, `personal-objective-wrapper-${playerId}`);
+        document.getElementById(`personal-objective-wrapper-${playerId}`).insertAdjacentHTML('beforeend', html);
 
         document.getElementById(`toggle-objective-expand-${playerId}`).addEventListener('click', () => this.expandObjectiveClick());
     }
@@ -384,7 +397,7 @@ export class Game {
         if (firstPlayerBoardToken) {
             slideToObjectAndAttach(this, firstPlayerBoardToken, `player-board-${playerId}-firstPlayerWrapper`);
         } else {
-            dojo.place('<div id="firstPlayerBoardToken" class="first-player-token"></div>', `player-board-${playerId}-firstPlayerWrapper`);
+            document.getElementById(`player-board-${playerId}-firstPlayerWrapper`).insertAdjacentHTML('beforeend', '<div id="firstPlayerBoardToken" class="first-player-token"></div>');
 
             this.bga.gameui.addTooltipHtml('firstPlayerBoardToken', _("Inspector pawn. This player is the first player of the round."));
         }
@@ -393,7 +406,7 @@ export class Game {
         if (firstPlayerTableToken) {
             slideToObjectAndAttach(this, firstPlayerTableToken, `player-table-${playerId}-first-player-wrapper`, this.zoomManager.zoom);
         } else {
-            dojo.place('<div id="firstPlayerTableToken" class="first-player-token"></div>', `player-table-${playerId}-first-player-wrapper`);
+            document.getElementById(`player-table-${playerId}-first-player-wrapper`).insertAdjacentHTML('beforeend', '<div id="firstPlayerTableToken" class="first-player-token"></div>');
 
             this.bga.gameui.addTooltipHtml('firstPlayerTableToken', _("Inspector pawn. This player is the first player of the round."));
         }
@@ -433,7 +446,7 @@ export class Game {
     private eliminatePlayer(playerId: number) {
         this.gamedatas.players[playerId].eliminated = 1;
         document.getElementById(`overall_player_board_${playerId}`).classList.add('eliminated-player');
-        dojo.addClass(`player-table-${playerId}`, 'eliminated');
+        document.getElementById(`player-table-${playerId}`).classList.add('eliminated');
         this.setNewScore(playerId, 0);
     }
 
@@ -485,7 +498,7 @@ export class Game {
 
 
         const pipId = `pip-${playerId}-${zone}-${position}`;
-        dojo.place(`<div class="pip" id="${pipId}" style="border-color: #${this.getPlayerColor(playerId)}"></div>`,  zone >=6 ? 'pips-bottom' : 'pips-top');
+        document.getElementById(zone >=6 ? 'pips-bottom' : 'pips-top').insertAdjacentHTML('beforeend', `<div class="pip" id="${pipId}" style="border-color: #${this.getPlayerColor(playerId)}"></div>`);
         const pipDiv = document.getElementById(`pip-${playerId}-${zone}-${position}`);
         const pipTable = new PlayerTable(this, this.gamedatas.players[playerId], pipId, pipDiv);
         this.registeredTablesByPlayerId[playerId].push(pipTable);
@@ -568,11 +581,11 @@ export class Game {
     }
 
     public placeDeparturePawn(position: number) {
-        if(!this.bga.actions.checkAction('placeDeparturePawn')) {
+        if(!this.bga.actions.checkAction('actPlaceDeparturePawn')) {
             return;
         }
 
-        this.takeAction('placeDeparturePawn', {
+        this.takeAction('actPlaceDeparturePawn', {
             position
         });
     }
@@ -585,7 +598,7 @@ export class Game {
             return;
         }
 
-        if(!this.bga.actions.checkAction('placeRoute')) {
+        if(!this.bga.actions.checkAction('actPlaceRoute')) {
             return;
         }
 
@@ -593,13 +606,13 @@ export class Game {
 
         if (eliminationWarning) {
             this.bga.gameui.confirmationDialog(_('Are you sure you want to place that marker? You will be eliminated!'), () => {
-                this.takeAction('placeRoute', {
+                this.takeAction('actPlaceRoute', {
                     from, 
                     to,
                 });
             });
         } else {
-            this.takeAction('placeRoute', {
+            this.takeAction('actPlaceRoute', {
                 from, 
                 to,
             });
@@ -607,27 +620,27 @@ export class Game {
     }
 
     public cancelLast() {
-        if(!this.bga.actions.checkAction('cancelLast')) {
+        if(!this.bga.actions.checkAction('actCancelLast')) {
             return;
         }
 
-        this.takeAction('cancelLast');
+        this.takeAction('actCancelLast');
     }
 
     public resetTurn() {
-        if(!this.bga.actions.checkAction('resetTurn')) {
+        if(!this.bga.actions.checkAction('actResetTurn')) {
             return;
         }
 
-        this.takeAction('resetTurn');
+        this.takeAction('actResetTurn');
     }
 
     public confirmTurn() {
-        if(!this.bga.actions.checkAction('confirmTurn', true)) {
+        if(!this.bga.actions.checkAction('actConfirmTurn', true)) {
             return;
         }
 
-        this.takeAction('confirmTurn');
+        this.takeAction('actConfirmTurn');
     }
 
     public takeAction(action: string, data?: any) {
@@ -664,7 +677,7 @@ export class Game {
         ];
     
         notifs.forEach((notif) => {
-            dojo.subscribe(notif[0], this, `notif_${notif[0]}`);
+            dojo.subscribe(notif[0], (...args) => this[`notif_${notif[0]}`](...args));
             (this.bga.gameui as any).notifqueue.setSynchronous(notif[0], notif[1]);
         });
     }

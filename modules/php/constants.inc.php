@@ -30,7 +30,7 @@ define('ELIMINATE_PLAYER', 'ELIMINATE_PLAYER');
 /*
  * Game option
  */
-define('SCORING_OPTION', 'SCORING_OPTION');
+define('SCORING_OPTION', 100);
 
 /*
  * Map elements

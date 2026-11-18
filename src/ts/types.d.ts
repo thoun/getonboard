@@ -92,19 +92,7 @@ interface GetOnBoardPlayer extends Player {
     markers: PlacedRoute[];
 }
 
-interface GetOnBoardGamedatas {
-    current_player_id: string;
-    decision: {decision_type: string};
-    game_result_neutralized: string;
-    gamestate: Gamestate;
-    gamestates: { [gamestateId: number]: Gamestate };
-    neutralized_player_id: string;
-    notifications: {last_packet_id: string, move_nbr: string}
-    playerorder: (string | number)[];
-    players: { [playerId: number]: GetOnBoardPlayer };
-    tablespeed: string;
-
-    // Add here variables you set up in getAllDatas
+interface GetOnBoardGamedatas extends Gamedatas<GetOnBoardPlayer> {
     roundNumber: number;
     commonObjectives: CommonObjective[];
     firstPlayerTokenPlayerId: number;

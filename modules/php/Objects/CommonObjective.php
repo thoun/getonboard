@@ -1,5 +1,7 @@
 <?php
 
+namespace Bga\Games\GetOnBoard\Objects;
+
 class CommonObjective {
     public int $id;
     public int $number;
@@ -13,4 +15,3 @@ class CommonObjective {
         $this->completedAtRound = intval($dbCard['completed_at_round']);
     } 
 }
-?>
