@@ -515,6 +515,7 @@ html[data-theme=light] .player-board {
   right: 5px;
   bottom: 0;
   font-size: 90%;
+  color: black;
 }
 .common-objective-slot .common-objective-counter [data-reached=true] {
   color: green;
@@ -661,6 +662,7 @@ html[data-no-grid=true][data-no-building=true] #map[data-size=big].hd {
   position: relative;
   font-family: "Indie Flower";
   font-size: 16pt;
+  color: black;
 }
 .player-table.eliminated {
   filter: grayscale(1);
